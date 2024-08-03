@@ -1,0 +1,30 @@
+name: Build and Test
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:18.19.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore Yarn Package Cache
+        uses: actions/cache@v2
+        with:
+          path: .yarn/cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          restore-keys: |
+            yarn-packages-
+      - name: Set Yarn Version
+        run: yarn set version 2.1
+      - name: Install dependencies
+        run: yarn install
+      - name: Save Yarn Package Cache
+        uses: actions/cache@v2
+        with:
+          path: .yarn/cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+      - name: Build
+        run: yarn run build
+      - name: Lint
+        run: yarn run lint
