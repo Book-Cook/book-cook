@@ -9,14 +9,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Yarn
-        run: yarn set version stable
+      - name: Install Yarn 1.22.17
+        run: npm install -g yarn@1.22.17
       - name: Install dependencies
-        run: yarn install
-      - name: Cache Yarn Cache
+        run: yarn install --frozen-lockfile
+      - name: Cache Node Modules
         uses: actions/cache@v2
         with:
-          path: .yarn/cache
+          path: node_modules
           key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             yarn-
