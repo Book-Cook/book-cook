@@ -6,25 +6,21 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: node:18.19.0
+
     steps:
       - uses: actions/checkout@v2
-      - name: Restore Yarn Package Cache
-        uses: actions/cache@v2
-        with:
-          path: .yarn/cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          restore-keys: |
-            yarn-packages-
-      - name: Set Yarn Version
-        run: yarn set version 2.1
+      - name: Set up Yarn
+        run: yarn set version stable
       - name: Install dependencies
         run: yarn install
-      - name: Save Yarn Package Cache
+      - name: Cache Yarn Cache
         uses: actions/cache@v2
         with:
           path: .yarn/cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            yarn-
       - name: Build
-        run: yarn run build
+        run: yarn build
       - name: Lint
-        run: yarn run lint
+        run: yarn lint
