@@ -1,0 +1,25 @@
+---
+name: Bug Report
+about: Create a report of the issue you are experiencing
+---
+
+## Brief Description
+<!-- Describe the issue briefly -->
+
+## Steps to Reproduce
+<!-- Simplify the steps to reproduce the bug -->
+1.
+2.
+3.
+
+## Expected vs Actual Behavior
+<!-- Briefly describe what should happen vs what is happening -->
+
+## Environment
+<!-- List only crucial environment details like browser version, etc. -->
+
+## Screenshots/Logs
+<!-- Attach if they help explain the issue -->
+
+## Additional Context
+<!-- Optional: Any other relevant information -->
