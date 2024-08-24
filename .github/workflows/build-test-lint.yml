@@ -1,5 +1,5 @@
-name: Build and Test
-on: [push, pull_request]
+name: Build, Test, Lint
+on: [pull-request]
 
 jobs:
   build:
@@ -8,18 +8,21 @@ jobs:
       image: node:18.19.0
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@3
       - name: Set up Yarn
         run: yarn set version 1.22.1
-      - name: Install dependencies
-        run: yarn install
-      - name: Cache Yarn Cache
-        uses: actions/cache@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: .yarn/cache
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            yarn-
+          ${{ runner.os }}-yarn-
+      - name: Install project dependencies
+        run: yarn --prefer-offline
       - name: Build
         run: yarn build
       - name: Lint
