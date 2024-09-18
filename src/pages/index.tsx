@@ -47,7 +47,7 @@ export default function Home() {
       <div
         style={{
           maxWidth: "700px",
-          marginTop: "100px",
+          marginTop: "40px",
           marginBottom: "100px",
         }}
       >
