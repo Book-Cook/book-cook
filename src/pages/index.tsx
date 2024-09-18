@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Body1, Display, LargeTitle } from "../components";
 import Markdown from "react-markdown";
-import { Title1 } from "@fluentui/react-components";
+import { tokens } from "@fluentui/react-components";
 
 const markdownInput = `
 # French Toast
@@ -29,6 +29,11 @@ const markdownInput = `
 5. **Cook the French Toast:** Heat a non-stick skillet over medium-low heat (350f-375f) and add a knob of butter. Once melted, add the soaked bread slices and cook for 2-3 minutes per side until golden brown and the custard is set.
 `;
 
+interface ListItemProps {
+  children?: React.ReactNode;
+  listStyleType?: React.CSSProperties["listStyleType"];
+}
+
 export default function Home() {
   return (
     <div
@@ -36,9 +41,16 @@ export default function Home() {
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
+        backgroundColor: tokens.colorNeutralBackground2,
       }}
     >
-      <div style={{ maxWidth: "700px" }}>
+      <div
+        style={{
+          maxWidth: "700px",
+          marginTop: "100px",
+          marginBottom: "100px",
+        }}
+      >
         <Markdown
           components={{
             p: ({ children }) => <Body1 as="p">{children}</Body1>,
@@ -52,6 +64,18 @@ export default function Home() {
               <Body1 as="strong" weight="bold">
                 {children}
               </Body1>
+            ),
+            li: ({ children, ...props }: ListItemProps) => (
+              <li
+                style={{
+                  display: "list-item",
+                  listStyleType: props.listStyleType || "inherit",
+                }}
+              >
+                <Body1 as="p" style={{ display: "block" }}>
+                  {children}
+                </Body1>
+              </li>
             ),
           }}
         >

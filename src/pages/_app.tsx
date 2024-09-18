@@ -31,7 +31,6 @@ export default function App(props: AppProps) {
           padding: 0px;
           margin: 0px;
           height: 100%;
-          overflow: hidden;
         }
         html {
           height: 100%;

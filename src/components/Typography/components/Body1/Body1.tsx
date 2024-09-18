@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 });
 
 export const Body1: FunctionComponent<TextProps> = createText(
-  { as: "p", font: "base", size: 300, weight: "regular" },
+  { as: "p", font: "base", size: 400, weight: "regular" },
   useStyles,
   "Body1"
 );
