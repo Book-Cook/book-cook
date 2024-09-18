@@ -20,12 +20,9 @@ export default function App(props: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
-        <title>My Status</title>
-        <meta name="title" content="My Status" />
-        <meta
-          name="description"
-          content="A site that showcases various statuses such as Team's presence."
-        />
+        <title>Book Cook</title>
+        <meta name="title" content="Book Cook" />
+        <meta name="description" content="The best recipe app ever!!!!" />
         <link rel="icon" type="image/svg+xml" href="/image/favicon.svg" />
       </Head>
       <style jsx global>{`

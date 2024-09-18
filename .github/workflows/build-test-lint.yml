@@ -3,8 +3,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container:
       image: node:18.19.0
 
     steps:
