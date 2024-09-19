@@ -19,44 +19,39 @@ export default function App(props: AppProps) {
 
   return (
     <>
-    <Head>
-      <title>Book Cook</title>
-      <meta name="title" content="Book Cook" />
-      <meta
-        name="description"
-        content="A site for storing recipes."
-      />
-      <link rel="icon" type="image/svg+xml" href="/image/favicon.svg" />
-    </Head>
-    <style jsx global>{`
-      body {
-        background-color: ${tokens.colorNeutralBackground1};
-        padding: 0px;
-        margin: 0px;
-        height: 100%;
-        overflow: hidden;
-      }
-      html {
-        height: 100%;
-      }
-      #__next {
-        height: 100%;
-      }
-    `}
-    </style>
-    <QueryClientProvider client={queryClient}>
-      <RendererProvider renderer={pageProps.renderer || createDOMRenderer()}>
-        <SSRProvider>
-          {isMounted && (
-            <AppContainer>
-              <Component {...pageProps} />
-            </AppContainer>
-          )}
-        </SSRProvider>
-      </RendererProvider>
-    </QueryClientProvider>
+      <Head>
+        <title>Book Cook</title>
+        <meta name="title" content="Book Cook" />
+        <meta name="description" content="A site for storing recipes." />
+        <link rel="icon" type="image/svg+xml" href="/image/favicon.svg" />
+      </Head>
+      <style jsx global>
+        {`
+          body {
+            background-color: ${tokens.colorNeutralBackground1};
+            padding: 0px;
+            margin: 0px;
+            height: 100%;
+          }
+          html {
+            height: 100%;
+          }
+          #__next {
+            height: 100%;
+          }
+        `}
+      </style>
+      <QueryClientProvider client={queryClient}>
+        <RendererProvider renderer={pageProps.renderer || createDOMRenderer()}>
+          <SSRProvider>
+            {isMounted && (
+              <AppContainer>
+                <Component {...pageProps} />
+              </AppContainer>
+            )}
+          </SSRProvider>
+        </RendererProvider>
+      </QueryClientProvider>
     </>
   );
 }
-
-
