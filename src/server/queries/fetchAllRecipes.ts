@@ -1,6 +1,6 @@
 import type { Recipe } from "../types";
 
-export const fetchAllRecipes = async (id: string): Promise<Recipe> => {
+export const fetchAllRecipes = async (): Promise<Recipe[]> => {
   const response = await fetch(`/api/recipes`);
 
   if (!response.ok) {

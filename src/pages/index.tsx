@@ -2,10 +2,18 @@ import * as React from "react";
 import { RecipeCard } from "../components";
 import { tokens } from "@fluentui/react-components";
 
-import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllRecipes } from "src/server/queries/fetchAllRecipes";
 
 export default function Home() {
-  const router = useRouter();
+  const {
+    data: recipes,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["recipes"],
+    queryFn: () => fetchAllRecipes(),
+  });
 
   return (
     <div
@@ -31,7 +39,18 @@ export default function Home() {
           alignItems: "start",
         }}
       >
-        <RecipeCard title="Cookies" />
+        {recipes?.map((recipe) => {
+          return (
+            <RecipeCard
+              title={recipe?.title}
+              id={recipe?._id}
+              createdDate={recipe?.createdDate}
+              imageSrc={recipe?.imageURL}
+              tags={recipe?.tags}
+            />
+          );
+        })}
+        {/* <RecipeCard title="Cookies" />
         <RecipeCard title="Cookies" />
         <RecipeCard title="Cookies" />
         <RecipeCard title="Cookies" />
@@ -43,7 +62,7 @@ export default function Home() {
           createdDate="8/3/2024"
           imageSrc="https://www.tasteofhome.com/wp-content/uploads/2020/10/The-Best-French-Toast_EXPS_TOHFM21_256104_E09_24_9b.jpg"
           tags={["test"]}
-        />
+        /> */}
       </div>
     </div>
   );

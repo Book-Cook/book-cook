@@ -6,6 +6,14 @@ module.exports = {
         protocol: "https",
         hostname: "www.tasteofhome.com",
       },
+      {
+        protocol: "https",
+        hostname: "beyondfrosting.com",
+      },
+      {
+        protocol: "https",
+        hostname: "therecipecritic.com",
+      },
     ],
   },
 };
