@@ -23,7 +23,7 @@ export default function App(props: AppProps) {
         <title>Book Cook</title>
         <meta name="title" content="Book Cook" />
         <meta name="description" content="A site for storing recipes." />
-        <link rel="icon" type="image/svg+xml" href="/image/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/image/Book-Cook-Logo.svg" />
       </Head>
       <style jsx global>
         {`
