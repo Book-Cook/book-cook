@@ -13,11 +13,17 @@ export default async function handler(req: any, res: any) {
   const db = client.db("dev");
 
   if (req.method === 'GET') {
-    // Retrieve all recipes
+    // Retrieve all recipes that matches whatever is in the search bar
     try {
-      const recipes = await db.collection('recipes').find({}, {
-        projection: { data: 0 }
-      }).toArray();
+      const { title } = req.query;
+      let query = {};
+      let projection = { data: 0 };
+
+      if (title) {
+        query = { title: { $regex: title, $options: 'i' } };
+      }
+
+      const recipes = await db.collection('recipes').find(query, { projection }).toArray();
       res.status(200).json(recipes);
     } catch (error) {
       console.error('Failed to fetch recipes:', error);
