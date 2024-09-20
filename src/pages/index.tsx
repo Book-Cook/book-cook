@@ -14,6 +14,9 @@ export default function Home() {
         display: "flex",
         flexDirection: "column",
         backgroundColor: tokens.colorNeutralBackground2,
+        justifyContent: "center",
+        marginLeft: "32px",
+        marginRight: "32px",
       }}
     >
       <div
@@ -22,8 +25,9 @@ export default function Home() {
           marginTop: "40px",
           marginBottom: "100px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "60px",
+          justifyContent: "center",
+          gridTemplateColumns: "repeat(auto-fit, 268px)",
+          gap: "20px",
           alignItems: "start",
         }}
       >

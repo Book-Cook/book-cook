@@ -21,13 +21,13 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   };
 
   return (
-    <Card onClick={onCardClick} style={{ width: "300px", height: "300px" }}>
+    <Card onClick={onCardClick} style={{ width: "268px", height: "300px" }}>
       <CardHeader
         header={<Text weight="bold">{title}</Text>}
         description={<Text italic>{createdDate}</Text>}
       />
 
-      <CardPreview style={{ width: "300px", height: "200px" }}>
+      <CardPreview style={{ width: "268px", height: "200px" }}>
         {imageSrc && (
           <Image
             src={imageSrc}
