@@ -4,15 +4,18 @@ import { tokens } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllRecipes } from "src/server/queries/fetchAllRecipes";
+import { useSearchBox } from "../context";
 
 export default function Home() {
+  const { searchBoxValue } = useSearchBox();
+
   const {
     data: recipes,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes"],
-    queryFn: () => fetchAllRecipes(),
+    queryKey: ["recipes", searchBoxValue],
+    queryFn: () => fetchAllRecipes(searchBoxValue),
   });
 
   return (

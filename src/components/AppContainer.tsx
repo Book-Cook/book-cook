@@ -5,6 +5,7 @@ import {
   webLightTheme,
 } from "@fluentui/react-components";
 import { Toolbar } from "./";
+import { SearchBoxProvider } from "../context";
 
 const fluentProviderStyles = {
   height: "100%",
@@ -15,10 +16,18 @@ const fluentProviderStyles = {
 export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
+  const [searchBoxValue, setSearchBoxValue] = React.useState("");
+
+  const onSearchBoxValueChange = (incomingValue: string) => {
+    setSearchBoxValue(incomingValue);
+  };
+
   return (
     <FluentProvider theme={webLightTheme} style={fluentProviderStyles}>
-      <Toolbar />
-      {children}
+      <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+        <Toolbar />
+        {children}
+      </SearchBoxProvider>
     </FluentProvider>
   );
 };

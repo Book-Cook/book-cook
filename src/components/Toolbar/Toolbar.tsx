@@ -1,13 +1,9 @@
 import * as React from "react";
-import {
-  Toolbar as ToolbarComponent,
-  SearchBox,
-  Link,
-  Display,
-} from "@fluentui/react-components";
+import { Toolbar as ToolbarComponent, Link } from "@fluentui/react-components";
 import { LargeTitle } from "../";
 import { makeStyles } from "@griffel/react";
 import { tokens } from "@fluentui/react-theme";
+import { SearchBar } from "./SearchBar";
 
 const useToolbarStyles = makeStyles({
   root: {
@@ -47,7 +43,7 @@ export const Toolbar = () => {
       >
         <LargeTitle size={700}>Book Cook</LargeTitle>
       </Link>
-      <SearchBox appearance="outline" placeholder="Search for snacks" />
+      <SearchBar />
     </ToolbarComponent>
   );
 };
