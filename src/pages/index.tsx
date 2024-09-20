@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RecipeCard } from "../components";
+import { RecipeCard, FallbackScreen } from "../components";
 import { tokens } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
@@ -39,30 +39,29 @@ export default function Home() {
           alignItems: "start",
         }}
       >
+        <FallbackScreen
+          isLoading={isLoading}
+          isError={error}
+          dataLength={recipes?.length}
+        />
         {recipes?.map((recipe) => {
           return (
             <RecipeCard
               title={recipe?.title}
               id={recipe?._id}
-              createdDate={recipe?.createdDate}
+              createdDate={
+                recipe?.createdAt &&
+                new Date(recipe?.createdAt).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              }
               imageSrc={recipe?.imageURL}
               tags={recipe?.tags}
             />
           );
         })}
-        {/* <RecipeCard title="Cookies" />
-        <RecipeCard title="Cookies" />
-        <RecipeCard title="Cookies" />
-        <RecipeCard title="Cookies" />
-        <RecipeCard title="Cookies" />
-        <RecipeCard title="Cookies" />
-        <RecipeCard
-          title="French Toast"
-          id="66eb31c43c095a50cb2e60a2"
-          createdDate="8/3/2024"
-          imageSrc="https://www.tasteofhome.com/wp-content/uploads/2020/10/The-Best-French-Toast_EXPS_TOHFM21_256104_E09_24_9b.jpg"
-          tags={["test"]}
-        /> */}
       </div>
     </div>
   );

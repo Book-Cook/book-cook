@@ -25,9 +25,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
       <CardHeader
         header={<Text weight="bold">{title}</Text>}
         description={<Text italic>{createdDate}</Text>}
+        style={{ maxHeight: "100px" }}
       />
-
-      <CardPreview style={{ width: "268px", height: "200px" }}>
+      <CardPreview style={{ width: "268px", height: "100%" }}>
         {imageSrc && (
           <Image
             src={imageSrc}
@@ -38,11 +38,24 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
           />
         )}
       </CardPreview>
-      <CardFooter>
-        {tags?.map((i) => {
-          return <Tag>{i}</Tag>;
-        })}
-      </CardFooter>
+      {tags && tags?.length > 0 && (
+        <CardFooter
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            width: "100%",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            maxHeight: "70px",
+            overflowY: "auto",
+          }}
+        >
+          {tags?.map((i) => {
+            return <Tag>{i}</Tag>;
+          })}
+        </CardFooter>
+      )}
     </Card>
   );
 };
