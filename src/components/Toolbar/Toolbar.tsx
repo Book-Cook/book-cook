@@ -3,7 +3,9 @@ import {
   Toolbar as ToolbarComponent,
   SearchBox,
   Link,
+  Display,
 } from "@fluentui/react-components";
+import { LargeTitle } from "../";
 import { makeStyles } from "@griffel/react";
 import { tokens } from "@fluentui/react-theme";
 
@@ -23,7 +25,7 @@ const useToolbarStyles = makeStyles({
     flexShrink: 0,
     zIndex: 10000,
     boxShadow: tokens.shadow2,
-    backgroundColor: tokens.colorNeutralBackground5,
+    backgroundColor: tokens.colorNeutralBackground1,
   },
   linkStyles: {
     textDecorationLine: "none",
@@ -36,7 +38,15 @@ export const Toolbar = () => {
 
   return (
     <ToolbarComponent className={toolbarStyles.root}>
-      Book Cook
+      <Link
+        href="/"
+        style={{
+          textDecorationLine: "none",
+          color: tokens.colorNeutralForeground1,
+        }}
+      >
+        <LargeTitle size={700}>Book Cook</LargeTitle>
+      </Link>
       <SearchBox appearance="outline" placeholder="Search for snacks" />
     </ToolbarComponent>
   );

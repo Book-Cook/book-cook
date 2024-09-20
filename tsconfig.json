@@ -1,33 +1,35 @@
 {
-    "exclude": ["node_modules"],
-    "compilerOptions": {
-      "outDir": "lib",
-      "module": "esnext",
-      "target": "esnext",
-      "sourceMap": true,
-      "declaration": true,
-      "declarationMap": true,
-      "noEmitOnError": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "moduleResolution": "node",
-      "jsx": "preserve",
-      "lib": ["esnext", "dom"],
-      "types": ["jest", "@types/jest"],
-      "baseUrl": ".",
-      "allowJs": true,
-      "noEmit": true,
-      "incremental": true,
-      "resolveJsonModule": true,
-      "isolatedModules": true
-    },
-    "include": [
-      "next-env.d.ts",
-      "**/*.ts",
-      "**/*.tsx",
-      "src/pages/index.js",
-      "src/pages/api/auth/[...nextauth].ts"
-, "src/clients/mongo.js"    ]
-  }
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "outDir": "lib",
+    "module": "esnext",
+    "target": "esnext",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "types": ["jest", "@types/jest"],
+    "baseUrl": ".",
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/pages/index.js",
+    "src/pages/api/auth/[...nextauth].ts",
+    "src/clients/mongo.js",
+    "src/components/FallbackScreens/LoadingScreen.tx"
+  ]
+}
