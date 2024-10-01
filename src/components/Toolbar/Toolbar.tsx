@@ -1,9 +1,14 @@
 import * as React from "react";
-import { Toolbar as ToolbarComponent, Link } from "@fluentui/react-components";
+import {
+  Toolbar as ToolbarComponent,
+  Link as FluentLink,
+  Button,
+} from "@fluentui/react-components";
 import { LargeTitle } from "../";
 import { makeStyles } from "@griffel/react";
 import { tokens } from "@fluentui/react-theme";
 import { SearchBar } from "./SearchBar";
+import { useRouter } from "next/router";
 
 const useToolbarStyles = makeStyles({
   root: {
@@ -31,10 +36,15 @@ const useToolbarStyles = makeStyles({
 
 export const Toolbar = () => {
   const toolbarStyles = useToolbarStyles();
+  const router = useRouter();
+
+  const onNewRecipeButtonPress = () => {
+    router.push(`/newRecipe`);
+  };
 
   return (
     <ToolbarComponent className={toolbarStyles.root}>
-      <Link
+      <FluentLink
         href="/"
         style={{
           textDecorationLine: "none",
@@ -42,8 +52,14 @@ export const Toolbar = () => {
         }}
       >
         <LargeTitle size={700}>Book Cook</LargeTitle>
-      </Link>
-      <SearchBar />
+      </FluentLink>
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Button appearance="subtle" onClick={onNewRecipeButtonPress}>
+          New recipe
+        </Button>
+
+        <SearchBar />
+      </div>
     </ToolbarComponent>
   );
 };
