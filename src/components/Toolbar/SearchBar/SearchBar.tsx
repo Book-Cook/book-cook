@@ -5,9 +5,13 @@ import type {
   InputOnChangeData,
 } from "@fluentui/react-components";
 import { useSearchBox } from "../../../context";
+import { useRouter } from "next/router";
 
 export const SearchBar = () => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
+
+  const router = useRouter()
+  const path = router.asPath;
 
   const onSearchBarChange = (
     _ev: SearchBoxChangeEvent,
@@ -16,12 +20,22 @@ export const SearchBar = () => {
     onSearchBoxValueChange(data.value);
   };
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      if (path !== '/') {
+        // User is not on the home page, reroute
+        router.push(`/`);
+      }
+    }
+  };
+
   return (
     <SearchBox
       value={searchBoxValue}
       onChange={onSearchBarChange}
       appearance="outline"
       placeholder="Search for snacks"
+      onKeyDown={handleKeyDown}
     />
   );
 };
