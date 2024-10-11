@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { MarkdownParser, FallbackScreen } from "../../components";
-import { tokens, Card, Spinner } from "@fluentui/react-components";
+import { tokens, Card, Spinner, Divider } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecipe } from "../../server";
 import * as React from "react";
@@ -10,11 +10,7 @@ export default function Recipes() {
   const router = useRouter();
   const { recipes } = router.query;
 
-  const {
-    data: recipe,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: recipe, isLoading } = useQuery({
     queryKey: ["recipe", recipes],
     queryFn: () => fetchRecipe(recipes as string),
   });
@@ -35,6 +31,9 @@ export default function Recipes() {
           backgroundColor: tokens.colorNeutralBackground3,
           border: `1px solid ${tokens.colorNeutralStroke2}`,
           padding: "50px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "50px",
         }}
       >
         <div
@@ -46,6 +45,7 @@ export default function Recipes() {
             overflow: "hidden",
             borderRadius: "8px",
             boxShadow: tokens.shadow8,
+            flexDirection: "row",
           }}
         >
           {recipe?.imageURL && (
@@ -58,15 +58,18 @@ export default function Recipes() {
             />
           )}
         </div>
-        {!isLoading ? (
-          recipe?.data ? (
-            <MarkdownParser markdownInput={recipe.data} />
+        <Divider />
+        <div>
+          {!isLoading ? (
+            recipe?.data ? (
+              <MarkdownParser markdownInput={recipe.data} />
+            ) : (
+              <FallbackScreen view="empty" />
+            )
           ) : (
-            <FallbackScreen view="empty" />
-          )
-        ) : (
-          <FallbackScreen view="loading" />
-        )}
+            <FallbackScreen view="loading" />
+          )}
+        </div>
       </div>
     </div>
   );

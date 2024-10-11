@@ -11,11 +11,7 @@ export const MarkdownParser: React.FC<MarkdownParserProps> = (props) => {
       components={{
         p: ({ children }) => <Body1 as="p">{children}</Body1>,
         title: ({ children }) => <Display as="h1">{children}</Display>,
-        h1: ({ children }) => (
-          <LargeTitle as="h1" style={{ display: "block" }}>
-            {children}
-          </LargeTitle>
-        ),
+        h1: ({ children }) => <LargeTitle as="h1">{children}</LargeTitle>,
         strong: ({ children }) => (
           <Body1 as="strong" weight="bold">
             {children}

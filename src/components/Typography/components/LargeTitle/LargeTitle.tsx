@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 });
 
 export const LargeTitle: FunctionComponent<TextProps> = createText(
-  { as: "h2", font: "base", size: 900, weight: "semibold" },
+  { as: "h2", font: "base", size: 800, weight: "semibold" },
   useStyles,
   "LargeTitle"
 );
