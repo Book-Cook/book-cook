@@ -26,10 +26,9 @@ export default function Recipes() {
     >
       <div
         style={{
-          maxWidth: "740px",
+          maxWidth: "840px",
           marginBottom: "100px",
-          backgroundColor: tokens.colorNeutralBackground3,
-          border: `1px solid ${tokens.colorNeutralStroke2}`,
+          backgroundColor: tokens.colorNeutralBackground2,
           padding: "50px",
           display: "flex",
           flexDirection: "column",
