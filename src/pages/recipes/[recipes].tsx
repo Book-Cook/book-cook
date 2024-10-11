@@ -10,7 +10,11 @@ export default function Recipes() {
   const router = useRouter();
   const { recipes } = router.query;
 
-  const { data: recipe, isLoading } = useQuery({
+  const {
+    data: recipe,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["recipe", recipes],
     queryFn: () => fetchRecipe(recipes as string),
   });
@@ -59,15 +63,13 @@ export default function Recipes() {
         </div>
         <Divider />
         <div>
-          {!isLoading ? (
-            recipe?.data ? (
-              <MarkdownParser markdownInput={recipe.data} />
-            ) : (
-              <FallbackScreen view="empty" />
-            )
-          ) : (
-            <FallbackScreen view="loading" />
-          )}
+          <FallbackScreen
+            isLoading={isLoading}
+            isError={Boolean(error)}
+            dataLength={recipe?.data.length}
+          >
+            {recipe?.data && <MarkdownParser markdownInput={recipe.data} />}
+          </FallbackScreen>
         </div>
       </div>
     </div>

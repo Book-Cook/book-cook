@@ -1,3 +1,3 @@
 export const NoDataScreen = () => {
-  return "No data available";
+  return <div>No data available</div>;
 };

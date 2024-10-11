@@ -4,7 +4,7 @@ import { LoadingScreen } from "./LoadingScreen";
 import { NoDataScreen } from "./NoDataScreen";
 
 export const FallbackScreen: React.FC<FallbackScreenProps> = (props) => {
-  const { isLoading, dataLength, isError } = props;
+  const { isLoading, dataLength, isError, children } = props;
 
   if (isError) {
     return <ErrorScreen />;
@@ -18,5 +18,5 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = (props) => {
     return <NoDataScreen />;
   }
 
-  return null;
+  return children ? <>{children}</> : null;
 };

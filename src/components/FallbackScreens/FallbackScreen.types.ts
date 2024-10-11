@@ -12,5 +12,10 @@ export type FallbackScreenProps = {
   /**
    * Whether there was an error fetching the data
    */
-  isError: Error | null;
+  isError: boolean;
+
+  /**
+   * The children components to render when there is no error or loading
+   */
+  children: React.ReactNode;
 };

@@ -44,27 +44,28 @@ export default function Home() {
       >
         <FallbackScreen
           isLoading={isLoading}
-          isError={error}
+          isError={Boolean(error)}
           dataLength={recipes?.length}
-        />
-        {recipes?.map((recipe) => {
-          return (
-            <RecipeCard
-              title={recipe?.title}
-              id={recipe?._id}
-              createdDate={
-                recipe?.createdAt &&
-                new Date(recipe?.createdAt).toLocaleDateString(undefined, {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })
-              }
-              imageSrc={recipe?.imageURL}
-              tags={recipe?.tags}
-            />
-          );
-        })}
+        >
+          {recipes?.map((recipe) => {
+            return (
+              <RecipeCard
+                title={recipe?.title}
+                id={recipe?._id}
+                createdDate={
+                  recipe?.createdAt &&
+                  new Date(recipe?.createdAt).toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                }
+                imageSrc={recipe?.imageURL}
+                tags={recipe?.tags}
+              />
+            );
+          })}
+        </FallbackScreen>
       </div>
     </div>
   );
