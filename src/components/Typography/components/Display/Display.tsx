@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 });
 
 export const Display: FunctionComponent<TextProps> = createText(
-  { as: "h1", font: "base", size: 800, weight: "bold" },
+  { as: "h1", font: "base", size: 900, weight: "bold" },
   useStyles,
   "Display"
 );

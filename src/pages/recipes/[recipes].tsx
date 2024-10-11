@@ -3,6 +3,8 @@ import { MarkdownParser, FallbackScreen } from "../../components";
 import { tokens, Card, Spinner } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecipe } from "../../server";
+import * as React from "react";
+import Image from "next/image";
 
 export default function Recipes() {
   const router = useRouter();
@@ -28,11 +30,34 @@ export default function Recipes() {
     >
       <div
         style={{
-          maxWidth: "700px",
-          marginTop: "40px",
+          maxWidth: "740px",
           marginBottom: "100px",
+          backgroundColor: tokens.colorNeutralBackground3,
+          border: `1px solid ${tokens.colorNeutralStroke2}`,
+          padding: "50px",
         }}
       >
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            maxWidth: "300px",
+            height: "250px",
+            overflow: "hidden",
+            borderRadius: "8px",
+            boxShadow: tokens.shadow8,
+          }}
+        >
+          {recipe?.imageURL && (
+            <Image
+              src={recipe?.imageURL}
+              alt={recipe?.title}
+              objectFit="contain"
+              fill
+              style={{ objectFit: "cover" }}
+            />
+          )}
+        </div>
         {!isLoading ? (
           recipe?.data ? (
             <MarkdownParser markdownInput={recipe.data} />
