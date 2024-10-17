@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import { MarkdownParser, FallbackScreen } from "../../components";
-import { tokens, Card, Spinner, Divider } from "@fluentui/react-components";
+import { MarkdownParser, FallbackScreen, Display } from "../../components";
+import { tokens, Tag, Divider, Text } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecipe } from "../../server";
 import * as React from "react";
@@ -41,25 +41,68 @@ export default function Recipes() {
       >
         <div
           style={{
-            position: "relative",
             display: "flex",
-            maxWidth: "300px",
-            height: "250px",
-            overflow: "hidden",
+            flexWrap: "wrap",
             borderRadius: "8px",
-            boxShadow: tokens.shadow8,
-            flexDirection: "row",
+            // boxShadow: tokens.shadow8,
+            overflow: "hidden",
           }}
         >
           {recipe?.imageURL && (
-            <Image
-              src={recipe?.imageURL}
-              alt={recipe?.title}
-              objectFit="contain"
-              fill
-              style={{ objectFit: "cover" }}
-            />
+            <div
+              style={{
+                flex: "1 1 50%",
+                minWidth: "300px",
+                position: "relative",
+                height: "250px",
+              }}
+            >
+              <Image
+                src={recipe.imageURL}
+                alt={recipe.title}
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 600px) 100vw, 50vw"
+              />
+            </div>
           )}
+          <div
+            style={{
+              flex: "1 1 50%",
+              minWidth: "300px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              padding: "16px",
+              boxSizing: "border-box",
+            }}
+          >
+            <Display style={{ margin: 0 }}>{recipe?.title}</Display>
+            {recipe?.createdAt && (
+              <Text italic>
+                {new Date(recipe.createdAt).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </Text>
+            )}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+              {recipe?.tags?.map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    backgroundColor: "#eee",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
         <Divider />
         <div>
