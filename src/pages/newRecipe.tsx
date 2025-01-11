@@ -1,10 +1,37 @@
 import * as React from "react";
 import { Field, Input, Textarea, Button } from "@fluentui/react-components";
 import { Display } from "../components";
+import { useCreateRecipe } from "../clientToServer";
 
 export default function NewRecipe() {
   const [title, setTitle] = React.useState("");
   const [recipe, setRecipe] = React.useState("");
+  const { mutate, isError, error } = useCreateRecipe();
+
+  const handleSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault();
+
+    if (!title || !recipe) {
+      alert("Please provide both a title and recipe content.");
+      return;
+    }
+
+    mutate(
+      { title, data: recipe, tags: [], imageURL: "" },
+      {
+        onSuccess: () => {
+          alert("Recipe created successfully!");
+          setTitle("");
+          setRecipe("");
+        },
+        onError: (err) => {
+          if (err instanceof Error) {
+            alert(`Failed to create recipe: ${err.message}`);
+          }
+        },
+      }
+    );
+  };
 
   return (
     <div
@@ -25,10 +52,7 @@ export default function NewRecipe() {
           maxWidth: "500px",
           gap: "15px",
         }}
-        onSubmit={(ev) => {
-          console.log("api call here" + recipe + title);
-          ev.preventDefault();
-        }}
+        onSubmit={handleSubmit}
       >
         <Display>Create a recipe</Display>
         <Field label="Title">

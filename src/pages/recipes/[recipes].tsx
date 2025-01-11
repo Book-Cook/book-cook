@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { MarkdownParser, FallbackScreen, Display } from "../../components";
 import { tokens, Tag, Divider, Text } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRecipe } from "../../server";
+import { fetchRecipe } from "../../clientToServer";
 import * as React from "react";
 import Image from "next/image";
 
