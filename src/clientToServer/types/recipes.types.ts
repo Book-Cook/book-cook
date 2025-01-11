@@ -29,3 +29,8 @@ export type Recipe = {
    */
   tags: string[];
 };
+
+export type CreateRecipeResponse = {
+  message: string;
+  recipeId: string;
+};
