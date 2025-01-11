@@ -3,11 +3,14 @@ import DOMPurify from "dompurify";
 
 export const fetchAllRecipes = async (
   searchBoxValue: string,
-  orderBy: string
+  sortProperty: string,
+  sortDirection: string
 ): Promise<Recipe[]> => {
-  const sanitized = DOMPurify.sanitize(searchBoxValue);
+  const sanitizedSearchBox = DOMPurify.sanitize(searchBoxValue);
+  const sanitizedSortProp = DOMPurify.sanitize(sortProperty);
+  const sanitizedSortDirection = DOMPurify.sanitize(sortDirection);
   const response = await fetch(
-    `/api/recipes?search=${encodeURIComponent(sanitized)}&$orderby=${encodeURIComponent(orderBy)}`
+    `/api/recipes?search=${encodeURIComponent(sanitizedSearchBox)}&sortProperty=${encodeURIComponent(sanitizedSortProp)}&sortDirection=${encodeURIComponent(sanitizedSortDirection)}`
   );
 
   if (!response.ok) {

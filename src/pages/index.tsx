@@ -19,7 +19,7 @@ export default function Home() {
     error,
   } = useQuery({
     queryKey: ["recipes", searchBoxValue],
-    queryFn: () => fetchAllRecipes(searchBoxValue, "date desc"),
+    queryFn: () => fetchAllRecipes(searchBoxValue, "createdAt", "desc"),
   });
 
   const onSortOptionSelect = (
