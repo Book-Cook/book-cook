@@ -1,10 +1,14 @@
 import * as React from "react";
 import { RecipeCard, FallbackScreen } from "../components";
-import { tokens } from "@fluentui/react-components";
+import { tokens, Dropdown, Option, Label } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllRecipes } from "src/server/queries/fetchAllRecipes";
 import { useSearchBox } from "../context";
+import type {
+  SelectionEvents,
+  OptionOnSelectData,
+} from "@fluentui/react-components";
 
 export default function Home() {
   const { searchBoxValue } = useSearchBox();
@@ -15,8 +19,15 @@ export default function Home() {
     error,
   } = useQuery({
     queryKey: ["recipes", searchBoxValue],
-    queryFn: () => fetchAllRecipes(searchBoxValue),
+    queryFn: () => fetchAllRecipes(searchBoxValue, "date desc"),
   });
+
+  const onSortOptionSelect = (
+    _ev: SelectionEvents,
+    data: OptionOnSelectData
+  ) => {
+    console.log(data.selectedOptions ?? "");
+  };
 
   return (
     <div
@@ -30,6 +41,27 @@ export default function Home() {
         marginRight: "32px",
       }}
     >
+      <div
+        style={{
+          padding: "12px",
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        {recipes?.length} recipes
+        <Dropdown
+          appearance="underline"
+          onOptionSelect={onSortOptionSelect}
+          defaultSelectedOptions={["dateNewest"]}
+          defaultValue={"Sort by date (newest)"}
+        >
+          <Option value={"dateNewest"}>Sort by date (newest)</Option>
+          <Option value={"dateOldest"}>Sort by date (oldest)</Option>
+          <Option value={"ascTitle"}>Sort by title (asc)</Option>
+          <Option value={"descTitle"}>Sort by title (desc)</Option>
+        </Dropdown>
+      </div>
       <div
         style={{
           width: "100%",
