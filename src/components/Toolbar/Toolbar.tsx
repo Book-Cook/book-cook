@@ -42,14 +42,18 @@ export const Toolbar = () => {
     router.push(`/newRecipe`);
   };
 
+  const onHomePageButtonPress = () => {
+    router.push(`/`);
+  };
+
   return (
     <ToolbarComponent className={toolbarStyles.root}>
       <FluentLink
-        href="/"
         style={{
           textDecorationLine: "none",
           color: tokens.colorNeutralForeground1,
         }}
+        onClick={onHomePageButtonPress}
       >
         <LargeTitle size={700}>Book Cook</LargeTitle>
       </FluentLink>
