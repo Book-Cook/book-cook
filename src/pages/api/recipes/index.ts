@@ -15,12 +15,18 @@ export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
     // Retrieve all recipes that matches whatever is in the search bar
     try {
-      const { title } = req.query;
+      const { search } = req.query;
+
       let query = {};
       let projection = { data: 0 };
 
-      if (title) {
-        query = { title: { $regex: title, $options: 'i' } };
+      if (search) {
+        query = {
+          $or: [
+            { title: { $regex: search, $options: 'i' } }, // Match title
+            { tags: { $regex: search, $options: 'i' } }   // Match tags (array of strings)
+          ]
+        };
       }
 
       const recipes = await db.collection('recipes').find(query, { projection }).toArray();
