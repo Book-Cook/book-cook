@@ -1,13 +1,15 @@
 import { useRouter } from "next/router";
 import { MarkdownParser, FallbackScreen, Display } from "../../components";
-import { tokens, Tag, Divider, Text } from "@fluentui/react-components";
+import { tokens, Tag, Divider, Text, Button } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRecipe } from "../../clientToServer";
+import { fetchRecipe, useDeleteRecipe } from "../../clientToServer";
 import * as React from "react";
 import Image from "next/image";
 
 export default function Recipes() {
   const router = useRouter();
+  const { mutate: deleteMutate } = useDeleteRecipe();
+
   const { recipes } = router.query;
 
   const {
@@ -18,6 +20,25 @@ export default function Recipes() {
     queryKey: ["recipe", recipes],
     queryFn: () => fetchRecipe(recipes as string),
   });
+
+  const onRecipeDelete = () => {
+    if (recipe?._id) {
+      deleteMutate(recipe?._id, {
+        onSuccess: () => {
+          new Promise<void>((resolve) => {
+            alert("Recipe deleted successfully!");
+            resolve();
+          });
+          router.push(`/`);
+        },
+        onError: (error) => {
+          if (error instanceof Error) {
+            alert(`Failed to delete recipe: ${error.message}`);
+          }
+        },
+      });
+    }
+  };
 
   return (
     <div
@@ -113,6 +134,15 @@ export default function Recipes() {
           >
             {recipe?.data && <MarkdownParser markdownInput={recipe.data} />}
           </FallbackScreen>
+        </div>
+        <div>
+          <Button
+            appearance="secondary"
+            style={{ backgroundColor: "darkRed", color: "white" }}
+            onClick={onRecipeDelete}
+          >
+            Delete
+          </Button>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
     // Retrieve all recipes that matches whatever is in the search bar
     try {
-      const { search } = req.query;
+      const { search, sortProperty = 'createdAt', sortDirection = 'desc' } = req.query;
 
       let query = {};
       let projection = { data: 0 };
@@ -29,7 +29,29 @@ export default async function handler(req: any, res: any) {
         };
       }
 
-      const recipes = await db.collection('recipes').find(query, { projection }).toArray();
+      console.log("sortProperty=" + sortProperty)
+      console.log("sortDirection=" + sortDirection)
+
+      // Validate sorting inputs
+      const validProperties = ['createdAt', 'title'];
+      const validDirections = ['asc', 'desc'];
+
+      if (!validProperties.includes(sortProperty)) {
+        throw new Error(`Invalid sort property: ${sortProperty}`);
+      }
+
+      if (!validDirections.includes(sortDirection)) {
+        throw new Error(`Invalid sort direction: ${sortDirection}`);
+      }
+
+      // Determine sorting direction (1 for ascending, -1 for descending)
+      const direction = sortDirection === 'asc' ? 1 : -1;
+
+      const recipes = await db.collection('recipes')
+        .find(query, { projection })
+        .sort({ [sortProperty]: direction })
+        .toArray();
+
       res.status(200).json(recipes);
     } catch (error) {
       console.error('Failed to fetch recipes:', error);

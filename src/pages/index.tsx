@@ -3,7 +3,7 @@ import { RecipeCard, FallbackScreen } from "../components";
 import { tokens, Dropdown, Option, Label } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllRecipes } from "src/clientToServer/queries/fetchAllRecipes";
+import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useSearchBox } from "../context";
 import type {
   SelectionEvents,
@@ -19,7 +19,7 @@ export default function Home() {
     error,
   } = useQuery({
     queryKey: ["recipes", searchBoxValue],
-    queryFn: () => fetchAllRecipes(searchBoxValue, "date desc"),
+    queryFn: () => fetchAllRecipes(searchBoxValue, "createdAt", "desc"),
   });
 
   const onSortOptionSelect = (
