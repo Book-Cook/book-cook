@@ -40,7 +40,7 @@ const useToolbarStyles = makeStyles({
     boxSizing: "border-box",
     flexShrink: 0,
     zIndex: 10000,
-    backdropFilter: "blur(10px)",
+    backgroundColor: tokens.colorNeutralBackground1,
     boxShadow: "0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05)",
     ...shorthands.padding("0", "24px"),
     ...shorthands.borderRadius(0, 0, "8px", "8px"),

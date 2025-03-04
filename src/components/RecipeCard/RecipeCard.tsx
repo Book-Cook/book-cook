@@ -38,11 +38,6 @@ const useStyles = makeStyles({
   },
   image: {
     objectFit: "cover",
-    transition: "transform 0.5s ease",
-
-    ":hover": {
-      transform: "scale(1.05)",
-    },
   },
   placeholderImage: {
     height: "100%",
@@ -57,6 +52,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
+    background: tokens.colorNeutralBackground1,
+    borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
   },
   tagsContainer: {
     display: "flex",
@@ -73,6 +70,20 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground2,
     whiteSpace: "nowrap",
   },
+  badgeNew: {
+    position: "absolute",
+    top: "12px",
+    right: "12px",
+    background: tokens.colorPaletteRedBackground2,
+    color: tokens.colorPaletteRedForeground2,
+    ...shorthands.padding("4px", "8px"),
+    ...shorthands.borderRadius("4px"),
+    fontSize: "11px",
+    fontWeight: 600,
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    zIndex: 1,
+  },
+
   moreTag: {
     ...shorthands.padding("4px", "10px"),
     ...shorthands.borderRadius("16px"),
@@ -96,19 +107,43 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left; // x position within the element
-      const y = e.clientY - rect.top; // y position within the element
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-      // Calculate rotation based on mouse position (subtle effect)
-      const xRotation = ((y - rect.height / 2) / rect.height) * 4;
-      const yRotation = ((rect.width / 2 - x) / rect.width) * 4;
+      // Calculate rotation with more natural values
+      const xRotation = ((y - rect.height / 2) / rect.height) * 6;
+      const yRotation = ((rect.width / 2 - x) / rect.width) * 6;
 
-      card.style.transform = `perspective(1000px) scale(1.03) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+      // Calculate light highlight position (follows mouse)
+      const highlightX = (x / rect.width) * 100;
+      const highlightY = (y / rect.height) * 100;
+
+      // Apply dynamic transform and lighting effects
+      card.style.transform = `perspective(1200px) scale(1.02) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+      card.style.boxShadow = `
+        ${-yRotation / 3}px ${xRotation / 3}px 20px rgba(0,0,0,0.15),
+        0 10px 30px -5px rgba(0,0,0,0.1)
+      `;
+
+      // Add dynamic highlight/reflection effect
+      card.style.background = `
+        linear-gradient(
+          120deg,
+          ${tokens.colorNeutralBackground1} 0%,
+          ${tokens.colorNeutralBackground1Hover} 40%,
+          rgba(255,255,255,0.15) ${highlightX}%,
+          ${tokens.colorNeutralBackground1Hover} 60%,
+          ${tokens.colorNeutralBackground1} 100%
+        )
+      `;
     };
 
     const handleMouseLeave = () => {
+      // Reset all effects smoothly
       card.style.transform =
-        "perspective(1000px) rotateX(0) rotateY(0) scale(1)";
+        "perspective(1200px) rotateX(0) rotateY(0) scale(1)";
+      card.style.boxShadow = "0 6px 16px rgba(0,0,0,0.08)";
+      card.style.background = "";
     };
 
     card.addEventListener("mousemove", handleMouseMove);
@@ -133,15 +168,36 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
       })
     : "";
 
+  /**
+   * Check if the recipe is new (created within the last 24 hours)
+   * TODO: We should check if the user has already clicked the card in the future
+   */
+  const isNew = React.useMemo(() => {
+    if (!createdDate) return false;
+
+    const recipeDate = new Date(createdDate);
+    const currentDate = new Date();
+
+    // Calculate time difference in milliseconds
+    const timeDifference = currentDate.getTime() - recipeDate.getTime();
+
+    // Convert to hours (ms to hours)
+    const hoursDifference = timeDifference / (1000 * 60 * 60);
+
+    return hoursDifference <= 24;
+  }, [createdDate]);
+
   return (
     <Card ref={cardRef} onClick={onCardClick} className={styles.card}>
       <div className={styles.cardInner}>
+        {isNew && <span className={styles.badgeNew}>NEW</span>}
         <div className={styles.imageContainer}>
           {imageSrc ? (
             <Image
               src={imageSrc}
               alt={title}
               fill
+              draggable={false}
               className={styles.image}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
