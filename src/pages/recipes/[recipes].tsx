@@ -46,14 +46,12 @@ export default function Recipes() {
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: tokens.colorNeutralBackground2,
       }}
     >
       <div
         style={{
           maxWidth: "840px",
           marginBottom: "100px",
-          backgroundColor: tokens.colorNeutralBackground2,
           padding: "50px",
           display: "flex",
           flexDirection: "column",

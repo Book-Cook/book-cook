@@ -126,7 +126,7 @@ const useToolbarStyles = makeStyles({
     gap: "10px",
     fontWeight: "700",
     fontSize: "20px",
-    color: "#9272e6",
+    color: tokens.colorBrandBackground,
     textDecoration: "none",
     transition: "transform 0.2s ease",
     ":hover": {
@@ -139,7 +139,7 @@ const useToolbarStyles = makeStyles({
     justifyContent: "center",
     width: "34px",
     height: "34px",
-    backgroundColor: "#9272e6",
+    backgroundColor: tokens.colorBrandBackground,
     color: "white",
     borderRadius: "10px",
     boxShadow: "0 2px 5px rgba(146, 114, 230, 0.3)",
@@ -172,7 +172,6 @@ const useToolbarStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    backgroundColor: "#9272e6",
     color: "#ffffff",
     fontWeight: "500",
     fontSize: "14px",
@@ -191,7 +190,7 @@ const useToolbarStyles = makeStyles({
   },
 
   logoText: {
-    background: "linear-gradient(135deg, #9272e6 0%, #6943d1 100%)",
+    background: tokens.colorBrandBackground,
     backgroundClip: "text",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
