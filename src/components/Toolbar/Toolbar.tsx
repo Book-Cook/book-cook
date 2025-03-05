@@ -79,6 +79,7 @@ const useToolbarStyles = makeStyles({
       backgroundColor: tokens.colorBrandBackground,
       transform: "translateX(-50%)",
       transition: "width 0.2s ease-in-out",
+      borderRadius: "999px",
     },
 
     ":hover": {
@@ -240,8 +241,7 @@ export const Toolbar = () => {
               Recipes
             </FluentLink>
           </Link>
-          {/*
-          <Link href="/collections" className={styles.nextLink} passHref>
+          {/* <Link href="/collections" className={styles.nextLink} passHref>
             <FluentLink
               className={`${styles.linkStyles} ${path.includes("/collections") ? styles.activeLink : ""}`}
             >
@@ -267,12 +267,7 @@ export const Toolbar = () => {
           New Recipe
         </Button>
         <SearchBar />
-        {/* <Tooltip content="Settings" relationship="label">
-          <Button className={styles.iconButton}>
-            <SettingsRegular fontSize={20} />
-          </Button>
-        </Tooltip>
-        <Tooltip content="Profile" relationship="label">
+        {/* <Tooltip content="Profile" relationship="label">
           <Avatar
             name="CZ"
             size={36}
