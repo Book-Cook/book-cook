@@ -60,8 +60,10 @@ const useStyles = makeStyles({
       from: { opacity: 0, transform: "translateY(8px)" },
       to: { opacity: 1, transform: "translateY(0)" },
     },
-    animationDuration: "0.3s",
+    animationDuration: ".3s",
     animationTimingFunction: "ease-out",
+    animationFillMode: "both",
+    animationDelay: "var(--fadeInDelay)",
   },
 });
 
@@ -126,9 +128,11 @@ export default function Home() {
               <div
                 key={recipe._id}
                 className={`${styles.fadeIn} ${styles.cardWrapper}`}
-                style={{
-                  animationDelay: `${Math.min(index * 0.05, 0.5)}s`,
-                }}
+                style={
+                  {
+                    "--fadeInDelay": `${Math.min(index * 0.1, 0.5)}s`,
+                  } as React.CSSProperties
+                }
               >
                 <RecipeCard
                   title={recipe?.title}

@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 export const SearchBar = () => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
-  const router = useRouter()
+  const router = useRouter();
   const path = router.asPath;
 
   const onSearchBarChange = (
@@ -21,10 +21,10 @@ export const SearchBar = () => {
   };
 
   const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      if (path !== '/') {
+    if (event.key === "Enter") {
+      if (path !== "/recipes") {
         // User is not on the home page, reroute
-        router.push(`/`);
+        router.push(`/recipes`);
       }
     }
   };
