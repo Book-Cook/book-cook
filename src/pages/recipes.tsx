@@ -111,8 +111,8 @@ export default function Home() {
     }
   };
 
-   // While loading, show a loading indicator
-   if (status === "loading") {
+  // While loading, show a loading indicator
+  if (status === "loading") {
     return <div>Loading...</div>;
   }
 

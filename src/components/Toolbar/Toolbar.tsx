@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import * as React from "react";
 import {
   Toolbar as ToolbarComponent,
   Link as FluentLink,
@@ -274,7 +274,7 @@ export const Toolbar = () => {
             <MenuTrigger>
               <Tooltip content="Profile" relationship="label">
                 <Avatar
-                  name={session.user.name || session.user.email}
+                  name={session.user.name || session.user.email || "Unknown"}
                   size={36}
                   color="brand"
                   style={{ cursor: "pointer" }}
@@ -287,17 +287,12 @@ export const Toolbar = () => {
                   Settings
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem onClick={() => signOut()}>
-                  Sign Out
-                </MenuItem>
+                <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
               </MenuList>
             </MenuPopover>
           </Menu>
         ) : (
-          <Button
-            appearance="primary"
-            onClick={() => signIn("google")}
-          >
+          <Button appearance="primary" onClick={() => signIn("google")}>
             Sign In
           </Button>
         )}
