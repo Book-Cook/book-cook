@@ -26,6 +26,7 @@ import { makeStyles, shorthands } from "@griffel/react";
 import { SearchBar } from "./SearchBar";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const useToolbarStyles = makeStyles({
   root: {
@@ -169,7 +170,7 @@ const useToolbarStyles = makeStyles({
     },
     transition: "transform 0.2s ease",
   },
-  newRecipeButton: {
+  toolbarButton: {
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -216,6 +217,7 @@ const useToolbarStyles = makeStyles({
 export const Toolbar = () => {
   const styles = useToolbarStyles();
   const router = useRouter();
+  const { data: session } = useSession();
   const path = router.pathname;
 
   return (
@@ -262,19 +264,38 @@ export const Toolbar = () => {
           appearance="primary"
           icon={<Add24Regular />}
           onClick={() => router.push("/newRecipe")}
-          className={styles.newRecipeButton}
+          className={styles.toolbarButton}
         >
           New Recipe
         </Button>
         <SearchBar />
-        {/* <Tooltip content="Profile" relationship="label">
-          <Avatar
-            name="CZ"
-            size={36}
-            color="brand"
-            className={styles.avatarButton}
-          />
-        </Tooltip> */}
+        {session?.user ? (
+          <Menu>
+            <MenuTrigger>
+              <Tooltip content="Profile" relationship="label">
+                <Avatar
+                  name={session.user.name || session.user.email || "Unknown"}
+                  size={36}
+                  color="brand"
+                  style={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                <MenuItem onClick={() => router.push("/settings")}>
+                  Settings
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
+        ) : (
+          <Button appearance="primary" onClick={() => signIn("google")}>
+            Sign In
+          </Button>
+        )}
       </div>
     </ToolbarComponent>
   );

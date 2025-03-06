@@ -16,6 +16,7 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
+import { useSession } from "next-auth/react";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -76,6 +77,8 @@ const useStyles = makeStyles({
 export default function Home() {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
+  const { data: session, status } = useSession();
+
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [availableTags, setAvailableTags] = React.useState<string[]>([]);
@@ -107,6 +110,16 @@ export default function Home() {
       setSortOption(data.selectedOptions[0]);
     }
   };
+
+  // While loading, show a loading indicator
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  // If no session, show an empty page (or you can display a message)
+  if (!session) {
+    return <h1>Sign in to view this page.</h1>;
+  }
 
   return (
     <div className={styles.pageContainer}>
