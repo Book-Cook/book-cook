@@ -10,6 +10,7 @@ import type { Theme } from "@fluentui/react-components";
 import { tokens } from "@fluentui/react-theme";
 import { Toolbar } from "./";
 import { SearchBoxProvider } from "../context";
+import { SessionProvider } from "next-auth/react";
 
 // Create a lavender-inspired brand palette
 const appBrandVariants: BrandVariants = {
@@ -106,11 +107,13 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   return (
-    <FluentProvider theme={customLightTheme} style={fluentProviderStyles}>
-      <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
-        <Toolbar />
-        <main style={{ padding: "24px" }}>{children}</main>
-      </SearchBoxProvider>
-    </FluentProvider>
+    <SessionProvider>
+      <FluentProvider theme={customLightTheme} style={fluentProviderStyles}>
+        <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+          <Toolbar />
+          <main style={{ padding: "24px" }}>{children}</main>
+        </SearchBoxProvider>
+      </FluentProvider>
+    </SessionProvider>
   );
 };
