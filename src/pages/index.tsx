@@ -22,6 +22,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Toolbar } from "../components/Toolbar/Toolbar";
+import { useSession, signIn } from "next-auth/react";
 
 const useStyles = makeStyles({
   container: {
@@ -270,21 +271,21 @@ const featuredRecipes = [
     title: "Classic Chocolate Cake",
     time: "45 min",
     rating: 4.8,
-    image: "/images/chocolate-cake.jpg",
+    // image: "/images/chocolate-cake.jpg",
   },
   {
     id: 2,
     title: "Fresh Summer Salad",
     time: "15 min",
     rating: 4.5,
-    image: "/images/summer-salad.jpg",
+    // image: "/images/summer-salad.jpg",
   },
   {
     id: 3,
     title: "Homemade Pasta",
     time: "60 min",
     rating: 4.9,
-    image: "/images/homemade-pasta.jpg",
+    // image: "/images/homemade-pasta.jpg",
   },
 ];
 
@@ -307,6 +308,7 @@ const staggerContainer = {
 export default function Home() {
   const styles = useStyles();
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   // Replace with actual images for production
   const placeholderImages = featuredRecipes.map(
@@ -401,13 +403,13 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.6 }}
           >
             {/* Replace with your hero image */}
-            <Image
+            {/* <Image
               src="/hero-image.jpg"
               alt="Delicious food display"
               fill
               style={{ objectFit: "cover", borderRadius: "16px" }}
               priority
-            />
+            /> */}
           </motion.div>
         </div>
       </section>
@@ -501,83 +503,84 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className={styles.featuresSection}>
-        <motion.h2
-          className={styles.sectionTitle}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeIn}
-        >
-          Why Choose Book Cook
-        </motion.h2>
+      {!session && (
+        <>
+          <section className={styles.featuresSection}>
+            <motion.h2
+              className={styles.sectionTitle}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeIn}
+            >
+              Why Choose Book Cook
+            </motion.h2>
 
-        <motion.div
-          className={styles.featuresGrid}
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          <motion.div className={styles.featureItem} variants={fadeIn}>
-            <div className={styles.featureIcon}>
-              <SparkleRegular />
-            </div>
-            <h3 className={styles.featureTitle}>Smart Recommendations</h3>
-            <p className={styles.featureDesc}>
-              Discover new recipes tailored to your taste preferences and
-              cooking history.
-            </p>
-          </motion.div>
+            <motion.div
+              className={styles.featuresGrid}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+            >
+              <motion.div className={styles.featureItem} variants={fadeIn}>
+                <div className={styles.featureIcon}>
+                  <SparkleRegular />
+                </div>
+                <h3 className={styles.featureTitle}>Smart Recommendations</h3>
+                <p className={styles.featureDesc}>
+                  Discover new recipes tailored to your taste preferences and
+                  cooking history.
+                </p>
+              </motion.div>
 
-          <motion.div className={styles.featureItem} variants={fadeIn}>
-            <div className={styles.featureIcon}>
-              <CollectionsRegular />
-            </div>
-            <h3 className={styles.featureTitle}>Organized Collections</h3>
-            <p className={styles.featureDesc}>
-              Create custom collections to organize your favorite recipes by
-              occasion, cuisine, or diet.
-            </p>
-          </motion.div>
+              <motion.div className={styles.featureItem} variants={fadeIn}>
+                <div className={styles.featureIcon}>
+                  <CollectionsRegular />
+                </div>
+                <h3 className={styles.featureTitle}>Organized Collections</h3>
+                <p className={styles.featureDesc}>
+                  Create custom collections to organize your favorite recipes by
+                  occasion, cuisine, or diet.
+                </p>
+              </motion.div>
 
-          <motion.div className={styles.featureItem} variants={fadeIn}>
-            <div className={styles.featureIcon}>
-              <ClockRegular />
-            </div>
-            <h3 className={styles.featureTitle}>Time-Saving Tools</h3>
-            <p className={styles.featureDesc}>
-              Meal planning, shopping lists, and cooking timers all in one place
-              to streamline your cooking.
-            </p>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Call to Action Section */}
-      <motion.section
-        className={styles.ctaSection}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h2 className={styles.ctaTitle}>
-          Ready to Start Your Culinary Journey?
-        </h2>
-        <p className={styles.ctaDesc}>
-          Join thousands of food enthusiasts creating and sharing amazing
-          recipes every day.
-        </p>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            className={styles.ctaButton}
-            onClick={() => router.push("/newRecipe")}
+              <motion.div className={styles.featureItem} variants={fadeIn}>
+                <div className={styles.featureIcon}>
+                  <ClockRegular />
+                </div>
+                <h3 className={styles.featureTitle}>Time-Saving Tools</h3>
+                <p className={styles.featureDesc}>
+                  Meal planning and shopping lists all in one place to
+                  streamline your cooking.
+                </p>
+              </motion.div>
+            </motion.div>
+          </section>
+          <motion.section
+            className={styles.ctaSection}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8 }}
           >
-            Create Your First Recipe
-          </Button>
-        </motion.div>
-      </motion.section>
+            <h2 className={styles.ctaTitle}>
+              Ready to Start Your Culinary Journey?
+            </h2>
+            <p className={styles.ctaDesc}>
+              Join others in creating and sharing amazing recipes every day.
+            </p>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                className={styles.ctaButton}
+                onClick={() => signIn("google")}
+              >
+                Sign up
+              </Button>
+            </motion.div>
+          </motion.section>
+        </>
+      )}
     </div>
   );
 }

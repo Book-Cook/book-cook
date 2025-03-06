@@ -1,12 +1,12 @@
 import * as React from "react";
 import { makeStyles, shorthands } from "@griffel/react";
-import { RecipeCard, FallbackScreen } from "../components";
+import { RecipeCard, FallbackScreen, TagFilter } from "../components";
 import {
   Text,
   Title3,
   Dropdown,
   Option,
-  useId,
+  tokens,
 } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
+import { useSession } from "next-auth/react";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -41,9 +42,15 @@ const useStyles = makeStyles({
   },
   controls: {
     display: "flex",
-    gap: "12px",
-    alignItems: "center",
-    flexWrap: "wrap",
+    flexDirection: "column",
+    gap: "16px",
+    alignItems: "stretch",
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: "320px",
+  },
+  sortDropdown: {
+    alignSelf: "flex-end",
   },
   grid: {
     display: "grid",
@@ -70,28 +77,55 @@ const useStyles = makeStyles({
 export default function Home() {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
+  const { data: session, status } = useSession();
+
+  const [sortOption, setSortOption] = React.useState("dateNewest");
+  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+  const [availableTags, setAvailableTags] = React.useState<string[]>([]);
 
   const {
     data: recipes,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue],
-    queryFn: () => fetchAllRecipes(searchBoxValue, "desc"),
+    queryKey: ["recipes", searchBoxValue, sortOption],
+    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption),
   });
+
+  // Extract unique tags from recipes
+  React.useEffect(() => {
+    if (recipes?.length) {
+      const uniqueTags = Array.from(
+        new Set(recipes.flatMap((recipe) => recipe.tags || []))
+      );
+      setAvailableTags(uniqueTags);
+    }
+  }, [recipes]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
     data: OptionOnSelectData
   ) => {
-    console.log(data.selectedOptions ?? "");
+    if (data.selectedOptions?.[0]) {
+      setSortOption(data.selectedOptions[0]);
+    }
   };
+
+  // While loading, show a loading indicator
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  // If no session, show an empty page (or you can display a message)
+  if (!session) {
+    return <h1>Sign in to view this page.</h1>;
+  }
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <div className={styles.titleSection}>
-          <Title3 as="h1">Recipes</Title3>
+          <Title3 as="h1">My Recipes</Title3>
           <Text
             size={200}
             weight="medium"
@@ -101,10 +135,13 @@ export default function Home() {
             {searchBoxValue
               ? `matching "${searchBoxValue}"`
               : "in your collection"}
+            {selectedTags.length > 0 &&
+              ` with tags: ${selectedTags.join(", ")}`}
           </Text>
         </div>
         <div className={styles.controls}>
           <Dropdown
+            className={styles.sortDropdown}
             appearance="underline"
             onOptionSelect={onSortOptionSelect}
             defaultSelectedOptions={["dateNewest"]}
@@ -115,6 +152,11 @@ export default function Home() {
             <Option value={"ascTitle"}>Sort by title (asc)</Option>
             <Option value={"descTitle"}>Sort by title (desc)</Option>
           </Dropdown>
+          {/* <TagFilter
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onTagsChange={setSelectedTags}
+          /> */}
         </div>
       </div>
       <FallbackScreen

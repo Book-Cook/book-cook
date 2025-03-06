@@ -32,9 +32,6 @@ export default async function handler(req: any, res: any) {
         };
       }
 
-      console.log("sortProperty=" + sortProperty);
-      console.log("sortDirection=" + sortDirection);
-
       // Validate sorting inputs
       const validProperties = ["createdAt", "title"];
       const validDirections = ["asc", "desc"];

@@ -10,6 +10,7 @@ import type { Theme } from "@fluentui/react-components";
 import { tokens } from "@fluentui/react-theme";
 import { Toolbar } from "./";
 import { SearchBoxProvider } from "../context";
+import { SessionProvider } from "next-auth/react";
 
 // Create a lavender-inspired brand palette
 const appBrandVariants: BrandVariants = {
@@ -18,7 +19,7 @@ const appBrandVariants: BrandVariants = {
   30: "#e1d7ff",
   40: "#cec1fa",
   50: "#b9aaf5",
-  60: "#8a79e3",
+  60: "#9e90e8",
   70: "#8775e3",
   80: "#6f5ed9",
   90: "#5847cf",
@@ -80,6 +81,7 @@ const customLightTheme: Theme = {
   colorNeutralStroke2: "#e7ddff", // Your lavender for subtle borders
   colorNeutralStroke3: "#ede6ff",
   colorNeutralStrokeAccessible: "#6943d1", // Accessible border color
+  colorNeutralStrokeAccessibleHover: "#8361e0",
   colorNeutralStrokeDisabled: "#e7ddff",
   colorNeutralStrokeOnBrand: "#ffffff",
 
@@ -106,11 +108,13 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   return (
-    <FluentProvider theme={customLightTheme} style={fluentProviderStyles}>
-      <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
-        <Toolbar />
-        <main style={{ padding: "24px" }}>{children}</main>
-      </SearchBoxProvider>
-    </FluentProvider>
+    <SessionProvider>
+      <FluentProvider theme={customLightTheme} style={fluentProviderStyles}>
+        <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+          <Toolbar />
+          <main style={{ padding: "24px" }}>{children}</main>
+        </SearchBoxProvider>
+      </FluentProvider>
+    </SessionProvider>
   );
 };
