@@ -1,6 +1,11 @@
 import * as React from "react";
 import { makeStyles, shorthands } from "@griffel/react";
-import { RecipeCard, FallbackScreen, TagFilter } from "../components";
+import {
+  RecipeCard,
+  FallbackScreen,
+  TagFilter,
+  Unauthorized,
+} from "../components";
 import {
   Text,
   Title3,
@@ -74,7 +79,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Home() {
+export default function Recipes() {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session, status } = useSession();
@@ -82,6 +87,7 @@ export default function Home() {
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [availableTags, setAvailableTags] = React.useState<string[]>([]);
+  const [showLoadingIndicator, setShowLoadingIndicator] = React.useState(false);
 
   const {
     data: recipes,
@@ -102,6 +108,20 @@ export default function Home() {
     }
   }, [recipes]);
 
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setShowLoadingIndicator(true);
+      }, 300);
+    } else {
+      setShowLoadingIndicator(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
   const onSortOptionSelect = (
     _ev: SelectionEvents,
     data: OptionOnSelectData
@@ -111,14 +131,8 @@ export default function Home() {
     }
   };
 
-  // While loading, show a loading indicator
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  // If no session, show an empty page (or you can display a message)
   if (!session) {
-    return <h1>Sign in to view this page.</h1>;
+    return <Unauthorized />;
   }
 
   return (
@@ -160,7 +174,7 @@ export default function Home() {
         </div>
       </div>
       <FallbackScreen
-        isLoading={isLoading}
+        isLoading={showLoadingIndicator}
         isError={Boolean(error)}
         dataLength={recipes?.length}
       >
@@ -172,7 +186,7 @@ export default function Home() {
                 className={`${styles.fadeIn} ${styles.cardWrapper}`}
                 style={
                   {
-                    "--fadeInDelay": `${Math.min(index * 0.1, 0.5)}s`,
+                    "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
                   } as React.CSSProperties
                 }
               >
