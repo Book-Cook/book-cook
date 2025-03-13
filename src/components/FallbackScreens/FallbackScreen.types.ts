@@ -15,6 +15,11 @@ export type FallbackScreenProps = {
   isError: boolean;
 
   /**
+   * Whether the user is unauthorized to view the content
+   */
+  isUnauthorized?: boolean;
+
+  /**
    * The children components to render when there is no error or loading
    */
   children: React.ReactNode;
