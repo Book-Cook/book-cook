@@ -7,6 +7,8 @@ import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import { AppContainer } from "../components";
 import { queryClient } from "../clients/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -45,12 +47,15 @@ export default function App(props: AppProps) {
           }
         `}
       </style>
+
       <QueryClientProvider client={queryClient}>
         <RendererProvider renderer={pageProps.renderer || createDOMRenderer()}>
           <SSRProvider>
             {isMounted && (
               <AppContainer>
                 <Component {...pageProps} />
+                <Analytics />
+                <SpeedInsights />
               </AppContainer>
             )}
           </SSRProvider>
