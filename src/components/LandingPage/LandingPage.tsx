@@ -60,7 +60,7 @@ const featuredRecipes = [
   },
 ];
 
-export const LandingPage = () => {
+const LandingPage = () => {
   const styles = useStyles();
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -339,3 +339,5 @@ export const LandingPage = () => {
     </div>
   );
 };
+
+export default LandingPage;
