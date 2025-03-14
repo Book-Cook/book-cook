@@ -1,12 +1,12 @@
-import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import clientPromise from 'src/clients/mongo';
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import clientPromise from "src/clients/mongo";
 
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process?.env?.GOOGLE_CLIENT_ID as string,
+      clientSecret: process?.env?.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
   events: {
@@ -23,7 +23,7 @@ export default NextAuth({
         await users.insertOne({
           email,
           createdAt: new Date(),
-          recentlyViewedRecipes: []
+          recentlyViewedRecipes: [],
         });
       }
     },

@@ -1,7 +1,7 @@
 import clientPromise from "../../../clients/mongo";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import authOptions from "../auth/[...nextauth]";
+import type { Session } from "next-auth";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
@@ -15,7 +15,11 @@ export default async function handler(req: any, res: any) {
 
   // Retrieve all recipes that the user has viewed recently
   try {
-    const session = await getServerSession(req, res, authOptions);
+    const session: Session | null = await getServerSession(
+      req,
+      res,
+      authOptions
+    );
 
     if (!session) {
       res.status(401).json({ message: "Unauthorized" });
@@ -23,10 +27,12 @@ export default async function handler(req: any, res: any) {
     }
 
     // Find the user document and project only recentlyViewedRecipes.
-    const userDoc = await db.collection("users").findOne(
-      { email: session.user?.email },
-      { projection: { recentlyViewedRecipes: 1, _id: 0 } }
-    );
+    const userDoc = await db
+      .collection("users")
+      .findOne(
+        { email: session?.user?.email },
+        { projection: { recentlyViewedRecipes: 1, _id: 0 } }
+      );
 
     if (!userDoc || !userDoc.recentlyViewedRecipes) {
       res.status(404).json({ message: "Recently viewed recipes not found" });
@@ -34,9 +40,12 @@ export default async function handler(req: any, res: any) {
     }
 
     // Query the recipes collection using the $in operator.
-    const recipes = await db.collection("recipes").find({
-      _id: { $in: userDoc.recentlyViewedRecipes }
-    }).toArray();
+    const recipes = await db
+      .collection("recipes")
+      .find({
+        _id: { $in: userDoc.recentlyViewedRecipes },
+      })
+      .toArray();
 
     res.status(200).json(recipes);
   } catch (error) {
