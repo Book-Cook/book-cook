@@ -11,7 +11,6 @@ const useStyles = makeStyles({
     width: "100%",
     height: "360px",
     transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
     overflow: "hidden",
     cursor: "pointer",
     position: "relative",
@@ -19,10 +18,8 @@ const useStyles = makeStyles({
     ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
 
     ":hover": {
-      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
       transform: "translateY(-2px)",
       ...shorthands.borderColor(tokens.colorBrandStroke1),
-      background: tokens.colorNeutralBackground1Hover,
     },
   },
   cardInner: {
@@ -99,61 +96,6 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useStyles();
-
-  // Card hover animation effect
-  React.useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      // Calculate rotation with more natural values
-      const xRotation = ((y - rect.height / 2) / rect.height) * 6;
-      const yRotation = ((rect.width / 2 - x) / rect.width) * 6;
-
-      // Calculate light highlight position (follows mouse)
-      const highlightX = (x / rect.width) * 100;
-      const highlightY = (y / rect.height) * 100;
-
-      // Apply dynamic transform and lighting effects
-      card.style.transform = `perspective(1200px) scale(1.02) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-      card.style.boxShadow = `
-        ${-yRotation / 3}px ${xRotation / 3}px 20px rgba(0,0,0,0.15),
-        0 10px 30px -5px rgba(0,0,0,0.1)
-      `;
-
-      // Add dynamic highlight/reflection effect
-      card.style.background = `
-        linear-gradient(
-          120deg,
-          ${tokens.colorNeutralBackground1} 0%,
-          ${tokens.colorNeutralBackground1Hover} 40%,
-          rgba(255,255,255,0.15) ${highlightX}%,
-          ${tokens.colorNeutralBackground1Hover} 60%,
-          ${tokens.colorNeutralBackground1} 100%
-        )
-      `;
-    };
-
-    const handleMouseLeave = () => {
-      // Reset all effects smoothly
-      card.style.transform =
-        "perspective(1200px) rotateX(0) rotateY(0) scale(1)";
-      card.style.boxShadow = "0 6px 16px rgba(0,0,0,0.08)";
-      card.style.background = "";
-    };
-
-    card.addEventListener("mousemove", handleMouseMove);
-    card.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      card.removeEventListener("mousemove", handleMouseMove);
-      card.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
 
   const onCardClick = () => {
     router.push(`/recipes/${id}`);

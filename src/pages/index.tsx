@@ -4,20 +4,16 @@ import { useSession } from "next-auth/react";
 
 // Dynamically import the landing page if the user is not authenticated
 const LandingPage = dynamic(
-  () => import("../components").then((mod) => ({ default: mod.LandingPage })),
+  () => import("../components/LandingPage/LandingPage"),
   {
     loading: () => null,
   }
 );
 
 // Dynamically import the home page if the user is authenticated
-const HomePage = dynamic(
-  () => import("../components").then((mod) => ({ default: mod.HomePage })),
-  {
-    loading: () => null,
-  }
-);
-
+const HomePage = dynamic(() => import("../components/HomePage/HomePage"), {
+  loading: () => null,
+});
 export default function Recipes() {
   const { data: session, status } = useSession();
 
