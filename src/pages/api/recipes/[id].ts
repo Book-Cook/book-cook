@@ -2,6 +2,7 @@ import clientPromise from "../../../clients/mongo";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth/next";
 import authOptions from "../auth/[...nextauth]";
+import type { Session } from "next-auth";
 
 type UpdateFields = {
   title?: string;
@@ -12,7 +13,7 @@ type UpdateFields = {
 
 export default async function handler(req: any, res: any) {
   const client = await clientPromise;
-  const session = await getServerSession(req, res, authOptions);
+  const session: Session | null = await getServerSession(req, res, authOptions);
   const db = client.db("dev");
   const recipesCollection = db.collection("recipes");
   const { id } = req.query as { id: string }; // Extract the recipe ID from the query parameters
@@ -37,16 +38,17 @@ export default async function handler(req: any, res: any) {
 
       if (recipe) {
         if (session && session.user?.email) {
-
           // First, remove the recipe id if it exists.
-          await db.collection("users").updateOne(
-            { email: session.user.email },
-            { $pull: { recentlyViewedRecipes: new ObjectId(id) } as any}
-          );
+          await db
+            .collection("users")
+            .updateOne(
+              { email: session.user.email },
+              { $pull: { recentlyViewedRecipes: new ObjectId(id) } as any }
+            );
 
           // Then, push the recipe id, keeping only the last 10 items.
           await db.collection("users").updateOne(
-            { email: session.user.email},
+            { email: session.user.email },
             {
               $push: {
                 recentlyViewedRecipes: {
