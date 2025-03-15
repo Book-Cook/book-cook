@@ -13,7 +13,7 @@ const uri: string = process.env.MONGODB_URI as string;
 const clientPromise =
   global._mongoClientPromise || new MongoClient(uri).connect();
 
-if (process.env.NODE_ENV === "development") {
+if (process?.env?.NODE_ENV === "development") {
   // In development, store the promise globally to prevent multiple connections
   global._mongoClientPromise = clientPromise;
 }

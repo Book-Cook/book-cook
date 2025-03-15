@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     color: tokens.colorBrandBackground,
     textDecoration: "none",
     transition: "transform 0.2s ease",
+    textWrap: "nowrap",
     ":hover": {
       transform: "scale(1.02)",
     },
