@@ -148,7 +148,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     // In a real app, upload to storage service and get URL
     alert("In a real app, this would upload the image to storage");
     // For demo purposes:
-    updateEditableData("imageURL", "/placeholder-image.jpg");
+    updateEditableData("imageURL", "");
   };
 
   const contextValue = {
