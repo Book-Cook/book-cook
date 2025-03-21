@@ -65,11 +65,6 @@ const LandingPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // Replace with actual images for production
-  const placeholderImages = featuredRecipes.map(
-    (recipe) => `/placeholder-${recipe.id}.jpg`
-  );
-
   return (
     <div className={styles.container}>
       {/* Hero Section */}
@@ -196,7 +191,7 @@ const LandingPage = () => {
               >
                 <CardPreview>
                   <Image
-                    src={placeholderImages[index]}
+                    src={""}
                     alt={recipe.title}
                     width={300}
                     height={200}

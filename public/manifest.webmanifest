@@ -1,0 +1,24 @@
+{
+  "name": "Book Cook",
+  "short_name": "Book Cook",
+  "description": "Your personal recipe collection and cooking companion",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4a5568",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["food", "cooking", "recipes"]
+}
