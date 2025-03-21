@@ -3,6 +3,7 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 export const useMobileDrawerStyles = makeStyles({
   mobileMenuButton: {
     position: "absolute",
+<<<<<<< HEAD
     top: "16px",
     right: "16px",
     ...shorthands.borderRadius("50%"),
@@ -15,10 +16,15 @@ export const useMobileDrawerStyles = makeStyles({
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground3,
     },
+=======
+    top: "10px",
+    right: "10px",
+>>>>>>> 72db7e0e165c5b70c3213ec115cd086d0deb05bc
   },
   mobileMenu: {
     display: "flex",
     flexDirection: "column",
+<<<<<<< HEAD
     gap: "32px",
     padding: "60px 24px 32px",
     backgroundColor: tokens.colorNeutralBackground1,
@@ -38,10 +44,21 @@ export const useMobileDrawerStyles = makeStyles({
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground2,
     },
+=======
+    gap: "16px",
+    padding: "16px",
+  },
+  mobileNavLink: {
+    fontSize: "18px",
+    padding: "12px 0",
+    width: "100%",
+    textAlign: "left",
+>>>>>>> 72db7e0e165c5b70c3213ec115cd086d0deb05bc
   },
   toolbarButton: {
     display: "flex",
     alignItems: "center",
+<<<<<<< HEAD
     justifyContent: "center",
     gap: "8px",
     color: "#ffffff",
@@ -82,5 +99,25 @@ export const useMobileDrawerStyles = makeStyles({
   },
   searchBarWrapper: {
     width: "100%",
+=======
+    gap: "8px",
+    color: "#ffffff",
+    fontWeight: "500",
+    fontSize: "14px",
+    height: "36px",
+    textWrap: "nowrap",
+    ...shorthands.padding("0", "20px"),
+    ...shorthands.borderRadius("8px"),
+    border: "none",
+    boxShadow: "0 1px 3px rgba(105, 67, 209, 0.15)",
+    transition: "all 0.2s ease",
+    ":hover": {
+      transform: "translateY(-1px)",
+      boxShadow: "0 4px 12px rgba(105, 67, 209, 0.25)",
+    },
+  },
+  activeLink: {
+    backgroundColor: tokens.colorNeutralBackground3,
+>>>>>>> 72db7e0e165c5b70c3213ec115cd086d0deb05bc
   },
 });
