@@ -24,6 +24,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
       open={isOpen}
       onOpenChange={(_, { open }) => onOpenChange(open)}
       position="end"
+      size="small"
     >
       <DrawerBody className={styles.mobileMenu}>
         <Button
@@ -34,19 +35,21 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
           aria-label="Close menu"
         />
 
-        {navLinks.map((link) => (
-          <Button
-            key={link.url}
-            appearance="subtle"
-            className={mergeClasses(
-              styles.mobileNavLink,
-              currentPath.includes(link.url) && styles.activeLink
-            )}
-            onClick={() => onNavigate(link.url)}
-          >
-            {link.label}
-          </Button>
-        ))}
+        <div className={styles.navSection}>
+          {navLinks.map((link) => (
+            <Button
+              key={link.url}
+              appearance="subtle"
+              className={mergeClasses(
+                styles.mobileNavLink,
+                currentPath.includes(link.url) && styles.activeLink
+              )}
+              onClick={() => onNavigate(link.url)}
+            >
+              {link.label}
+            </Button>
+          ))}
+        </div>
 
         <Button
           appearance="primary"
@@ -57,7 +60,9 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
           New Recipe
         </Button>
 
-        <SearchBar />
+        <div className={styles.searchBarWrapper}>
+          <SearchBar />
+        </div>
       </DrawerBody>
     </Drawer>
   );
