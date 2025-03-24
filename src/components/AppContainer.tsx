@@ -112,7 +112,9 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
       <FluentProvider theme={customLightTheme} style={fluentProviderStyles}>
         <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
           <Toolbar />
-          <main style={{ padding: "24px" }}>{children}</main>
+          <div style={{ padding: "12px 24px", boxSizing: "border-box" }}>
+            {children}
+          </div>
         </SearchBoxProvider>
       </FluentProvider>
     </SessionProvider>

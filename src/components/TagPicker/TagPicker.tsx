@@ -3,7 +3,7 @@ import { useStyles } from "./TagPicker.styles";
 import type { TagFilterProps } from "./TagPicker.types";
 import { SearchRegular } from "@fluentui/react-icons";
 
-export const TagFilter: React.FC<TagFilterProps> = ({
+export const TagPicker: React.FC<TagFilterProps> = ({
   availableTags,
   selectedTags,
   onTagsChange,

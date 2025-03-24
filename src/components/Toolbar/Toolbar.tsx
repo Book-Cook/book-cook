@@ -27,6 +27,8 @@ export const Toolbar = () => {
   const isMobile = useMediaQuery("(max-width: 900px)");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+  const isRecipesPage = router.pathname === "/recipes";
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleNewRecipe = () => router.push("/newRecipe");
@@ -62,9 +64,11 @@ export const Toolbar = () => {
               >
                 New Recipe
               </Button>
-              <div className={styles.searchBarWrapper}>
-                <SearchBar />
-              </div>
+              {!isRecipesPage && (
+                <div className={styles.searchBarWrapper}>
+                  <SearchBar />
+                </div>
+              )}
             </>
           )}
           {session?.user ? (
