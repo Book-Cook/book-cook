@@ -1,17 +1,12 @@
 import * as React from "react";
 import { makeStyles, shorthands } from "@griffel/react";
-import {
-  RecipeCard,
-  FallbackScreen,
-  TagFilter,
-  Unauthorized,
-} from "../components";
+import { RecipeCard, FallbackScreen, Unauthorized } from "../components";
 import {
   Text,
   Title3,
   Dropdown,
   Option,
-  tokens,
+  Input,
 } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
@@ -21,7 +16,10 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
+
 import { useSession } from "next-auth/react";
+import { SearchBar } from "../components/Toolbar/SearchBar";
+import { TagPicker } from "../components/TagPicker/TagPicker";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -31,7 +29,6 @@ const useStyles = makeStyles({
     width: "100%",
     margin: "0 auto",
     gap: "24px",
-    ...shorthands.padding("0", "12px"),
   },
   header: {
     display: "flex",
@@ -45,17 +42,25 @@ const useStyles = makeStyles({
     flexDirection: "column",
     gap: "4px",
   },
-  controls: {
-    display: "flex",
-    flexDirection: "column",
+  controlsRow: {
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
     gap: "16px",
-    alignItems: "stretch",
-    flexGrow: 0,
-    flexShrink: 0,
-    flexBasis: "320px",
+    width: "100%",
+    alignItems: "center",
+    "@media (max-width: 500px)": {
+      gridTemplateColumns: "1fr",
+    },
+  },
+  searchWrapper: {
+    flexGrow: 1,
+    maxWidth: "500px",
   },
   sortDropdown: {
-    alignSelf: "flex-end",
+    minWidth: "220px",
+  },
+  tagPickerWrapper: {
+    width: "100%",
   },
   grid: {
     display: "grid",
@@ -65,7 +70,8 @@ const useStyles = makeStyles({
   },
   cardWrapper: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "stretch",
+    height: "100%",
   },
   fadeIn: {
     animationName: {
@@ -76,6 +82,7 @@ const useStyles = makeStyles({
     animationTimingFunction: "ease-out",
     animationFillMode: "both",
     animationDelay: "var(--fadeInDelay)",
+    width: "100%",
   },
 });
 
@@ -94,8 +101,8 @@ export default function Recipes() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption],
-    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption),
+    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags],
+    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption, selectedTags),
   });
 
   // Extract unique tags from recipes
@@ -153,10 +160,13 @@ export default function Recipes() {
               ` with tags: ${selectedTags.join(", ")}`}
           </Text>
         </div>
-        <div className={styles.controls}>
+        <div className={styles.controlsRow}>
+          <div className={styles.searchWrapper}>
+            <SearchBar />
+          </div>
           <Dropdown
             className={styles.sortDropdown}
-            appearance="underline"
+            appearance="outline"
             onOptionSelect={onSortOptionSelect}
             defaultSelectedOptions={["dateNewest"]}
             defaultValue={"Sort by date (newest)"}
@@ -166,11 +176,11 @@ export default function Recipes() {
             <Option value={"ascTitle"}>Sort by title (asc)</Option>
             <Option value={"descTitle"}>Sort by title (desc)</Option>
           </Dropdown>
-          {/* <TagFilter
+          <TagPicker
             availableTags={availableTags}
             selectedTags={selectedTags}
             onTagsChange={setSelectedTags}
-          /> */}
+          />
         </div>
       </div>
       <FallbackScreen

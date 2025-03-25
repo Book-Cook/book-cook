@@ -12,7 +12,6 @@ const useStyles = makeStyles({
     width: "100%",
     margin: "0 auto",
     gap: "48px",
-    ...shorthands.padding("0", "12px", "64px"),
   },
   heroSection: {
     display: "flex",
