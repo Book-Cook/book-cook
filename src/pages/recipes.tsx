@@ -101,8 +101,8 @@ export default function Recipes() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption],
-    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption),
+    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags],
+    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption, selectedTags),
   });
 
   // Extract unique tags from recipes

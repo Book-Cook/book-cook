@@ -45,7 +45,7 @@ const useStyles = makeStyles({
 export const Logo = () => {
   const styles = useStyles();
   return (
-    <Link href="/" passHref className={styles.nextLink}>
+    <Link href="/recipes" passHref className={styles.nextLink}>
       <FluentLink className={styles.logo} style={{ textDecoration: "none" }}>
         <span className={styles.logoIcon}>
           <BookOpenRegular fontSize={18} />

@@ -4,6 +4,7 @@ import {
   Drawer,
   DrawerBody,
   mergeClasses,
+  Text,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 import { SearchBar } from "../SearchBar";
@@ -33,31 +34,47 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
           className={styles.mobileMenuButton}
           aria-label="Close menu"
         />
-
-        {navLinks.map((link) => (
-          <Button
-            key={link.url}
-            appearance="subtle"
-            className={mergeClasses(
-              styles.mobileNavLink,
-              currentPath.includes(link.url) && styles.activeLink
-            )}
-            onClick={() => onNavigate(link.url)}
-          >
-            {link.label}
-          </Button>
-        ))}
-
-        <Button
-          appearance="primary"
-          icon={<Add24Regular />}
-          onClick={() => onNavigate("/newRecipe")}
-          className={styles.toolbarButton}
-        >
-          New Recipe
-        </Button>
-
-        <SearchBar />
+        <div className={styles.drawerContent}>
+          <div className={styles.drawerHeader}>
+            <Text className={styles.drawerTitle}>Menu</Text>
+            <div className={styles.searchWrapper}>
+              <SearchBar />
+            </div>
+          </div>
+          <div className={styles.divider} />
+          <div className={styles.navSection}>
+            {navLinks.map((link) => (
+              <Button
+                key={link.url}
+                appearance="subtle"
+                className={mergeClasses(
+                  styles.mobileNavLink,
+                  currentPath === link.url && styles.activeLink
+                )}
+                onClick={() => {
+                  onNavigate(link.url);
+                  onOpenChange(false);
+                }}
+              >
+                {link.label}
+              </Button>
+            ))}
+          </div>
+          <div className={styles.footerSection}>
+            <Button
+              appearance="primary"
+              icon={<Add24Regular />}
+              onClick={() => {
+                onNavigate("/newRecipe");
+                onOpenChange(false);
+              }}
+              className={styles.toolbarButton}
+              style={{ marginTop: "16px" }}
+            >
+              New Recipe
+            </Button>
+          </div>
+        </div>
       </DrawerBody>
     </Drawer>
   );

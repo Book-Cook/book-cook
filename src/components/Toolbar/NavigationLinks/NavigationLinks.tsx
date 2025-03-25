@@ -22,7 +22,7 @@ export const NavigationLinks: React.FC<NavigationLinksProps> = ({
           <FluentLink
             className={mergeClasses(
               styles.linkStyles,
-              currentPath.includes(link.url) && styles.activeLink
+              currentPath === link.url && styles.activeLink
             )}
           >
             {link.label}

@@ -1,5 +1,4 @@
 import clientPromise from "../../../clients/mongo";
-import { ObjectId } from "mongodb";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET" && req.method !== "POST") {
@@ -18,6 +17,7 @@ export default async function handler(req: any, res: any) {
         search,
         sortProperty = "createdAt",
         sortDirection = "desc",
+        tags,
       } = req.query;
 
       let query = {};
@@ -30,6 +30,18 @@ export default async function handler(req: any, res: any) {
             { tags: { $regex: search, $options: "i" } }, // Match tags (array of strings)
           ],
         };
+      }
+
+      if (tags) {
+        const tagsList = Array.isArray(tags) ? tags : [tags];
+
+        if (Object.keys(query).length > 0) {
+          query = {
+            $and: [query, { tags: { $all: tagsList } }],
+          };
+        } else {
+          query = { tags: { $all: tagsList } };
+        }
       }
 
       // Validate sorting inputs
