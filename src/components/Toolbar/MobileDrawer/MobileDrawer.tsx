@@ -7,6 +7,7 @@ import {
   DrawerHeaderTitle,
   Divider,
   mergeClasses,
+  Text,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 import { SearchBar } from "../SearchBar";
@@ -68,9 +69,12 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               </Button>
             ))}
           </div>
+<<<<<<< HEAD
 
           <Divider />
 
+=======
+>>>>>>> e95f26bae90c1a6f8f00696f6a89fcfc9c0a8665
           <div className={styles.footerSection}>
             <Button
               appearance="primary"
@@ -79,7 +83,12 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 onNavigate("/newRecipe");
                 onOpenChange(false);
               }}
+<<<<<<< HEAD
               className={styles.primaryActionButton}
+=======
+              className={styles.toolbarButton}
+              style={{ marginTop: "16px" }}
+>>>>>>> e95f26bae90c1a6f8f00696f6a89fcfc9c0a8665
             >
               New Recipe
             </Button>
