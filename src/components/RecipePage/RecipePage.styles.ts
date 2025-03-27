@@ -13,7 +13,7 @@ export const useStyles = makeStyles({
     maxWidth: "840px",
     width: "100%",
     marginBottom: "100px",
-    ...shorthands.padding("0", "0", "30px"),
+    ...shorthands.padding("20px"),
     display: "flex",
     flexDirection: "column",
     gap: "30px",

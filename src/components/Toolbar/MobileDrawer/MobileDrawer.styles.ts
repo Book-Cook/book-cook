@@ -1,122 +1,109 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
 export const useMobileDrawerStyles = makeStyles({
-  mobileMenuButton: {
-    position: "absolute",
-    top: "20px",
-    right: "20px",
-    ...shorthands.borderRadius("50%"),
-    width: "40px",
-    height: "40px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+  mobileMenu: {
+    backgroundColor: tokens.colorNeutralBackground1,
+  },
+
+  drawerHeader: {},
+
+  drawerHeaderAction: {
     color: tokens.colorNeutralForeground1,
-    transition: "transform 0.2s ease, background-color 0.2s ease",
-    zIndex: 10,
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground3,
       transform: "rotate(90deg)",
     },
   },
-  mobileMenu: {
+
+  drawerContentWrapper: {
     display: "flex",
     flexDirection: "column",
-    padding: "0",
-    backgroundColor: tokens.colorNeutralBackground1,
-    height: "100%",
-    overflow: "hidden",
+    flexGrow: 1,
+    minHeight: 0,
+    ...shorthands.padding(
+      tokens.spacingVerticalXXL,
+      tokens.spacingHorizontalL,
+      tokens.spacingVerticalL
+    ),
+    gap: tokens.spacingVerticalL,
   },
-  drawerContent: {
+
+  searchWrapper: {},
+
+  navSection: {
     display: "flex",
     flexDirection: "column",
-    height: "100%",
-    padding: "72px 28px 28px",
+    gap: tokens.spacingVerticalS,
+    width: "100%",
   },
+
   mobileNavLink: {
-    fontSize: "16px",
-    fontWeight: "500",
-    padding: "14px 16px",
+    fontSize: tokens.fontSizeBase300,
+    fontWeight: tokens.fontWeightRegular,
+    ...shorthands.padding(tokens.spacingVerticalM, tokens.spacingHorizontalM),
     width: "100%",
     textAlign: "left",
-    ...shorthands.borderRadius("8px"),
+    ...shorthands.borderRadius(tokens.borderRadiusMedium),
     transition:
       "transform 0.2s ease, background-color 0.2s ease, color 0.2s ease",
     color: tokens.colorNeutralForeground1,
+    justifyContent: "flex-start",
     ":hover": {
-      backgroundColor: tokens.colorNeutralBackground2,
+      backgroundColor: tokens.colorNeutralBackground1Hover,
       transform: "translateX(4px)",
+      color: tokens.colorNeutralForeground1Hover,
+    },
+    ":active": {
+      backgroundColor: tokens.colorNeutralBackground1Pressed,
+      color: tokens.colorNeutralForeground1Pressed,
     },
   },
-  toolbarButton: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "8px",
-    color: "#ffffff",
-    fontWeight: "600",
-    fontSize: "15px",
-    height: "50px",
-    width: "100%",
-    textWrap: "nowrap",
-    ...shorthands.padding("0", "24px"),
-    ...shorthands.borderRadius("8px"),
-    border: "none",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-    ":hover": {
-      transform: "translateY(-2px)",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)",
-    },
-  },
+
   activeLink: {
-    backgroundColor: tokens.colorNeutralBackground2,
-    fontWeight: "600",
-    color: tokens.colorBrandForeground1,
+    backgroundColor: tokens.colorSubtleBackgroundSelected,
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground1,
     position: "relative",
+    ":hover": {
+      backgroundColor: tokens.colorSubtleBackgroundSelected,
+      color: tokens.colorNeutralForeground1,
+    },
     "::before": {
       content: "''",
       position: "absolute",
       left: "0",
       top: "50%",
       transform: "translateY(-50%)",
-      width: "4px",
+      width: "3px",
       height: "24px",
-      backgroundColor: tokens.colorBrandBackground,
-      ...shorthands.borderRadius("0", "4px", "4px", "0"),
+      backgroundColor: tokens.colorCompoundBrandStroke,
+      borderTopRightRadius: tokens.borderRadiusMedium,
+      borderBottomRightRadius: tokens.borderRadiusMedium,
+      borderTopLeftRadius: "0px",
+      borderBottomLeftRadius: "0px",
     },
   },
-  navSection: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-    width: "100%",
-    margin: "24px 0",
-  },
-  drawerHeader: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-    marginBottom: "8px",
-  },
-  drawerTitle: {
-    fontSize: "24px",
-    fontWeight: "600",
-    color: tokens.colorNeutralForeground1,
-    marginBottom: "4px",
-  },
-  divider: {
-    height: "1px",
-    width: "100%",
-    backgroundColor: tokens.colorNeutralBackground4,
-    margin: "4px 0",
-  },
+
   footerSection: {
-    marginTop: "auto",
-    paddingTop: "24px",
+    paddingTop: tokens.spacingVerticalL,
+    flexShrink: 0,
   },
-  searchWrapper: {
-    marginBottom: "8px",
+
+  primaryActionButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: tokens.spacingHorizontalS,
+    fontWeight: tokens.fontWeightSemibold,
+    fontSize: tokens.fontSizeBase300,
+    minHeight: "44px",
+    width: "100%",
+    textWrap: "nowrap",
+    ...shorthands.padding("0", tokens.spacingHorizontalL),
+    ...shorthands.borderRadius(tokens.borderRadiusMedium),
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    ":hover": {
+      transform: "translateY(-2px)",
+    },
   },
 });
