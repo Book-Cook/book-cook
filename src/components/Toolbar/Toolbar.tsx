@@ -2,14 +2,8 @@ import * as React from "react";
 import {
   Toolbar as ToolbarComponent,
   Button,
-  Drawer,
-  DrawerBody,
 } from "@fluentui/react-components";
-import {
-  Add24Regular,
-  Dismiss24Regular,
-  Navigation24Regular,
-} from "@fluentui/react-icons";
+import { Navigation24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 import { UserProfile } from "./UserProfile";
@@ -19,6 +13,7 @@ import { NavigationLinks } from "./NavigationLinks";
 import { MobileDrawer } from "./MobileDrawer";
 import { useMediaQuery } from "../../hooks";
 import { useToolbarStyles } from "./Toolbar.styles";
+import { NewRecipeButton } from "./NewRecipeButton";
 
 export const Toolbar = () => {
   const styles = useToolbarStyles();
@@ -56,19 +51,10 @@ export const Toolbar = () => {
         <div className={styles.rightSection}>
           {session?.user && (
             <>
-              <Button
-                appearance="primary"
-                icon={<Add24Regular />}
-                onClick={handleNewRecipe}
-                className={styles.toolbarButton}
-              >
-                New Recipe
-              </Button>
-              {!isRecipesPage && (
-                <div className={styles.searchBarWrapper}>
-                  <SearchBar />
-                </div>
-              )}
+              <NewRecipeButton />
+              <div className={styles.searchBarWrapper}>
+                <SearchBar />
+              </div>
             </>
           )}
           {session?.user ? (

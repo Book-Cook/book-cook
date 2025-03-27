@@ -16,6 +16,60 @@ import {
 import { useRecipe } from "../../../context";
 import { useStyles } from "./RecipeHeader.styles";
 
+const EditActions = ({
+  onSave,
+  onCancel,
+}: {
+  onSave: () => void;
+  onCancel: () => void;
+}) => (
+  <>
+    <Tooltip content="Save changes" relationship="label">
+      <Button
+        icon={<CheckmarkRegular />}
+        appearance="primary"
+        onClick={onSave}
+        aria-label="Save changes"
+      />
+    </Tooltip>
+    <Tooltip content="Cancel editing" relationship="label">
+      <Button
+        icon={<DismissRegular />}
+        appearance="subtle"
+        onClick={onCancel}
+        aria-label="Cancel editing"
+      />
+    </Tooltip>
+  </>
+);
+
+const ViewActions = ({
+  onEdit,
+  onDelete,
+}: {
+  onEdit: () => void;
+  onDelete: () => void;
+}) => (
+  <>
+    <Tooltip content="Edit recipe" relationship="label">
+      <Button
+        icon={<EditRegular />}
+        appearance="subtle"
+        onClick={onEdit}
+        aria-label="Edit recipe"
+      />
+    </Tooltip>
+    <Tooltip content="Delete recipe" relationship="label">
+      <Button
+        icon={<DeleteRegular />}
+        appearance="subtle"
+        onClick={onDelete}
+        aria-label="Delete recipe"
+      />
+    </Tooltip>
+  </>
+);
+
 export const RecipeHeader = () => {
   const styles = useStyles();
   const {
@@ -29,6 +83,20 @@ export const RecipeHeader = () => {
     deleteRecipe,
   } = useRecipe();
 
+  const formattedDate = React.useMemo(() => {
+    try {
+      return recipe?.createdAt
+        ? new Date(recipe.createdAt).toLocaleDateString(undefined, {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })
+        : null;
+    } catch {
+      return null;
+    }
+  }, [recipe?.createdAt]);
+
   return (
     <motion.div
       initial={{ y: 10, opacity: 0 }}
@@ -37,62 +105,39 @@ export const RecipeHeader = () => {
       className={styles.headerSection}
     >
       <div className={styles.titleRow}>
-        {isEditing ? (
-          <Input
-            value={editableData.title}
-            onChange={(e) => updateEditableData("title", e.target.value)}
-            className={styles.titleInput}
-            placeholder="Recipe title"
-          />
-        ) : (
-          <Display as="h1" className={styles.title}>
-            {recipe?.title}
-          </Display>
-        )}
+        <div className={styles.titleContainer}>
+          {isEditing ? (
+            <Input
+              aria-label="Recipe title"
+              placeholder="Recipe title"
+              value={editableData.title}
+              onChange={(e) => updateEditableData("title", e.target.value)}
+              className={styles.titleInput}
+              size="large" // Use Fluent's sizing for visual weight
+              appearance="underline" // Example: Using a built-in modern appearance
+            />
+          ) : (
+            <Display as="h1" className={styles.title}>
+              {recipe?.title}
+            </Display>
+          )}
+        </div>
 
-        {isEditing ? (
-          <div className={styles.actionButtons}>
-            <Tooltip content="Save changes" relationship="label">
-              <Button
-                icon={<CheckmarkRegular />}
-                appearance="primary"
-                onClick={saveChanges}
-              />
-            </Tooltip>
-            <Tooltip content="Cancel editing" relationship="label">
-              <Button
-                icon={<DismissRegular />}
-                appearance="subtle"
-                onClick={cancelEditing}
-              />
-            </Tooltip>
-          </div>
-        ) : (
-          <div className={styles.actionButtons}>
-            <Tooltip content="Edit recipe" relationship="label">
-              <Button
-                icon={<EditRegular />}
-                appearance="subtle"
-                onClick={() => setIsEditing(true)}
-              />
-            </Tooltip>
-            <Tooltip content="Delete recipe" relationship="label">
-              <Button
-                icon={<DeleteRegular />}
-                appearance="subtle"
-                onClick={deleteRecipe}
-              />
-            </Tooltip>
-          </div>
-        )}
+        <div className={styles.actionButtons}>
+          {isEditing ? (
+            <EditActions onSave={saveChanges} onCancel={cancelEditing} />
+          ) : (
+            <ViewActions
+              onEdit={() => setIsEditing(true)}
+              onDelete={deleteRecipe}
+            />
+          )}
+        </div>
       </div>
-      {recipe?.createdAt && !isEditing && (
-        <Text size={200} italic className={styles.date}>
-          {new Date(recipe.createdAt).toLocaleDateString(undefined, {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
+
+      {formattedDate && !isEditing && (
+        <Text italic className={styles.date}>
+          Created: {formattedDate}
         </Text>
       )}
     </motion.div>

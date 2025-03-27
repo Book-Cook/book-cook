@@ -3,8 +3,10 @@ import {
   Button,
   Drawer,
   DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+  Divider,
   mergeClasses,
-  Text,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 import { SearchBar } from "../SearchBar";
@@ -26,22 +28,28 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
       onOpenChange={(_, { open }) => onOpenChange(open)}
       position="end"
     >
+      <DrawerHeader>
+        <DrawerHeaderTitle
+          action={
+            <Button
+              appearance="subtle"
+              aria-label="Close"
+              icon={<Dismiss24Regular />}
+              onClick={() => onOpenChange(false)}
+              className={styles.drawerHeaderAction}
+            />
+          }
+        >
+          Menu
+        </DrawerHeaderTitle>
+      </DrawerHeader>
+
       <DrawerBody className={styles.mobileMenu}>
-        <Button
-          appearance="subtle"
-          icon={<Dismiss24Regular />}
-          onClick={() => onOpenChange(false)}
-          className={styles.mobileMenuButton}
-          aria-label="Close menu"
-        />
-        <div className={styles.drawerContent}>
-          <div className={styles.drawerHeader}>
-            <Text className={styles.drawerTitle}>Menu</Text>
-            <div className={styles.searchWrapper}>
-              <SearchBar />
-            </div>
+        <div className={styles.drawerContentWrapper}>
+          <div className={styles.searchWrapper}>
+            <SearchBar />
           </div>
-          <div className={styles.divider} />
+
           <div className={styles.navSection}>
             {navLinks.map((link) => (
               <Button
@@ -60,6 +68,9 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               </Button>
             ))}
           </div>
+
+          <Divider />
+
           <div className={styles.footerSection}>
             <Button
               appearance="primary"
@@ -68,8 +79,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 onNavigate("/newRecipe");
                 onOpenChange(false);
               }}
-              className={styles.toolbarButton}
-              style={{ marginTop: "16px" }}
+              className={styles.primaryActionButton}
             >
               New Recipe
             </Button>
