@@ -1,5 +1,4 @@
 import * as React from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import TurndownService from "turndown";
 import {
@@ -14,20 +13,9 @@ import {
   MessageBarBody,
   Spinner,
   FieldProps,
-  Skeleton,
-  SkeletonItem,
 } from "@fluentui/react-components";
-import "react-quill/dist/quill.snow.css";
 import { useCreateRecipe } from "../clientToServer";
-
-const DynamicReactQuill = dynamic(() => import("react-quill"), {
-  ssr: false,
-  loading: () => (
-    <Skeleton style={{ minHeight: "200px" }}>
-      <SkeletonItem />
-    </Skeleton>
-  ),
-});
+import { TiptapEditor } from "../components/Editor/Editor";
 
 const useStyles = makeStyles({
   container: {
@@ -43,25 +31,6 @@ const useStyles = makeStyles({
     maxWidth: "700px",
     ...shorthands.gap(tokens.spacingVerticalL),
   },
-  quillEditor: {
-    backgroundColor: tokens.colorNeutralBackground1,
-    "> .ql-container": {
-      minHeight: "200px",
-      fontSize: tokens.fontSizeBase300,
-      ...shorthands.borderColor(tokens.colorNeutralStroke1),
-    },
-    "> .ql-toolbar": {
-      ...shorthands.borderColor(tokens.colorNeutralStroke1),
-      ...shorthands.borderRadius(
-        `${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium} 0 0`
-      ),
-    },
-    "> .ql-container.ql-snow": {
-      ...shorthands.borderRadius(
-        `0 0 ${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium}`
-      ),
-    },
-  },
   submitContainer: {
     display: "flex",
     alignItems: "center",
@@ -69,19 +38,32 @@ const useStyles = makeStyles({
   },
 });
 
-const turndownService = new TurndownService();
+// Initialize Turndown Service
+const turndownService = new TurndownService({
+  headingStyle: "atx",
+  codeBlockStyle: "fenced",
+  emDelimiter: "*",
+});
+// Optional: turndownService.use(gfm);
 
-const isQuillEmpty = (htmlValue: string | undefined): boolean => {
+// Check if editor content is effectively empty
+const isEditorContentEmpty = (htmlValue: string | undefined): boolean => {
   if (!htmlValue) return true;
-  const text = htmlValue.replace(/<[^>]*>/g, "").trim();
-  return text.length === 0;
+  if (typeof document !== "undefined") {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlValue;
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    return text.trim().length === 0;
+  }
+  // Fallback for non-browser
+  return htmlValue.replace(/<[^>]*>/g, "").trim().length === 0;
 };
 
 export default function NewRecipe() {
   const styles = useStyles();
   const router = useRouter();
   const [title, setTitle] = React.useState("");
-  const [recipeHtml, setRecipeHtml] = React.useState("");
+  const [editorContentHtml, setEditorContentHtml] = React.useState("");
   const [titleError, setTitleError] = React.useState<string | undefined>();
   const [recipeError, setRecipeError] = React.useState<string | undefined>();
   const [apiError, setApiError] = React.useState<string | null>(null);
@@ -106,14 +88,23 @@ export default function NewRecipe() {
       setTitleError("Title is required.");
       isValid = false;
     }
-    if (isQuillEmpty(recipeHtml)) {
+    if (isEditorContentEmpty(editorContentHtml)) {
       setRecipeError("Recipe content cannot be empty.");
       isValid = false;
     }
 
     if (!isValid) return;
 
-    const recipeMarkdown = turndownService.turndown(recipeHtml);
+    let recipeMarkdown: string;
+    try {
+      // Convert HTML to Markdown before sending
+      recipeMarkdown = turndownService.turndown(editorContentHtml);
+    } catch (conversionError) {
+      console.error("Markdown conversion failed:", conversionError);
+      setApiError("Failed to process recipe content.");
+      return;
+    }
+
     mutate(
       { title, data: recipeMarkdown, tags: [], imageURL: "" },
       {
@@ -135,16 +126,6 @@ export default function NewRecipe() {
         },
       }
     );
-  };
-
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link"],
-      ["clean"],
-    ],
   };
 
   return (
@@ -183,20 +164,16 @@ export default function NewRecipe() {
           required
           {...getValidationProps(recipeError)}
         >
-          <div className={styles.quillEditor}>
-            <DynamicReactQuill
-              theme="snow"
-              value={recipeHtml}
-              onChange={(content) => {
-                setRecipeHtml(content);
-                if (recipeError) setRecipeError(undefined);
-                if (apiError) setApiError(null);
-              }}
-              modules={quillModules}
-              placeholder="Enter ingredients and instructions..."
-              readOnly={isPending}
-            />
-          </div>
+          <TiptapEditor
+            value={editorContentHtml}
+            onChange={(htmlContent) => {
+              setEditorContentHtml(htmlContent);
+              if (recipeError) setRecipeError(undefined);
+              if (apiError) setApiError(null);
+            }}
+            placeholder="Enter ingredients and instructions..."
+            readOnly={isPending}
+          />
         </Field>
 
         <div className={styles.submitContainer}>
