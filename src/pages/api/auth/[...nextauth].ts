@@ -24,6 +24,7 @@ export default NextAuth({
           email,
           createdAt: new Date(),
           recentlyViewedRecipes: [],
+          collections: [],
         });
       }
     },

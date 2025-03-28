@@ -12,6 +12,7 @@ import {
   DismissRegular,
   EditRegular,
   DeleteRegular,
+  Heart20Regular,
 } from "@fluentui/react-icons";
 import { useRecipe } from "../../../context";
 import { useStyles } from "./RecipeHeader.styles";
@@ -44,13 +45,23 @@ const EditActions = ({
 );
 
 const ViewActions = ({
+  onAddToCollection,
   onEdit,
   onDelete,
 }: {
+  onAddToCollection: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }) => (
   <>
+    <Tooltip content="Add to collection" relationship="label">
+      <Button
+        icon={<Heart20Regular />}
+        appearance="subtle"
+        onClick={onAddToCollection}
+        aria-label="Add recipe"
+      />
+    </Tooltip>
     <Tooltip content="Edit recipe" relationship="label">
       <Button
         icon={<EditRegular />}
@@ -81,7 +92,10 @@ export const RecipeHeader = () => {
     saveChanges,
     cancelEditing,
     deleteRecipe,
+    addToCollection,
   } = useRecipe();
+
+  const handleAddToCollection = () => recipe?._id && addToCollection(recipe._id);
 
   const formattedDate = React.useMemo(() => {
     try {
@@ -128,6 +142,7 @@ export const RecipeHeader = () => {
             <EditActions onSave={saveChanges} onCancel={cancelEditing} />
           ) : (
             <ViewActions
+              onAddToCollection={handleAddToCollection}
               onEdit={() => setIsEditing(true)}
               onDelete={deleteRecipe}
             />
