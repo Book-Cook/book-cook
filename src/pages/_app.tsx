@@ -34,7 +34,7 @@ export default function App(props: AppProps) {
       <style jsx global>
         {`
           body {
-            background-color: #fcfaff;
+            background-color: ${tokens.colorNeutralBackground1};
             padding: 0px;
             margin: 0px;
             height: 100%;

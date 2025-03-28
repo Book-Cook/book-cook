@@ -7,7 +7,6 @@ export const useStyles = makeStyles({
     flexDirection: "column",
     minHeight: "100vh",
     ...shorthands.padding("20px", "16px", "40px"),
-    backgroundColor: tokens.colorNeutralBackground2,
   },
   recipeCard: {
     maxWidth: "840px",
@@ -17,7 +16,7 @@ export const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "30px",
-    backgroundColor: "white",
+    backgroundColor: tokens.colorNeutralBackground1,
     borderRadius: "16px",
     boxShadow: "rgba(0, 0, 0, 0.08) 0px 8px 24px",
     overflow: "hidden",

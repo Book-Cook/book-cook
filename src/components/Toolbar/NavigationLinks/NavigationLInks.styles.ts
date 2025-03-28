@@ -30,7 +30,6 @@ export const useNavigationStyles = makeStyles({
 
     ":hover": {
       color: tokens.colorBrandForeground1,
-      backgroundColor: "rgba(146, 114, 230, 0.08)",
       transform: "translateY(-1px)",
       boxShadow: "0 4px 12px rgba(146, 114, 230, 0.15)",
       textDecoration: "none",

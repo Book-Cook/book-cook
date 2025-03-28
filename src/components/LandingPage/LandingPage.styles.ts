@@ -8,9 +8,9 @@ export const useStyles = makeStyles({
     width: "100%",
     boxSizing: "border-box",
     ...shorthands.overflow("hidden"),
+    color: tokens.colorNeutralForeground1,
   },
 
-  // Hero section
   hero: {
     display: "flex",
     flexDirection: "column",
@@ -37,7 +37,8 @@ export const useStyles = makeStyles({
     lineHeight: 1.1,
     fontWeight: "800",
     marginBottom: "20px",
-    background: "linear-gradient(135deg, #9272e6 0%, #6943d1 100%)",
+    // Gradient uses brand colors - appearance may vary slightly across themes
+    background: `linear-gradient(135deg, ${tokens.colorBrandBackground} 0%, ${tokens.colorBrandBackgroundHover} 100%)`,
     backgroundClip: "text",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
@@ -60,38 +61,55 @@ export const useStyles = makeStyles({
     marginTop: "20px",
   },
 
+  // Styles for custom button elements if not using Fluent Button component
   primaryButton: {
-    backgroundColor: "#9272e6",
-    color: "white",
+    backgroundColor: tokens.colorBrandBackground,
+    color: tokens.colorNeutralForegroundOnBrand,
     fontSize: "16px",
     fontWeight: "600",
     height: "48px",
     ...shorthands.padding("0", "28px"),
-    ...shorthands.borderRadius("24px"),
-    transition: "all 0.3s ease",
+    ...shorthands.borderRadius(tokens.borderRadiusLarge), // Use token
+    border: "none",
+    cursor: "pointer",
+    transitionProperty: "transform, background-color, box-shadow",
+    transitionDuration: tokens.durationNormal,
+    transitionTimingFunction: tokens.curveEasyEase,
     ":hover": {
       transform: "translateY(-2px)",
-      boxShadow: "0 8px 15px rgba(146, 114, 230, 0.2)",
+      backgroundColor: tokens.colorBrandBackgroundHover,
+      boxShadow: tokens.shadow8,
+    },
+    ":active": {
+      backgroundColor: tokens.colorBrandBackgroundPressed,
+      transform: "translateY(0)",
+      boxShadow: tokens.shadow2,
     },
   },
 
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
     fontSize: "16px",
     fontWeight: "600",
     height: "48px",
     ...shorthands.padding("0", "28px"),
-    ...shorthands.borderRadius("24px"),
+    ...shorthands.borderRadius(tokens.borderRadiusLarge), // Use token
     border: `1px solid ${tokens.colorNeutralStroke1}`,
-    transition: "all 0.3s ease",
+    cursor: "pointer",
+    transitionProperty: "transform, background-color, border-color",
+    transitionDuration: tokens.durationNormal,
+    transitionTimingFunction: tokens.curveEasyEase,
     ":hover": {
-      backgroundColor: tokens.colorNeutralBackground2,
+      backgroundColor: tokens.colorNeutralBackground1Hover,
       transform: "translateY(-2px)",
+    },
+    ":active": {
+      backgroundColor: tokens.colorNeutralBackground1Pressed,
+      transform: "translateY(0)",
     },
   },
 
-  // Featured recipes section
   featuredSection: {
     ...shorthands.padding("80px", "20px"),
     backgroundColor: tokens.colorNeutralBackground2,
@@ -105,6 +123,7 @@ export const useStyles = makeStyles({
     fontWeight: "700",
     marginBottom: "48px",
     textAlign: "center",
+    color: tokens.colorNeutralForeground1,
   },
 
   recipesGrid: {
@@ -116,22 +135,27 @@ export const useStyles = makeStyles({
   },
 
   recipeCard: {
-    transition: "all 0.3s ease",
+    backgroundColor: tokens.colorNeutralBackground1,
+    borderRadius: tokens.borderRadiusMedium,
+    transitionProperty: "transform, box-shadow",
+    transitionDuration: tokens.durationNormal,
+    transitionTimingFunction: tokens.curveEasyEase,
     cursor: "pointer",
+    overflow: "hidden", // Ensure image radius applies correctly
     ":hover": {
       transform: "translateY(-8px)",
-      boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
+      boxShadow: tokens.shadow16,
     },
   },
 
   cardImage: {
+    display: "block", // Fix potential spacing issues
     width: "100%",
     height: "200px",
     objectFit: "cover",
-    ...shorthands.borderRadius("8px"),
+    // No radius needed here if recipeCard uses overflow: hidden
   },
 
-  // Features section
   featuresSection: {
     ...shorthands.padding("100px", "20px"),
     backgroundColor: tokens.colorNeutralBackground1,
@@ -162,12 +186,12 @@ export const useStyles = makeStyles({
     alignItems: "center",
     width: "80px",
     height: "80px",
-    ...shorthands.borderRadius("40px"),
-    backgroundColor: "rgba(146, 114, 230, 0.1)",
+    borderRadius: "50%",
+    backgroundColor: tokens.colorBrandBackground2, // Subtle brand background
     marginBottom: "24px",
-    color: "#9272e6",
+    color: tokens.colorBrandForeground1,
     fontSize: "32px",
-    transition: "transform 0.3s ease",
+    transition: `transform ${tokens.durationNormal} ${tokens.curveEasyEase}`,
     ":hover": {
       transform: "scale(1.1)",
     },
@@ -177,6 +201,7 @@ export const useStyles = makeStyles({
     fontSize: "20px",
     fontWeight: "600",
     marginBottom: "12px",
+    color: tokens.colorNeutralForeground1,
   },
 
   featureDesc: {
@@ -184,10 +209,9 @@ export const useStyles = makeStyles({
     lineHeight: 1.6,
   },
 
-  // CTA section
   ctaSection: {
-    backgroundColor: "#9272e6",
-    color: "white",
+    backgroundColor: tokens.colorBrandBackground,
+    color: tokens.colorNeutralForegroundOnBrand,
     ...shorthands.padding("80px", "20px"),
     display: "flex",
     flexDirection: "column",
@@ -199,7 +223,7 @@ export const useStyles = makeStyles({
     fontSize: "40px",
     fontWeight: "700",
     marginBottom: "20px",
-    color: "white",
+    color: tokens.colorNeutralForegroundOnBrand,
   },
 
   ctaDesc: {
@@ -210,26 +234,34 @@ export const useStyles = makeStyles({
   },
 
   ctaButton: {
-    backgroundColor: "white",
-    color: "#9272e6",
+    backgroundColor: tokens.colorNeutralBackgroundStatic, // Static white
+    color: tokens.colorBrandForeground1,
     fontSize: "18px",
     fontWeight: "600",
     height: "52px",
     ...shorthands.padding("0", "32px"),
-    ...shorthands.borderRadius("26px"),
-    transition: "all 0.3s ease",
+    ...shorthands.borderRadius(tokens.borderRadiusXLarge), // Use token
+    border: "none",
+    cursor: "pointer",
+    transitionProperty: "transform, box-shadow, color",
+    transitionDuration: tokens.durationNormal,
+    transitionTimingFunction: tokens.curveEasyEase,
     ":hover": {
       transform: "translateY(-3px) scale(1.05)",
-      boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)",
+      boxShadow: tokens.shadow16,
+    },
+    ":active": {
+      transform: "translateY(0) scale(1)",
+      boxShadow: tokens.shadow4,
     },
   },
 
-  // Decorative elements
   floatingBubble: {
     position: "absolute",
     borderRadius: "50%",
-    backgroundColor: "rgba(146, 114, 230, 0.1)",
+    backgroundColor: tokens.colorBrandBackground2, // Subtle brand background
     zIndex: 1,
+    opacity: 0.5, // Adjust if needed for subtlety
   },
 
   heroImageContainer: {
