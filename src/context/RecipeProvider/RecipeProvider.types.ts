@@ -17,4 +17,5 @@ export type RecipeContextType = {
   cancelEditing: () => void;
   deleteRecipe: () => void;
   handleImageUpload: (file: File) => void;
+  addToCollection: (recipeId: string) => Promise<void>;
 };
