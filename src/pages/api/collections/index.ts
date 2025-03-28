@@ -2,6 +2,7 @@ import clientPromise from "../../../clients/mongo";
 import { getServerSession } from "next-auth/next";
 import authOptions from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
@@ -13,7 +14,7 @@ export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const db = client.db("dev");
 
-  // Retrieve all recipes that the user has viewed recently
+  // Retrieve all recipes that the user has added to their collections
   try {
     const session: Session | null = await getServerSession(
       req,
@@ -26,35 +27,31 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
-    // Find the user document and project only recentlyViewedRecipes.
+    // Find the user document and project only collections.
     const userDoc = await db
       .collection("users")
       .findOne(
         { email: session?.user?.email },
-        { projection: { recentlyViewedRecipes: 1, _id: 0 } }
+        { projection: { collections: 1, _id: 0 } }
       );
 
-    if (!userDoc || !userDoc.recentlyViewedRecipes) {
-      res.status(404).json({ message: "Recently viewed recipes not found" });
+    if (!userDoc || !userDoc.collections) {
+      res.status(404).json({ message: "Collections not found" });
       return;
     }
+
+    // Convert string IDs to ObjectIds
+    const objectIds = userDoc.collections.map((id: string) => new ObjectId(id));
 
     // Query the recipes collection using the $in operator.
     const recipes = await db
       .collection("recipes")
       .find({
-        _id: { $in: userDoc.recentlyViewedRecipes },
+        _id: { $in: objectIds },
       })
       .toArray();
 
-    const orderedRecipes = userDoc.recentlyViewedRecipes
-      .map((id: any) =>
-        recipes.find((recipe) => recipe._id.toString() === id.toString())
-      )
-      .filter((recipe: any) => recipe) // remove any null/undefined
-      .reverse();
-
-    res.status(200).json(orderedRecipes);
+    res.status(200).json(recipes);
   } catch (error) {
     console.error("Failed to fetch recently viewed recipes:", error);
     res.status(500).json({ message: "Internal Server Error" });

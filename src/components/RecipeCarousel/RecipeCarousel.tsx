@@ -4,20 +4,13 @@ import { Title3, Text, Button, tokens } from "@fluentui/react-components";
 import { ArrowLeftRegular, ArrowRightRegular } from "@fluentui/react-icons";
 import { RecipeCard } from "../RecipeCard/RecipeCard";
 import { motion } from "framer-motion";
-
-export type RecentRecipe = {
-  id: string;
-  title: string;
-  imageSrc?: string;
-  tags?: string[];
-  createdDate: string;
-};
+import { Recipe } from "../../clientToServer/types";
 
 export type RecentRecipesCarouselProps = {
   /**
    * Array of recently viewed recipes
    */
-  recipes: RecentRecipe[];
+  recipes: Recipe[] | [];
   /**
    * Title for the carousel section
    */
@@ -57,6 +50,7 @@ const useStyles = makeStyles({
     gap: "24px",
   },
   cardWrapper: {
+    position: "relative",
     flexShrink: 0,
     width: "280px",
     "@media (max-width: 640px)": {
@@ -133,6 +127,7 @@ const useStyles = makeStyles({
     left: 0,
     width: "100%",
     height: "100%",
+    pointerEvents: "auto", // enable pointer events on the overlay
     cursor: "pointer",
     zIndex: 1,
   },
@@ -181,6 +176,8 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
   const canScrollLeft = currentIndex > 0;
   const canScrollRight = currentIndex < maxIndex;
 
+  const orderedRecipes = [...recipes].reverse();
+
   // Update card dimensions and visible cards on resize
   React.useEffect(() => {
     const calculateCardDimensions = () => {
@@ -215,6 +212,7 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
   const handleCardClick = (id: string) => {
     // Only allow clicks when not dragging
     if (!isDragging || !dragMovedRef.current) {
+      console.log("Navigating to recipe:", id);
       window.location.href = `/recipes/${id}`;
     }
   };
@@ -380,17 +378,17 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
           }}
         >
           {recipes.map((recipe) => (
-            <div key={recipe.id} className={styles.cardWrapper}>
+            <div key={recipe._id} className={styles.cardWrapper}>
               <RecipeCard
-                id={recipe.id}
+                id={recipe._id}
                 title={recipe.title}
-                imageSrc={recipe.imageSrc}
+                imageSrc={recipe.imageURL}
                 tags={recipe.tags}
-                createdDate={recipe.createdDate}
+                createdDate={recipe.createdAt}
               />
               <div
                 className={styles.cardClickOverlay}
-                onClick={() => handleCardClick(recipe.id)}
+                onClick={() => handleCardClick(recipe._id)}
               />
             </div>
           ))}

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRecipe, useDeleteRecipe } from "../../clientToServer";
 import { RecipeContextType } from "./RecipeProvider.types";
+import { add } from "date-fns";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -151,6 +152,38 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     updateEditableData("imageURL", "");
   };
 
+  // Add to collection mutation
+  const addToCollectionMutation = useMutation({
+    mutationFn: async (recipeId: string) => {
+      const response = await fetch(`/api/collections/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipeId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add recipe to collection");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      // Optionally invalidate queries if needed
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        alert(`Failed to add recipe to collection: ${error.message}`);
+      }
+    },
+  });
+
+  const addToCollection = async (recipeId: string) => {
+    await addToCollectionMutation.mutate(recipeId);
+  };
+
   const contextValue = {
     recipe,
     isLoading,
@@ -165,6 +198,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     cancelEditing,
     deleteRecipe,
     handleImageUpload,
+    addToCollection,
   };
 
   return (
