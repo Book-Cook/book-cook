@@ -30,9 +30,11 @@
     "@ducanh2912/next-pwa": "^10.2.9",
     "react-quill": "^2.0.0",
     "turndown": "^7.2.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "chroma-js": "^3.1.2"
   },
   "devDependencies": {
+    "@types/chroma-js": "^3.1.1",
     "@types/turndown": "^5.0.5",
     "@next/eslint-plugin-next": "^14.2.12",
     "@types/enzyme": "3.10.12",

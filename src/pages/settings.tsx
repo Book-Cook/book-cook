@@ -8,9 +8,11 @@ import {
   Option,
   Spinner,
   Button,
+  Switch,
 } from "@fluentui/react-components";
 import { useSession, signOut } from "next-auth/react";
 import { Unauthorized } from "../components";
+import { useTheme } from "../context";
 
 const useStyles = makeStyles({
   page: {
@@ -35,6 +37,7 @@ const useStyles = makeStyles({
   title: {
     fontSize: "18px",
     fontWeight: "600",
+    color: tokens.colorNeutralForeground1,
   },
   settingGroup: {
     display: "flex",
@@ -44,7 +47,7 @@ const useStyles = makeStyles({
   setting: {
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "space-between",
     gap: "16px",
   },
@@ -57,6 +60,7 @@ const useStyles = makeStyles({
   label: {
     fontSize: "14px",
     fontWeight: "600",
+    color: tokens.colorNeutralForeground1,
   },
   description: {
     fontSize: "12px",
@@ -65,10 +69,14 @@ const useStyles = makeStyles({
   control: {
     width: "250px",
     flexShrink: 0,
-    alignSelf: "center",
     "@media (max-width: 710px)": {
       width: "100%",
     },
+  },
+  colorInput: {
+    height: "32px",
+    minWidth: "40px",
+    cursor: "pointer",
   },
   signOutButton: {
     backgroundColor: tokens.colorPaletteRedBackground1,
@@ -84,15 +92,60 @@ const useStyles = makeStyles({
 export default function Settings() {
   const styles = useStyles();
   const { data: session, status } = useSession();
+  const { themeMode, primaryColor, toggleTheme, setPrimaryColor } = useTheme(); // <-- Consume theme context
+
+  // Local state for recipe preferences (kept from original)
   const [defaultServings, setDefaultServings] = React.useState("4");
   const [unitSystem, setUnitSystem] = React.useState("imperial");
 
   if (status === "loading") return <Spinner label="Loading settings..." />;
   if (!session) return <Unauthorized />;
 
+  const handlePrimaryColorChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPrimaryColor(event.target.value);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
+        <div className={styles.section}>
+          <h2 className={styles.title}>Appearance</h2>
+          <div className={styles.settingGroup}>
+            <div className={styles.setting}>
+              <div className={styles.info}>
+                <div className={styles.label}>Theme Mode</div>
+                <div className={styles.description}>
+                  Switch between light and dark visual themes for the
+                  application.
+                </div>
+              </div>
+              <Switch
+                label={themeMode === "dark" ? "Dark Mode" : "Light Mode"}
+                checked={themeMode === "dark"}
+                onChange={toggleTheme}
+              />
+            </div>
+            <Divider />
+            <div className={styles.setting}>
+              <div className={styles.info}>
+                <div className={styles.label}>Primary Color</div>
+                <div className={styles.description}>
+                  Choose the main accent color used throughout the app.
+                </div>
+              </div>
+              <Input
+                className={mergeClasses(styles.control, styles.colorInput)}
+                type={"color" as any}
+                value={primaryColor}
+                onChange={handlePrimaryColorChange}
+                appearance="filled-darker"
+              />
+            </div>
+          </div>
+        </div>
+
         <div className={styles.section}>
           <h2 className={styles.title}>Recipe Preferences</h2>
           <div className={styles.settingGroup}>
@@ -100,11 +153,9 @@ export default function Settings() {
               <div className={styles.info}>
                 <div className={styles.label}>Default Unit System</div>
                 <div className={styles.description}>
-                  Choose which measurement system to use when viewing and
-                  creating recipes
+                  Choose measurement system for recipes.
                 </div>
               </div>
-
               <Dropdown
                 className={styles.control}
                 value={unitSystem === "imperial" ? "US Imperial" : "Metric"}
@@ -124,11 +175,9 @@ export default function Settings() {
               <div className={styles.info}>
                 <div className={styles.label}>Default Servings</div>
                 <div className={styles.description}>
-                  Set how many servings to use as the default when creating new
-                  recipes
+                  Default servings for new recipes.
                 </div>
               </div>
-
               <Input
                 className={styles.control}
                 value={defaultServings}
@@ -140,14 +189,13 @@ export default function Settings() {
             </div>
           </div>
         </div>
-
         <div className={styles.section}>
           <h2 className={styles.title}>Account Settings</h2>
           <div className={styles.setting}>
             <div className={styles.info}>
               <div className={styles.label}>Sign Out</div>
               <div className={styles.description}>
-                End your current session and return to the login screen
+                End your current session.
               </div>
             </div>
             <Button className={styles.signOutButton} onClick={() => signOut()}>
