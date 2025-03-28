@@ -7,51 +7,57 @@ import {
 import type { Theme } from "@fluentui/react-components";
 import type {
   ThemeMode,
+  ThemePreference,
   ThemeContextProps,
   InitialValues,
 } from "./ThemeProvider.types";
 import {
-  DEFAULT_THEME_MODE,
+  DEFAULT_THEME_PREFERENCE,
   DEFAULT_PRIMARY_COLOR,
   LOCAL_STORAGE_PRIMARY_COLOR_KEY,
-  LOCAL_STORAGE_THEME_MODE_KEY,
+  LOCAL_STORAGE_THEME_PREFERENCE_KEY,
   LOCAL_STORAGE_CACHED_THEME_KEY,
 } from "./themeConstants";
+import { useThemeDetector } from "../../hooks";
 
 const ThemeContext = React.createContext<ThemeContextProps | undefined>(
   undefined
 );
 
 const getInitialValues = (): InitialValues => {
-  let mode: ThemeMode = DEFAULT_THEME_MODE;
+  let preference: ThemePreference = DEFAULT_THEME_PREFERENCE;
   let color: string = DEFAULT_PRIMARY_COLOR;
   let cachedThemeString: string | null = null;
 
   if (typeof window !== "undefined") {
     try {
-      const storedMode = localStorage.getItem(LOCAL_STORAGE_THEME_MODE_KEY);
-      if (storedMode === "light" || storedMode === "dark") {
-        mode = storedMode;
+      const storedPreference = localStorage.getItem(
+        LOCAL_STORAGE_THEME_PREFERENCE_KEY
+      );
+      if (
+        storedPreference === "light" ||
+        storedPreference === "dark" ||
+        storedPreference === "system"
+      ) {
+        preference = storedPreference;
       }
-
       const storedColor = localStorage.getItem(LOCAL_STORAGE_PRIMARY_COLOR_KEY);
       if (storedColor) {
         color = storedColor;
       }
-
       cachedThemeString = localStorage.getItem(LOCAL_STORAGE_CACHED_THEME_KEY);
     } catch (error) {
       console.error(
         "Failed to read initial theme values from localStorage:",
         error
       );
-      cachedThemeString = null; // Don't use cache if read failed
+      cachedThemeString = null;
     }
   }
-  return { mode, color, cachedThemeString };
+  return { preference, color, cachedThemeString };
 };
 
-const persistThemeData = (theme: Theme, mode: ThemeMode) => {
+const persistThemeData = (theme: Theme, preference: ThemePreference) => {
   if (typeof window !== "undefined") {
     try {
       const primaryColor = theme.colorBrandBackground || DEFAULT_PRIMARY_COLOR;
@@ -59,7 +65,7 @@ const persistThemeData = (theme: Theme, mode: ThemeMode) => {
         LOCAL_STORAGE_CACHED_THEME_KEY,
         JSON.stringify(theme)
       );
-      localStorage.setItem(LOCAL_STORAGE_THEME_MODE_KEY, mode);
+      localStorage.setItem(LOCAL_STORAGE_THEME_PREFERENCE_KEY, preference);
       localStorage.setItem(LOCAL_STORAGE_PRIMARY_COLOR_KEY, primaryColor);
     } catch (error) {
       console.error(`Failed to write theme data to localStorage:`, error);
@@ -71,19 +77,31 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [initialValues] = React.useState(getInitialValues);
+  const isSystemDark = useThemeDetector();
 
-  const [themeMode, setThemeMode] = React.useState<ThemeMode>(
-    initialValues.mode
-  );
+  const [themePreference, setThemePreferenceState] =
+    React.useState<ThemePreference>(initialValues.preference);
   const [primaryColor, setPrimaryColorState] = React.useState<string>(
     initialValues.color
   );
 
-  // Attempt to parse the initial cached theme string once on mount
+  const appliedThemeMode = React.useMemo((): ThemeMode => {
+    const systemMode = isSystemDark ? "dark" : "light";
+    return themePreference === "system" ? systemMode : themePreference;
+  }, [themePreference, isSystemDark]);
+
   const [initialCachedTheme] = React.useState<Theme | undefined>(() => {
     if (initialValues.cachedThemeString) {
       try {
-        return JSON.parse(initialValues.cachedThemeString);
+        const parsed = JSON.parse(initialValues.cachedThemeString);
+        if (
+          parsed &&
+          typeof parsed === "object" &&
+          parsed.colorBrandBackground
+        ) {
+          return parsed;
+        }
+        throw new Error("Parsed data is not a valid theme object");
       } catch (error) {
         console.error("Failed to parse cached theme from localStorage:", error);
         if (typeof window !== "undefined") {
@@ -96,46 +114,65 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   const theme = React.useMemo((): Theme => {
+    const stateMatchesInitialValues =
+      themePreference === initialValues.preference &&
+      primaryColor === initialValues.color;
+
     const canUseInitialCache =
       initialCachedTheme &&
-      themeMode === initialValues.mode &&
-      primaryColor === initialValues.color &&
-      initialCachedTheme.colorBrandBackground === primaryColor; // Integrity check
+      stateMatchesInitialValues &&
+      initialCachedTheme.colorBrandBackground === primaryColor;
 
     if (canUseInitialCache) {
       return initialCachedTheme;
     }
 
-    // Regenerate if cache invalid, missing, or mode/color state has changed
     const currentBrandVariants = generateBrandVariants(primaryColor);
-    return themeMode === "light"
+    return appliedThemeMode === "light"
       ? createDynamicLightTheme(currentBrandVariants)
       : createDynamicDarkTheme(currentBrandVariants);
   }, [
-    themeMode,
+    appliedThemeMode,
     primaryColor,
     initialCachedTheme,
-    initialValues.mode,
+    themePreference,
+    initialValues.preference,
     initialValues.color,
   ]);
 
-  const toggleTheme = React.useCallback(() => {
-    setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-  }, []);
+  const setThemePreference = React.useCallback(
+    (preference: ThemePreference) => {
+      setThemePreferenceState(preference);
+    },
+    []
+  );
 
   const setPrimaryColor = React.useCallback((color: string) => {
     setPrimaryColorState(color);
   }, []);
 
   const contextValue = React.useMemo(
-    () => ({ theme, themeMode, primaryColor, toggleTheme, setPrimaryColor }),
-    [theme, themeMode, primaryColor, toggleTheme, setPrimaryColor]
+    () => ({
+      theme,
+      appliedThemeMode,
+      themePreference,
+      setThemePreference,
+      primaryColor,
+      setPrimaryColor,
+    }),
+    [
+      theme,
+      appliedThemeMode,
+      themePreference,
+      setThemePreference,
+      primaryColor,
+      setPrimaryColor,
+    ]
   );
 
   React.useEffect(() => {
-    persistThemeData(theme, themeMode);
+    persistThemeData(theme, themePreference);
 
-    // Apply side effects
     if (theme.colorNeutralBackground1) {
       document.body.style.backgroundColor = theme.colorNeutralBackground1;
       const themeMetaTag = document.querySelector('meta[name="theme-color"]');
@@ -143,7 +180,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         themeMetaTag.setAttribute("content", theme.colorNeutralBackground1);
       }
     }
-  }, [theme, themeMode]); // Persist and apply changes when theme or mode updates
+  }, [theme, themePreference]); // Persist when theme object or user preference changes
 
   return (
     <ThemeContext.Provider value={contextValue}>

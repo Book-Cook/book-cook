@@ -8,11 +8,13 @@ import {
   Option,
   Spinner,
   Button,
-  Switch,
+  Radio,
+  RadioGroup,
 } from "@fluentui/react-components";
 import { useSession, signOut } from "next-auth/react";
 import { Unauthorized } from "../components";
 import { useTheme } from "../context";
+import type { ThemePreference } from "../context";
 
 const useStyles = makeStyles({
   page: {
@@ -73,6 +75,13 @@ const useStyles = makeStyles({
       width: "100%",
     },
   },
+  radioGroupControl: {
+    width: "250px",
+    flexShrink: 0,
+    "@media (max-width: 710px)": {
+      width: "auto",
+    },
+  },
   colorInput: {
     height: "32px",
     minWidth: "40px",
@@ -92,9 +101,9 @@ const useStyles = makeStyles({
 export default function Settings() {
   const styles = useStyles();
   const { data: session, status } = useSession();
-  const { themeMode, primaryColor, toggleTheme, setPrimaryColor } = useTheme(); // <-- Consume theme context
+  const { themePreference, setThemePreference, primaryColor, setPrimaryColor } =
+    useTheme();
 
-  // Local state for recipe preferences (kept from original)
   const [defaultServings, setDefaultServings] = React.useState("4");
   const [unitSystem, setUnitSystem] = React.useState("imperial");
 
@@ -107,6 +116,13 @@ export default function Settings() {
     setPrimaryColor(event.target.value);
   };
 
+  const handleThemePreferenceChange = (
+    event: React.FormEvent<HTMLDivElement>,
+    data: { value: string }
+  ) => {
+    setThemePreference(data.value as ThemePreference);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
@@ -115,17 +131,21 @@ export default function Settings() {
           <div className={styles.settingGroup}>
             <div className={styles.setting}>
               <div className={styles.info}>
-                <div className={styles.label}>Theme Mode</div>
+                <div className={styles.label}>Theme</div>
                 <div className={styles.description}>
-                  Switch between light and dark visual themes for the
-                  application.
+                  Choose the application theme or follow system preference.
                 </div>
               </div>
-              <Switch
-                label={themeMode === "dark" ? "Dark Mode" : "Light Mode"}
-                checked={themeMode === "dark"}
-                onChange={toggleTheme}
-              />
+              <RadioGroup
+                layout="horizontal"
+                value={themePreference}
+                onChange={handleThemePreferenceChange}
+                className={styles.radioGroupControl}
+              >
+                <Radio value="light" label="Light" />
+                <Radio value="dark" label="Dark" />
+                <Radio value="system" label="System" />
+              </RadioGroup>
             </div>
             <Divider />
             <div className={styles.setting}>
@@ -189,6 +209,7 @@ export default function Settings() {
             </div>
           </div>
         </div>
+
         <div className={styles.section}>
           <h2 className={styles.title}>Account Settings</h2>
           <div className={styles.setting}>
