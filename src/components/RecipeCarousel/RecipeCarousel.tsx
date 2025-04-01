@@ -176,8 +176,6 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
   const canScrollLeft = currentIndex > 0;
   const canScrollRight = currentIndex < maxIndex;
 
-  const orderedRecipes = [...recipes].reverse();
-
   // Update card dimensions and visible cards on resize
   React.useEffect(() => {
     const calculateCardDimensions = () => {
@@ -354,7 +352,6 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
           />
         </div>
       </div>
-
       <div
         className={`${styles.carouselContainer} ${isDragging ? styles.noSelection : ""}`}
         onMouseDown={handleDragStart}

@@ -10,6 +10,7 @@ export const useThemeDetector = () => {
 
   const [isDarkTheme, setIsDarkTheme] = React.useState(darkThemeQuery?.matches);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const themeListener = (ev: any) => {
     setIsDarkTheme(ev.matches);
   };

@@ -39,6 +39,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   const updateMutation = useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: async (updatedRecipe: any) => {
       const response = await fetch(`/api/recipes/${recipe?._id}`, {
         method: "PUT",
@@ -79,6 +80,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [recipe]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateEditableData = (field: string, value: any) => {
     setEditableData((prev) => {
       const updatedData = { ...prev, [field]: value };
@@ -157,7 +159,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const handleImageUpload = (file: File) => {
+  const handleImageUpload = () => {
     // In a real app, upload to storage service and get URL
     alert("In a real app, this would upload the image to storage");
     updateEditableData("imageURL", "");
