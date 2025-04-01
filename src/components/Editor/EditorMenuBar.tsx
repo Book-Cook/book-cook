@@ -20,19 +20,22 @@ import {
   TextNumberListLtr24Regular,
   Link24Regular,
 } from "@fluentui/react-icons";
-// Assuming EditorToolbarButton.tsx is correctly located and exported
 import { ToolbarButton } from "./EditorToolbarButton";
 
-// --- Styling ---
 const useStyles = makeStyles({
   menuBar: {
     display: "flex",
-    flexWrap: "wrap",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     ...shorthands.padding(tokens.spacingHorizontalS, tokens.spacingVerticalXS),
     backgroundColor: tokens.colorNeutralBackground2,
     ...shorthands.gap(tokens.spacingHorizontalXS),
+  },
+  divider: {
+    flexGrow: "0",
+    marginLeft: tokens.spacingHorizontalXXS,
+    marginRight: tokens.spacingHorizontalXXS,
   },
 });
 
@@ -149,7 +152,13 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
       {toolbarItems.map((item, index) => {
         switch (item.type) {
           case "divider":
-            return <Divider key={`divider-${index}`} vertical />;
+            return (
+              <Divider
+                key={`divider-${index}`}
+                vertical
+                className={styles.divider}
+              />
+            );
           case "button":
             const IconComponent = item.icon as React.ComponentType;
             return (
