@@ -5,14 +5,10 @@ import { useRecipe } from "../../../context";
 
 export const RecipeContent = () => {
   const { isLoading, editableData, updateEditableData } = useRecipe();
-  const oldContent = React.useRef(editableData?.content);
 
   const handleEditorChange = React.useCallback(
     (htmlContent: string) => {
-      if (htmlContent !== oldContent.current) {
-        oldContent.current = htmlContent;
-        updateEditableData("content", htmlContent);
-      }
+      updateEditableData("content", htmlContent);
     },
     [updateEditableData]
   );

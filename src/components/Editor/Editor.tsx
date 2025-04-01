@@ -10,7 +10,8 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
     overflow: "hidden",
-    fontSize: "17px",
+    fontSize: "15px",
+    fontWeight: tokens.fontWeightRegular,
     lineHeight: "1.8",
   },
   editorContentArea: {

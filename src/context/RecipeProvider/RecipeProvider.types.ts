@@ -1,11 +1,10 @@
+import { Recipe } from "src/clientToServer";
+
 export type RecipeContextType = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  recipe: any;
+  recipe: Recipe | undefined;
   isLoading: boolean;
   error: unknown;
-  isEditing: boolean;
   hasEdits: boolean;
-  setIsEditing: (value: boolean) => void;
   editableData: {
     title: string;
     content: string;
@@ -19,6 +18,5 @@ export type RecipeContextType = {
   saveChanges: () => void;
   cancelEditing: () => void;
   deleteRecipe: () => void;
-  handleImageUpload: (file: File) => void;
-  addToCollection: (recipeId: string) => Promise<void>;
+  onAddToCollection: (recipeId: string) => Promise<void>;
 };

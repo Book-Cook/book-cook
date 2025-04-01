@@ -1,7 +1,12 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchRecipe, useDeleteRecipe } from "../../clientToServer";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchRecipe,
+  useDeleteRecipe,
+  useAddToCollection,
+  useUpdateRecipe,
+} from "../../clientToServer";
 import { RecipeContextType } from "./RecipeProvider.types";
 import { isEqual } from "lodash";
 
@@ -14,10 +19,9 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const router = useRouter();
   const { recipes: recipeId } = router.query;
-  const queryClient = useQueryClient();
   const { mutate: deleteMutate } = useDeleteRecipe();
-
-  const [isEditing, setIsEditing] = React.useState(false);
+  const { mutate: addToCollection } = useAddToCollection();
+  const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
 
   const [editableData, setEditableData] = React.useState({
     title: "",
@@ -25,8 +29,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     tags: [] as string[],
     imageURL: "",
   });
-
-  const [hasEdits, setHasEdits] = React.useState(false); // New state
 
   const {
     data: recipe,
@@ -38,65 +40,9 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     enabled: !!recipeId,
   });
 
-  const updateMutation = useMutation({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mutationFn: async (updatedRecipe: any) => {
-      const response = await fetch(`/api/recipes/${recipe?._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedRecipe),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update recipe");
-      }
-
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
-      setIsEditing(false);
-    },
-    onError: (error) => {
-      if (error instanceof Error) {
-        alert(`Failed to update recipe: ${error.message}`);
-      }
-    },
-  });
-
-  // Initialize editable data when recipe changes
-  React.useEffect(() => {
-    if (recipe) {
-      const initialData = {
-        title: recipe.title || "",
-        content: recipe.data || "",
-        tags: recipe.tags || [],
-        imageURL: recipe.imageURL || "",
-      };
-      setEditableData(initialData);
-      setHasEdits(false);
-    }
-  }, [recipe]);
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateEditableData = (field: string, value: any) => {
-    setEditableData((prev) => {
-      const updatedData = { ...prev, [field]: value };
-      // Compare updated data with original recipe data
-      if (recipe) {
-        const originalData = {
-          title: recipe.title || "",
-          content: recipe.data || "",
-          tags: recipe.tags || [],
-          imageURL: recipe.imageURL || "",
-        };
-
-        setHasEdits(!isEqual(updatedData, originalData));
-      }
-      return updatedData;
-    });
+    setEditableData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleAddTag = (tag: string) => {
@@ -118,18 +64,15 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    updateMutation.mutate({
+    updateRecipe({
       title: editableData.title,
       data: editableData.content,
       tags: editableData.tags,
       imageURL: editableData.imageURL,
     });
-
-    setHasEdits(false);
   };
 
   const cancelEditing = () => {
-    setIsEditing(false);
     if (recipe) {
       const initialData = {
         title: recipe.title || "",
@@ -138,7 +81,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
         imageURL: recipe.imageURL || "",
       };
       setEditableData(initialData);
-      setHasEdits(false); // Reset hasEdits when canceling
     }
   };
 
@@ -159,48 +101,47 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const handleImageUpload = () => {
-    // In a real app, upload to storage service and get URL
-    alert("In a real app, this would upload the image to storage");
-    updateEditableData("imageURL", "");
+  const onAddToCollection = async (recipeId: string) => {
+    await addToCollection(recipeId);
   };
 
-  const addToCollectionMutation = useMutation({
-    mutationFn: async (recipeId: string) => {
-      const response = await fetch(`/api/collections/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ recipeId }),
-      });
+  React.useEffect(() => {
+    if (recipe) {
+      const initialData = {
+        title: recipe.title || "",
+        content: recipe.data || "",
+        tags: recipe.tags || [],
+        imageURL: recipe.imageURL || "",
+      };
+      setEditableData(initialData);
+    }
+  }, [recipe]);
 
-      if (!response.ok) {
-        throw new Error("Failed to add recipe to collection");
-      }
+  const initialEditableData = React.useMemo(() => {
+    if (!recipe) {
+      return null;
+    }
+    return {
+      title: recipe.title || "",
+      content: recipe.data || "",
+      tags: recipe.tags || [],
+      imageURL: recipe.imageURL || "",
+    };
+  }, [recipe]);
 
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["collections"] });
-    },
-    onError: (error) => {
-      if (error instanceof Error) {
-        alert(`Failed to add recipe to collection: ${error.message}`);
-      }
-    },
-  });
-
-  const addToCollection = async (recipeId: string) => {
-    await addToCollectionMutation.mutate(recipeId);
-  };
+  const hasEdits = React.useMemo(() => {
+    if (!initialEditableData) {
+      return false;
+    }
+    console.log(JSON.stringify(editableData) + "editable");
+    console.log(JSON.stringify(initialEditableData) + "inital");
+    return !isEqual(editableData, initialEditableData);
+  }, [editableData, initialEditableData]);
 
   const contextValue = {
     recipe,
     isLoading,
     error,
-    isEditing,
-    setIsEditing,
     editableData,
     updateEditableData,
     handleAddTag,
@@ -208,8 +149,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     saveChanges,
     cancelEditing,
     deleteRecipe,
-    handleImageUpload,
-    addToCollection,
+    onAddToCollection,
     hasEdits,
   };
 
