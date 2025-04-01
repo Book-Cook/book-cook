@@ -1,7 +1,9 @@
 {
   "name": "book-cook",
   "version": "0.0.0",
+  "description": "Recipe management application",
   "private": true,
+  "sideEffects": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
