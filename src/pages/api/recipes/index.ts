@@ -21,7 +21,7 @@ export default async function handler(req: any, res: any) {
       } = req.query;
 
       let query = {};
-      let projection = { data: 0 };
+      const projection = { data: 0 };
 
       if (search) {
         query = {

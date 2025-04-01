@@ -1,13 +1,7 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
+import { makeStyles } from "@griffel/react";
 import { RecipeCard, FallbackScreen, Unauthorized } from "../components";
-import {
-  Text,
-  Title3,
-  Dropdown,
-  Option,
-  Input,
-} from "@fluentui/react-components";
+import { Text, Title3, Dropdown, Option } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
@@ -89,7 +83,7 @@ const useStyles = makeStyles({
 export default function Recipes() {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);

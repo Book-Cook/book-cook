@@ -157,6 +157,7 @@ export default function Settings() {
               </div>
               <Input
                 className={mergeClasses(styles.control, styles.colorInput)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 type={"color" as any}
                 value={primaryColor}
                 onChange={handlePrimaryColorChange}

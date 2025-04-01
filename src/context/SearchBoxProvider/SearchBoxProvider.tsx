@@ -9,4 +9,3 @@ export const SearchBoxContext = React.createContext<SearchBoxContextValue>({
 export const SearchBoxProvider = SearchBoxContext.Provider;
 
 export const useSearchBox = () => React.useContext(SearchBoxContext);
-1;

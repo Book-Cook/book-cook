@@ -4,6 +4,7 @@ import authOptions from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
 import { ObjectId } from "mongodb";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);

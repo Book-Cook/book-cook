@@ -71,8 +71,7 @@ const HomePage = () => {
 
   // Use fetched data or fallback to mock if unavailable.
   const recipesToShow =
-      recentlyViewed && recentlyViewed.length > 0
-      ? recentlyViewed : [];
+    recentlyViewed && recentlyViewed.length > 0 ? recentlyViewed : [];
 
   return (
     <div className={styles.container}>

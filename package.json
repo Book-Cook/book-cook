@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "export": "next build && next export"
   },
   "dependencies": {
@@ -49,6 +50,10 @@
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.34.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-config-next": "^15.2.4",
     "husky": "7.0.4",
     "prettier": "^3.2.5",
     "renovate": "^37.235.0",

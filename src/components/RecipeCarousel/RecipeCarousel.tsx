@@ -316,9 +316,9 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
           <Title3 className={styles.title}>{title}</Title3>
         </div>
         <div className={styles.emptyState}>
-          <Text size={400}>You haven't viewed any recipes yet.</Text>
+          <Text size={400}>{`You haven't viewed any recipes yet.`}</Text>
           <Text size={300} style={{ marginTop: "8px" }}>
-            Start exploring recipes and they'll show up here.
+            {`Start exploring recipes and they'll show up here.`}
           </Text>
         </div>
       </div>

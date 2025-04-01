@@ -108,7 +108,6 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
   readOnly = false,
 }) => {
   const styles = useStyles();
-  const initialValue = React.useRef(value);
 
   const editor = useEditor({
     extensions: getEditorExtensions(placeholder),
@@ -137,7 +136,7 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
         editor.commands.setContent(value, false);
       }
     }
-  }, [value]);
+  }, [editor, value]);
 
   return (
     <div className={styles.editorWrapper}>

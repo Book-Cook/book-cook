@@ -20,6 +20,7 @@ export const SearchBar = () => {
     onSearchBoxValueChange(data.value);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       if (path !== "/recipes") {
