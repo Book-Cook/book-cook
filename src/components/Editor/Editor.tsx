@@ -7,11 +7,11 @@ import type { TiptapEditorProps } from "./TiptapEditorProps.types";
 
 const useStyles = makeStyles({
   editorWrapper: {
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
-    ...shorthands.borderRadius(tokens.borderRadiusMedium),
     backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
     overflow: "hidden",
+    fontSize: "17px",
+    lineHeight: "1.8",
   },
   editorContentArea: {
     minHeight: "200px",
@@ -23,24 +23,40 @@ const useStyles = makeStyles({
     minHeight: "inherit",
     outline: "none",
     "& p": {
-      marginTop: "0",
-      marginBottom: tokens.spacingVerticalS,
-      lineHeight: tokens.lineHeightBase300,
+      marginTop: "18px",
+      marginBottom: "18px",
+      lineHeight: "1.8",
     },
     "& h1, & h2, & h3": {
       color: tokens.colorNeutralForeground1,
-      marginTop: tokens.spacingVerticalL,
-      marginBottom: tokens.spacingVerticalS,
+      marginTop: "32px",
+      marginBottom: "16px",
       lineHeight: tokens.lineHeightBase500,
       fontWeight: tokens.fontWeightSemibold,
+      borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+      paddingBottom: "10px",
+      fontSize: "1.5rem",
     },
-    "& h1": { fontSize: tokens.fontSizeHero800 },
-    "& h2": { fontSize: tokens.fontSizeHero700 },
-    "& h3": { fontSize: tokens.fontSizeBase600 },
+    "& h1": {
+      fontSize: tokens.fontSizeHero800,
+      fontFamily: "'Georgia', serif",
+    },
+    "& h2": {
+      fontSize: tokens.fontSizeHero700,
+      fontFamily: "'Georgia', serif",
+    },
+    "& h3": {
+      fontSize: tokens.fontSizeBase600,
+      fontFamily: "'Georgia', serif",
+    },
     "& ul, & ol": {
-      ...shorthands.padding("0", "0", "0", tokens.spacingHorizontalXXL),
-      marginTop: "0",
-      marginBottom: tokens.spacingVerticalS,
+      ...shorthands.padding("0", "0", "0", "25px"),
+      marginTop: "18px",
+      marginBottom: "18px",
+    },
+    "& li": {
+      marginBottom: "12px",
+      position: "relative",
     },
     "& li > p:last-child": {
       marginBottom: tokens.spacingVerticalXS,
@@ -49,13 +65,17 @@ const useStyles = makeStyles({
       color: tokens.colorBrandForegroundLink,
       textDecorationLine: "none",
       cursor: "pointer",
+      borderBottom: `1px solid ${tokens.colorBrandStroke2Hover}`,
+      transition: "border-bottom 0.2s ease",
       "&:hover": {
         color: tokens.colorBrandForegroundLinkHover,
         textDecorationLine: "underline",
+        borderBottomWidth: "2px",
       },
     },
     "& strong": {
       fontWeight: tokens.fontWeightSemibold,
+      fontFamily: "'Georgia', serif",
     },
     "& p.is-editor-empty:first-child::before": {
       content: "attr(data-placeholder)",
@@ -64,6 +84,19 @@ const useStyles = makeStyles({
       pointerEvents: "none",
       height: "0",
       fontStyle: "normal",
+    },
+    "& img": {
+      maxWidth: "100%",
+      ...shorthands.borderRadius("8px"),
+      marginTop: "16px",
+      marginBottom: "16px",
+    },
+    "& blockquote": {
+      borderLeft: `4px solid ${tokens.colorBrandStroke1}`,
+      paddingLeft: "16px",
+      margin: "20px 0",
+      color: tokens.colorNeutralForeground2,
+      fontStyle: "italic",
     },
   },
 });
@@ -75,6 +108,7 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
   readOnly = false,
 }) => {
   const styles = useStyles();
+  const initialValue = React.useRef(value);
 
   const editor = useEditor({
     extensions: getEditorExtensions(placeholder),

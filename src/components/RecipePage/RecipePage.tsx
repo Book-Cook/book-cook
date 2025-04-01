@@ -32,7 +32,6 @@ export const RecipePage = () => {
               <RecipeTags />
             </div>
           </div>
-          <Divider className={styles.divider} />
           <div className={styles.contentContainer}>
             <RecipeContent />
           </div>

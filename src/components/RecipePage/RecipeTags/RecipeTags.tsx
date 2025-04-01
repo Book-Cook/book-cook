@@ -24,7 +24,7 @@ export const RecipeTags = () => {
     setNewTag("");
   };
 
-  return (
+  return recipe?.tags?.length > 0 ? (
     <div className={styles.tagsContainer}>
       {isEditing ? (
         <>
@@ -67,5 +67,5 @@ export const RecipeTags = () => {
         ))
       )}
     </div>
-  );
+  ) : null;
 };

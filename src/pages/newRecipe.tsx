@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import TurndownService from "turndown";
 import {
   Field,
   Input,
@@ -22,7 +21,8 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     width: "100%",
-    ...shorthands.padding(tokens.spacingVerticalXXL, tokens.spacingHorizontalM),
+    paddingTop: tokens.spacingVerticalXXL,
+    paddingBottom: tokens.spacingVerticalXXL,
   },
   form: {
     display: "flex",
@@ -38,25 +38,20 @@ const useStyles = makeStyles({
   },
 });
 
-// Initialize Turndown Service
-const turndownService = new TurndownService({
-  headingStyle: "atx",
-  codeBlockStyle: "fenced",
-  emDelimiter: "*",
-});
-// Optional: turndownService.use(gfm);
-
-// Check if editor content is effectively empty
 const isEditorContentEmpty = (htmlValue: string | undefined): boolean => {
   if (!htmlValue) return true;
   if (typeof document !== "undefined") {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlValue;
-    const text = tempDiv.textContent || tempDiv.innerText || "";
-    return text.trim().length === 0;
+    return (tempDiv.textContent || "").trim().length === 0;
   }
-  // Fallback for non-browser
-  return htmlValue.replace(/<[^>]*>/g, "").trim().length === 0;
+  return htmlValue.replace(/<[^>]*>/g, "").trim().length === 0; // Fallback
+};
+
+const getValidationProps = (
+  error: string | undefined
+): Pick<FieldProps, "validationMessage" | "validationState"> => {
+  return error ? { validationMessage: error, validationState: "error" } : {};
 };
 
 export default function NewRecipe() {
@@ -67,61 +62,47 @@ export default function NewRecipe() {
   const [titleError, setTitleError] = React.useState<string | undefined>();
   const [recipeError, setRecipeError] = React.useState<string | undefined>();
   const [apiError, setApiError] = React.useState<string | null>(null);
-
-  const { mutate, isPending } = useCreateRecipe();
+  const { mutate: createRecipe, isPending } = useCreateRecipe();
   const formTitleId = React.useId();
-
-  const getValidationProps = (
-    error: string | undefined
-  ): Pick<FieldProps, "validationMessage" | "validationState"> => {
-    return error ? { validationMessage: error, validationState: "error" } : {};
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setTitleError(undefined);
-    setRecipeError(undefined);
     setApiError(null);
 
+    // Reset errors and validate
+    let currentTitleError: string | undefined;
+    let currentRecipeError: string | undefined;
     let isValid = true;
+
     if (!title.trim()) {
-      setTitleError("Title is required.");
+      currentTitleError = "Title is required.";
       isValid = false;
     }
     if (isEditorContentEmpty(editorContentHtml)) {
-      setRecipeError("Recipe content cannot be empty.");
+      currentRecipeError = "Recipe content cannot be empty.";
       isValid = false;
     }
 
+    setTitleError(currentTitleError);
+    setRecipeError(currentRecipeError);
+
     if (!isValid) return;
 
-    let recipeMarkdown: string;
-    try {
-      // Convert HTML to Markdown before sending
-      recipeMarkdown = turndownService.turndown(editorContentHtml);
-    } catch (conversionError) {
-      console.error("Markdown conversion failed:", conversionError);
-      setApiError("Failed to process recipe content.");
-      return;
-    }
-
-    mutate(
-      { title, data: recipeMarkdown, tags: [], imageURL: "" },
+    createRecipe(
+      { title: title.trim(), data: editorContentHtml, tags: [], imageURL: "" },
       {
         onSuccess: (data) => {
           if (data?.recipeId) {
             router.push(`/recipes/${data.recipeId}`);
           } else {
-            setApiError(
-              "Recipe created, but could not get ID for redirection."
-            );
+            console.warn("Recipe created, but no recipeId received:", data);
+            setApiError("Recipe created, but failed to redirect.");
           }
         },
         onError: (error) => {
+          console.error("Recipe creation API error:", error);
           setApiError(
-            error instanceof Error
-              ? error.message
-              : "An unknown error occurred creating the recipe."
+            error instanceof Error ? error.message : "Unknown creation error."
           );
         },
       }
@@ -134,6 +115,7 @@ export default function NewRecipe() {
         aria-labelledby={formTitleId}
         className={styles.form}
         onSubmit={handleSubmit}
+        noValidate
       >
         <Text as="h1" size={800} weight="semibold" block id={formTitleId}>
           Create a Recipe
@@ -175,12 +157,11 @@ export default function NewRecipe() {
             readOnly={isPending}
           />
         </Field>
-
         <div className={styles.submitContainer}>
           <Button type="submit" appearance="primary" disabled={isPending}>
             {isPending ? "Creating..." : "Create Recipe"}
           </Button>
-          {isPending && <Spinner size="tiny" />}
+          {isPending && <Spinner size="tiny" aria-label="Creating recipe" />}
         </div>
       </form>
     </div>

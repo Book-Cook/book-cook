@@ -1,6 +1,6 @@
 import { tokens, makeStyles, shorthands } from "@fluentui/react-components";
 
-export const useStyles = makeStyles({
+export const useHeaderStyles = makeStyles({
   headerSection: {
     display: "flex",
     flexDirection: "column",
@@ -19,13 +19,20 @@ export const useStyles = makeStyles({
   title: {
     margin: 0,
     fontWeight: tokens.fontWeightSemibold,
-    fontFamily: "'Georgia', serif",
     fontSize: tokens.fontSizeHero800,
     lineHeight: tokens.lineHeightHero800,
     overflowWrap: "break-word",
   },
   titleInput: {
     width: "100%",
+
+    "& input": {
+      fontFamily: "'Georgia', serif",
+      padding: "6px",
+      fontSize: tokens.fontSizeHero800,
+      lineHeight: tokens.lineHeightHero800,
+      fontWeight: tokens.fontWeightSemibold,
+    },
   },
   actionButtons: {
     display: "flex",

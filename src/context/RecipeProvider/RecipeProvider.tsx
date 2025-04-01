@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRecipe, useDeleteRecipe } from "../../clientToServer";
 import { RecipeContextType } from "./RecipeProvider.types";
-import { add } from "date-fns";
+import { isEqual } from "lodash";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -17,10 +17,8 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   const queryClient = useQueryClient();
   const { mutate: deleteMutate } = useDeleteRecipe();
 
-  // Edit mode state
   const [isEditing, setIsEditing] = React.useState(false);
 
-  // Editable data state
   const [editableData, setEditableData] = React.useState({
     title: "",
     content: "",
@@ -28,7 +26,8 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     imageURL: "",
   });
 
-  // Fetch recipe data
+  const [hasEdits, setHasEdits] = React.useState(false); // New state
+
   const {
     data: recipe,
     isLoading,
@@ -39,7 +38,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     enabled: !!recipeId,
   });
 
-  // Update mutation
   const updateMutation = useMutation({
     mutationFn: async (updatedRecipe: any) => {
       const response = await fetch(`/api/recipes/${recipe?._id}`, {
@@ -70,21 +68,35 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   // Initialize editable data when recipe changes
   React.useEffect(() => {
     if (recipe) {
-      setEditableData({
+      const initialData = {
         title: recipe.title || "",
         content: recipe.data || "",
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
-      });
+      };
+      setEditableData(initialData);
+      setHasEdits(false);
     }
   }, [recipe]);
 
-  // Update a specific field in editable data
   const updateEditableData = (field: string, value: any) => {
-    setEditableData((prev) => ({ ...prev, [field]: value }));
+    setEditableData((prev) => {
+      const updatedData = { ...prev, [field]: value };
+      // Compare updated data with original recipe data
+      if (recipe) {
+        const originalData = {
+          title: recipe.title || "",
+          content: recipe.data || "",
+          tags: recipe.tags || [],
+          imageURL: recipe.imageURL || "",
+        };
+
+        setHasEdits(!isEqual(updatedData, originalData));
+      }
+      return updatedData;
+    });
   };
 
-  // Tag management
   const handleAddTag = (tag: string) => {
     if (tag.trim() !== "" && !editableData.tags.includes(tag.trim())) {
       updateEditableData("tags", [...editableData.tags, tag.trim()]);
@@ -98,7 +110,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  // Save changes
   const saveChanges = () => {
     if (!editableData.title.trim() || !editableData.content.trim()) {
       alert("Title and content are required");
@@ -111,22 +122,24 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       tags: editableData.tags,
       imageURL: editableData.imageURL,
     });
+
+    setHasEdits(false);
   };
 
-  // Cancel editing
   const cancelEditing = () => {
     setIsEditing(false);
     if (recipe) {
-      setEditableData({
+      const initialData = {
         title: recipe.title || "",
         content: recipe.data || "",
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
-      });
+      };
+      setEditableData(initialData);
+      setHasEdits(false); // Reset hasEdits when canceling
     }
   };
 
-  // Delete recipe
   const deleteRecipe = () => {
     if (recipe?._id) {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
@@ -144,15 +157,12 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Image upload handler
   const handleImageUpload = (file: File) => {
     // In a real app, upload to storage service and get URL
     alert("In a real app, this would upload the image to storage");
-    // For demo purposes:
     updateEditableData("imageURL", "");
   };
 
-  // Add to collection mutation
   const addToCollectionMutation = useMutation({
     mutationFn: async (recipeId: string) => {
       const response = await fetch(`/api/collections/add`, {
@@ -170,7 +180,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.json();
     },
     onSuccess: () => {
-      // Optionally invalidate queries if needed
       queryClient.invalidateQueries({ queryKey: ["collections"] });
     },
     onError: (error) => {
@@ -199,6 +208,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     deleteRecipe,
     handleImageUpload,
     addToCollection,
+    hasEdits,
   };
 
   return (
@@ -208,7 +218,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Custom hook for using the context
 export const useRecipe = () => {
   const context = React.useContext(RecipeContext);
   if (!context) {

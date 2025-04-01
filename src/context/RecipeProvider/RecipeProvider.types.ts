@@ -3,6 +3,7 @@ export type RecipeContextType = {
   isLoading: boolean;
   error: unknown;
   isEditing: boolean;
+  hasEdits: boolean;
   setIsEditing: (value: boolean) => void;
   editableData: {
     title: string;
