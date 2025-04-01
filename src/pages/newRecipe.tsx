@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import TurndownService from "turndown";
 import {
   Field,
   Input,
@@ -37,12 +36,6 @@ const useStyles = makeStyles({
     alignItems: "center",
     ...shorthands.gap(tokens.spacingHorizontalS),
   },
-});
-
-const turndownService = new TurndownService({
-  headingStyle: "atx",
-  codeBlockStyle: "fenced",
-  emDelimiter: "*",
 });
 
 const isEditorContentEmpty = (htmlValue: string | undefined): boolean => {
