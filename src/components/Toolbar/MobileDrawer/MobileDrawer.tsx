@@ -7,7 +7,6 @@ import {
   DrawerHeaderTitle,
   Divider,
   mergeClasses,
-  Text,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 import { SearchBar } from "../SearchBar";

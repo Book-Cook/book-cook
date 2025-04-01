@@ -1,5 +1,6 @@
 import clientPromise from "../../../clients/mongo";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET" && req.method !== "POST") {
     res.setHeader("Allow", ["GET", "POST"]);
@@ -21,7 +22,7 @@ export default async function handler(req: any, res: any) {
       } = req.query;
 
       let query = {};
-      let projection = { data: 0 };
+      const projection = { data: 0 };
 
       if (search) {
         query = {

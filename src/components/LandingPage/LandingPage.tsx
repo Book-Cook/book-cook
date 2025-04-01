@@ -63,7 +63,7 @@ const featuredRecipes = [
 const LandingPage = () => {
   const styles = useStyles();
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <div className={styles.container}>
@@ -183,7 +183,7 @@ const LandingPage = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {featuredRecipes.map((recipe, index) => (
+          {featuredRecipes.map((recipe) => (
             <motion.div key={recipe.id} variants={fadeIn}>
               <Card
                 className={styles.recipeCard}

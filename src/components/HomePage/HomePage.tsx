@@ -59,11 +59,7 @@ const HomePage = () => {
   };
 
   // Fetch recently viewed recipes if user is authenticated.
-  const {
-    data: recentlyViewed,
-    isLoading: recentlyViewedLoading,
-    error: recentlyViewedError,
-  } = useQuery<Recipe[]>({
+  const { data: recentlyViewed } = useQuery<Recipe[]>({
     queryKey: ["recentlyViewed", session?.user?.email],
     queryFn: () => fetchRecentlyViewed(),
     enabled: !!session, // only fetch if there is a session
@@ -71,8 +67,7 @@ const HomePage = () => {
 
   // Use fetched data or fallback to mock if unavailable.
   const recipesToShow =
-      recentlyViewed && recentlyViewed.length > 0
-      ? recentlyViewed : [];
+    recentlyViewed && recentlyViewed.length > 0 ? recentlyViewed : [];
 
   return (
     <div className={styles.container}>

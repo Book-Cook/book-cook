@@ -151,7 +151,7 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
     >
       {toolbarItems.map((item, index) => {
         switch (item.type) {
-          case "divider":
+          case "divider": {
             return (
               <Divider
                 key={`divider-${index}`}
@@ -159,7 +159,8 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
                 className={styles.divider}
               />
             );
-          case "button":
+          }
+          case "button": {
             const IconComponent = item.icon as React.ComponentType;
             return (
               <ToolbarButton
@@ -171,7 +172,8 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
                 disabled={!item.can}
               />
             );
-          case "linkButton":
+          }
+          case "linkButton": {
             const LinkIconComponent = item.icon as React.ComponentType;
             return (
               <Tooltip
@@ -190,6 +192,7 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
                 />
               </Tooltip>
             );
+          }
           default:
             return null; // Should not happen with defined types
         }

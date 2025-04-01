@@ -18,7 +18,7 @@ export function useCreateRecipe() {
       }
       return (await response.json()) as CreateRecipeResponse;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recipes"] });
     },
     onError: (error) => {

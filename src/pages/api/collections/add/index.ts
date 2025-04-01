@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import authOptions from "../../auth/[...nextauth]";
 import type { Session } from "next-auth";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
@@ -28,7 +29,7 @@ export default async function handler(req: any, res: any) {
         {
           $addToSet: {
             collections: recipeId, // add the recipeId to the collection
-          }
+          },
         }
       );
 

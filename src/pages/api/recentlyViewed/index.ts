@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import authOptions from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -48,9 +49,11 @@ export default async function handler(req: any, res: any) {
       .toArray();
 
     const orderedRecipes = userDoc.recentlyViewedRecipes
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((id: any) =>
         recipes.find((recipe) => recipe._id.toString() === id.toString())
       )
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .filter((recipe: any) => recipe) // remove any null/undefined
       .reverse();
 

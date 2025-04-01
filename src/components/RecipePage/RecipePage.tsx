@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Divider } from "@fluentui/react-components";
 import { motion } from "framer-motion";
 import { RecipeProvider } from "../../context";
 import { RecipeImage } from "./RecipeImage/RecipeImage";

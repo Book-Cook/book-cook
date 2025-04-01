@@ -11,6 +11,7 @@ type UpdateFields = {
   imageURL?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const session: Session | null = await getServerSession(req, res, authOptions);
@@ -39,12 +40,11 @@ export default async function handler(req: any, res: any) {
       if (recipe) {
         if (session && session.user?.email) {
           // First, remove the recipe id if it exists.
-          await db
-            .collection("users")
-            .updateOne(
-              { email: session.user.email },
-              { $pull: { recentlyViewedRecipes: new ObjectId(id) } as any }
-            );
+          await db.collection("users").updateOne(
+            { email: session.user.email },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            { $pull: { recentlyViewedRecipes: new ObjectId(id) } as any }
+          );
 
           // Then, push the recipe id, keeping only the last 10 items.
           await db.collection("users").updateOne(
@@ -55,6 +55,7 @@ export default async function handler(req: any, res: any) {
                   $each: [new ObjectId(id)],
                   $slice: -10, // Keeps only the last 10 items
                 },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } as any,
             }
           );
