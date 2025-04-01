@@ -42,7 +42,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.14.191",
     "@next/eslint-plugin-next": "^14.2.12",
     "@types/chroma-js": "^3.1.1",
     "@types/enzyme": "3.10.12",
@@ -59,6 +59,6 @@
     "renovate": "^37.235.0",
     "ts-jest": "27.1.4",
     "ts-node": "10.7.0",
-    "typescript": "4.6.3"
+    "typescript": "4.9.3"
   }
 }
