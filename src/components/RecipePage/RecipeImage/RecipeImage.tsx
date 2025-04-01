@@ -8,15 +8,18 @@ import { useStyles } from "./RecipeImage.styles";
 
 export const RecipeImage = () => {
   const styles = useStyles();
-  const { isEditing, recipe, editableData, handleImageUpload } = useRecipe();
+  const { recipe, editableData } = useRecipe();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      handleImageUpload(file);
+      // handleImageUpload(file);
     }
   };
+
+  // TODO
+  const isEditing = false;
 
   if (isEditing) {
     return (

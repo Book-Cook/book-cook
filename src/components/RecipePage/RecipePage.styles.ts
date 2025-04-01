@@ -1,12 +1,10 @@
-import { makeStyles, shorthands } from "@fluentui/react-components";
+import { makeStyles } from "@fluentui/react-components";
 
 export const useStyles = makeStyles({
   pageContainer: {
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
-    ...shorthands.padding("20px", "16px", "40px"),
   },
   recipeCard: {
     maxWidth: "740px",

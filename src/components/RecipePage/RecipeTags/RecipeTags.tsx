@@ -7,8 +7,7 @@ import { useStyles } from "./RecipeTags.styles";
 
 export const RecipeTags = () => {
   const styles = useStyles();
-  const { recipe, isEditing, editableData, handleAddTag, handleRemoveTag } =
-    useRecipe();
+  const { recipe, editableData, handleAddTag, handleRemoveTag } = useRecipe();
   const [newTag, setNewTag] = React.useState("");
 
   const handleTagKeyPress = (e: React.KeyboardEvent) => {
@@ -24,7 +23,10 @@ export const RecipeTags = () => {
     setNewTag("");
   };
 
-  return recipe?.tags?.length > 0 ? (
+  // TODO
+  const isEditing = false;
+
+  return recipe && recipe?.tags?.length > 0 ? (
     <div className={styles.tagsContainer}>
       {isEditing ? (
         <>

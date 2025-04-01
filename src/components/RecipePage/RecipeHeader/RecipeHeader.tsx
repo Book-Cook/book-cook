@@ -14,12 +14,12 @@ export const RecipeHeader = () => {
     saveChanges,
     cancelEditing,
     deleteRecipe,
-    addToCollection,
+    onAddToCollection,
     hasEdits,
   } = useRecipe();
 
   const handleAddToCollection = () =>
-    recipe?._id && addToCollection(recipe._id);
+    recipe?._id && onAddToCollection(recipe._id);
 
   const formattedDate = useMemo(() => {
     const date = recipe?.createdAt ? new Date(recipe.createdAt) : null;
