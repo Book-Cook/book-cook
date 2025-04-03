@@ -7,12 +7,20 @@ import {
   useAddToCollection,
   useUpdateRecipe,
 } from "../../clientToServer";
-import { RecipeContextType } from "./RecipeProvider.types";
+import type { UpdateRecipePayload } from "../../clientToServer";
+import type { RecipeContextType } from "./RecipeProvider.types";
 import { isEqual } from "lodash";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
 );
+
+export type EditableData = {
+  title: string;
+  content: string;
+  tags: string[];
+  imageURL: string;
+};
 
 export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -23,7 +31,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   const { mutate: addToCollection } = useAddToCollection();
   const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
 
-  const [editableData, setEditableData] = React.useState({
+  const [editableData, setEditableData] = React.useState<EditableData>({
     title: "",
     content: "",
     tags: [] as string[],
@@ -57,6 +65,41 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       editableData.tags.filter((tag) => tag !== tagToRemove)
     );
   };
+
+  // const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
+  //   let dataToSave: EditableData = {
+  //     title: editableData.title,
+  //     content: editableData.content,
+  //     tags: editableData.tags,
+  //     imageURL: editableData.imageURL,
+  //   };
+
+  //   if (immediateUpdate) {
+  //     dataToSave = {
+  //       ...{
+  //         title: recipe?.title as string,
+  //         content: recipe?.data as string,
+  //         tags: recipe?.tags as string[],
+  //         imageURL: recipe?.imageURL as string,
+  //       },
+  //       ...(immediateUpdate || {}),
+  //     };
+  //   }
+
+  //   console.log(dataToSave);
+
+  //   if (!dataToSave.title.trim()) {
+  //     alert("Title is required");
+  //     return;
+  //   }
+
+  //   updateRecipe({
+  //     title: dataToSave.title,
+  //     data: dataToSave.content,
+  //     tags: dataToSave.tags,
+  //     imageURL: dataToSave.imageURL,
+  //   });
+  // };
 
   const saveChanges = () => {
     if (!editableData.title.trim() || !editableData.content.trim()) {
@@ -133,8 +176,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!initialEditableData) {
       return false;
     }
-    console.log(JSON.stringify(editableData) + "editable");
-    console.log(JSON.stringify(initialEditableData) + "inital");
     return !isEqual(editableData, initialEditableData);
   }, [editableData, initialEditableData]);
 

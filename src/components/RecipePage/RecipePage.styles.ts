@@ -10,6 +10,7 @@ export const useStyles = makeStyles({
     maxWidth: "740px",
     width: "100%",
     marginBottom: "100px",
+    marginTop: "20px",
     display: "flex",
     flexDirection: "column",
     gap: "30px",

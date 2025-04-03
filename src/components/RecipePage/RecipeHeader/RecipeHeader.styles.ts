@@ -15,6 +15,11 @@ export const useHeaderStyles = makeStyles({
   titleContainer: {
     flexGrow: 1,
     minWidth: 0,
+    fontFamily: "'Georgia', serif",
+    padding: "6px",
+    fontSize: tokens.fontSizeHero800,
+    lineHeight: tokens.lineHeightHero800,
+    fontWeight: tokens.fontWeightSemibold,
   },
   title: {
     margin: 0,
@@ -22,17 +27,6 @@ export const useHeaderStyles = makeStyles({
     fontSize: tokens.fontSizeHero800,
     lineHeight: tokens.lineHeightHero800,
     overflowWrap: "break-word",
-  },
-  titleInput: {
-    width: "100%",
-
-    "& input": {
-      fontFamily: "'Georgia', serif",
-      padding: "6px",
-      fontSize: tokens.fontSizeHero800,
-      lineHeight: tokens.lineHeightHero800,
-      fontWeight: tokens.fontWeightSemibold,
-    },
   },
   actionButtons: {
     display: "flex",

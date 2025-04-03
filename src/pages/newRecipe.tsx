@@ -14,7 +14,7 @@ import {
   FieldProps,
 } from "@fluentui/react-components";
 import { useCreateRecipe } from "../clientToServer";
-import { TiptapEditor } from "../components/Editor/Editor";
+import { Editor } from "../components/Editor/Editor";
 
 const useStyles = makeStyles({
   container: {
@@ -146,7 +146,7 @@ export default function NewRecipe() {
           required
           {...getValidationProps(recipeError)}
         >
-          <TiptapEditor
+          <Editor
             value={editorContentHtml}
             onChange={(htmlContent) => {
               setEditorContentHtml(htmlContent);

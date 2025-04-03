@@ -48,7 +48,7 @@ export const Logo = () => {
   const styles = useStyles();
 
   return (
-    <Link href="/recipes" className={styles.logoLink}>
+    <Link href="/" className={styles.logoLink}>
       <span className={styles.logoIcon}>
         <BookOpenFilled />
       </span>

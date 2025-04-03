@@ -1,4 +1,5 @@
 import { Recipe } from "src/clientToServer";
+import type { UpdateRecipePayload } from "../../clientToServer";
 
 export type RecipeContextType = {
   recipe: Recipe | undefined;
@@ -15,7 +16,7 @@ export type RecipeContextType = {
   updateEditableData: (field: string, value: any) => void;
   handleAddTag: (tag: string) => void;
   handleRemoveTag: (tag: string) => void;
-  saveChanges: () => void;
+  saveChanges: (immediateUpdate?: Partial<UpdateRecipePayload>) => void;
   cancelEditing: () => void;
   deleteRecipe: () => void;
   onAddToCollection: (recipeId: string) => Promise<void>;
