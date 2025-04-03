@@ -5,15 +5,22 @@ import {
   makeStyles,
   shorthands,
   tokens,
+  Menu,
+  MenuTrigger,
+  MenuList,
+  MenuItem,
+  MenuPopover,
+  MenuDivider,
 } from "@fluentui/react-components";
 import {
-  DismissRegular,
   DeleteRegular,
   Heart20Regular,
-  SaveRegular,
+  MoreHorizontalRegular,
+  EditRegular,
+  TagRegular,
 } from "@fluentui/react-icons";
 
-export const useActionsStyles = makeStyles({
+export const useHeaderActionsStyles = makeStyles({
   root: {
     display: "flex",
     alignItems: "center",
@@ -21,72 +28,68 @@ export const useActionsStyles = makeStyles({
   },
   favoriteButton: {
     color: tokens.colorPaletteRedForeground1,
+    ":hover": {
+      color: tokens.colorPaletteRedForeground2,
+    },
+    ":hover:active": {
+      color: tokens.colorPaletteRedForeground3,
+    },
   },
 });
 
 export type RecipeHeaderActionsProps = {
-  onSave: () => void;
-  onCancel: () => void;
   onAddToCollection: () => void;
   onDelete: () => void;
-  hasEdits: boolean;
+  onChangeTitle: () => void;
+  onAddTags: () => void;
 };
 
 export const RecipeHeaderActions: React.FC<RecipeHeaderActionsProps> = ({
-  onSave,
-  onCancel,
   onAddToCollection,
   onDelete,
-  hasEdits,
+  onChangeTitle,
+  onAddTags,
 }) => {
-  const styles = useActionsStyles();
+  const styles = useHeaderActionsStyles();
 
   return (
     <div className={styles.root}>
-      {hasEdits ? (
-        <>
-          <Tooltip content="Save changes" relationship="label">
+      <Tooltip content="Add to Collection" relationship="label">
+        <Button
+          aria-label="Add to Collection"
+          appearance="transparent"
+          icon={<Heart20Regular />}
+          shape="circular"
+          onClick={onAddToCollection}
+          className={styles.favoriteButton}
+        />
+      </Tooltip>
+      <Menu>
+        <MenuTrigger disableButtonEnhancement>
+          <Tooltip content="More options" relationship="label">
             <Button
-              aria-label="Save changes"
-              appearance="primary"
-              icon={<SaveRegular />}
-              shape="circular"
-              onClick={onSave}
-            />
-          </Tooltip>
-          <Tooltip content="Cancel editing" relationship="label">
-            <Button
-              aria-label="Cancel editing"
+              aria-label="More options"
               appearance="subtle"
-              icon={<DismissRegular />}
+              icon={<MoreHorizontalRegular />}
               shape="circular"
-              onClick={onCancel}
             />
           </Tooltip>
-        </>
-      ) : (
-        <>
-          <Tooltip content="Add to Collection" relationship="label">
-            <Button
-              aria-label="Add to Collection"
-              appearance="transparent"
-              icon={<Heart20Regular />}
-              shape="circular"
-              onClick={onAddToCollection}
-              className={styles.favoriteButton}
-            />
-          </Tooltip>
-          <Tooltip content="Delete recipe" relationship="label">
-            <Button
-              aria-label="Delete recipe"
-              appearance="subtle"
-              icon={<DeleteRegular />}
-              shape="circular"
-              onClick={onDelete}
-            />
-          </Tooltip>
-        </>
-      )}
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList>
+            <MenuItem icon={<EditRegular />} onClick={onChangeTitle}>
+              Change Title
+            </MenuItem>
+            <MenuItem icon={<TagRegular />} onClick={onAddTags}>
+              Add Tags
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem icon={<DeleteRegular />} onClick={onDelete}>
+              Delete recipe
+            </MenuItem>
+          </MenuList>
+        </MenuPopover>
+      </Menu>
     </div>
   );
 };

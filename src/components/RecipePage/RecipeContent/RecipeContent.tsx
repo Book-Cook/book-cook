@@ -1,6 +1,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
-import { TiptapEditor } from "../../Editor/Editor";
+import { Editor } from "../../Editor/Editor";
 import { useRecipe } from "../../../context";
 
 export const RecipeContent = () => {
@@ -19,7 +19,7 @@ export const RecipeContent = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.6, duration: 0.5 }}
     >
-      <TiptapEditor
+      <Editor
         value={editableData?.content || ""}
         onChange={handleEditorChange}
         placeholder="Write your recipe content..."

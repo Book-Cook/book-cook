@@ -6,7 +6,8 @@ import { RecipeCard } from "../RecipeCard/RecipeCard";
 import useEmblaCarousel from "embla-carousel-react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
-import { RecentRecipesCarouselProps } from "./RecipeCarousel.types";
+import { RecipesCarouselProps } from "./RecipeCarousel.types";
+import { useRouter } from "next/router";
 
 const emblaOptions: EmblaOptionsType = {
   align: "start",
@@ -64,12 +65,13 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   };
 }
 
-export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
+export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
   recipes,
-  title = "Recently Viewed Recipes",
+  title,
 }) => {
   const styles = useRecipeCarouselStyles();
   const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions);
+  const router = useRouter();
 
   const {
     selectedIndex,
@@ -81,9 +83,12 @@ export const RecentRecipesCarousel: React.FC<RecentRecipesCarouselProps> = ({
     scrollTo,
   } = useCarouselControls(emblaApi);
 
-  const handleCardClick = React.useCallback((id: string) => {
-    window.location.href = `/recipes/${id}`;
-  }, []);
+  const handleCardClick = React.useCallback(
+    (id: string) => {
+      router.push(`/recipes/${id}`);
+    },
+    [router]
+  );
 
   if (recipes.length === 0) {
     return (

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-type UpdateRecipePayload = {
+export type UpdateRecipePayload = {
   title: string;
   data: string;
   tags: string[];

@@ -1,6 +1,13 @@
 import type { Recipe } from "../../clientToServer/types";
 
-export type RecentRecipesCarouselProps = {
+export type RecipesCarouselProps = {
+  /**
+   * The list of recipes to be displayed in the carousel.
+   */
   recipes: Recipe[] | [];
-  title?: string;
+
+  /**
+   * The title of the carousel, displayed above the recipes.
+   */
+  title: string;
 };

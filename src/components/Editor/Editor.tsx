@@ -1,18 +1,17 @@
 import * as React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { EditorMenuBar } from "./EditorMenuBar";
 import { getEditorExtensions } from "./utils";
-import type { TiptapEditorProps } from "./TiptapEditorProps.types";
+import type { EditorProps } from "./Editor.types";
 
 const useStyles = makeStyles({
   editorWrapper: {
     backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
     overflow: "hidden",
-    fontSize: "15px",
     fontWeight: tokens.fontWeightRegular,
     lineHeight: "1.8",
+    fontSize: "15px",
   },
   editorContentArea: {
     minHeight: "200px",
@@ -102,7 +101,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const TiptapEditor: React.FC<TiptapEditorProps> = ({
+export const Editor: React.FC<EditorProps> = ({
   value,
   onChange,
   placeholder = "Enter recipe details...",
@@ -141,7 +140,6 @@ export const TiptapEditor: React.FC<TiptapEditorProps> = ({
 
   return (
     <div className={styles.editorWrapper}>
-      {editor && <EditorMenuBar editor={editor} />}
       <div className={styles.editorContentArea}>
         <EditorContent editor={editor} />
       </div>
