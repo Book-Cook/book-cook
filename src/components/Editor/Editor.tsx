@@ -9,9 +9,9 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
     overflow: "hidden",
-    fontSize: "15px",
     fontWeight: tokens.fontWeightRegular,
     lineHeight: "1.8",
+    fontSize: "15px",
   },
   editorContentArea: {
     minHeight: "200px",
@@ -140,7 +140,6 @@ export const Editor: React.FC<EditorProps> = ({
 
   return (
     <div className={styles.editorWrapper}>
-      {/* {editor && <EditorMenuBar editor={editor} />} */}
       <div className={styles.editorContentArea}>
         <EditorContent editor={editor} />
       </div>

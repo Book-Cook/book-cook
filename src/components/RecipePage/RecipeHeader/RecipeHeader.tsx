@@ -6,15 +6,16 @@ import { RecipeHeaderActions } from "./RecipeHeaderActions";
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { ChangeTitleDialog } from "./ChangeTitleDialog";
+import { ChangeTagsDialog } from "./ChangeTagsDialog";
 
 export const RecipeHeader = () => {
   const [isTitleDialogOpen, setIsTitleDialogOpen] = React.useState(false);
+  const [isTagsDialogOpen, setIsTagsDialogOpen] = React.useState(false);
 
   const styles = useHeaderStyles();
   const {
     recipe,
     editableData,
-    updateEditableData,
     saveChanges,
     cancelEditing,
     deleteRecipe,
@@ -46,13 +47,26 @@ export const RecipeHeader = () => {
   };
 
   const handleDialogSave = (newTitle: string) => {
-    updateEditableData("title", newTitle);
     saveChanges({ title: newTitle });
     setIsTitleDialogOpen(false);
   };
 
   const handleDialogClose = () => {
     setIsTitleDialogOpen(false);
+  };
+
+  // Add these functions for tags dialog
+  const openChangeTagsDialog = () => {
+    setIsTagsDialogOpen(true);
+  };
+
+  const handleTagsDialogSave = (updatedTags: string[]) => {
+    saveChanges({ tags: updatedTags });
+    setIsTagsDialogOpen(false);
+  };
+
+  const handleTagsDialogClose = () => {
+    setIsTagsDialogOpen(false);
   };
 
   return (
@@ -69,7 +83,7 @@ export const RecipeHeader = () => {
             onAddToCollection={handleAddToCollection}
             onDelete={deleteRecipe}
             onChangeTitle={openChangeTitleDialog}
-            onAddTags={() => {}}
+            onAddTags={openChangeTagsDialog} // Update this to use the new function
           />
         </div>
         <RecipeHeaderSaveBar
@@ -88,6 +102,12 @@ export const RecipeHeader = () => {
         currentTitle={editableData.title}
         onSave={handleDialogSave}
         onClose={handleDialogClose}
+      />
+      <ChangeTagsDialog
+        isOpen={isTagsDialogOpen}
+        currentTags={editableData.tags}
+        onSave={handleTagsDialogSave}
+        onClose={handleTagsDialogClose}
       />
     </>
   );

@@ -75,6 +75,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   //   };
 
   //   if (immediateUpdate) {
+  //     // When doing immediate updates with specific fields only
   //     dataToSave = {
   //       ...{
   //         title: recipe?.title as string,
@@ -84,10 +85,15 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   //       },
   //       ...(immediateUpdate || {}),
   //     };
+  //   } else {
+  //     // When saving all changes at once, validate content too
+  //     if (!editableData.content.trim()) {
+  //       alert("Title and content are required");
+  //       return;
+  //     }
   //   }
 
-  //   console.log(dataToSave);
-
+  //   // Always validate title
   //   if (!dataToSave.title.trim()) {
   //     alert("Title is required");
   //     return;
@@ -100,11 +106,17 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   //     imageURL: dataToSave.imageURL,
   //   });
   // };
-
-  const saveChanges = () => {
-    if (!editableData.title.trim() || !editableData.content.trim()) {
-      alert("Title and content are required");
-      return;
+  const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
+    if (immediateUpdate) {
+      updateRecipe({
+        ...{
+          title: editableData?.title as string,
+          data: editableData?.content as string,
+          tags: editableData?.tags as string[],
+          imageURL: editableData?.imageURL as string,
+        },
+        ...(immediateUpdate || {}),
+      });
     }
 
     updateRecipe({
