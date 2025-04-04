@@ -197,6 +197,7 @@ export default function Recipes() {
                 <RecipeCard
                   title={recipe?.title}
                   id={recipe?._id}
+                  emoji={recipe?.emoji || "🍽️"}
                   createdDate={
                     recipe?.createdAt &&
                     new Date(recipe?.createdAt).toLocaleDateString(undefined, {

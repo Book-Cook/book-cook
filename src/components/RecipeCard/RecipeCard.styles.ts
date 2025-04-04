@@ -77,7 +77,12 @@ export const useRecipeCardStyles = makeStyles({
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     zIndex: 1,
   },
-
+  emojiFallback: {
+    fontSize: "48px",
+    lineHeight: 1,
+    // Optional: Add some opacity if you want it less prominent
+    // opacity: 0.8,
+  },
   moreTag: {
     ...shorthands.padding("4px", "10px"),
     ...shorthands.borderRadius("16px"),

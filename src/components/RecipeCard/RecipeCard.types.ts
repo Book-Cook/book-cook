@@ -23,4 +23,9 @@ export type RecipeCardProps = {
    * The id of the recipe to navigate to
    */
   id: string;
+
+  /**
+   * The emoji to render for the recipe card.
+   */
+  emoji: string;
 };

@@ -28,6 +28,12 @@ export type Recipe = {
    * The list of tags for the recipe.
    */
   tags: string[];
+
+  /**
+   * The emoji icon for the recipe. Used as a fallback for the image.
+   * If the image is not available, this emoji will be displayed.
+   */
+  emoji: string;
 };
 
 export type CreateRecipeResponse = {

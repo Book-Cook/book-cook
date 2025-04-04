@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Card, CardHeader, Text, tokens } from "@fluentui/react-components";
-import { BookOpenRegular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
 import { useRecipeCardStyles } from "./RecipeCard.styles";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
-  const { title, createdDate, imageSrc, tags, id } = props;
+  const { title, createdDate, imageSrc, tags, id, emoji } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -60,7 +59,13 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
             />
           ) : (
             <div className={styles.placeholderImage}>
-              <BookOpenRegular fontSize={48} style={{ opacity: 0.5 }} />
+              <span
+                className={styles.emojiFallback}
+                role="img"
+                aria-label={`${title} placeholder emoji`}
+              >
+                {emoji}
+              </span>
             </div>
           )}
         </div>

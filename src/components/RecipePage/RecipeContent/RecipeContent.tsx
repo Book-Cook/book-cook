@@ -19,12 +19,14 @@ export const RecipeContent = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.6, duration: 0.5 }}
     >
-      <Editor
-        value={editableData?.content || ""}
-        onChange={handleEditorChange}
-        placeholder="Write your recipe content..."
-        readOnly={isLoading}
-      />
+      {editableData?.content ? (
+        <Editor
+          value={editableData?.content || ""}
+          onChange={handleEditorChange}
+          placeholder="Write your recipe content..."
+          readOnly={isLoading}
+        />
+      ) : null}
       {isLoading && <div>Loading...</div>}
     </motion.div>
   );
