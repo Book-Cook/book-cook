@@ -6,7 +6,6 @@ export const useRecipeCarouselStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     width: "100%",
-
     position: "relative",
     marginBottom: tokens.spacingVerticalXXXL,
   },

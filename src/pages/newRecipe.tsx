@@ -89,7 +89,13 @@ export default function NewRecipe() {
     if (!isValid) return;
 
     createRecipe(
-      { title: title.trim(), data: editorContentHtml, tags: [], imageURL: "" },
+      {
+        title: title.trim(),
+        data: editorContentHtml,
+        tags: [],
+        imageURL: "",
+        emoji: "",
+      },
       {
         onSuccess: (data) => {
           if (data?.recipeId) {

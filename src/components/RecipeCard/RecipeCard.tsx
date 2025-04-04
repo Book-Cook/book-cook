@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Card, CardHeader, Text, tokens } from "@fluentui/react-components";
+import {
+  Card,
+  CardHeader,
+  Text,
+  tokens,
+  Tooltip,
+} from "@fluentui/react-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
@@ -95,7 +101,23 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                 </span>
               ))}
               {tags.length > 3 && (
-                <span className={styles.moreTag}>+{tags.length - 3} more</span>
+                <Tooltip
+                  content={
+                    <div>
+                      {tags.slice(3).map((tag, i, arr) => (
+                        <>
+                          {tag}
+                          {i < arr.length - 1 ? "," : ""}
+                        </>
+                      ))}
+                    </div>
+                  }
+                  relationship="label"
+                >
+                  <span className={styles.moreTag}>
+                    +{tags.length - 3} more
+                  </span>
+                </Tooltip>
               )}
             </div>
           )}
