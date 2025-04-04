@@ -5,7 +5,7 @@ import { Text, Title3, Dropdown, Option } from "@fluentui/react-components";
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
-import { useSearchBox } from "../context";
+import { useSearchBox, RecipeProvider } from "../context";
 import type {
   SelectionEvents,
   OptionOnSelectData,
@@ -150,83 +150,88 @@ export default function Recipes() {
   }
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.header}>
-        <div className={styles.titleSection}>
-          <Title3 as="h1">My Recipes</Title3>
-          <Text
-            size={200}
-            weight="medium"
-            style={{ color: "var(--colorNeutralForeground2)" }}
-          >
-            {recipes?.length} recipes{" "}
-            {searchBoxValue
-              ? `matching "${searchBoxValue}"`
-              : "in your collection"}
-            {selectedTags.length > 0 &&
-              ` with tags: ${selectedTags.join(", ")}`}
-          </Text>
-        </div>
-        <div className={styles.controlsRow}>
-          <div className={styles.searchWrapper}>
-            <SearchBar />
+    <RecipeProvider>
+      <div className={styles.pageContainer}>
+        <div className={styles.header}>
+          <div className={styles.titleSection}>
+            <Title3 as="h1">My Recipes</Title3>
+            <Text
+              size={200}
+              weight="medium"
+              style={{ color: "var(--colorNeutralForeground2)" }}
+            >
+              {recipes?.length} recipes{" "}
+              {searchBoxValue
+                ? `matching "${searchBoxValue}"`
+                : "in your collection"}
+              {selectedTags.length > 0 &&
+                ` with tags: ${selectedTags.join(", ")}`}
+            </Text>
           </div>
-          <Dropdown
-            className={styles.sortDropdown}
-            appearance="outline"
-            onOptionSelect={onSortOptionSelect}
-            defaultSelectedOptions={["dateNewest"]}
-            defaultValue={"Sort by date (newest)"}
-          >
-            <Option value={"dateNewest"}>Sort by date (newest)</Option>
-            <Option value={"dateOldest"}>Sort by date (oldest)</Option>
-            <Option value={"ascTitle"}>Sort by title (asc)</Option>
-            <Option value={"descTitle"}>Sort by title (desc)</Option>
-          </Dropdown>
-          <TagPicker
-            availableTags={availableTags}
-            selectedTags={selectedTags}
-            onTagsChange={setSelectedTags}
-          />
+          <div className={styles.controlsRow}>
+            <div className={styles.searchWrapper}>
+              <SearchBar />
+            </div>
+            <Dropdown
+              className={styles.sortDropdown}
+              appearance="outline"
+              onOptionSelect={onSortOptionSelect}
+              defaultSelectedOptions={["dateNewest"]}
+              defaultValue={"Sort by date (newest)"}
+            >
+              <Option value={"dateNewest"}>Sort by date (newest)</Option>
+              <Option value={"dateOldest"}>Sort by date (oldest)</Option>
+              <Option value={"ascTitle"}>Sort by title (asc)</Option>
+              <Option value={"descTitle"}>Sort by title (desc)</Option>
+            </Dropdown>
+            <TagPicker
+              availableTags={availableTags}
+              selectedTags={selectedTags}
+              onTagsChange={setSelectedTags}
+            />
+          </div>
         </div>
-      </div>
-      <FallbackScreen
-        isLoading={showLoadingIndicator}
-        isError={Boolean(error)}
-        dataLength={recipes?.length}
-      >
-        <div className={styles.grid}>
-          {recipes?.map((recipe, index) => {
-            return (
-              <div
-                key={recipe._id}
-                className={`${styles.fadeIn} ${styles.cardWrapper}`}
-                style={
-                  {
-                    "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
-                  } as React.CSSProperties
-                }
-              >
-                <RecipeCard
-                  title={recipe?.title}
-                  id={recipe?._id}
-                  emoji={recipe?.emoji || "🍽️"}
-                  createdDate={
-                    recipe?.createdAt &&
-                    new Date(recipe?.createdAt).toLocaleDateString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })
+        <FallbackScreen
+          isLoading={showLoadingIndicator}
+          isError={Boolean(error)}
+          dataLength={recipes?.length}
+        >
+          <div className={styles.grid}>
+            {recipes?.map((recipe, index) => {
+              return (
+                <div
+                  key={recipe._id}
+                  className={`${styles.fadeIn} ${styles.cardWrapper}`}
+                  style={
+                    {
+                      "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
+                    } as React.CSSProperties
                   }
-                  imageSrc={recipe?.imageURL}
-                  tags={recipe?.tags}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </FallbackScreen>
-    </div>
+                >
+                  <RecipeCard
+                    title={recipe?.title}
+                    id={recipe?._id}
+                    emoji={recipe?.emoji || "🍽️"}
+                    createdDate={
+                      recipe?.createdAt &&
+                      new Date(recipe?.createdAt).toLocaleDateString(
+                        undefined,
+                        {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        }
+                      )
+                    }
+                    imageSrc={recipe?.imageURL}
+                    tags={recipe?.tags}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </FallbackScreen>
+      </div>
+    </RecipeProvider>
   );
 }

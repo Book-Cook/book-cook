@@ -10,9 +10,10 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
 import { useRecipeCardStyles } from "./RecipeCard.styles";
+import { RecipeActions } from "../RecipeActions";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
-  const { title, createdDate, imageSrc, tags, id, emoji } = props;
+  const { title, createdDate, imageSrc, tags, id, emoji, isMinimal } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -75,13 +76,24 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
             </div>
           )}
         </div>
-
         <div className={styles.content}>
           <CardHeader
             header={
               <Text weight="semibold" size={500} truncate>
                 {title}
               </Text>
+            }
+            action={
+              !isMinimal ? (
+                <RecipeActions
+                  title={title}
+                  createdDate={createdDate}
+                  imageSrc={imageSrc}
+                  tags={tags}
+                  id={id}
+                  emoji={emoji}
+                />
+              ) : null
             }
             description={
               <Text
@@ -93,7 +105,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
             }
             style={{ padding: "0 0 12px 0" }}
           />
-          {tags && tags.length > 0 && (
+
+          {!isMinimal && tags && tags.length > 0 && (
             <div className={styles.tagsContainer}>
               {tags.slice(0, 3).map((tag, i) => (
                 <span key={i} className={styles.tag}>

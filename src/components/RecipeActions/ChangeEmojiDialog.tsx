@@ -200,6 +200,7 @@ export const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
       <DialogSurface
         className={styles.dialogSurface}
         aria-describedby={undefined}
+        onClick={(ev) => ev.stopPropagation()}
       >
         <DialogTitle className={styles.dialogTitle}>
           Change Recipe Emoji

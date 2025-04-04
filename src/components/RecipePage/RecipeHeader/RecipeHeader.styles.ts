@@ -41,4 +41,18 @@ export const useHeaderStyles = makeStyles({
     lineHeight: tokens.lineHeightBase200,
     paddingLeft: tokens.spacingHorizontalSNudge,
   },
+  favoriteButton: {
+    color: tokens.colorPaletteRedForeground1,
+    ":hover": {
+      color: tokens.colorPaletteRedForeground2,
+    },
+    ":hover:active": {
+      color: tokens.colorPaletteRedForeground3,
+    },
+  },
+  actionsContainer: {
+    display: "flex",
+    alignItems: "center",
+    ...shorthands.gap(tokens.spacingHorizontalS),
+  },
 });

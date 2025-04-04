@@ -144,6 +144,7 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
       <DialogSurface
         className={styles.dialogSurface}
         aria-describedby={undefined}
+        onClick={(ev) => ev.stopPropagation()}
       >
         <DialogTitle className={styles.dialogTitle}>
           Change Recipe Title

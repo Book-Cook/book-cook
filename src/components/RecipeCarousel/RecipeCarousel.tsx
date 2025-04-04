@@ -143,6 +143,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
                 imageSrc={recipe.imageURL}
                 tags={recipe.tags}
                 createdDate={recipe.createdAt}
+                isMinimal
               />
               <div
                 className={styles.cardClickOverlay}

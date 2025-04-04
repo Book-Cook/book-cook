@@ -8,29 +8,22 @@ import {
   useUpdateRecipe,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
-import type { RecipeContextType } from "./RecipeProvider.types";
+import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
 import { isEqual } from "lodash";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
 );
 
-export type EditableData = {
-  title: string;
-  content: string;
-  tags: string[];
-  imageURL: string;
-  emoji: string;
-};
-
-export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const RecipeProvider: React.FC<{
+  children: React.ReactNode;
+  specificRecipeId?: string;
+}> = ({ children, specificRecipeId }) => {
   const router = useRouter();
-  const { recipes: recipeId } = router.query;
-  const { mutate: deleteMutate } = useDeleteRecipe();
-  const { mutate: addToCollection } = useAddToCollection();
-  const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
+  const { recipes: routerRecipeId } = router.query;
+  const recipeId =
+    specificRecipeId ||
+    (typeof routerRecipeId === "string" ? routerRecipeId : undefined);
 
   const [editableData, setEditableData] = React.useState<EditableData>({
     title: "",
@@ -38,7 +31,14 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     tags: [] as string[],
     imageURL: "",
     emoji: "",
+    _id: undefined,
   });
+
+  const { mutate: deleteMutate } = useDeleteRecipe();
+  const { mutate: addToCollection } = useAddToCollection();
+  const { mutate: updateRecipe } = useUpdateRecipe(
+    recipeId || editableData._id
+  );
 
   const {
     data: recipe,
@@ -51,18 +51,23 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableData = (field: string, value: any) => {
+  const updateEditableDataKey = (field: string, value: any) => {
     setEditableData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateEditableData = (value: any) => {
+    setEditableData(value);
   };
 
   const handleAddTag = (tag: string) => {
     if (tag.trim() !== "" && !editableData.tags.includes(tag.trim())) {
-      updateEditableData("tags", [...editableData.tags, tag.trim()]);
+      updateEditableDataKey("tags", [...editableData.tags, tag.trim()]);
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    updateEditableData(
+    updateEditableDataKey(
       "tags",
       editableData.tags.filter((tag) => tag !== tagToRemove)
     );
@@ -105,11 +110,15 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const deleteRecipe = () => {
-    if (recipe?._id) {
+    const idToDelete = recipe?._id || editableData._id;
+
+    if (idToDelete) {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
-        deleteMutate(recipe._id, {
+        deleteMutate(idToDelete, {
           onSuccess: () => {
-            router.push(`/`);
+            if (router.pathname.includes("/recipes/[recipes]")) {
+              router.push("/");
+            }
           },
           onError: (error) => {
             if (error instanceof Error) {
@@ -163,6 +172,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     isLoading,
     error,
     editableData,
+    updateEditableDataKey,
     updateEditableData,
     handleAddTag,
     handleRemoveTag,

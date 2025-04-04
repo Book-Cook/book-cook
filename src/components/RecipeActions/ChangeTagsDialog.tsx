@@ -215,6 +215,7 @@ export const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
       <DialogSurface
         className={styles.dialogSurface}
         aria-describedby={undefined}
+        onClick={(ev) => ev.stopPropagation()}
       >
         <DialogTitle className={styles.dialogTitle}>
           Manage Recipe Tags

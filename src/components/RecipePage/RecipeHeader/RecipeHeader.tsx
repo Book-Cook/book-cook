@@ -1,32 +1,22 @@
 import React, { useMemo } from "react";
-import { Text } from "@fluentui/react-components";
+import { Button, Tooltip, Text } from "@fluentui/react-components";
+import { Heart20Regular } from "@fluentui/react-icons";
 import { motion } from "framer-motion";
 import { useRecipe } from "../../../context";
-import { RecipeHeaderActions } from "./RecipeHeaderActions";
+import { RecipeActions } from "../../RecipeActions";
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
-import { ChangeTitleDialog } from "./ChangeTitleDialog";
-import { ChangeTagsDialog } from "./ChangeTagsDialog";
-import { ChangeEmojiDialog } from "./ChangeEmojiDialog";
 
 export const RecipeHeader = () => {
-  const [isTitleDialogOpen, setIsTitleDialogOpen] = React.useState(false);
-  const [isTagsDialogOpen, setIsTagsDialogOpen] = React.useState(false);
-  const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
-
   const styles = useHeaderStyles();
   const {
     recipe,
     editableData,
     saveChanges,
     cancelEditing,
-    deleteRecipe,
-    onAddToCollection,
     hasEdits,
+    onAddToCollection,
   } = useRecipe();
-
-  const handleAddToCollection = () =>
-    recipe?._id && onAddToCollection(recipe._id);
 
   const formattedDate = useMemo(() => {
     const date = recipe?.createdAt ? new Date(recipe.createdAt) : null;
@@ -44,20 +34,8 @@ export const RecipeHeader = () => {
     }
   }, [recipe?.createdAt]);
 
-  const handleTitleDialogSave = (newTitle: string) => {
-    saveChanges({ title: newTitle });
-    setIsTitleDialogOpen(false);
-  };
-
-  const handleTagsDialogSave = (updatedTags: string[]) => {
-    saveChanges({ tags: updatedTags });
-    setIsTagsDialogOpen(false);
-  };
-
-  const handleEmojiDialogSave = (updatedEmoji: string) => {
-    saveChanges({ emoji: updatedEmoji });
-    setIsEmojiDialogOpen(false);
-  };
+  const handleAddToCollection = () =>
+    recipe?._id && onAddToCollection(recipe._id);
 
   return (
     <>
@@ -69,19 +47,19 @@ export const RecipeHeader = () => {
       >
         <div className={styles.titleRow}>
           <div className={styles.titleContainer}>{editableData.title}</div>
-          <RecipeHeaderActions
-            onAddToCollection={handleAddToCollection}
-            onDelete={deleteRecipe}
-            onChangeTitle={() => {
-              setIsTitleDialogOpen(true);
-            }}
-            onChangeEmoji={() => {
-              setIsEmojiDialogOpen(true);
-            }}
-            onAddTags={() => {
-              setIsTagsDialogOpen(true);
-            }}
-          />
+          <div className={styles.actionsContainer}>
+            <Tooltip content="Add to Collection" relationship="label">
+              <Button
+                aria-label="Add to Collection"
+                appearance="transparent"
+                icon={<Heart20Regular />}
+                shape="circular"
+                onClick={handleAddToCollection}
+                className={styles.favoriteButton}
+              />
+            </Tooltip>
+            <RecipeActions />
+          </div>
         </div>
         <RecipeHeaderSaveBar
           hasEdits={hasEdits}
@@ -94,30 +72,6 @@ export const RecipeHeader = () => {
           </Text>
         )}
       </motion.div>
-      <ChangeTitleDialog
-        isOpen={isTitleDialogOpen}
-        currentTitle={editableData.title}
-        onSave={handleTitleDialogSave}
-        onClose={() => {
-          setIsTitleDialogOpen(false);
-        }}
-      />
-      <ChangeTagsDialog
-        isOpen={isTagsDialogOpen}
-        currentTags={editableData.tags}
-        onSave={handleTagsDialogSave}
-        onClose={() => {
-          setIsTagsDialogOpen(false);
-        }}
-      />
-      <ChangeEmojiDialog
-        isOpen={isEmojiDialogOpen}
-        currentEmoji={editableData?.emoji}
-        onSave={handleEmojiDialogSave}
-        onClose={() => {
-          setIsEmojiDialogOpen(false);
-        }}
-      />
     </>
   );
 };
