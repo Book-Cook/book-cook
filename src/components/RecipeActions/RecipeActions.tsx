@@ -23,7 +23,7 @@ import { useRecipe } from "../../context";
 import type { RecipeActionsProps } from "./RecipeActions.types";
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { id, title, tags, emoji, imageSrc } = props;
+  const { _id, title, tags, emoji, imageURL } = props;
 
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
@@ -50,13 +50,14 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const handleMenuInteraction = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (id) {
+    if (_id) {
       updateEditableData({
-        _id: id,
-        title: title,
+        _id: _id,
+        title: title || "",
         tags: tags || [],
-        emoji: emoji,
-        imageURL: imageSrc || "",
+        emoji: emoji || "",
+        imageURL: imageURL || "",
+        content: "",
       });
     }
   };

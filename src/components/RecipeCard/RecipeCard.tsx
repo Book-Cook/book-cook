@@ -87,10 +87,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
               !isMinimal ? (
                 <RecipeActions
                   title={title}
-                  createdDate={createdDate}
-                  imageSrc={imageSrc}
+                  imageURL={imageSrc}
                   tags={tags}
-                  id={id}
+                  _id={id}
                   emoji={emoji}
                 />
               ) : null

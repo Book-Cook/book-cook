@@ -4,13 +4,13 @@ import { Editor } from "../../Editor/Editor";
 import { useRecipe } from "../../../context";
 
 export const RecipeContent = () => {
-  const { isLoading, editableData, updateEditableData } = useRecipe();
+  const { isLoading, editableData, updateEditableDataKey } = useRecipe();
 
   const handleEditorChange = React.useCallback(
     (htmlContent: string) => {
-      updateEditableData("content", htmlContent);
+      updateEditableDataKey("content", htmlContent);
     },
-    [updateEditableData]
+    [updateEditableDataKey]
   );
 
   return (
