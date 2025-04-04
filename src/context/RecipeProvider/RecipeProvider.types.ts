@@ -11,6 +11,7 @@ export type RecipeContextType = {
     content: string;
     tags: string[];
     imageURL: string;
+    emoji: string;
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateEditableData: (field: string, value: any) => void;

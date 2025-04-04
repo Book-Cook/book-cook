@@ -20,6 +20,7 @@ export type EditableData = {
   content: string;
   tags: string[];
   imageURL: string;
+  emoji: string;
 };
 
 export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -36,6 +37,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     content: "",
     tags: [] as string[],
     imageURL: "",
+    emoji: "",
   });
 
   const {
@@ -66,46 +68,6 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  // const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
-  //   let dataToSave: EditableData = {
-  //     title: editableData.title,
-  //     content: editableData.content,
-  //     tags: editableData.tags,
-  //     imageURL: editableData.imageURL,
-  //   };
-
-  //   if (immediateUpdate) {
-  //     // When doing immediate updates with specific fields only
-  //     dataToSave = {
-  //       ...{
-  //         title: recipe?.title as string,
-  //         content: recipe?.data as string,
-  //         tags: recipe?.tags as string[],
-  //         imageURL: recipe?.imageURL as string,
-  //       },
-  //       ...(immediateUpdate || {}),
-  //     };
-  //   } else {
-  //     // When saving all changes at once, validate content too
-  //     if (!editableData.content.trim()) {
-  //       alert("Title and content are required");
-  //       return;
-  //     }
-  //   }
-
-  //   // Always validate title
-  //   if (!dataToSave.title.trim()) {
-  //     alert("Title is required");
-  //     return;
-  //   }
-
-  //   updateRecipe({
-  //     title: dataToSave.title,
-  //     data: dataToSave.content,
-  //     tags: dataToSave.tags,
-  //     imageURL: dataToSave.imageURL,
-  //   });
-  // };
   const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
     if (immediateUpdate) {
       updateRecipe({
@@ -114,17 +76,19 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
           data: editableData?.content as string,
           tags: editableData?.tags as string[],
           imageURL: editableData?.imageURL as string,
+          emoji: editableData?.emoji as string,
         },
         ...(immediateUpdate || {}),
       });
+    } else {
+      updateRecipe({
+        title: editableData.title,
+        data: editableData.content,
+        tags: editableData.tags,
+        imageURL: editableData.imageURL,
+        emoji: editableData?.emoji,
+      });
     }
-
-    updateRecipe({
-      title: editableData.title,
-      data: editableData.content,
-      tags: editableData.tags,
-      imageURL: editableData.imageURL,
-    });
   };
 
   const cancelEditing = () => {
@@ -134,6 +98,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
         content: recipe.data || "",
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
+        emoji: recipe.emoji || "",
       };
       setEditableData(initialData);
     }
@@ -167,6 +132,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
         content: recipe.data || "",
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
+        emoji: recipe.emoji || "",
       };
       setEditableData(initialData);
     }
@@ -181,6 +147,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       content: recipe.data || "",
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
+      emoji: recipe.emoji || "",
     };
   }, [recipe]);
 

@@ -1,13 +1,18 @@
 import * as React from "react";
-import { Card, CardHeader, Text, tokens } from "@fluentui/react-components";
-import { BookOpenRegular } from "@fluentui/react-icons";
+import {
+  Card,
+  CardHeader,
+  Text,
+  tokens,
+  Tooltip,
+} from "@fluentui/react-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
 import { useRecipeCardStyles } from "./RecipeCard.styles";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
-  const { title, createdDate, imageSrc, tags, id } = props;
+  const { title, createdDate, imageSrc, tags, id, emoji } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -60,7 +65,13 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
             />
           ) : (
             <div className={styles.placeholderImage}>
-              <BookOpenRegular fontSize={48} style={{ opacity: 0.5 }} />
+              <span
+                className={styles.emojiFallback}
+                role="img"
+                aria-label={`${title} placeholder emoji`}
+              >
+                {emoji}
+              </span>
             </div>
           )}
         </div>
@@ -90,7 +101,23 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                 </span>
               ))}
               {tags.length > 3 && (
-                <span className={styles.moreTag}>+{tags.length - 3} more</span>
+                <Tooltip
+                  content={
+                    <div>
+                      {tags.slice(3).map((tag, i, arr) => (
+                        <>
+                          {tag}
+                          {i < arr.length - 1 ? "," : ""}
+                        </>
+                      ))}
+                    </div>
+                  }
+                  relationship="label"
+                >
+                  <span className={styles.moreTag}>
+                    +{tags.length - 3} more
+                  </span>
+                </Tooltip>
               )}
             </div>
           )}

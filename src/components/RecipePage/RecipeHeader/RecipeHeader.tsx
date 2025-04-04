@@ -7,10 +7,12 @@ import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { ChangeTitleDialog } from "./ChangeTitleDialog";
 import { ChangeTagsDialog } from "./ChangeTagsDialog";
+import { ChangeEmojiDialog } from "./ChangeEmojiDialog";
 
 export const RecipeHeader = () => {
   const [isTitleDialogOpen, setIsTitleDialogOpen] = React.useState(false);
   const [isTagsDialogOpen, setIsTagsDialogOpen] = React.useState(false);
+  const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
 
   const styles = useHeaderStyles();
   const {
@@ -42,22 +44,9 @@ export const RecipeHeader = () => {
     }
   }, [recipe?.createdAt]);
 
-  const openChangeTitleDialog = () => {
-    setIsTitleDialogOpen(true);
-  };
-
-  const handleDialogSave = (newTitle: string) => {
+  const handleTitleDialogSave = (newTitle: string) => {
     saveChanges({ title: newTitle });
     setIsTitleDialogOpen(false);
-  };
-
-  const handleDialogClose = () => {
-    setIsTitleDialogOpen(false);
-  };
-
-  // Add these functions for tags dialog
-  const openChangeTagsDialog = () => {
-    setIsTagsDialogOpen(true);
   };
 
   const handleTagsDialogSave = (updatedTags: string[]) => {
@@ -65,8 +54,9 @@ export const RecipeHeader = () => {
     setIsTagsDialogOpen(false);
   };
 
-  const handleTagsDialogClose = () => {
-    setIsTagsDialogOpen(false);
+  const handleEmojiDialogSave = (updatedEmoji: string) => {
+    saveChanges({ emoji: updatedEmoji });
+    setIsEmojiDialogOpen(false);
   };
 
   return (
@@ -82,8 +72,15 @@ export const RecipeHeader = () => {
           <RecipeHeaderActions
             onAddToCollection={handleAddToCollection}
             onDelete={deleteRecipe}
-            onChangeTitle={openChangeTitleDialog}
-            onAddTags={openChangeTagsDialog} // Update this to use the new function
+            onChangeTitle={() => {
+              setIsTitleDialogOpen(true);
+            }}
+            onChangeEmoji={() => {
+              setIsEmojiDialogOpen(true);
+            }}
+            onAddTags={() => {
+              setIsTagsDialogOpen(true);
+            }}
           />
         </div>
         <RecipeHeaderSaveBar
@@ -100,14 +97,26 @@ export const RecipeHeader = () => {
       <ChangeTitleDialog
         isOpen={isTitleDialogOpen}
         currentTitle={editableData.title}
-        onSave={handleDialogSave}
-        onClose={handleDialogClose}
+        onSave={handleTitleDialogSave}
+        onClose={() => {
+          setIsTitleDialogOpen(false);
+        }}
       />
       <ChangeTagsDialog
         isOpen={isTagsDialogOpen}
         currentTags={editableData.tags}
         onSave={handleTagsDialogSave}
-        onClose={handleTagsDialogClose}
+        onClose={() => {
+          setIsTagsDialogOpen(false);
+        }}
+      />
+      <ChangeEmojiDialog
+        isOpen={isEmojiDialogOpen}
+        currentEmoji={editableData?.emoji}
+        onSave={handleEmojiDialogSave}
+        onClose={() => {
+          setIsEmojiDialogOpen(false);
+        }}
       />
     </>
   );

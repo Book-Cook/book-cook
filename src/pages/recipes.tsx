@@ -14,6 +14,7 @@ import type {
 import { useSession } from "next-auth/react";
 import { SearchBar } from "../components/Toolbar/SearchBar";
 import { TagPicker } from "../components/TagPicker/TagPicker";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -99,6 +100,8 @@ export default function Recipes() {
     queryFn: () => fetchAllRecipes(searchBoxValue, sortOption, selectedTags),
   });
 
+  const router = useRouter();
+
   // Extract unique tags from recipes
   React.useEffect(() => {
     if (recipes?.length) {
@@ -122,6 +125,16 @@ export default function Recipes() {
 
     return () => clearTimeout(timer);
   }, [isLoading]);
+
+  React.useEffect(() => {
+    const { tag } = router.query;
+    if (tag && typeof tag === "string") {
+      if (!selectedTags.includes(tag)) {
+        setSelectedTags([...selectedTags, tag]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -197,6 +210,7 @@ export default function Recipes() {
                 <RecipeCard
                   title={recipe?.title}
                   id={recipe?._id}
+                  emoji={recipe?.emoji || "🍽️"}
                   createdDate={
                     recipe?.createdAt &&
                     new Date(recipe?.createdAt).toLocaleDateString(undefined, {

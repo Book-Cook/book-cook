@@ -17,9 +17,8 @@ const useStyles = makeStyles({
     flexDirection: "column",
     maxWidth: "1400px",
     width: "100%",
-    margin: "0 auto",
     gap: "48px",
-    ...shorthands.padding("48px", "24px"),
+    ...shorthands.padding("32px", "0px"),
   },
   heroSection: {
     display: "flex",
@@ -105,6 +104,7 @@ const HomePage = () => {
           </div>
         </div>
       )}
+
       <div className={styles.sectionContainer}>
         <RecipesCarousel
           recipes={recentlyViewedRecipes}

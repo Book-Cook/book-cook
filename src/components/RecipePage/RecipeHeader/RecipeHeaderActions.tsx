@@ -18,6 +18,7 @@ import {
   MoreHorizontalRegular,
   EditRegular,
   TagRegular,
+  EmojiRegular,
 } from "@fluentui/react-icons";
 
 export const useHeaderActionsStyles = makeStyles({
@@ -41,6 +42,7 @@ export type RecipeHeaderActionsProps = {
   onAddToCollection: () => void;
   onDelete: () => void;
   onChangeTitle: () => void;
+  onChangeEmoji: () => void;
   onAddTags: () => void;
 };
 
@@ -48,6 +50,7 @@ export const RecipeHeaderActions: React.FC<RecipeHeaderActionsProps> = ({
   onAddToCollection,
   onDelete,
   onChangeTitle,
+  onChangeEmoji,
   onAddTags,
 }) => {
   const styles = useHeaderActionsStyles();
@@ -79,6 +82,9 @@ export const RecipeHeaderActions: React.FC<RecipeHeaderActionsProps> = ({
           <MenuList>
             <MenuItem icon={<EditRegular />} onClick={onChangeTitle}>
               Change Title
+            </MenuItem>
+            <MenuItem icon={<EmojiRegular />} onClick={onChangeEmoji}>
+              Change Emoji
             </MenuItem>
             <MenuItem icon={<TagRegular />} onClick={onAddTags}>
               Add Tags

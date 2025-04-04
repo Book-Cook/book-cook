@@ -13,7 +13,7 @@ import {
 } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 import type { DialogOpenChangeEvent } from "@fluentui/react-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const useStyles = makeStyles({
   dialogSurface: {
@@ -72,6 +72,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexWrap: "wrap",
     gap: "8px",
+    minHeight: "40px", // Add minimum height to prevent layout shift
   },
   tag: {
     backgroundColor: tokens.colorNeutralBackground2,
@@ -83,7 +84,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: "6px",
     cursor: "pointer",
-    transition: "all 0.2s ease",
+    transition: "background-color 0.2s ease",
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground3,
     },
@@ -120,6 +121,29 @@ export type ChangeTagsDialogProps = {
    * Maximum allowed length for a tag
    */
   maxTagLength?: number;
+};
+
+// Animation variants
+const tagVariants = {
+  hidden: { opacity: 0, scale: 0.8, duration: 0.1 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.15,
+      type: "spring",
+      stiffness: 500,
+      damping: 25,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.8,
+    transition: {
+      duration: 0.1,
+      ease: "easeOut",
+    },
+  },
 };
 
 export const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
@@ -219,27 +243,40 @@ export const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
             />
           </div>
 
-          {tags.length > 0 ? (
-            <div className={styles.tagsContainer}>
-              {tags.map((tag, index) => (
+          <div className={styles.tagsContainer}>
+            <AnimatePresence>
+              {tags.length > 0 ? (
+                tags.map((tag) => (
+                  <motion.div
+                    key={tag}
+                    variants={tagVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    layout
+                    transition={{
+                      type: "spring",
+                      stiffness: 600,
+                      damping: 35,
+                    }}
+                    className={styles.tag}
+                    onClick={() => handleRemoveTag(tag)}
+                  >
+                    <span className={styles.tagText}>{tag}</span>
+                    <DismissRegular fontSize={12} />
+                  </motion.div>
+                ))
+              ) : (
                 <motion.div
-                  key={`${tag}-${index}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className={styles.tag}
-                  onClick={() => handleRemoveTag(tag)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={styles.noTagsMessage}
                 >
-                  <span className={styles.tagText}>{tag}</span>
-                  <DismissRegular fontSize={12} />
+                  No tags added yet. Add a tag to help organize your recipe.
                 </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className={styles.noTagsMessage}>
-              No tags added yet. Add a tag to help organize your recipe.
-            </div>
-          )}
+              )}
+            </AnimatePresence>
+          </div>
         </DialogBody>
         <DialogActions className={styles.dialogActions}>
           <Button

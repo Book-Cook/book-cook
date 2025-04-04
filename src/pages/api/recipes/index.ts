@@ -88,6 +88,7 @@ export default async function handler(req: any, res: any) {
         data,
         tags: tags || [],
         createdAt: new Date(),
+        emoji: "",
       };
 
       const result = await db.collection("recipes").insertOne(newRecipe);

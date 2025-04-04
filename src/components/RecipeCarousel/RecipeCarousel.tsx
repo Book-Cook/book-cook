@@ -138,6 +138,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
             <div className={styles.slide} key={recipe._id}>
               <RecipeCard
                 id={recipe._id}
+                emoji={recipe?.emoji || "🍽️"}
                 title={recipe.title}
                 imageSrc={recipe.imageURL}
                 tags={recipe.tags}

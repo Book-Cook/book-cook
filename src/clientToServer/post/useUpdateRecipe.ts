@@ -5,6 +5,7 @@ export type UpdateRecipePayload = {
   data: string;
   tags: string[];
   imageURL: string;
+  emoji: string;
 };
 
 /**
