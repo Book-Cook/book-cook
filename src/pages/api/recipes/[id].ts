@@ -9,6 +9,7 @@ type UpdateFields = {
   data?: string;
   tags?: string[];
   imageURL?: string;
+  emoji?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,12 +73,13 @@ export default async function handler(req: any, res: any) {
   } else if (req.method === "PUT") {
     // Update a specific recipe
     try {
-      const { title, data, tags, imageURL } = req.body;
+      const { title, data, tags, imageURL, emoji } = req.body;
       const updateFields: UpdateFields = {};
 
       if (title) updateFields.title = title;
       if (data) updateFields.data = data;
       if (tags) updateFields.tags = tags;
+      if (emoji) updateFields.emoji = emoji;
       if (imageURL) updateFields.imageURL = imageURL;
 
       const result = await recipesCollection.updateOne(

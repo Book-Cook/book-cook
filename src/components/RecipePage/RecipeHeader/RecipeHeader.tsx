@@ -50,7 +50,6 @@ export const RecipeHeader = () => {
   };
 
   const handleTagsDialogSave = (updatedTags: string[]) => {
-    console.log("Updated tags:", updatedTags);
     saveChanges({ tags: updatedTags });
     setIsTagsDialogOpen(false);
   };
@@ -116,7 +115,7 @@ export const RecipeHeader = () => {
         currentEmoji={editableData?.emoji}
         onSave={handleEmojiDialogSave}
         onClose={() => {
-          setIsTagsDialogOpen(false);
+          setIsEmojiDialogOpen(false);
         }}
       />
     </>
