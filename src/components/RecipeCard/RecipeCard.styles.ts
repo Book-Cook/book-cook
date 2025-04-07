@@ -92,7 +92,11 @@ export const useRecipeCardStyles = makeStyles({
     fontWeight: 500,
     background: tokens.colorNeutralBackground3,
     color: tokens.colorNeutralForeground2,
+    display: "inline-block",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+    verticalAlign: "middle",
   },
   badgeNew: {
     position: "absolute",

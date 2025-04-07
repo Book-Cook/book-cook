@@ -140,7 +140,12 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange} modalType="modal">
+    <Dialog
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      modalType="modal"
+      surfaceMotion={null}
+    >
       <DialogSurface
         className={styles.dialogSurface}
         aria-describedby={undefined}

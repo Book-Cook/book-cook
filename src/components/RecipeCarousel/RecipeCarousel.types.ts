@@ -10,4 +10,9 @@ export type RecipesCarouselProps = {
    * The title of the carousel, displayed above the recipes.
    */
   title: string;
+
+  /**
+   * Boolean indicating if the carousel is loading.
+   */
+  isLoading: boolean;
 };
