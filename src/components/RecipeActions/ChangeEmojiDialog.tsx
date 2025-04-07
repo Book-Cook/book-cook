@@ -1,20 +1,22 @@
 import * as React from "react";
 import {
-  Input,
+  SearchBox,
   Dialog,
   DialogSurface,
   DialogTitle,
   DialogBody,
-  DialogActions,
-  Button,
   makeStyles,
   shorthands,
   tokens,
   Text,
+  SearchBoxChangeEvent,
+  InputOnChangeData,
 } from "@fluentui/react-components";
-import type { DialogOpenChangeEvent } from "@fluentui/react-components";
+import GraphemeSplitter from "grapheme-splitter";
+import * as emoji from "node-emoji";
 
-const commonEmojis = [
+// Default emojis for food categories
+const defaultSuggestedEmojis = [
   "🍕",
   "🍔",
   "🍗",
@@ -48,105 +50,126 @@ const commonEmojis = [
   "🍵",
   "🍼",
 ];
+const DEFAULT_EMOJI = "🍽️";
+const splitter = new GraphemeSplitter();
 
 const useStyles = makeStyles({
   dialogSurface: {
-    maxWidth: "450px",
+    maxWidth: "480px",
     width: "100%",
-    ...shorthands.borderRadius("14px"),
-    boxShadow: tokens.shadow16,
+    ...shorthands.borderRadius("16px"),
+    boxShadow: tokens.shadow64,
+    border: "none",
   },
   dialogTitle: {
-    fontSize: tokens.fontSizeBase600,
+    fontSize: tokens.fontSizeHero700,
     fontWeight: tokens.fontWeightSemibold,
-    paddingBottom: "4px",
+    paddingBottom: "8px",
+    color: tokens.colorNeutralForeground1,
   },
   dialogBody: {
-    paddingTop: "12px",
+    paddingTop: "16px",
     paddingBottom: "24px",
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    gap: "16px",
+    gap: "20px",
   },
-  emojiInput: {
-    width: "100%",
-    fontSize: tokens.fontSizeBase500,
-    textAlign: "center",
+  gridContainer: {
+    minHeight: "220px",
+    display: "flex",
+    flexDirection: "column",
+    borderRadius: "12px",
+    ...shorthands.padding("16px"),
   },
   emojiGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(8, 1fr)",
-    gap: "12px",
-    marginTop: "8px",
+    gridTemplateColumns: "repeat(auto-fill, minmax(38px, 1fr))",
+    gap: "4px",
+    maxHeight: "250px",
+    flexGrow: 1,
+    ...shorthands.padding("8px", "0"),
+    overflowY: "auto",
   },
   emojiButton: {
-    width: "36px",
-    height: "36px",
+    width: "38px",
+    height: "38px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: tokens.fontSizeBase500,
+    fontSize: tokens.fontSizeBase600,
     cursor: "pointer",
     backgroundColor: tokens.colorNeutralBackground1,
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
-    ...shorthands.borderRadius("4px"),
-    transition: "all 0.2s ease",
+    ...shorthands.border("1px", "solid", "transparent"),
+    ...shorthands.borderRadius("8px"),
+    transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
     ":hover": {
-      backgroundColor: tokens.colorNeutralBackground2,
-      transform: "scale(1.1)",
+      backgroundColor: tokens.colorNeutralBackground3,
     },
     ":focus": {
       outlineWidth: "2px",
       outlineStyle: "solid",
       outlineColor: tokens.colorBrandStroke1,
+      outlineOffset: "1px",
     },
   },
   selectedEmoji: {
-    backgroundColor: tokens.colorBrandBackground2,
+    backgroundColor: tokens.colorNeutralBackground3,
+    boxShadow: tokens.shadow2,
+    transform: "scale(1.08) translateY(-2px)",
     ...shorthands.borderColor(tokens.colorBrandStroke1),
   },
   emojiSectionTitle: {
     fontSize: tokens.fontSizeBase300,
     fontWeight: tokens.fontWeightSemibold,
-    marginTop: "16px",
-    marginBottom: "8px",
+    marginBottom: "12px",
+    color: tokens.colorNeutralForeground2,
   },
-  dialogActions: {
-    paddingTop: "0",
-    ...shorthands.gap("12px"),
+  noResultsText: {
+    textAlign: "center",
+    color: tokens.colorNeutralForeground3,
+    paddingTop: "30px",
+    flexGrow: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontStyle: "italic",
   },
   primaryButton: {
-    transition: "all 0.2s ease",
+    transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    height: "38px",
+    ...shorthands.padding("0", "20px"),
+    ...shorthands.borderRadius("8px"),
     ":hover": {
-      transform: "translateY(-1px)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
     },
   },
   secondaryButton: {
-    transition: "all 0.2s ease",
+    transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    height: "38px",
+    ...shorthands.padding("0", "20px"),
+    ...shorthands.borderRadius("8px"),
     ":hover": {
-      transform: "translateY(-1px)",
+      transform: "translateY(-2px)",
     },
   },
 });
 
+// Check if a string is a single emoji character
+const isSingleEmoji = (value: string): boolean => {
+  if (!value) return false;
+  const graphemes = splitter.splitGraphemes(value);
+  return (
+    graphemes.length === 1 &&
+    /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u.test(graphemes[0])
+  );
+};
+
 export type ChangeEmojiDialogProps = {
-  /**
-   * Whether the dialog is open or closed.
-   */
   isOpen: boolean;
-  /**
-   * The current emoji of the recipe.
-   */
   currentEmoji: string;
-  /**
-   * Callback function to handle saving the new emoji.
-   */
   onSave: (newEmoji: string) => void;
-  /**
-   * Callback function to handle closing the dialog.
-   */
   onClose: () => void;
 };
 
@@ -157,102 +180,155 @@ export const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
   onClose,
 }) => {
   const styles = useStyles();
-  const [emoji, setEmoji] = React.useState(currentEmoji || "🍽️");
+  const [inputValue, setInputValue] = React.useState<string>("");
+  const [selectedEmoji, setSelectedEmoji] =
+    React.useState<string>(DEFAULT_EMOJI);
+  const [displayedEmojis, setDisplayedEmojis] = React.useState<string[]>(
+    defaultSuggestedEmojis
+  );
+  const [isSearching, setIsSearching] = React.useState<boolean>(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const debounceTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
+  // Reset state when dialog opens
   React.useEffect(() => {
     if (isOpen) {
-      setEmoji(currentEmoji || "🍽️");
-      // Schedule focus after the dialog renders
-      setTimeout(() => {
+      // Initialize state with memoized values to prevent unnecessary re-renders
+      const initialEmoji = isSingleEmoji(currentEmoji)
+        ? currentEmoji
+        : DEFAULT_EMOJI;
+      setSelectedEmoji(initialEmoji);
+      setDisplayedEmojis(defaultSuggestedEmojis);
+      setIsSearching(false);
+
+      // Focus without timeout for faster response
+      requestAnimationFrame(() => {
         if (inputRef.current) {
           inputRef.current.focus();
+          inputRef.current.select();
         }
-      }, 50);
+      });
     }
-  }, [currentEmoji, isOpen]);
+  }, [isOpen, currentEmoji]);
 
-  const handleSaveClick = () => {
-    if (emoji.trim()) {
-      onSave(emoji.trim());
-    }
-  };
-
-  const handleCancelClick = () => {
-    onClose();
-  };
-
-  const handleOpenChange = (
-    _event: DialogOpenChangeEvent,
-    data: { open: boolean }
+  // Handle input changes for emoji search
+  const handleInputChange = (
+    _e: SearchBoxChangeEvent,
+    data: InputOnChangeData
   ) => {
-    if (!data.open) {
-      onClose();
+    const newValue = data.value;
+    setInputValue(newValue);
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
     }
+
+    debounceTimeout.current = setTimeout(() => {
+      const trimmedValue = newValue.trim();
+
+      if (isSingleEmoji(trimmedValue)) {
+        setSelectedEmoji(trimmedValue);
+        setIsSearching(false);
+        setDisplayedEmojis(defaultSuggestedEmojis);
+      } else if (trimmedValue === "") {
+        setSelectedEmoji("");
+        setIsSearching(false);
+        setDisplayedEmojis(defaultSuggestedEmojis);
+      } else {
+        setIsSearching(true);
+        const searchResults = emoji.search(trimmedValue);
+        setDisplayedEmojis(searchResults.map((result) => result.emoji));
+      }
+    }, 150);
   };
 
-  const handleEmojiSelect = (selectedEmoji: string) => {
-    setEmoji(selectedEmoji);
-  };
+  const handleEmojiGridSelect = React.useCallback(
+    (emojiChar: string) => {
+      setSelectedEmoji(emojiChar);
+      setIsSearching(false);
+
+      if (isSingleEmoji(emojiChar)) {
+        onSave(emojiChar);
+        onClose();
+      }
+    },
+    [onSave, onClose]
+  );
+
+  const emojiGrid = React.useMemo(() => {
+    return displayedEmojis.length > 0 ? (
+      <div className={styles.emojiGrid}>
+        {displayedEmojis.map((emojiChar, index) => (
+          <div
+            key={`${emojiChar}-${index}`}
+            className={`${styles.emojiButton} ${selectedEmoji === emojiChar ? styles.selectedEmoji : ""}`}
+            onClick={() => handleEmojiGridSelect(emojiChar)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Select emoji ${emojiChar}`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleEmojiGridSelect(emojiChar);
+              }
+            }}
+          >
+            {emojiChar}
+          </div>
+        ))}
+      </div>
+    ) : isSearching ? (
+      <Text className={styles.noResultsText}>No emojis found</Text>
+    ) : null;
+  }, [
+    displayedEmojis,
+    handleEmojiGridSelect,
+    isSearching,
+    selectedEmoji,
+    styles.emojiButton,
+    styles.emojiGrid,
+    styles.noResultsText,
+    styles.selectedEmoji,
+  ]);
+
+  const gridTitle = isSearching
+    ? `Results for "${inputValue}"`
+    : "Common food emojis";
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange} modalType="modal">
+    <Dialog
+      open={isOpen}
+      onOpenChange={(ev, data) => {
+        ev.stopPropagation();
+        return !data.open && onClose();
+      }}
+      modalType="modal"
+      surfaceMotion={null}
+    >
       <DialogSurface
         className={styles.dialogSurface}
-        aria-describedby={undefined}
-        onClick={(ev) => ev.stopPropagation()}
+        onClick={(ev) => {
+          ev.stopPropagation();
+        }}
       >
         <DialogTitle className={styles.dialogTitle}>
           Change Recipe Emoji
         </DialogTitle>
         <DialogBody className={styles.dialogBody}>
-          <Input
-            placeholder="Type or paste an emoji"
-            value={emoji}
-            onChange={(_e, data) => setEmoji(data.value)}
-            className={styles.emojiInput}
+          <SearchBox
+            placeholder="Filter..."
+            appearance="filled-darker"
+            onChange={handleInputChange}
+            value={inputValue}
             ref={inputRef}
-            aria-label="Recipe emoji"
+            aria-label="Recipe emoji search or selection"
+            maxLength={50}
           />
-
-          <Text className={styles.emojiSectionTitle}>Common food emojis</Text>
-          <div className={styles.emojiGrid}>
-            {commonEmojis.map((emojiChar) => (
-              <div
-                key={emojiChar}
-                className={`${styles.emojiButton} ${emoji === emojiChar ? styles.selectedEmoji : ""}`}
-                onClick={() => handleEmojiSelect(emojiChar)}
-                role="button"
-                tabIndex={0}
-                aria-label={`Select emoji ${emojiChar}`}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleEmojiSelect(emojiChar);
-                  }
-                }}
-              >
-                {emojiChar}
-              </div>
-            ))}
+          <div className={styles.gridContainer}>
+            <Text className={styles.emojiSectionTitle}>{gridTitle}</Text>
+            {emojiGrid}
           </div>
         </DialogBody>
-        <DialogActions className={styles.dialogActions}>
-          <Button
-            appearance="subtle"
-            onClick={handleCancelClick}
-            className={styles.secondaryButton}
-          >
-            Cancel
-          </Button>
-          <Button
-            appearance="primary"
-            onClick={handleSaveClick}
-            className={styles.primaryButton}
-          >
-            Save
-          </Button>
-        </DialogActions>
       </DialogSurface>
     </Dialog>
   );

@@ -10,8 +10,11 @@ import {
   makeStyles,
   shorthands,
   tokens,
+  Spinner,
 } from "@fluentui/react-components";
 import type { DialogOpenChangeEvent } from "@fluentui/react-components";
+import { useRouter } from "next/router";
+import { useCreateRecipe } from "../../../clientToServer";
 
 const useStyles = makeStyles({
   dialogSurface: {
@@ -19,11 +22,6 @@ const useStyles = makeStyles({
     width: "100%",
     ...shorthands.borderRadius("14px"),
     boxShadow: tokens.shadow16,
-  },
-  dialogTitle: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    paddingBottom: "4px",
   },
   dialogBody: {
     paddingTop: "12px",
@@ -42,7 +40,6 @@ const useStyles = makeStyles({
   },
   dialogActions: {
     paddingTop: "0",
-
     ...shorthands.gap("12px"),
   },
   primaryButton: {
@@ -64,59 +61,83 @@ const useStyles = makeStyles({
     textAlign: "right",
     marginTop: "4px",
   },
+  errorMessage: {
+    color: tokens.colorPaletteRedForeground1,
+    fontSize: tokens.fontSizeBase200,
+    marginTop: tokens.spacingVerticalS,
+  },
+  spinnerContainer: {
+    display: "inline-flex",
+    marginLeft: tokens.spacingHorizontalS,
+    alignItems: "center",
+  },
 });
 
-export type ChangeTitleDialogProps = {
+export type NewRecipeDialogProps = {
   /**
    * Whether the dialog is open or closed.
    */
   isOpen: boolean;
   /**
-   * The current title of the recipe.
-   */
-  currentTitle: string;
-  /**
-   * Callback function to handle saving the new title.
-   */
-  onSave: (newTitle: string) => void;
-  /**
    * Callback function to handle closing the dialog.
    */
   onClose: () => void;
-  /**
-   * Maximum allowed length for the title
-   */
-  maxLength?: number;
 };
 
-export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
+export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   isOpen,
-  currentTitle,
-  onSave,
   onClose,
-  maxLength = 100,
 }) => {
   const styles = useStyles();
-  const [newTitle, setNewTitle] = React.useState(currentTitle);
+  const router = useRouter();
+  const [newRecipeTitle, setNewRecipeTitle] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const { mutate: createRecipe, isPending } = useCreateRecipe();
 
   React.useEffect(() => {
     if (isOpen) {
-      setNewTitle(currentTitle);
-      // Schedule focus and selection after the dialog renders
+      setNewRecipeTitle("");
+      setErrorMessage(null);
       setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.focus();
-          textareaRef.current.setSelectionRange(0, currentTitle.length);
         }
       }, 50);
     }
-  }, [currentTitle, isOpen]);
+  }, [isOpen]);
 
   const handleSaveClick = () => {
-    if (newTitle.trim()) {
-      onSave(newTitle.trim());
+    if (!newRecipeTitle.trim()) {
+      setErrorMessage("Title is required.");
+      return;
     }
+
+    createRecipe(
+      {
+        title: newRecipeTitle.trim(),
+        data: "",
+        tags: [],
+        imageURL: "",
+        emoji: "",
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.recipeId) {
+            onClose();
+            router.push(`/recipes/${data.recipeId}`);
+          } else {
+            setErrorMessage("Recipe created, but failed to redirect.");
+          }
+        },
+        onError: (error) => {
+          console.error("Recipe creation API error:", error);
+          setErrorMessage(
+            error instanceof Error ? error.message : "Failed to create recipe."
+          );
+        },
+      }
+    );
   };
 
   const handleCancelClick = () => {
@@ -139,6 +160,16 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
     }
   };
 
+  const handleTextChange = (
+    _e: React.ChangeEvent<HTMLTextAreaElement>,
+    data: { value: string }
+  ) => {
+    setNewRecipeTitle(data.value.substring(0, 100));
+    if (errorMessage) {
+      setErrorMessage(null);
+    }
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -151,32 +182,33 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
         aria-describedby={undefined}
         onClick={(ev) => ev.stopPropagation()}
       >
-        <DialogTitle className={styles.dialogTitle}>
-          Change Recipe Title
-        </DialogTitle>
+        <DialogTitle>New Recipe</DialogTitle>
         <DialogBody className={styles.dialogBody}>
           <Textarea
             placeholder="Enter recipe title"
-            value={newTitle}
-            onChange={(_e, data) =>
-              setNewTitle(data.value.substring(0, maxLength))
-            }
+            value={newRecipeTitle}
+            onChange={handleTextChange}
             className={styles.textArea}
             ref={textareaRef}
             onKeyDown={handleKeyDown}
-            maxLength={maxLength}
+            maxLength={100}
             aria-label="Recipe title"
             resize="none"
+            disabled={isPending}
           />
           <div className={styles.characterCount}>
-            {newTitle.length}/{maxLength}
+            {newRecipeTitle.length}/100
           </div>
+          {errorMessage && (
+            <div className={styles.errorMessage}>{errorMessage}</div>
+          )}
         </DialogBody>
         <DialogActions className={styles.dialogActions}>
           <Button
             appearance="subtle"
             onClick={handleCancelClick}
             className={styles.secondaryButton}
+            disabled={isPending}
           >
             Cancel
           </Button>
@@ -184,9 +216,14 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
             appearance="primary"
             onClick={handleSaveClick}
             className={styles.primaryButton}
-            disabled={!newTitle.trim()}
+            disabled={!newRecipeTitle.trim() || isPending}
           >
-            Save
+            {isPending ? "Creating..." : "Create Recipe"}
+            {isPending && (
+              <span className={styles.spinnerContainer}>
+                <Spinner size="tiny" />
+              </span>
+            )}
           </Button>
         </DialogActions>
       </DialogSurface>

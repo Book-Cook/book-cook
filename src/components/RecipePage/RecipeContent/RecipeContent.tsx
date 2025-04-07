@@ -19,7 +19,7 @@ export const RecipeContent = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.6, duration: 0.5 }}
     >
-      {editableData?.content ? (
+      {!isLoading ? (
         <Editor
           value={editableData?.content || ""}
           onChange={handleEditorChange}

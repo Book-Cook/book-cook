@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DOMPurify from "dompurify";
 
 export type UpdateRecipePayload = {
   title: string;
@@ -23,20 +24,38 @@ export function useUpdateRecipe(recipeId: string | string[] | undefined) {
         throw new Error("Recipe ID required for update.");
       }
 
-      const response = await fetch(`/api/recipes/${recipeId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedRecipeData),
-      });
+      const sanitizedData = {
+        title: DOMPurify.sanitize(String(updatedRecipeData.title || "")),
+        data: DOMPurify.sanitize(String(updatedRecipeData.data || "")),
+        tags: Array.isArray(updatedRecipeData.tags)
+          ? updatedRecipeData.tags.map((tag) => DOMPurify.sanitize(String(tag)))
+          : [],
+        imageURL: DOMPurify.sanitize(String(updatedRecipeData.imageURL || "")),
+        emoji: DOMPurify.sanitize(String(updatedRecipeData.emoji || "")),
+      };
 
-      if (!response.ok) {
-        throw new Error(`Failed to update recipe (Status: ${response.status})`);
+      try {
+        const response = await fetch(`/api/recipes/${recipeId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(sanitizedData),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to update recipe (Status: ${response.status})`
+          );
+        }
+
+        return response.json();
+      } catch (error) {
+        console.log("Error in fetch:", error);
+        return error;
       }
-
-      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
     },
   });
 }

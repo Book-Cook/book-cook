@@ -1,6 +1,13 @@
 import * as React from "react";
 import { mergeClasses } from "@griffel/react";
-import { Title3, Text, Button, tokens } from "@fluentui/react-components";
+import {
+  Title3,
+  Text,
+  Button,
+  tokens,
+  Skeleton,
+  SkeletonItem,
+} from "@fluentui/react-components";
 import { ArrowLeftRegular, ArrowRightRegular } from "@fluentui/react-icons";
 import { RecipeCard } from "../RecipeCard/RecipeCard";
 import useEmblaCarousel from "embla-carousel-react";
@@ -65,10 +72,11 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   };
 }
 
-export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
-  recipes,
-  title,
-}) => {
+const skeletonCount = 6;
+
+export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
+  const { recipes, title, isLoading = true } = props;
+
   const styles = useRecipeCarouselStyles();
   const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions);
   const router = useRouter();
@@ -90,17 +98,15 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
     [router]
   );
 
-  if (recipes.length === 0) {
+  if (!isLoading && recipes.length === 0) {
     return (
       <div className={styles.root}>
         <div className={styles.header}>
-          {" "}
           <Title3 className={styles.title}>{title}</Title3>{" "}
         </div>
         <div className={styles.emptyState}>
           <Text size={400}>{`You haven't viewed any recipes yet.`}</Text>
           <Text size={300} style={{ marginTop: tokens.spacingVerticalS }}>
-            {" "}
             {`Start exploring recipes and they'll show up here.`}{" "}
           </Text>
         </div>
@@ -118,7 +124,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
             appearance="subtle"
             icon={<ArrowLeftRegular />}
             onClick={scrollPrev}
-            disabled={!canScrollPrev}
+            disabled={!canScrollPrev || isLoading}
             aria-label="Previous recipes"
           />
           <Button
@@ -126,31 +132,53 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = ({
             appearance="subtle"
             icon={<ArrowRightRegular />}
             onClick={scrollNext}
-            disabled={!canScrollNext}
+            disabled={!canScrollNext || isLoading}
             aria-label="Next recipes"
           />
         </div>
       </div>
-
       <div className={styles.viewport} ref={emblaRef}>
         <div className={styles.container}>
-          {recipes.map((recipe) => (
-            <div className={styles.slide} key={recipe._id}>
-              <RecipeCard
-                id={recipe._id}
-                emoji={recipe?.emoji || "🍽️"}
-                title={recipe.title}
-                imageSrc={recipe.imageURL}
-                tags={recipe.tags}
-                createdDate={recipe.createdAt}
-                isMinimal
-              />
-              <div
-                className={styles.cardClickOverlay}
-                onClick={() => handleCardClick(recipe._id)}
-              />
-            </div>
-          ))}
+          {!isLoading
+            ? recipes.map((recipe) => (
+                <div className={styles.slide} key={recipe._id}>
+                  <RecipeCard
+                    id={recipe._id}
+                    emoji={recipe?.emoji || "🍽️"}
+                    title={recipe.title}
+                    imageSrc={recipe.imageURL}
+                    tags={recipe.tags}
+                    createdDate={recipe.createdAt}
+                    isMinimal
+                  />
+                  <div
+                    className={styles.cardClickOverlay}
+                    onClick={() => handleCardClick(recipe._id)}
+                  />
+                </div>
+              ))
+            : Array.from({ length: skeletonCount }).map((_, index) => (
+                <div className={styles.slide} key={`skeleton-${index}`}>
+                  <Skeleton>
+                    <div className={styles.skeletonItemContainer}>
+                      <SkeletonItem
+                        shape="rectangle"
+                        className={styles.skeletonImage}
+                      />
+                      <div className={styles.skeletonTextContent}>
+                        <SkeletonItem
+                          shape="rectangle"
+                          className={styles.skeletonTitle}
+                        />
+                        <SkeletonItem
+                          shape="rectangle"
+                          className={styles.skeletonLine}
+                        />
+                      </div>
+                    </div>
+                  </Skeleton>
+                </div>
+              ))}
         </div>
       </div>
       {scrollSnaps.length > 1 && (

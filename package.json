@@ -36,7 +36,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "lodash": "^4.17.21",
-    "embla-carousel-react": "^8.5.2"
+    "embla-carousel-react": "^8.5.2",
+    "grapheme-splitter": "^1.0.4",
+    "node-emoji": "^2.2.0",
+    "ai": "^4.3.2",
+    "@ai-sdk/react": "^1.2.6",
+    "@ai-sdk/openai": "^1.3.7",
+    "@ai-sdk/google": "^1.2.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",

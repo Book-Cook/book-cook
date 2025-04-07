@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Card,
-  CardHeader,
-  Text,
-  tokens,
-  Tooltip,
-} from "@fluentui/react-components";
+import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
@@ -71,40 +65,47 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                 role="img"
                 aria-label={`${title} placeholder emoji`}
               >
-                {emoji}
+                {emoji || "🍽️"}
               </span>
             </div>
           )}
         </div>
         <div className={styles.content}>
-          <CardHeader
-            header={
-              <Text weight="semibold" size={500} truncate>
-                {title}
-              </Text>
-            }
-            action={
-              !isMinimal ? (
+          <div className={styles.headerRoot}>
+            <div className={styles.headerContent}>
+              <Tooltip content={title} relationship="label">
+                <Text
+                  weight="semibold"
+                  size={500}
+                  className={styles.title}
+                  truncate
+                >
+                  {title}
+                </Text>
+              </Tooltip>
+              {formattedDate && (
+                <Text
+                  size={200}
+                  className={styles.description}
+                  style={{ color: tokens.colorNeutralForeground3 }}
+                >
+                  {formattedDate}
+                </Text>
+              )}
+            </div>
+
+            {!isMinimal && (
+              <div className={styles.headerAction}>
                 <RecipeActions
                   title={title}
                   imageURL={imageSrc}
                   tags={tags}
                   _id={id}
-                  emoji={emoji}
+                  emoji={emoji || "🍽️"}
                 />
-              ) : null
-            }
-            description={
-              <Text
-                size={200}
-                style={{ color: tokens.colorNeutralForeground3 }}
-              >
-                {formattedDate}
-              </Text>
-            }
-            style={{ padding: "0 0 12px 0" }}
-          />
-
+              </div>
+            )}
+          </div>
           {!isMinimal && tags && tags.length > 0 && (
             <div className={styles.tagsContainer}>
               {tags.slice(0, 3).map((tag, i) => (

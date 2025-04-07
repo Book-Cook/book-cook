@@ -1,7 +1,6 @@
 import * as React from "react";
 import { makeStyles, shorthands } from "@griffel/react";
-import { Button, Title1, Text, tokens } from "@fluentui/react-components";
-import { useRouter } from "next/router";
+import { tokens } from "@fluentui/react-components";
 import { RecipesCarousel } from "../RecipeCarousel";
 import {
   fetchRecentlyViewed,
@@ -15,10 +14,17 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    maxWidth: "1400px",
+    alignItems: "center",
+    justifyContent: "center",
     width: "100%",
     gap: "48px",
     ...shorthands.padding("32px", "0px"),
+  },
+  subContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    maxWidth: "1400px",
   },
   heroSection: {
     display: "flex",
@@ -48,16 +54,7 @@ const useStyles = makeStyles({
 
 const HomePage = () => {
   const styles = useStyles();
-  const router = useRouter();
   const { data: session } = useSession();
-
-  const handleCreateRecipe = () => {
-    router.push("/newRecipe");
-  };
-
-  const navigateToRecipes = () => {
-    router.push("/recipes");
-  };
 
   const { data: recentlyViewed } = useQuery<Recipe[]>({
     queryKey: ["recentlyViewed", session?.user?.email],
@@ -79,41 +76,19 @@ const HomePage = () => {
 
   return (
     <div className={styles.container}>
-      {recentlyViewedRecipes.length === 0 && (
-        <div className={styles.heroSection}>
-          <Title1 className={styles.heroTitle}>Welcome to BookCook</Title1>
-          <Text className={styles.heroSubtitle} size={400}>
-            Your personal recipe collection organized in one place. Create,
-            discover, and cook with ease.
-          </Text>
-          <div className={styles.buttonGroup}>
-            <Button
-              appearance="primary"
-              size="large"
-              onClick={handleCreateRecipe}
-            >
-              Create New Recipe
-            </Button>
-            <Button
-              appearance="outline"
-              size="large"
-              onClick={navigateToRecipes}
-            >
-              Browse Your Recipes
-            </Button>
-          </div>
+      <div className={styles.subContainer}>
+        <div className={styles.sectionContainer}>
+          <RecipesCarousel
+            recipes={recentlyViewedRecipes}
+            title={"Recently Viewed Recipes"}
+            isLoading={!recentlyViewed}
+          />
+          <RecipesCarousel
+            recipes={recipeCollectionsList}
+            title={"Favorite recipes"}
+            isLoading={!recipeCollections}
+          />
         </div>
-      )}
-
-      <div className={styles.sectionContainer}>
-        <RecipesCarousel
-          recipes={recentlyViewedRecipes}
-          title={"Recently Viewed Recipes"}
-        />
-        <RecipesCarousel
-          recipes={recipeCollectionsList}
-          title={"Favorite recipes"}
-        />
       </div>
     </div>
   );

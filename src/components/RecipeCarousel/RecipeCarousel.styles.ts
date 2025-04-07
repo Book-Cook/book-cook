@@ -45,7 +45,6 @@ export const useRecipeCarouselStyles = makeStyles({
     flexShrink: 0,
     width: "240px",
     "@media (max-width: 640px)": { width: "180px" },
-    display: "flex",
     justifyContent: "center",
   },
   cardClickOverlay: {
@@ -137,5 +136,33 @@ export const useRecipeCarouselStyles = makeStyles({
     color: tokens.colorNeutralForeground3,
     background: tokens.colorNeutralBackground2,
     ...shorthands.borderRadius(tokens.borderRadiusMedium),
+  },
+  skeletonItemContainer: {
+    display: "flex",
+    flexDirection: "column",
+    ...shorthands.gap(tokens.spacingHorizontalS),
+    height: "280px",
+    ...shorthands.borderRadius("12px"),
+    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
+    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    boxShadow: tokens.shadow2,
+    ...shorthands.padding("16px"),
+  },
+  skeletonImage: {
+    height: "150px",
+  },
+  skeletonTitle: {
+    height: tokens.fontSizeBase500,
+    width: "90%",
+  },
+  skeletonLine: {
+    height: tokens.fontSizeBase300,
+    width: "50%",
+  },
+  skeletonTextContent: {
+    display: "flex",
+    flexDirection: "column",
+    ...shorthands.gap(tokens.spacingHorizontalS),
+    ...shorthands.padding("16px"),
   },
 });
