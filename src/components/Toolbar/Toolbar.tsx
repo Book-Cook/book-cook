@@ -14,6 +14,7 @@ import { MobileDrawer } from "./MobileDrawer";
 import { useMediaQuery } from "../../hooks";
 import { useToolbarStyles } from "./Toolbar.styles";
 import { NewRecipeButton } from "./NewRecipeButton";
+import { NewRecipeDialog } from "./NewRecipeDialog";
 
 export const Toolbar = () => {
   const styles = useToolbarStyles();
@@ -21,11 +22,19 @@ export const Toolbar = () => {
   const { data: session } = useSession();
   const isMobile = useMediaQuery("(max-width: 900px)");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isNewRecipeDialogOpen, setIsNewRecipeDialogOpen] =
+    React.useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <>
+      <NewRecipeDialog
+        isOpen={isNewRecipeDialogOpen}
+        onClose={() => {
+          setIsNewRecipeDialogOpen(false);
+        }}
+      />
       <ToolbarComponent className={styles.root}>
         {isMobile && (
           <Button
@@ -47,7 +56,7 @@ export const Toolbar = () => {
         <div className={styles.rightSection}>
           {session?.user && (
             <>
-              <NewRecipeButton />
+              <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
               <div className={styles.searchBarWrapper}>
                 <SearchBar />
               </div>
@@ -65,6 +74,7 @@ export const Toolbar = () => {
       {session?.user && (
         <MobileDrawer
           isOpen={isMenuOpen}
+          onNewRecipeDialogOpen={() => setIsNewRecipeDialogOpen(true)}
           onOpenChange={setIsMenuOpen}
           currentPath={router.pathname}
           onNavigate={(url) => {

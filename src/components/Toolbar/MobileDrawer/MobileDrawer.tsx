@@ -19,6 +19,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onOpenChange,
   currentPath,
   onNavigate,
+  onNewRecipeDialogOpen,
 }) => {
   const styles = useMobileDrawerStyles();
 
@@ -76,7 +77,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               appearance="primary"
               icon={<Add24Regular />}
               onClick={() => {
-                onNavigate("/newRecipe");
+                onNewRecipeDialogOpen();
                 onOpenChange(false);
               }}
               className={styles.primaryActionButton}

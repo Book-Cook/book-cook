@@ -1,7 +1,6 @@
 import * as React from "react";
 import { makeStyles, shorthands } from "@griffel/react";
-import { Button, Title1, Text, tokens } from "@fluentui/react-components";
-import { useRouter } from "next/router";
+import { tokens } from "@fluentui/react-components";
 import { RecipesCarousel } from "../RecipeCarousel";
 import {
   fetchRecentlyViewed,
@@ -55,16 +54,7 @@ const useStyles = makeStyles({
 
 const HomePage = () => {
   const styles = useStyles();
-  const router = useRouter();
   const { data: session } = useSession();
-
-  const handleCreateRecipe = () => {
-    router.push("/newRecipe");
-  };
-
-  const navigateToRecipes = () => {
-    router.push("/recipes");
-  };
 
   const { data: recentlyViewed } = useQuery<Recipe[]>({
     queryKey: ["recentlyViewed", session?.user?.email],

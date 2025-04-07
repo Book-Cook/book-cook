@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Card,
-  CardHeader,
-  Text,
-  tokens,
-  Tooltip,
-} from "@fluentui/react-components";
+import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { RecipeCardProps } from "./RecipeCard.types";
@@ -71,7 +65,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                 role="img"
                 aria-label={`${title} placeholder emoji`}
               >
-                {emoji}
+                {emoji || "🍽️"}
               </span>
             </div>
           )}
@@ -107,7 +101,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                   imageURL={imageSrc}
                   tags={tags}
                   _id={id}
-                  emoji={emoji}
+                  emoji={emoji || "🍽️"}
                 />
               </div>
             )}

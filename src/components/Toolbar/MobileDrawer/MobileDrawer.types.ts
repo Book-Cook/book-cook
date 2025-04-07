@@ -15,4 +15,9 @@ export type MobileDrawerProps = {
    * Callback function to handle navigation to a different URL.
    */
   onNavigate: (url: string) => void;
+
+  /**
+   * Callback function to handle the opening and closing of the new recipe dialog.
+   */
+  onNewRecipeDialogOpen: () => void;
 };
