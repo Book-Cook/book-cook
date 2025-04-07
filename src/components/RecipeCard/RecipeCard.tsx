@@ -77,14 +77,31 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
           )}
         </div>
         <div className={styles.content}>
-          <CardHeader
-            header={
-              <Text weight="semibold" size={500} truncate>
-                {title}
-              </Text>
-            }
-            action={
-              !isMinimal ? (
+          <div className={styles.headerRoot}>
+            <div className={styles.headerContent}>
+              <Tooltip content={title} relationship="label">
+                <Text
+                  weight="semibold"
+                  size={500}
+                  className={styles.title}
+                  truncate
+                >
+                  {title}
+                </Text>
+              </Tooltip>
+              {formattedDate && (
+                <Text
+                  size={200}
+                  className={styles.description}
+                  style={{ color: tokens.colorNeutralForeground3 }}
+                >
+                  {formattedDate}
+                </Text>
+              )}
+            </div>
+
+            {!isMinimal && (
+              <div className={styles.headerAction}>
                 <RecipeActions
                   title={title}
                   imageURL={imageSrc}
@@ -92,19 +109,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                   _id={id}
                   emoji={emoji}
                 />
-              ) : null
-            }
-            description={
-              <Text
-                size={200}
-                style={{ color: tokens.colorNeutralForeground3 }}
-              >
-                {formattedDate}
-              </Text>
-            }
-            style={{ padding: "0 0 12px 0" }}
-          />
-
+              </div>
+            )}
+          </div>
           {!isMinimal && tags && tags.length > 0 && (
             <div className={styles.tagsContainer}>
               {tags.slice(0, 3).map((tag, i) => (

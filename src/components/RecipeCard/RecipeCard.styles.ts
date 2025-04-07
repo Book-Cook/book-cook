@@ -41,6 +41,42 @@ export const useRecipeCardStyles = makeStyles({
     alignItems: "center",
     justifyContent: "center",
   },
+  headerRoot: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: "12px",
+    marginBottom: "12px",
+    width: "100%",
+  },
+  headerContent: {
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  title: {
+    display: "-webkit-box",
+    "-webkit-box-orient": "vertical",
+    "-webkit-line-clamp": "3",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    lineHeight: "1.3",
+    width: "100%",
+    overflowWrap: "break-word",
+  },
+  description: {
+    marginTop: "2px",
+  },
+  headerAction: {
+    flexShrink: 0,
+  },
+  tagsContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
+  },
   content: {
     ...shorthands.padding("16px"),
     flexGrow: 1,
@@ -48,12 +84,6 @@ export const useRecipeCardStyles = makeStyles({
     flexDirection: "column",
     background: tokens.colorNeutralBackground1,
     borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
-  },
-  tagsContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "6px",
-    marginTop: "auto",
   },
   tag: {
     ...shorthands.padding("4px", "10px"),
@@ -80,8 +110,6 @@ export const useRecipeCardStyles = makeStyles({
   emojiFallback: {
     fontSize: "48px",
     lineHeight: 1,
-    // Optional: Add some opacity if you want it less prominent
-    // opacity: 0.8,
   },
   moreTag: {
     ...shorthands.padding("4px", "10px"),
