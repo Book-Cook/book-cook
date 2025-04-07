@@ -14,7 +14,6 @@ import {
 } from "@fluentui/react-components";
 import GraphemeSplitter from "grapheme-splitter";
 import * as emoji from "node-emoji";
-import { MiddlewareNotFoundError } from "next/dist/shared/lib/utils";
 
 // Default emojis for food categories
 const defaultSuggestedEmojis = [
