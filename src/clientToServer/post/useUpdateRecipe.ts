@@ -1,13 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DOMPurify from "dompurify";
-
-export type UpdateRecipePayload = {
-  title: string;
-  data: string;
-  tags: string[];
-  imageURL: string;
-  emoji: string;
-};
+import type { UpdateRecipePayload } from "../types";
 
 /**
  * Hook to update a recipe via post request.

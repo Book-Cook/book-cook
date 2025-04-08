@@ -34,6 +34,19 @@ export type Recipe = {
    * If the image is not available, this emoji will be displayed.
    */
   emoji: string;
+
+  /**
+   * The owner of the recipe.
+   */
+  owner: string;
+};
+
+export type UpdateRecipePayload = {
+  title: string;
+  data: string;
+  tags: string[];
+  imageURL: string;
+  emoji: string;
 };
 
 export type CreateRecipeResponse = {

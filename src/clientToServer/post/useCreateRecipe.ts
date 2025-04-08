@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Recipe, CreateRecipeResponse } from "../types";
+import type { UpdateRecipePayload, CreateRecipeResponse } from "../types";
 
 export function useCreateRecipe() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (newRecipe: Omit<Recipe, "_id" | "createdAt">) => {
+    mutationFn: async (
+      newRecipe: Omit<UpdateRecipePayload, "_id" | "createdAt">
+    ) => {
       const response = await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

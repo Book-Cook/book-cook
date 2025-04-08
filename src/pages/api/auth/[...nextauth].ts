@@ -25,6 +25,7 @@ export default NextAuth({
           createdAt: new Date(),
           recentlyViewedRecipes: [],
           collections: [],
+          sharedWithUsers: [],
         });
       }
     },

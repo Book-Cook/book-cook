@@ -2,18 +2,12 @@ module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: 2022,
     sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
+    ecmaFeatures: { jsx: true },
     project: "./tsconfig.json",
   },
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
-  },
+  env: { browser: true, node: true, es2022: true },
   plugins: ["@typescript-eslint", "react", "react-hooks", "import"],
   extends: [
     "eslint:recommended",
@@ -26,14 +20,25 @@ module.exports = {
     "next/core-web-vitals",
   ],
   settings: {
-    react: {
-      version: "detect",
+    react: { version: "detect" },
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        paths: ["src"],
+      },
+      typescript: {
+        alwaysTryTypes: true,
+        project: ["./tsconfig.json"],
+      },
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
     },
   },
   rules: {
     // React
-    "react/prop-types": "off", // Not needed with TypeScript
-    "react/react-in-jsx-scope": "off", // Not needed with Next.js
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
 
     // TypeScript
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -46,16 +51,22 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-explicit-any": "warn",
+
+    // Import Resolution
+    "import/no-unresolved": [
+      "error",
+      {
+        commonjs: true,
+        amd: true,
+        caseSensitive: true,
+      },
+    ],
   },
   overrides: [
     {
       files: [".eslintrc.js", "*.config.js"],
       parser: "espree",
-      parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: "module",
-        project: null,
-      },
+      parserOptions: { ecmaVersion: 2022, sourceType: "module", project: null },
     },
   ],
 };
