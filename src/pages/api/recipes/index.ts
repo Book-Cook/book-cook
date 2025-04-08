@@ -1,4 +1,13 @@
 import clientPromise from "../../../clients/mongo";
+import { getServerSession } from "next-auth/next";
+import authOptions from "../auth/[...nextauth]";
+import type { Session } from "next-auth";
+
+type VisibilityCondition =
+  | { isPublic: boolean }
+  | { owner: string }
+  | { sharedWith: string }
+  | { owner: { $in: string[] } };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -10,6 +19,7 @@ export default async function handler(req: any, res: any) {
 
   const client = await clientPromise;
   const db = client.db("dev");
+  const session: Session | null = await getServerSession(req, res, authOptions);
 
   if (req.method === "GET") {
     // Retrieve all recipes that matches whatever is in the search bar
@@ -24,25 +34,54 @@ export default async function handler(req: any, res: any) {
       let query = {};
       const projection = { data: 0 };
 
-      if (search) {
-        query = {
-          $or: [
-            { title: { $regex: search, $options: "i" } }, // Match title
-            { tags: { $regex: search, $options: "i" } }, // Match tags (array of strings)
-          ],
-        };
+      // Build visibility conditions
+      const visibilityConditions: VisibilityCondition[] = [
+        { isPublic: true }, // Public recipes are always visible
+      ];
+
+      if (session?.user?.email) {
+        visibilityConditions.push(
+          { owner: session.user.email }, // User's own recipes
+          { sharedWith: session.user.email }, // Recipes shared directly
+          // Recipes from users who shared their BookCook
+          {
+            owner: {
+              $in: await db
+                .collection("users")
+                .find({ sharedWithUsers: session.user.email })
+                .map((user) => user.email)
+                .toArray(),
+            },
+          }
+        );
       }
 
+      // Add search conditions if present
+      if (search) {
+        query = {
+          $and: [
+            { $or: visibilityConditions },
+            {
+              $or: [
+                { title: { $regex: search, $options: "i" } },
+                { tags: { $regex: search, $options: "i" } },
+              ],
+            },
+          ],
+        };
+      } else {
+        query = { $or: visibilityConditions };
+      }
+
+      // Add tags filter if present
       if (tags) {
         const tagsList = Array.isArray(tags) ? tags : [tags];
-
-        if (Object.keys(query).length > 0) {
-          query = {
-            $and: [query, { tags: { $all: tagsList } }],
-          };
-        } else {
-          query = { tags: { $all: tagsList } };
-        }
+        query = {
+          $and: [
+            query,
+            { tags: { $all: tagsList } }
+          ]
+        };
       }
 
       // Validate sorting inputs
@@ -74,6 +113,13 @@ export default async function handler(req: any, res: any) {
   } else if (req.method === "POST") {
     // Create a new recipe
     try {
+      // Check if the user is authenticated
+      if (!session || !session.user) {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized. Please log in to create a recipe." });
+      }
+
       const { title, data, tags } = req.body;
 
       // Validate input data
@@ -82,19 +128,25 @@ export default async function handler(req: any, res: any) {
       }
 
       const newRecipe = {
+        owner: session?.user?.email,
+        sharedWith: [],
+        isPublic: false,
         title,
         data,
         tags: tags || [],
         createdAt: new Date(),
-        emoji: "",
+        emoji: "🍽️",
+        imageURL: "",
       };
 
       const result = await db.collection("recipes").insertOne(newRecipe);
 
-      res.status(201).json({
-        message: "Recipe uploaded successfully.",
-        recipeId: result.insertedId,
-      });
+      res
+        .status(201)
+        .json({
+          message: "Recipe uploaded successfully.",
+          recipeId: result.insertedId,
+        });
     } catch (error) {
       console.error("Failed to upload recipe:", error);
       res.status(500).json({ message: "Internal Server Error" });

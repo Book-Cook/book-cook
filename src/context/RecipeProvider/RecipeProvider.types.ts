@@ -1,5 +1,4 @@
-import { Recipe } from "src/clientToServer";
-import type { UpdateRecipePayload } from "../../clientToServer";
+import type { Recipe, UpdateRecipePayload } from "../../clientToServer";
 
 export type EditableData = {
   title: string;
