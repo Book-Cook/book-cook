@@ -8,10 +8,6 @@ runs:
       run: git config --global --add safe.directory /__w/book-cook/book-cook
       shell: bash
 
-    - name: Setup Node.js for Performance
-      run: echo "NODE_OPTIONS=--max-old-space-size=4096" >> $GITHUB_ENV
-      shell: bash
-
     - name: Set up Yarn
       run: yarn set version 1.22.1
       shell: bash
