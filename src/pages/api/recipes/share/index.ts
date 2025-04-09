@@ -5,7 +5,8 @@ import type { Session } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type ResponseData = {
-  message: string;
+  message?: string;
+  sharedWithUsers?: string[];
 };
 
 type ShareRequestBody = {
@@ -16,49 +17,106 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", ["POST"]);
+  // Validate request method
+  const allowedMethods = ["GET", "POST", "DELETE"];
+  if (!allowedMethods.includes(req.method || "")) {
+    res.setHeader("Allow", allowedMethods);
     return res.status(405).json({ message: "Method not allowed" });
   }
 
+  // Check authentication
   const session: Session | null = await getServerSession(req, res, authOptions);
-
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const { shareWithEmail } = req.body as ShareRequestBody;
-
-  if (!shareWithEmail) {
-    return res.status(400).json({ message: "Email is required" });
-  }
+  // Connect to database
+  const client = await clientPromise;
+  const db = client.db("dev");
+  const userEmail = session.user.email;
 
   try {
-    const client = await clientPromise;
-    const db = client.db("dev");
+    // GET - Fetch users who have access
+    if (req.method === "GET") {
+      const user = await db.collection("users").findOne({ email: userEmail });
 
-    // Verify the shareWithEmail is a valid email
-    const otherUser = await db.collection("users").findOne({
-      email: shareWithEmail,
-    });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-    if (!otherUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(200).json({
+        sharedWithUsers: user.sharedWithUsers || [],
+      });
     }
 
-    // Add user to sharedWithUsers array
-    await db.collection("users").updateOne(
-      { email: session.user.email },
-      {
-        $addToSet: {
-          sharedWithUsers: shareWithEmail,
-        },
-      }
-    );
+    // Validate shareWithEmail for POST and DELETE requests
+    const { shareWithEmail } = req.body as ShareRequestBody;
 
-    res.status(200).json({ message: "Recipe book shared successfully" });
+    // Email validation
+    if (!shareWithEmail) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(shareWithEmail)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Prevent sharing with yourself
+    if (shareWithEmail.toLowerCase() === userEmail.toLowerCase()) {
+      return res.status(400).json({ message: "Cannot share with yourself" });
+    }
+
+    // POST - Share recipes with another user
+    if (req.method === "POST") {
+      // Verify target user exists
+      const otherUser = await db.collection("users").findOne({
+        email: shareWithEmail,
+      });
+
+      if (!otherUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Add user to sharedWithUsers array
+      await db
+        .collection("users")
+        .updateOne(
+          { email: userEmail },
+          { $addToSet: { sharedWithUsers: shareWithEmail } }
+        );
+
+      return res
+        .status(200)
+        .json({ message: "Recipe book shared successfully" });
+    }
+
+    // DELETE - Remove user access
+    if (req.method === "DELETE") {
+      // Verify the user actually exists in your sharedWithUsers
+      const currentUser = await db.collection("users").findOne({
+        email: userEmail,
+        sharedWithUsers: shareWithEmail,
+      });
+
+      if (!currentUser) {
+        return res
+          .status(404)
+          .json({ message: "User not in your shared list" });
+      }
+
+      await db
+        .collection("users")
+        .updateOne(
+          { email: userEmail },
+          { $pull: { sharedWithUsers: shareWithEmail } }
+        );
+
+      return res.status(200).json({ message: "Access removed successfully" });
+    }
   } catch (error) {
-    console.error("Failed to share recipe book:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(`Failed to ${req.method} shared recipes:`, error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
