@@ -1,5 +1,15 @@
 import React, { useMemo } from "react";
-import { Button, Tooltip, Text } from "@fluentui/react-components";
+import {
+  Button,
+  Tooltip,
+  Text,
+  useToastController,
+  Toast,
+  ToastTitle,
+  ToastBody,
+  Toaster,
+  useId,
+} from "@fluentui/react-components";
 import { Heart20Regular, SparkleRegular } from "@fluentui/react-icons";
 import { motion } from "framer-motion";
 import { useRecipe } from "../../../context";
@@ -19,6 +29,9 @@ export const RecipeHeader = () => {
     hasEdits,
     onAddToCollection,
   } = useRecipe();
+
+  const toasterId = useId("toaster");
+  const { dispatchToast } = useToastController(toasterId);
 
   const {
     mutate: convertRecipeContent,
@@ -47,23 +60,42 @@ export const RecipeHeader = () => {
 
   const handleAiConvert = () => {
     if (isConverting || !editableData?.content) {
-      return; // Don't run if already converting or no content
+      return;
     }
 
-    resetConversionState(); // Clear previous errors/data from hook state
+    resetConversionState();
 
-    console.log("Triggering AI conversion..."); // Debug log
+    dispatchToast(
+      <Toast>
+        <ToastTitle>AI Processing</ToastTitle>
+        <ToastBody>Converting recipe measurements...</ToastBody>
+      </Toast>,
+      { position: "top-end", timeout: 2000 }
+    );
 
     convertRecipeContent(
       { htmlContent: editableData.content },
       {
         onSuccess: (data) => {
-          console.log("AI conversion successful.");
-          console.log(data.processedContent);
           updateEditableDataKey("content", data.processedContent);
+
+          dispatchToast(
+            <Toast>
+              <ToastTitle>Success!</ToastTitle>
+            </Toast>,
+            { position: "top-end", intent: "success", timeout: 1000 }
+          );
         },
-        onError: (error) => {
-          console.error("AI conversion error:", error);
+        onError: () => {
+          dispatchToast(
+            <Toast>
+              <ToastTitle>Error</ToastTitle>
+              <ToastBody>
+                Failed to convert measurements. Please try again.
+              </ToastBody>
+            </Toast>,
+            { position: "top-end", intent: "error", timeout: 1000 }
+          );
         },
       }
     );
@@ -71,6 +103,7 @@ export const RecipeHeader = () => {
 
   return (
     <>
+      <Toaster toasterId={toasterId} />
       <motion.div
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
