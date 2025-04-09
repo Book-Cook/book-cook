@@ -3,6 +3,7 @@ import authOptions from "../../auth/[...nextauth]";
 import clientPromise from "../../../../clients/mongo";
 import type { Session } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { PullOperator } from "mongodb";
 
 type ResponseData = {
   message?: string;
@@ -110,7 +111,11 @@ export default async function handler(
         .collection("users")
         .updateOne(
           { email: userEmail },
-          { $pull: { sharedWithUsers: shareWithEmail } }
+          {
+            $pull: {
+              sharedWithUsers: shareWithEmail,
+            } as PullOperator<Document>,
+          }
         );
 
       return res.status(200).json({ message: "Access removed successfully" });
