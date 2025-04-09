@@ -29,9 +29,6 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      # - name: Run tests
-      #   run: yarn test
-
       - name: Build and analyze bundle
         run: yarn analyze
 
