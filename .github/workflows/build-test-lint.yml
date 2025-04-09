@@ -14,7 +14,8 @@ jobs:
       image: node:18.19.0
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 0
       - name: Setup Node and dependencies
         uses: ./.github/actions/setup-node
 
@@ -22,9 +23,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .next/cache
-          key: nextjs-${{ runner.os }}-${{ github.sha }}
+          key: nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
           restore-keys: |
-            nextjs-${{ runner.os }}-
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
       - name: Lint
         run: yarn lint
@@ -43,6 +45,8 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: ".next/static/**/*.js"
+          build-script: "analyze"
+          use-check-if-exists: true
 
       - name: Report Status
         if: github.event_name == 'pull_request' && success()
