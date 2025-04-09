@@ -7,13 +7,13 @@ jobs:
     container:
       image: node:18.19.0
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Yarn
         run: yarn set version 1.22.1
       - name: Install dependencies
         run: yarn install
       - name: Cache Yarn Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .yarn/cache
           key: yarn-${{ hashFiles('**/yarn.lock') }}
