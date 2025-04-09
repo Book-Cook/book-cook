@@ -3,8 +3,9 @@ on: [push, pull_request]
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+    container:
       image: node:18.19.0
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Yarn
@@ -18,7 +19,17 @@ jobs:
           key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             yarn-
-      - name: Build
-        run: yarn build
+      - name: Build and analyze bundle
+        run: yarn analyze
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle-stats
+          path: .next/analyze
+      - name: Comment PR with bundle size changes
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: ".next/static/**/*.js"
       - name: Lint
         run: yarn lint
