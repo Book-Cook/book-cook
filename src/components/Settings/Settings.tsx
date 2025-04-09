@@ -14,12 +14,25 @@ import { AccountSection } from "./AccountSection/AccountSection";
 import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
 import { SettingsSearchContext } from "./context";
 import { sectionIds } from "./constants";
+import type { AccordionToggleEventHandler } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   page: {
     maxWidth: "800px",
     margin: "0 auto",
     padding: "12px",
+  },
+  title: {
+    fontSize: tokens.fontSizeBase600,
+    fontWeight: tokens.fontWeightSemibold,
+    lineHeight: tokens.lineHeightBase600,
+    color: tokens.colorNeutralForeground1,
+    margin: 0,
+  },
+  subtitle: {
+    fontSize: tokens.fontSizeBase200,
+    color: tokens.colorNeutralForeground3,
+    margin: "4px 0 0 0",
   },
   card: {
     ...shorthands.padding("24px"),
@@ -28,14 +41,7 @@ const useStyles = makeStyles({
     boxShadow: tokens.shadow8,
     display: "flex",
     flexDirection: "column",
-    gap: "32px",
-    justifyContent: "center",
-  },
-  accordionHeader: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1,
-    margin: 0,
+    gap: "24px",
   },
   noResults: {
     color: tokens.colorNeutralForeground3,
@@ -49,7 +55,10 @@ export const SettingsPage = () => {
   const styles = useStyles();
   const { data: session, status } = useSession();
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [visibleSections, setVisibleSections] = React.useState<string[]>([]);
+  const [visibleSectionIds, setVisibleSectionIds] = React.useState<Set<string>>(
+    new Set()
+  );
+  const [openItems, setOpenItems] = React.useState<string[]>([]); // Add state for open accordion items
 
   const handleSearchChange = (
     _event: React.FormEvent<HTMLElement>,
@@ -61,30 +70,49 @@ export const SettingsPage = () => {
   const settingsContextValue = React.useMemo(
     () => ({
       searchTerm,
-      registerVisibleSection: (sectionId: string) => {
-        setVisibleSections((prev) =>
-          prev.includes(sectionId) ? prev : [...prev, sectionId]
-        );
+      addVisibleSection: (id: string) => {
+        setVisibleSectionIds((prev) => new Set(prev).add(id));
       },
-      unregisterVisibleSection: (sectionId: string) => {
-        setVisibleSections((prev) => prev.filter((id) => id !== sectionId));
+      removeVisibleSection: (id: string) => {
+        setVisibleSectionIds((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(id);
+          return newSet;
+        });
       },
     }),
     [searchTerm]
   );
 
+  const handleToggle: AccordionToggleEventHandler<string> = (_event, data) => {
+    setOpenItems(data?.openItems);
+  };
+
+  const hasVisibleSections = !searchTerm || visibleSectionIds.size > 0;
+
+  React.useEffect(() => {
+    if (searchTerm) {
+      setOpenItems(sectionIds.filter((id) => visibleSectionIds.has(id)));
+    }
+  }, [searchTerm, visibleSectionIds]);
+
   if (status === "loading") {
     return <Spinner label="Loading settings..." />;
   }
+
   if (!session) {
     return <Unauthorized />;
   }
 
-  const hasVisibleSections = !searchTerm || visibleSections.length > 0;
-
   return (
     <div className={styles.page}>
       <div className={styles.card}>
+        <div>
+          <h1 className={styles.title}>Settings</h1>
+          <p className={styles.subtitle}>
+            Manage your account and application preferences
+          </p>
+        </div>
         <SearchBox
           placeholder="Search settings"
           onChange={handleSearchChange}
@@ -93,14 +121,17 @@ export const SettingsPage = () => {
         <SettingsSearchContext.Provider value={settingsContextValue}>
           <Accordion
             collapsible
+            openItems={openItems}
             defaultOpenItems={searchTerm ? sectionIds : []}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onToggle={handleToggle as any}
+            multiple
           >
             <AppearanceSection />
             <RecipePreferencesSection />
             <SharingSection />
             <AccountSection />
           </Accordion>
-
           {searchTerm && !hasVisibleSections && (
             <div className={styles.noResults}>No matching settings found</div>
           )}

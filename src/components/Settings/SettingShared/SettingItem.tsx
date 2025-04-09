@@ -1,6 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@griffel/react";
-import { tokens, Divider, mergeClasses } from "@fluentui/react-components";
+import { tokens, mergeClasses } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   setting: {
@@ -48,7 +48,6 @@ const useStyles = makeStyles({
 export interface SettingItemProps {
   label: string;
   description: string;
-  showDivider?: boolean;
   children: React.ReactNode;
   statusMessage?: {
     text: string;
@@ -60,7 +59,6 @@ export interface SettingItemProps {
 export const SettingItem: React.FC<SettingItemProps> = ({
   label,
   description,
-  showDivider = false,
   children,
   statusMessage,
   fullWidth = false,
@@ -68,38 +66,32 @@ export const SettingItem: React.FC<SettingItemProps> = ({
   const styles = useStyles();
 
   return (
-    <>
+    <div
+      className={mergeClasses(
+        styles.setting,
+        fullWidth && styles.settingFullWidth
+      )}
+    >
       <div
-        className={mergeClasses(
-          styles.setting,
-          fullWidth && styles.settingFullWidth
-        )}
+        className={mergeClasses(styles.info, fullWidth && styles.infoFullWidth)}
       >
-        <div
-          className={mergeClasses(
-            styles.info,
-            fullWidth && styles.infoFullWidth
-          )}
-        >
-          <div className={styles.label}>{label}</div>
-          <div className={styles.description}>{description}</div>
-          {statusMessage && (
-            <div
-              className={
-                statusMessage.type === "success"
-                  ? "successMessage"
-                  : "errorMessage"
-              }
-            >
-              {statusMessage.text}
-            </div>
-          )}
-        </div>
-        <div className={fullWidth ? styles.childrenFullWidth : styles.control}>
-          {children}
-        </div>
+        <div className={styles.label}>{label}</div>
+        <div className={styles.description}>{description}</div>
+        {statusMessage && (
+          <div
+            className={
+              statusMessage.type === "success"
+                ? "successMessage"
+                : "errorMessage"
+            }
+          >
+            {statusMessage.text}
+          </div>
+        )}
       </div>
-      {showDivider && <Divider />}
-    </>
+      <div className={fullWidth ? styles.childrenFullWidth : styles.control}>
+        {children}
+      </div>
+    </div>
   );
 };

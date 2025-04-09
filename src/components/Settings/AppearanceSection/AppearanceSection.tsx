@@ -5,8 +5,8 @@ import { PaintBrush24Regular } from "@fluentui/react-icons";
 import { useTheme } from "../../../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 import type { ThemePreference } from "../../../context";
-import { useSettingsSearch } from "../context";
 import { appearanceSectionId } from "../constants";
+import { useSettingsSection } from "../context";
 
 const useStyles = makeStyles({
   colorInput: {
@@ -16,13 +16,27 @@ const useStyles = makeStyles({
   },
 });
 
+const sectionKeywords = ["appearance", "look", "visual", "design"];
+const themeKeyWords = ["theme", "light", "dark", "system", "mode"];
+const colorKeyWords = ["primary", "color", "accent", "brand"];
+
 export const AppearanceSection: React.FC = () => {
   const styles = useStyles();
   const { themePreference, setThemePreference, primaryColor, setPrimaryColor } =
     useTheme();
-  const { searchTerm, registerVisibleSection, unregisterVisibleSection } =
-    useSettingsSearch();
-  const sectionId = "appearance";
+
+  const { isVisible, searchTerm } = useSettingsSection(appearanceSectionId, [
+    ...sectionKeywords,
+    ...themeKeyWords,
+    ...colorKeyWords,
+  ]);
+
+  const sectionMatches =
+    !searchTerm || sectionKeywords.some((k) => k.includes(searchTerm));
+  const themeItemMatches =
+    !searchTerm || themeKeyWords.some((k) => k.includes(searchTerm));
+  const colorItemMatches =
+    !searchTerm || colorKeyWords.some((k) => k.includes(searchTerm));
 
   const handlePrimaryColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrimaryColor(e.target.value);
@@ -35,43 +49,6 @@ export const AppearanceSection: React.FC = () => {
     setThemePreference(data.value as ThemePreference);
   };
 
-  // Check if this section or any of its items match the search term
-  const sectionMatches =
-    !searchTerm || "appearance theme color".includes(searchTerm);
-  const themeItemMatches =
-    !searchTerm || "theme light dark system".includes(searchTerm);
-  const colorItemMatches =
-    !searchTerm || "primary color accent".includes(searchTerm);
-
-  // Determine if section should be visible
-  const isVisible =
-    !searchTerm || sectionMatches || themeItemMatches || colorItemMatches;
-
-  // Register/unregister section visibility when it changes
-  React.useEffect(() => {
-    if (searchTerm) {
-      if (isVisible) {
-        registerVisibleSection(sectionId);
-      } else {
-        unregisterVisibleSection(sectionId);
-      }
-    }
-
-    // Cleanup on unmount
-    return () => {
-      if (searchTerm) {
-        unregisterVisibleSection(sectionId);
-      }
-    };
-  }, [
-    searchTerm,
-    isVisible,
-    registerVisibleSection,
-    unregisterVisibleSection,
-    sectionId,
-  ]);
-
-  // If there's a search term and nothing in this section matches, don't render
   if (searchTerm && !isVisible) {
     return null;
   }
@@ -82,11 +59,10 @@ export const AppearanceSection: React.FC = () => {
       itemValue={appearanceSectionId}
       icon={<PaintBrush24Regular />}
     >
-      {(!searchTerm || themeItemMatches) && (
+      {(!searchTerm || themeItemMatches || sectionMatches) && (
         <SettingItem
           label="Theme"
           description="Choose the application theme or follow system preference."
-          showDivider={!searchTerm || colorItemMatches}
         >
           <RadioGroup
             layout="horizontal"
@@ -99,7 +75,7 @@ export const AppearanceSection: React.FC = () => {
           </RadioGroup>
         </SettingItem>
       )}
-      {(!searchTerm || colorItemMatches) && (
+      {(!searchTerm || colorItemMatches || sectionMatches) && (
         <SettingItem
           label="Primary Color"
           description="Choose the main accent color used throughout the app."

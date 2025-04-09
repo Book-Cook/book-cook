@@ -2,15 +2,15 @@ import * as React from "react";
 
 interface SettingsSearchContextType {
   searchTerm: string;
-  registerVisibleSection: (sectionId: string) => void;
-  unregisterVisibleSection: (sectionId: string) => void;
+  addVisibleSection: (id: string) => void;
+  removeVisibleSection: (id: string) => void;
 }
 
 export const SettingsSearchContext =
   React.createContext<SettingsSearchContextType>({
     searchTerm: "",
-    registerVisibleSection: () => {},
-    unregisterVisibleSection: () => {},
+    addVisibleSection: () => {},
+    removeVisibleSection: () => {},
   });
 
 export const useSettingsSearch = () => React.useContext(SettingsSearchContext);

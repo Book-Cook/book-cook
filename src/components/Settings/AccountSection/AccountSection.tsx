@@ -11,6 +11,7 @@ import { signOut, useSession } from "next-auth/react";
 import { SettingsSection, SettingItem } from "../SettingShared";
 import { PersonAccounts24Regular } from "@fluentui/react-icons";
 import { accountSectionId } from "../constants";
+import { useSettingsSection } from "../context";
 
 const useStyles = makeStyles({
   profileInfo: {
@@ -56,12 +57,52 @@ const useStyles = makeStyles({
   },
 });
 
+// Define search keywords for each section
+const sectionKeywords = ["account", "profile", "user", "settings"];
+const profileKeywords = [
+  "profile information",
+  "info",
+  "user",
+  "name",
+  "email",
+  "avatar",
+];
+const signOutKeywords = ["sign out", "logout", "log out", "exit"];
+const recentsKeywords = [
+  "recently viewed",
+  "history",
+  "clear recently viewed",
+  "viewed recipes",
+];
+const dangerKeywords = ["delete", "remove", "account", "danger"];
+
 export const AccountSection: React.FC = () => {
   const styles = useStyles();
   const { data: session } = useSession();
   const user = session?.user;
 
   const [isClearing, setIsClearing] = React.useState(false);
+
+  // Add search functionality
+  const { isVisible, searchTerm } = useSettingsSection(accountSectionId, [
+    ...sectionKeywords,
+    ...profileKeywords,
+    ...signOutKeywords,
+    ...recentsKeywords,
+    ...dangerKeywords,
+  ]);
+
+  // Check if sections should be visible based on search
+  const sectionMatches =
+    !searchTerm || sectionKeywords.some((k) => k.includes(searchTerm));
+  const profileItemMatches =
+    !searchTerm || profileKeywords.some((k) => k.includes(searchTerm));
+  const signOutItemMatches =
+    !searchTerm || signOutKeywords.some((k) => k.includes(searchTerm));
+  const recentsItemMatches =
+    !searchTerm || recentsKeywords.some((k) => k.includes(searchTerm));
+  const dangerItemMatches =
+    !searchTerm || dangerKeywords.some((k) => k.includes(searchTerm));
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
@@ -93,66 +134,77 @@ export const AccountSection: React.FC = () => {
     }
   };
 
+  // Return null if searching and this section doesn't match
+  if (searchTerm && !isVisible) {
+    return null;
+  }
+
   return (
     <SettingsSection
       itemValue={accountSectionId}
       title="Account"
       icon={<PersonAccounts24Regular />}
     >
-      <SettingItem
-        label="Profile Information"
-        description="Your account details used for BookCook."
-        showDivider
-      >
-        {user && (
-          <div className={styles.profileInfo}>
-            <Avatar
-              name={user.name || undefined}
-              image={{ src: user.image || undefined }}
-              size={48}
-              color="colorful"
-            />
-            <div className={styles.userDetails}>
-              <Text weight="semibold">{user.name}</Text>
-              <Text className={styles.email}>{user.email}</Text>
+      {(!searchTerm || profileItemMatches || sectionMatches) && (
+        <SettingItem
+          label="Profile Information"
+          description="Your account details used for BookCook."
+        >
+          {user && (
+            <div className={styles.profileInfo}>
+              <Avatar
+                name={user.name || undefined}
+                image={{ src: user.image || undefined }}
+                size={48}
+                color="colorful"
+              />
+              <div className={styles.userDetails}>
+                <Text weight="semibold">{user.name}</Text>
+                <Text className={styles.email}>{user.email}</Text>
+              </div>
             </div>
-          </div>
-        )}
-      </SettingItem>
+          )}
+        </SettingItem>
+      )}
 
-      <SettingItem
-        label="Sign Out"
-        description="Log out of your BookCook account."
-        showDivider
-      >
-        <Button onClick={handleSignOut}>Sign Out</Button>
-      </SettingItem>
+      {(!searchTerm || signOutItemMatches || sectionMatches) && (
+        <SettingItem
+          label="Sign Out"
+          description="Log out of your BookCook account."
+        >
+          <Button onClick={handleSignOut}>Sign Out</Button>
+        </SettingItem>
+      )}
 
-      <SettingItem
-        label="Clear Recently Viewed"
-        description="Remove all recipes from your recently viewed list."
-      >
-        <Button onClick={clearRecents} disabled={isClearing}>
-          {isClearing ? "Clearing..." : "Clear Recently Viewed"}
-        </Button>
-      </SettingItem>
-
-      <div className={styles.dangerZone}>
-        <Text className={styles.dangerTitle}>Danger Zone</Text>
-        <Text className={styles.dangerDescription}>
-          These actions are destructive and cannot be reversed. Please proceed
-          with caution.
-        </Text>
-        <Divider />
-        <div style={{ marginTop: "16px" }}>
-          <Button
-            className={styles.dangerButton}
-            onClick={() => alert("This feature is not yet implemented")}
-          >
-            Delete Account
+      {(!searchTerm || recentsItemMatches || sectionMatches) && (
+        <SettingItem
+          label="Clear Recently Viewed"
+          description="Remove all recipes from your recently viewed list."
+        >
+          <Button onClick={clearRecents} disabled={isClearing}>
+            {isClearing ? "Clearing..." : "Clear Recently Viewed"}
           </Button>
+        </SettingItem>
+      )}
+
+      {(!searchTerm || dangerItemMatches || sectionMatches) && (
+        <div className={styles.dangerZone}>
+          <Text className={styles.dangerTitle}>Danger Zone</Text>
+          <Text className={styles.dangerDescription}>
+            These actions are destructive and cannot be reversed. Please proceed
+            with caution.
+          </Text>
+          <Divider />
+          <div style={{ marginTop: "16px" }}>
+            <Button
+              className={styles.dangerButton}
+              onClick={() => alert("This feature is not yet implemented")}
+            >
+              Delete Account
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </SettingsSection>
   );
 };

@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionHeader,
+  Divider,
 } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
@@ -31,6 +32,11 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground1,
     margin: 0,
   },
+  settingItem: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  },
 });
 
 export interface SettingsSectionProps {
@@ -49,6 +55,16 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
 }) => {
   const styles = useStyles();
 
+  // Process children to add dividers between them
+  const childrenWithDividers = React.Children.toArray(children)
+    .filter(Boolean)
+    .flatMap((child, index, array) => {
+      if (index === array.length - 1) {
+        return [child];
+      }
+      return [child, <Divider key={`divider-${index}`} />];
+    });
+
   return (
     <AccordionItem value={itemValue}>
       <AccordionHeader
@@ -59,7 +75,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
         {title}
       </AccordionHeader>
       <AccordionPanel>
-        {<section className={styles.section}>{children}</section>}
+        <section className={styles.section}>{childrenWithDividers}</section>
       </AccordionPanel>
     </AccordionItem>
   );

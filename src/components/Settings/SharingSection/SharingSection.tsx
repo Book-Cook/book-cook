@@ -26,6 +26,7 @@ import {
   useSharedUsers,
 } from "../../../clientToServer";
 import { sharingSectionId } from "../constants";
+import { useSettingsSection } from "../context";
 
 const useStyles = makeStyles({
   shareContainer: {
@@ -61,17 +62,37 @@ const useStyles = makeStyles({
   },
 });
 
+// Define search keywords for each section
+const sectionKeywords = ["sharing", "share", "collaborate", "access"];
+const shareUserKeywords = [
+  "share with user",
+  "share with another user",
+  "add user",
+  "invite",
+  "email",
+  "collaborate",
+];
+
 export const SharingSection: React.FC = () => {
   const styles = useStyles();
   const [shareEmail, setShareEmail] = React.useState("");
 
-  // Toast setup
   const toasterId = useId("sharing-toaster");
   const { dispatchToast } = useToastController(toasterId);
 
   const { data: sharedUsers = [], isLoading } = useSharedUsers();
   const shareRecipeMutation = useShareWithUser();
   const removeAccessMutation = useDeleteSharedUser();
+
+  const { isVisible, searchTerm } = useSettingsSection(sharingSectionId, [
+    ...sectionKeywords,
+    ...shareUserKeywords,
+  ]);
+
+  const sectionMatches =
+    !searchTerm || sectionKeywords.some((k) => k.includes(searchTerm));
+  const shareUserItemMatches =
+    !searchTerm || shareUserKeywords.some((k) => k.includes(searchTerm));
 
   const handleShareRecipeBook = async () => {
     if (!shareEmail) return;
@@ -138,6 +159,11 @@ export const SharingSection: React.FC = () => {
   const isSharing =
     shareRecipeMutation.isPending || removeAccessMutation.isPending;
 
+  // Return null if searching and this section doesn't match
+  if (searchTerm && !isVisible) {
+    return null;
+  }
+
   return (
     <>
       <Toaster toasterId={toasterId} />
@@ -146,61 +172,62 @@ export const SharingSection: React.FC = () => {
         itemValue={sharingSectionId}
         icon={<PersonAdd24Regular />}
       >
-        <SettingItem
-          label="Share with Another User"
-          description="Enter an email address to share your recipe book with another user."
-          fullWidth
-        >
-          <div className={styles.shareContainer}>
-            <Input
-              value={shareEmail}
-              onChange={(e) => setShareEmail(e.target.value)}
-              placeholder="user@example.com"
-              type="email"
-              disabled={isSharing}
-              style={{ flexGrow: 1 }}
-            />
-            <Button
-              icon={<PersonAddRegular />}
-              onClick={handleShareRecipeBook}
-              disabled={!shareEmail || isSharing}
-            >
-              {isSharing ? <Spinner size="tiny" /> : "Share"}
-            </Button>
-          </div>
-
-          <div className={styles.usersList}>
-            {isLoading ? (
-              <Spinner size="tiny" label="Loading shared users..." />
-            ) : sharedUsers.length === 0 ? (
-              <div className={styles.emptyState}>
-                {`You haven't shared your recipes with anyone yet.`}
-              </div>
-            ) : (
-              sharedUsers.map((email) => (
-                <div key={email} className={styles.userItem}>
-                  <div className={styles.userInfo}>
-                    <Avatar
-                      name={email.split("@")[0]}
-                      size={24}
-                      color="colorful"
-                    />
-                    <Text>{email}</Text>
-                  </div>
-                  <Button
-                    icon={<PersonDeleteRegular />}
-                    appearance="subtle"
-                    size="small"
-                    onClick={() => handleRemoveAccess(email)}
-                    title="Remove access"
-                    aria-label={`Remove ${email}'s access`}
-                    disabled={isSharing}
-                  />
+        {(!searchTerm || shareUserItemMatches || sectionMatches) && (
+          <SettingItem
+            label="Share with Another User"
+            description="Enter an email address to share your recipe book with another user."
+            fullWidth
+          >
+            <div className={styles.shareContainer}>
+              <Input
+                value={shareEmail}
+                onChange={(e) => setShareEmail(e.target.value)}
+                placeholder="user@example.com"
+                type="email"
+                disabled={isSharing}
+                style={{ flexGrow: 1 }}
+              />
+              <Button
+                icon={<PersonAddRegular />}
+                onClick={handleShareRecipeBook}
+                disabled={!shareEmail || isSharing}
+              >
+                {isSharing ? <Spinner size="tiny" /> : "Share"}
+              </Button>
+            </div>
+            <div className={styles.usersList}>
+              {isLoading ? (
+                <Spinner size="tiny" label="Loading shared users..." />
+              ) : sharedUsers.length === 0 ? (
+                <div className={styles.emptyState}>
+                  {`You haven't shared your recipes with anyone yet.`}
                 </div>
-              ))
-            )}
-          </div>
-        </SettingItem>
+              ) : (
+                sharedUsers.map((email) => (
+                  <div key={email} className={styles.userItem}>
+                    <div className={styles.userInfo}>
+                      <Avatar
+                        name={email.split("@")[0]}
+                        size={24}
+                        color="colorful"
+                      />
+                      <Text>{email}</Text>
+                    </div>
+                    <Button
+                      icon={<PersonDeleteRegular />}
+                      appearance="subtle"
+                      size="small"
+                      onClick={() => handleRemoveAccess(email)}
+                      title="Remove access"
+                      aria-label={`Remove ${email}'s access`}
+                      disabled={isSharing}
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+          </SettingItem>
+        )}
       </SettingsSection>
     </>
   );
