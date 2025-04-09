@@ -2,37 +2,62 @@ name: Build and Test
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**.md"
   pull_request:
     branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     container:
       image: node:18.19.0
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Yarn
-        run: yarn set version 1.22.1
-      - name: Install dependencies
-        run: yarn install
-      - name: Cache Yarn Cache
+
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Cache Next.js build cache
         uses: actions/cache@v3
         with:
-          path: .yarn/cache
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            yarn-
+            nextjs-${{ runner.os }}-
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Run tests
+        run: yarn test
+
       - name: Build and analyze bundle
         run: yarn analyze
+
       - name: Upload bundle stats
         uses: actions/upload-artifact@v4
         with:
           name: bundle-stats
           path: .next/analyze
+
       - name: Comment PR with bundle size changes
         uses: preactjs/compressed-size-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: ".next/static/**/*.js"
-      - name: Lint
-        run: yarn lint
+
+      - name: Report Status
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue, repo } = context;
+            const run_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Build completed successfully! [View build details](${run_url})`
+            });

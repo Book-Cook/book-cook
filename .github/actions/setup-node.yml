@@ -1,24 +1,29 @@
-name: Setup and Install Dependencies
+name: "Setup Node.js and Install Dependencies"
+description: "Sets up Node.js, configures Yarn, and installs dependencies"
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+runs:
+  using: "composite"
+  steps:
+    - name: Git Safe Directory
+      run: git config --global --add safe.directory /__w/book-cook/book-cook
+      shell: bash
 
-jobs:
-  setup:
-    runs-on: ubuntu-latest
+    - name: Setup Node.js for Performance
+      run: echo "NODE_OPTIONS=--max-old-space-size=4096" >> $GITHUB_ENV
+      shell: bash
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Set up Yarn
+      run: yarn set version 1.22.1
+      shell: bash
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14.x
-          cache: "yarn"
+    - name: Install dependencies
+      run: yarn install
+      shell: bash
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+    - name: Cache Yarn Cache
+      uses: actions/cache@v3
+      with:
+        path: .yarn/cache
+        key: yarn-${{ github.sha }}
+        restore-keys: |
+          yarn-
