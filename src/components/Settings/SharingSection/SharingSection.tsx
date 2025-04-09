@@ -7,10 +7,25 @@ import {
   Text,
   Spinner,
   Avatar,
+  useToastController,
+  Toast,
+  ToastTitle,
+  ToastBody,
+  Toaster,
+  useId,
 } from "@fluentui/react-components";
-import { PersonAddRegular, PersonDeleteRegular } from "@fluentui/react-icons";
+import {
+  PersonAddRegular,
+  PersonAdd24Regular,
+  PersonDeleteRegular,
+} from "@fluentui/react-icons";
 import { SettingsSection, SettingItem } from "../SettingShared";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useShareWithUser,
+  useDeleteSharedUser,
+  useSharedUsers,
+} from "../../../clientToServer";
+import { sharingSectionId } from "../constants";
 
 const useStyles = makeStyles({
   shareContainer: {
@@ -44,177 +59,149 @@ const useStyles = makeStyles({
     fontStyle: "italic",
     ...shorthands.padding("8px", "0"),
   },
-  statusMessage: {
-    marginTop: "8px",
-  },
-  success: {
-    color: tokens.colorPaletteGreenForeground1,
-  },
-  error: {
-    color: tokens.colorPaletteRedForeground1,
-  },
 });
-
-// Mock API calls - replace with your actual fetch calls
-const fetchSharedUsers = async () => {
-  const response = await fetch("/api/recipes/share");
-  if (!response.ok) {
-    throw new Error("Failed to load shared users");
-  }
-  const data = await response.json();
-  return data.sharedWithUsers || [];
-};
-
-const shareWithUser = async (email: string) => {
-  const response = await fetch("/api/recipes/share", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ shareWithEmail: email }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to share");
-  }
-  return await response.json();
-};
-
-const removeUserAccess = async (email: string) => {
-  const response = await fetch("/api/recipes/share", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ shareWithEmail: email }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to remove access");
-  }
-  return await response.json();
-};
 
 export const SharingSection: React.FC = () => {
   const styles = useStyles();
-  const [email, setEmail] = React.useState("");
-  const [statusMessage, setStatusMessage] = React.useState<{
-    text: string;
-    type: "success" | "error";
-  } | null>(null);
-  const queryClient = useQueryClient();
+  const [shareEmail, setShareEmail] = React.useState("");
 
-  const { data: sharedUsers = [], isLoading } = useQuery({
-    queryKey: ["sharedUsers"],
-    queryFn: fetchSharedUsers,
-  });
+  // Toast setup
+  const toasterId = useId("sharing-toaster");
+  const { dispatchToast } = useToastController(toasterId);
 
-  const shareMutation = useMutation({
-    mutationFn: shareWithUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
-      setEmail("");
-      setStatusMessage({
-        text: "Successfully shared recipe book",
-        type: "success",
-      });
-      setTimeout(() => setStatusMessage(null), 3000);
-    },
-    onError: (error: Error) => {
-      setStatusMessage({
-        text: error.message,
-        type: "error",
-      });
-    },
-  });
+  const { data: sharedUsers = [], isLoading } = useSharedUsers();
+  const shareRecipeMutation = useShareWithUser();
+  const removeAccessMutation = useDeleteSharedUser();
 
-  const removeMutation = useMutation({
-    mutationFn: removeUserAccess,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
-      setStatusMessage({
-        text: "Access removed successfully",
-        type: "success",
-      });
-      setTimeout(() => setStatusMessage(null), 3000);
-    },
-    onError: (error: Error) => {
-      setStatusMessage({
-        text: error.message,
-        type: "error",
-      });
-    },
-  });
+  const handleShareRecipeBook = async () => {
+    if (!shareEmail) return;
 
-  const handleShare = () => {
-    if (email.trim()) {
-      shareMutation.mutate(email.trim());
+    try {
+      await shareRecipeMutation.mutateAsync(shareEmail);
+
+      // Show success toast
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Success</ToastTitle>
+          <ToastBody>Book cook shared successfully!</ToastBody>
+        </Toast>,
+        { position: "bottom-end", intent: "success", timeout: 1000 }
+      );
+
+      setShareEmail("");
+    } catch (error) {
+      // Show error toast
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Error</ToastTitle>
+          <ToastBody>
+            {error instanceof Error
+              ? error.message
+              : "Failed to share your book cook"}
+          </ToastBody>
+        </Toast>,
+        { position: "bottom-end", intent: "error", timeout: 2000 }
+      );
     }
   };
 
-  const handleRemoveAccess = (emailToRemove: string) => {
-    if (confirm(`Remove access for ${emailToRemove}?`)) {
-      removeMutation.mutate(emailToRemove);
+  const handleRemoveAccess = async (email: string) => {
+    if (!confirm(`Remove access for ${email}?`)) {
+      return;
+    }
+
+    try {
+      await removeAccessMutation.mutateAsync(email);
+
+      // Show success toast for removing access
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Access Removed</ToastTitle>
+          <ToastBody>{`Access for ${email} has been removed.`}</ToastBody>
+        </Toast>,
+        { position: "bottom-end", intent: "success", timeout: 1000 }
+      );
+    } catch (error) {
+      // Show error toast
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Error</ToastTitle>
+          <ToastBody>
+            {error instanceof Error ? error.message : "Failed to remove access"}
+          </ToastBody>
+        </Toast>,
+        { position: "bottom-end", intent: "error", timeout: 2000 }
+      );
     }
   };
 
-  const isPending = shareMutation.isPending || removeMutation.isPending;
+  const isSharing =
+    shareRecipeMutation.isPending || removeAccessMutation.isPending;
 
   return (
-    <SettingsSection title="Sharing" itemValue="sharing">
-      <SettingItem
-        label="Share Recipe Book"
-        description="Share your entire recipe collection with others by email."
-        statusMessage={statusMessage}
-        fullWidth
+    <>
+      <Toaster toasterId={toasterId} />
+      <SettingsSection
+        title="Sharing"
+        itemValue={sharingSectionId}
+        icon={<PersonAdd24Regular />}
       >
-        <div className={styles.shareContainer}>
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email address"
-            type="email"
-            disabled={isPending}
-          />
-          <Button
-            icon={<PersonAddRegular />}
-            onClick={handleShare}
-            disabled={!email.trim() || isPending}
-          >
-            Share
-          </Button>
-        </div>
+        <SettingItem
+          label="Share with Another User"
+          description="Enter an email address to share your recipe book with another user."
+          fullWidth
+        >
+          <div className={styles.shareContainer}>
+            <Input
+              value={shareEmail}
+              onChange={(e) => setShareEmail(e.target.value)}
+              placeholder="user@example.com"
+              type="email"
+              disabled={isSharing}
+              style={{ flexGrow: 1 }}
+            />
+            <Button
+              icon={<PersonAddRegular />}
+              onClick={handleShareRecipeBook}
+              disabled={!shareEmail || isSharing}
+            >
+              {isSharing ? <Spinner size="tiny" /> : "Share"}
+            </Button>
+          </div>
 
-        {isLoading ? (
-          <Spinner size="tiny" label="Loading shared users..." />
-        ) : sharedUsers.length === 0 ? (
-          <div className={styles.emptyState}>
-            You haven't shared your recipes with anyone yet.
-          </div>
-        ) : (
           <div className={styles.usersList}>
-            {sharedUsers.map((userEmail: string) => (
-              <div key={userEmail} className={styles.userItem}>
-                <div className={styles.userInfo}>
-                  <Avatar
-                    name={userEmail.split("@")[0]}
-                    size={24}
-                    color="colorful"
-                  />
-                  <Text>{userEmail}</Text>
-                </div>
-                <Button
-                  icon={<PersonDeleteRegular />}
-                  appearance="subtle"
-                  size="small"
-                  onClick={() => handleRemoveAccess(userEmail)}
-                  title="Remove access"
-                  aria-label={`Remove ${userEmail}'s access`}
-                  disabled={isPending}
-                />
+            {isLoading ? (
+              <Spinner size="tiny" label="Loading shared users..." />
+            ) : sharedUsers.length === 0 ? (
+              <div className={styles.emptyState}>
+                {`You haven't shared your recipes with anyone yet.`}
               </div>
-            ))}
+            ) : (
+              sharedUsers.map((email) => (
+                <div key={email} className={styles.userItem}>
+                  <div className={styles.userInfo}>
+                    <Avatar
+                      name={email.split("@")[0]}
+                      size={24}
+                      color="colorful"
+                    />
+                    <Text>{email}</Text>
+                  </div>
+                  <Button
+                    icon={<PersonDeleteRegular />}
+                    appearance="subtle"
+                    size="small"
+                    onClick={() => handleRemoveAccess(email)}
+                    title="Remove access"
+                    aria-label={`Remove ${email}'s access`}
+                    disabled={isSharing}
+                  />
+                </div>
+              ))
+            )}
           </div>
-        )}
-      </SettingItem>
-    </SettingsSection>
+        </SettingItem>
+      </SettingsSection>
+    </>
   );
 };

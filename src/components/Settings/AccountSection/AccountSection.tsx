@@ -9,6 +9,8 @@ import {
 } from "@fluentui/react-components";
 import { signOut, useSession } from "next-auth/react";
 import { SettingsSection, SettingItem } from "../SettingShared";
+import { PersonAccounts24Regular } from "@fluentui/react-icons";
+import { accountSectionId } from "../constants";
 
 const useStyles = makeStyles({
   profileInfo: {
@@ -92,7 +94,11 @@ export const AccountSection: React.FC = () => {
   };
 
   return (
-    <SettingsSection itemValue="account" title="Account">
+    <SettingsSection
+      itemValue={accountSectionId}
+      title="Account"
+      icon={<PersonAccounts24Regular />}
+    >
       <SettingItem
         label="Profile Information"
         description="Your account details used for BookCook."

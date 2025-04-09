@@ -12,6 +12,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "24px",
+    padding: "24px 0px",
   },
   title: {
     fontSize: tokens.fontSizeBase600,
@@ -36,18 +37,25 @@ export interface SettingsSectionProps {
   title: string;
   children: React.ReactNode;
   itemValue: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
 }
 
 export const SettingsSection: React.FC<SettingsSectionProps> = ({
   children,
   itemValue,
   title,
+  icon,
 }) => {
   const styles = useStyles();
 
   return (
     <AccordionItem value={itemValue}>
-      <AccordionHeader className={styles.accordionHeader}>
+      <AccordionHeader
+        size="large"
+        icon={icon}
+        className={styles.accordionHeader}
+      >
         {title}
       </AccordionHeader>
       <AccordionPanel>

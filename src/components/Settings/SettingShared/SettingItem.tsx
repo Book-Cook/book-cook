@@ -1,6 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@griffel/react";
-import { tokens, Divider } from "@fluentui/react-components";
+import { tokens, Divider, mergeClasses } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   setting: {
@@ -10,11 +10,22 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     gap: "16px",
   },
+  settingFullWidth: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  childrenFullWidth: {
+    width: "100%",
+  },
   info: {
     flex: "1 1 300px",
     display: "flex",
     flexDirection: "column",
     gap: "4px",
+  },
+  infoFullWidth: {
+    flex: "1 1 auto",
   },
   label: {
     fontSize: tokens.fontSizeBase300,
@@ -59,12 +70,17 @@ export const SettingItem: React.FC<SettingItemProps> = ({
   return (
     <>
       <div
-        className={styles.setting}
-        style={
-          fullWidth ? { flexDirection: "column", alignItems: "flex-start" } : {}
-        }
+        className={mergeClasses(
+          styles.setting,
+          fullWidth && styles.settingFullWidth
+        )}
       >
-        <div className={styles.info}>
+        <div
+          className={mergeClasses(
+            styles.info,
+            fullWidth && styles.infoFullWidth
+          )}
+        >
           <div className={styles.label}>{label}</div>
           <div className={styles.description}>{description}</div>
           {statusMessage && (
@@ -79,7 +95,7 @@ export const SettingItem: React.FC<SettingItemProps> = ({
             </div>
           )}
         </div>
-        <div className={fullWidth ? { width: "100%" } : styles.control}>
+        <div className={fullWidth ? styles.childrenFullWidth : styles.control}>
           {children}
         </div>
       </div>
