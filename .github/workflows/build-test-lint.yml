@@ -61,11 +61,10 @@ jobs:
           name: bundle-stats
           path: .next/analyze
 
-      - name: Comment PR with bundle size changes
-        uses: preactjs/compressed-size-action@v2
-        if: github.event_name == 'pull_request'
+      - name: Upload bundle stats to RelativeCI
+        uses: relative-ci/agent-action@v2
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          pattern: ".next/static/**/*.js"
-          use-check: true
-          build-script: "analyze"
+          key: ${{ secrets.RELATIVE_CI_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webpackStatsFile: .next/analyze/stats.json
