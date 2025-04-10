@@ -3,6 +3,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   disable: process.env.NODE_ENV === "development",
   register: true,
   skipWaiting: true,
+  buildExcludes: [/middleware-manifest\.json$/],
   // Better caching strategy
   runtimeCaching: [
     {
@@ -64,6 +65,33 @@ const nextConfig = {
         hostname: "therecipecritic.com",
       },
     ],
+  },
+
+  webpack: (config, options) => {
+    const { dev, isServer } = options;
+
+    if (!dev && !isServer) {
+      const { StatsWriterPlugin } = require("webpack-stats-plugin");
+      const filterWebpackStats = require("@bundle-stats/plugin-webpack-filter");
+
+      config.plugins.push(
+        new StatsWriterPlugin({
+          filename: "../.next/analyze/webpack-stats.json",
+          stats: {
+            assets: true,
+            chunks: true,
+            modules: true,
+            excludeAssets: [/webpack-stats.json/],
+            excludeModules: [/custom-module.js/],
+          },
+          transform: (webpackStats) => {
+            const filteredSource = filterWebpackStats(webpackStats);
+            return JSON.stringify(filteredSource);
+          },
+        })
+      );
+    }
+    return config;
   },
 };
 
