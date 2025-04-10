@@ -11,12 +11,12 @@
     "@ai-sdk/provider-utils" "2.2.6"
 
 "@ai-sdk/openai@^1.3.7":
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-1.3.7.tgz#a848b65af86d49158c83a56b64d409cce62deb1d"
-  integrity sha512-JjjEulfMgH5kGyCWKdyhxNLSIs2qBkUr6LtzNJtYlV23e5RbOHA5qgbbxn6IbGxeZs4xpPhpGmOnUVzh7GZwcg==
+  version "1.3.10"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-1.3.10.tgz#892286c4336dd3aa26a61f706438ac60f47caf7e"
+  integrity sha512-XO0wF2lmAMWCYjkM5bLpWTKoXet61fBiIimTi+blqEGiLUjAvivt/1zZL1Lzhrv9+p19IC1rn9EWZI1dCelV8w==
   dependencies:
-    "@ai-sdk/provider" "1.1.0"
-    "@ai-sdk/provider-utils" "2.2.4"
+    "@ai-sdk/provider" "1.1.2"
+    "@ai-sdk/provider-utils" "2.2.6"
 
 "@ai-sdk/provider-utils@2.2.4":
   version "2.2.4"
