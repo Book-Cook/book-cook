@@ -36,11 +36,34 @@ module.exports = {
     },
   },
   rules: {
+    curly: "warn",
+    eqeqeq: ["error", "always", { null: "ignore" }],
+    "no-debugger": "error",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
+    "prefer-const": "warn",
+    "no-return-await": "warn",
+    "prefer-template": "warn",
+    "object-shorthand": "warn",
+    "no-unused-expressions": "error",
+    "no-implicit-coercion": "warn",
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: ["node_modules/*"],
+      },
+    ],
     // React
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/no-danger": "warn",
+    "react/self-closing-comp": "warn",
+    "react/jsx-fragments": ["error"],
+    "react-hooks/exhaustive-deps": "warn",
+    "react/no-deprecated": "warn",
 
     // TypeScript
+    "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -51,8 +74,67 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "warn",
+    "@typescript-eslint/prefer-optional-chain": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        prefer: "type-imports",
+        disallowTypeAnnotations: true,
+        fixStyle: "separate-type-imports",
+      },
+    ],
 
     // Import Resolution
+    "import/newline-after-import": [
+      "warn",
+      { exactCount: true, considerComments: true },
+    ],
+    "import/no-duplicates": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/order": [
+      "warn",
+      {
+        groups: ["external", "internal"],
+        pathGroups: [
+          {
+            pattern: "react",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@fluentui/**",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@griffel/react/**",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@/**",
+            group: "internal",
+            position: "after",
+          },
+          {
+            pattern: "./**",
+            group: "internal",
+            position: "after",
+          },
+          {
+            pattern: "../**",
+            group: "internal",
+            position: "after",
+          },
+        ],
+        distinctGroup: false,
+        pathGroupsExcludedImportTypes: ["react"],
+        "newlines-between": "always",
+        alphabetize: { order: "asc", caseInsensitive: true },
+      },
+    ],
     "import/no-unresolved": [
       "error",
       {

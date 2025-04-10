@@ -53,7 +53,7 @@ jobs:
         run: yarn lint
 
       - name: Build and analyze bundle
-        run: yarn analyze
+        run: yarn build
 
       - name: Upload bundle stats to RelativeCI
         uses: relative-ci/agent-action@v2

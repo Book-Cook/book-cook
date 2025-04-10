@@ -1,5 +1,4 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
 import {
   Button,
   tokens,
@@ -7,11 +6,13 @@ import {
   Avatar,
   Divider,
 } from "@fluentui/react-components";
-import { signOut, useSession } from "next-auth/react";
-import { SettingsSection, SettingItem } from "../SettingShared";
 import { PersonAccounts24Regular } from "@fluentui/react-icons";
+import { makeStyles, shorthands } from "@griffel/react";
+import { signOut, useSession } from "next-auth/react";
+
 import { accountSectionId } from "../constants";
 import { useSettingsSection } from "../context";
+import { SettingsSection, SettingItem } from "../SettingShared";
 
 const useStyles = makeStyles({
   profileInfo: {
@@ -104,8 +105,8 @@ export const AccountSection: React.FC = () => {
   const dangerItemMatches =
     !searchTerm || dangerKeywords.some((k) => k.includes(searchTerm));
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" });
   };
 
   const clearRecents = async () => {
@@ -153,8 +154,8 @@ export const AccountSection: React.FC = () => {
           {user && (
             <div className={styles.profileInfo}>
               <Avatar
-                name={user.name || undefined}
-                image={{ src: user.image || undefined }}
+                name={user.name ?? undefined}
+                image={{ src: user.image ?? undefined }}
                 size={48}
                 color="colorful"
               />

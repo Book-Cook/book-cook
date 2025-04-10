@@ -1,11 +1,12 @@
 // src/theme.ts
-import chroma from "chroma-js";
+import type {
+  BrandVariants,
+  Theme} from "@fluentui/react-components";
 import {
   createDarkTheme,
-  createLightTheme,
-  BrandVariants,
-  Theme,
+  createLightTheme
 } from "@fluentui/react-components";
+import chroma from "chroma-js";
 
 export type ThemeMode = "light" | "dark";
 

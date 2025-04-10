@@ -1,16 +1,18 @@
 import * as React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { useRecipe } from "../../../context";
-import { useStyles } from "./RecipeImage.styles";
 import { Text } from "@fluentui/react-components";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+import { useStyles } from "./RecipeImage.styles";
+
+import { useRecipe } from "../../../context";
 
 export const RecipeImage = () => {
   const styles = useStyles();
   const { recipe } = useRecipe();
 
   const defaultEmoji = "🍽️";
-  const displayEmoji = recipe?.emoji || defaultEmoji;
+  const displayEmoji = recipe?.emoji ?? defaultEmoji;
 
   return recipe?.imageURL ? (
     <motion.div

@@ -1,14 +1,16 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
 import { tokens } from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@griffel/react";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+
 import { RecipesCarousel } from "../RecipeCarousel";
+
 import {
   fetchRecentlyViewed,
   fetchRecipeCollections,
 } from "../../clientToServer";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { Recipe } from "../../clientToServer/types";
+import type { Recipe } from "../../clientToServer/types";
 
 const useStyles = makeStyles({
   container: {
@@ -59,13 +61,13 @@ const HomePage = () => {
   const { data: recentlyViewed } = useQuery<Recipe[]>({
     queryKey: ["recentlyViewed", session?.user?.email],
     queryFn: () => fetchRecentlyViewed(),
-    enabled: !!session,
+    enabled: Boolean(session),
   });
 
   const { data: recipeCollections } = useQuery<Recipe[]>({
     queryKey: ["recipeCollections", session?.user?.email],
     queryFn: () => fetchRecipeCollections(),
-    enabled: !!session,
+    enabled: Boolean(session),
   });
 
   const recentlyViewedRecipes =

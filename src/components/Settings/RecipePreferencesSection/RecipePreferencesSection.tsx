@@ -1,16 +1,18 @@
 import * as React from "react";
-import { makeStyles } from "@griffel/react";
+import type {
+  SelectionEvents} from "@fluentui/react-components";
 import {
   Dropdown,
   Option,
   Switch,
-  Slider,
-  SelectionEvents,
+  Slider
 } from "@fluentui/react-components";
 import { Food24Regular } from "@fluentui/react-icons";
-import { SettingsSection, SettingItem } from "../SettingShared";
+import { makeStyles } from "@griffel/react";
+
 import { recipePreferencesSectionId } from "../constants";
 import { useSettingsSection } from "../context";
+import { SettingsSection, SettingItem } from "../SettingShared";
 
 const useStyles = makeStyles({
   dropdown: {

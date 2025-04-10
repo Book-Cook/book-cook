@@ -3,7 +3,11 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   disable: process.env.NODE_ENV === "development",
   register: true,
   skipWaiting: true,
-  buildExcludes: [/middleware-manifest\.json$/],
+  buildExcludes: [
+    /middleware-manifest\.json$/,
+    /\.map$/,
+    /react-loadable-manifest\.json$/,
+  ],
   // Better caching strategy
   runtimeCaching: [
     {
@@ -50,6 +54,23 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    optimizePackageImports: [
+      "@fluentui/react-components",
+      "lodash",
+      "node-emoji",
+      "grapheme-splitter",
+      "framer-motion",
+      "dompurify",
+      "chroma-js",
+      "@tiptap/extension-link",
+      "@tiptap/extension-placeholder",
+      "@tiptap/extension-underline",
+      "@tiptap/pm",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+    ],
+  },
   images: {
     remotePatterns: [
       {
@@ -78,10 +99,11 @@ const nextConfig = {
         new StatsWriterPlugin({
           filename: "../.next/analyze/webpack-stats.json",
           stats: {
+            preset: "detailed",
             assets: true,
             chunks: true,
             modules: true,
-            excludeAssets: [/webpack-stats.json/],
+            excludeAssets: [/webpack-stats.json/, /\.map$/],
             excludeModules: [/custom-module.js/],
           },
           transform: (webpackStats) => {

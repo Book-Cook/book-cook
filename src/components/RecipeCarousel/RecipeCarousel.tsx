@@ -1,5 +1,4 @@
 import * as React from "react";
-import { mergeClasses } from "@griffel/react";
 import {
   Title3,
   Text,
@@ -9,12 +8,14 @@ import {
   SkeletonItem,
 } from "@fluentui/react-components";
 import { ArrowLeftRegular, ArrowRightRegular } from "@fluentui/react-icons";
-import { RecipeCard } from "../RecipeCard/RecipeCard";
+import { mergeClasses } from "@griffel/react";
+import type { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
-import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
-import { RecipesCarouselProps } from "./RecipeCarousel.types";
 import { useRouter } from "next/router";
+
+import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
+import type { RecipesCarouselProps } from "./RecipeCarousel.types";
+import { RecipeCard } from "../RecipeCard/RecipeCard";
 
 const emblaOptions: EmblaOptionsType = {
   align: "start",
@@ -43,7 +44,9 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   );
 
   const updateState = React.useCallback(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) {
+      return;
+    }
     setScrollSnaps(emblaApi.scrollSnapList());
     setSelectedIndex(emblaApi.selectedScrollSnap());
     setCanScrollPrev(emblaApi.canScrollPrev());
@@ -51,7 +54,9 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   }, [emblaApi]);
 
   React.useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) {
+      return;
+    }
     updateState();
     emblaApi.on("select", updateState);
     emblaApi.on("reInit", updateState);
@@ -92,8 +97,8 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
   } = useCarouselControls(emblaApi);
 
   const handleCardClick = React.useCallback(
-    (id: string) => {
-      router.push(`/recipes/${id}`);
+    async (id: string) => {
+      await router.push(`/recipes/${id}`);
     },
     [router]
   );

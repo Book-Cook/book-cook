@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link as FluentLink, mergeClasses } from "@fluentui/react-components";
 import Link from "next/link";
+
 import { useNavigationStyles } from "./NavigationLInks.styles";
 import type { NavigationLinksProps } from "./NavigationLinks.types";
 import { navLinks } from "../constants";

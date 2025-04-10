@@ -12,7 +12,7 @@ export async function deleteSharedUser(
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to remove access");
+    throw new Error(data.message ?? "Failed to remove access");
   }
 
   return data;

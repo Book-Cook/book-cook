@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { processWithAI } from "../../../server";
+import type { NextRequest} from "next/server";
+import { NextResponse } from "next/server";
+
 import { measurementConversionPrompt } from "../../../constants";
+import { processWithAI } from "../../../server";
 
 export const runtime = "edge";
 

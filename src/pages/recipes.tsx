@@ -1,20 +1,19 @@
 import * as React from "react";
-import { makeStyles } from "@griffel/react";
-import { RecipeCard, FallbackScreen, Unauthorized } from "../components";
 import { Text, Title3, Dropdown, Option } from "@fluentui/react-components";
-
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
-import { useSearchBox, RecipeProvider } from "../context";
 import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
-
-import { useSession } from "next-auth/react";
-import { SearchBar } from "../components/Toolbar/SearchBar";
-import { TagPicker } from "../components/TagPicker/TagPicker";
+import { makeStyles } from "@griffel/react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
+import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import { RecipeCard, FallbackScreen, Unauthorized } from "../components";
+import { TagPicker } from "../components/TagPicker/TagPicker";
+import { SearchBar } from "../components/Toolbar/SearchBar";
+import { useSearchBox, RecipeProvider } from "../context";
 
 const useStyles = makeStyles({
   pageContainer: {

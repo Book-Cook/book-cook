@@ -1,4 +1,5 @@
-import { MongoClient, MongoClientOptions } from "mongodb";
+import type { MongoClientOptions } from "mongodb";
+import { MongoClient } from "mongodb";
 
 // Check for MongoDB URI in environment variables
 if (!process.env.MONGODB_URI) {
@@ -27,10 +28,7 @@ let clientPromise: Promise<MongoClient>;
 try {
   if (process.env.NODE_ENV === "development") {
     // In development, use a global variable to preserve the connection across hot-reloads
-    if (!global._mongoClientPromise) {
-      console.log("Creating new MongoDB connection in development");
-      global._mongoClientPromise = new MongoClient(uri, options).connect();
-    }
+    global._mongoClientPromise ??= new MongoClient(uri, options).connect();
     clientPromise = global._mongoClientPromise;
   } else {
     // In production, create a new connection

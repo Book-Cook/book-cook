@@ -24,7 +24,7 @@ export const useConvertMeasurements = () => {
       if (!response.ok) {
         let errorMsg = "API request failed";
         try {
-          errorMsg = (await response.json()).message || errorMsg;
+          errorMsg = (await response.json()).message ?? errorMsg;
         } catch (e) {
           console.error("Failed to parse error response", e);
         }

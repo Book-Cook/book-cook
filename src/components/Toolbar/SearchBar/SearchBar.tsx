@@ -4,8 +4,9 @@ import type {
   SearchBoxChangeEvent,
   InputOnChangeData,
 } from "@fluentui/react-components";
-import { useSearchBox } from "../../../context";
 import { useRouter } from "next/router";
+
+import { useSearchBox } from "../../../context";
 
 export const SearchBar = () => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
@@ -21,11 +22,11 @@ export const SearchBar = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = async (event: any) => {
     if (event.key === "Enter") {
       if (path !== "/recipes") {
         // User is not on the home page, reroute
-        router.push(`/recipes`);
+        await router.push(`/recipes`);
       }
     }
   };

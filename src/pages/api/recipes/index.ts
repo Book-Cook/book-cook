@@ -1,7 +1,9 @@
-import clientPromise from "../../../clients/mongo";
-import { getServerSession } from "next-auth/next";
-import authOptions from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
+
+import authOptions from "../auth/[...nextauth]";
+
+import clientPromise from "../../../clients/mongo";
 
 type VisibilityCondition =
   | { isPublic: boolean }
@@ -77,10 +79,7 @@ export default async function handler(req: any, res: any) {
       if (tags) {
         const tagsList = Array.isArray(tags) ? tags : [tags];
         query = {
-          $and: [
-            query,
-            { tags: { $all: tagsList } }
-          ]
+          $and: [query, { tags: { $all: tagsList } }],
         };
       }
 
@@ -114,7 +113,7 @@ export default async function handler(req: any, res: any) {
     // Create a new recipe
     try {
       // Check if the user is authenticated
-      if (!session || !session.user) {
+      if (!session?.user) {
         return res
           .status(401)
           .json({ message: "Unauthorized. Please log in to create a recipe." });
@@ -133,7 +132,7 @@ export default async function handler(req: any, res: any) {
         isPublic: false,
         title,
         data,
-        tags: tags || [],
+        tags: tags ?? [],
         createdAt: new Date(),
         emoji: "🍽️",
         imageURL: "",
@@ -141,12 +140,10 @@ export default async function handler(req: any, res: any) {
 
       const result = await db.collection("recipes").insertOne(newRecipe);
 
-      res
-        .status(201)
-        .json({
-          message: "Recipe uploaded successfully.",
-          recipeId: result.insertedId,
-        });
+      res.status(201).json({
+        message: "Recipe uploaded successfully.",
+        recipeId: result.insertedId,
+      });
     } catch (error) {
       console.error("Failed to upload recipe:", error);
       res.status(500).json({ message: "Internal Server Error" });

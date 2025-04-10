@@ -1,4 +1,6 @@
-import { generateText, LanguageModelUsage } from "ai";
+import type { LanguageModelUsage } from "ai";
+import { generateText } from "ai";
+
 import { getAiModel } from "./model";
 
 type ProcessAIOptions = {

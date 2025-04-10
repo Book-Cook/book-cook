@@ -1,12 +1,15 @@
 import * as React from "react";
-import { makeStyles } from "@griffel/react";
 import { Input, Radio, RadioGroup } from "@fluentui/react-components";
 import { PaintBrush24Regular } from "@fluentui/react-icons";
-import { useTheme } from "../../../context";
-import { SettingsSection, SettingItem } from "../SettingShared";
-import type { ThemePreference } from "../../../context";
+import { makeStyles } from "@griffel/react";
+
+
 import { appearanceSectionId } from "../constants";
 import { useSettingsSection } from "../context";
+import { SettingsSection, SettingItem } from "../SettingShared";
+
+import type { ThemePreference } from "../../../context";
+import { useTheme } from "../../../context";
 
 const useStyles = makeStyles({
   colorInput: {

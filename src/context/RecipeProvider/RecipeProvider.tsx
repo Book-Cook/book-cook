@@ -1,6 +1,10 @@
 import * as React from "react";
-import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
+import isEqual from "lodash/isEqual";
+import { useRouter } from "next/router";
+
+import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
+
 import {
   fetchRecipe,
   useDeleteRecipe,
@@ -8,8 +12,6 @@ import {
   useUpdateRecipe,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
-import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
-import { isEqual } from "lodash";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -22,7 +24,7 @@ export const RecipeProvider: React.FC<{
   const router = useRouter();
   const { recipes: routerRecipeId } = router.query;
   const recipeId =
-    specificRecipeId ||
+    specificRecipeId ??
     (typeof routerRecipeId === "string" ? routerRecipeId : undefined);
 
   const [editableData, setEditableData] = React.useState<EditableData>({
@@ -37,7 +39,7 @@ export const RecipeProvider: React.FC<{
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
   const { mutate: updateRecipe } = useUpdateRecipe(
-    recipeId || editableData._id
+    recipeId ?? editableData._id
   );
 
   const {
@@ -47,7 +49,7 @@ export const RecipeProvider: React.FC<{
   } = useQuery({
     queryKey: ["recipe", recipeId],
     queryFn: () => fetchRecipe(recipeId as string),
-    enabled: !!recipeId,
+    enabled: Boolean(recipeId),
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,14 +112,14 @@ export const RecipeProvider: React.FC<{
   };
 
   const deleteRecipe = () => {
-    const idToDelete = recipe?._id || editableData._id;
+    const idToDelete = recipe?._id ?? editableData._id;
 
     if (idToDelete) {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
         deleteMutate(idToDelete, {
-          onSuccess: () => {
+          onSuccess: async () => {
             if (router.pathname.includes("/recipes/[recipes]")) {
-              router.push("/");
+              await router.push("/");
             }
           },
           onError: (error) => {
@@ -131,7 +133,7 @@ export const RecipeProvider: React.FC<{
   };
 
   const onAddToCollection = async (recipeId: string) => {
-    await addToCollection(recipeId);
+    addToCollection(recipeId);
   };
 
   React.useEffect(() => {

@@ -1,20 +1,21 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
 import {
   tokens,
   Spinner,
   Accordion,
   SearchBox,
 } from "@fluentui/react-components";
-import { useSession } from "next-auth/react";
-import { Unauthorized } from "../FallbackScreens";
-import { AppearanceSection } from "./AppearanceSection/AppearanceSection";
-import { SharingSection } from "./SharingSection/SharingSection";
-import { AccountSection } from "./AccountSection/AccountSection";
-import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
-import { SettingsSearchContext } from "./context";
-import { sectionIds } from "./constants";
 import type { AccordionToggleEventHandler } from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@griffel/react";
+import { useSession } from "next-auth/react";
+
+import { AccountSection } from "./AccountSection/AccountSection";
+import { AppearanceSection } from "./AppearanceSection/AppearanceSection";
+import { sectionIds } from "./constants";
+import { SettingsSearchContext } from "./context";
+import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
+import { SharingSection } from "./SharingSection/SharingSection";
+import { Unauthorized } from "../FallbackScreens";
 
 const useStyles = makeStyles({
   page: {

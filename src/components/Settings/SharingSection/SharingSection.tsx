@@ -1,5 +1,4 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
 import {
   Input,
   Button,
@@ -19,14 +18,18 @@ import {
   PersonAdd24Regular,
   PersonDeleteRegular,
 } from "@fluentui/react-icons";
+import { makeStyles, shorthands } from "@griffel/react";
+
+
+import { sharingSectionId } from "../constants";
+import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
+
 import {
   useShareWithUser,
   useDeleteSharedUser,
   useSharedUsers,
 } from "../../../clientToServer";
-import { sharingSectionId } from "../constants";
-import { useSettingsSection } from "../context";
 
 const useStyles = makeStyles({
   shareContainer: {
@@ -95,7 +98,7 @@ export const SharingSection: React.FC = () => {
     !searchTerm || shareUserKeywords.some((k) => k.includes(searchTerm));
 
   const handleShareRecipeBook = async () => {
-    if (!shareEmail) return;
+    if (!shareEmail) {return;}
 
     try {
       await shareRecipeMutation.mutateAsync(shareEmail);

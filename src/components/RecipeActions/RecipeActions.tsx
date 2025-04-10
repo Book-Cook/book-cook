@@ -16,22 +16,36 @@ import {
   TagRegular,
   EmojiRegular,
 } from "@fluentui/react-icons";
-import { ChangeTitleDialog } from "./ChangeTitleDialog";
-import { ChangeTagsDialog } from "./ChangeTagsDialog";
-import { ChangeEmojiDialog } from "./ChangeEmojiDialog";
-import { useRecipe } from "../../context";
+import isEqual from "lodash/isEqual";
+import dynamic from "next/dynamic";
+
 import type { RecipeActionsProps } from "./RecipeActions.types";
-import { isEqual } from "lodash";
+
+import { useRecipe } from "../../context";
+
+type DialogType = "title" | "tags" | "emoji" | null;
+
+const ChangeTitleDialog = dynamic(() => import("./ChangeTitleDialog"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ChangeTagsDialog = dynamic(() => import("./ChangeTagsDialog"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
+  loading: () => null,
+  ssr: false,
+});
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { _id, title, tags, emoji, imageURL } = props;
-
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
 
-  const [isTitleDialogOpen, setIsTitleDialogOpen] = React.useState(false);
-  const [isTagsDialogOpen, setIsTagsDialogOpen] = React.useState(false);
-  const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
+  const [activeDialog, setActiveDialog] = React.useState<DialogType>(null);
 
   const handleMenuInteraction = React.useCallback(
     (e: React.MouseEvent) => {
@@ -39,15 +53,14 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       e.nativeEvent.stopImmediatePropagation();
 
       const newData = {
-        _id: _id,
-        title: title || "",
-        tags: tags || [],
-        emoji: emoji || "",
-        imageURL: imageURL || "",
+        _id,
+        title: title ?? "",
+        tags: tags ?? [],
+        emoji: emoji ?? "",
+        imageURL: imageURL ?? "",
         content: "",
       };
 
-      // Check if the editableData has changed before updating
       if (_id && !isEqual(editableData, newData)) {
         updateEditableData(newData);
       }
@@ -55,58 +68,24 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
     [_id, editableData, title, tags, emoji, imageURL, updateEditableData]
   );
 
-  // Click handlers with proper event stopping
-  const openTitleDialog = React.useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsTitleDialogOpen(true);
-  }, []);
-
-  const openEmojiDialog = React.useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsEmojiDialogOpen(true);
-  }, []);
-
-  const openTagsDialog = React.useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsTagsDialogOpen(true);
-  }, []);
-
-  // Dialog close handlers
-  const closeTitleDialog = React.useCallback(() => {
-    setIsTitleDialogOpen(false);
-  }, []);
-
-  const closeTagsDialog = React.useCallback(() => {
-    setIsTagsDialogOpen(false);
-  }, []);
-
-  const closeEmojiDialog = React.useCallback(() => {
-    setIsEmojiDialogOpen(false);
-  }, []);
-
-  // Dialog save handlers
-  const handleTitleDialogSave = React.useCallback(
-    (newTitle: string) => {
-      saveChanges({ title: newTitle });
-      setIsTitleDialogOpen(false);
+  const openDialog = React.useCallback(
+    (type: DialogType) => (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setActiveDialog(type);
     },
-    [saveChanges]
+    []
   );
 
-  const handleTagsDialogSave = React.useCallback(
-    (updatedTags: string[]) => {
-      saveChanges({ tags: updatedTags });
-      setIsTagsDialogOpen(false);
-    },
-    [saveChanges]
-  );
+  const closeDialog = React.useCallback(() => {
+    setActiveDialog(null);
+  }, []);
 
-  const handleEmojiDialogSave = React.useCallback(
-    (updatedEmoji: string) => {
-      saveChanges({ emoji: updatedEmoji });
-      setIsEmojiDialogOpen(false);
+  const handleSave = React.useCallback(
+    (field: keyof typeof editableData) => (value: string | string[]) => {
+      saveChanges({ [field]: value });
+      closeDialog();
     },
-    [saveChanges]
+    [saveChanges, closeDialog]
   );
 
   const handleDeleteClick = React.useCallback(
@@ -117,17 +96,16 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
     [deleteRecipe]
   );
 
-  // Memoize menu content to prevent re-renders
   const menuContent = React.useMemo(
     () => (
       <MenuList onClick={(ev) => ev.stopPropagation()}>
-        <MenuItem icon={<EditRegular />} onClick={openTitleDialog}>
+        <MenuItem icon={<EditRegular />} onClick={openDialog("title")}>
           Change Title
         </MenuItem>
-        <MenuItem icon={<EmojiRegular />} onClick={openEmojiDialog}>
+        <MenuItem icon={<EmojiRegular />} onClick={openDialog("emoji")}>
           Change Emoji
         </MenuItem>
-        <MenuItem icon={<TagRegular />} onClick={openTagsDialog}>
+        <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
         </MenuItem>
         <MenuDivider />
@@ -136,7 +114,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuItem>
       </MenuList>
     ),
-    [openTitleDialog, openEmojiDialog, openTagsDialog, handleDeleteClick]
+    [openDialog, handleDeleteClick]
   );
 
   return (
@@ -155,24 +133,30 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuTrigger>
         <MenuPopover>{menuContent}</MenuPopover>
       </Menu>
-      <ChangeTitleDialog
-        isOpen={isTitleDialogOpen}
-        currentTitle={editableData.title}
-        onSave={handleTitleDialogSave}
-        onClose={closeTitleDialog}
-      />
-      <ChangeTagsDialog
-        isOpen={isTagsDialogOpen}
-        currentTags={editableData.tags}
-        onSave={handleTagsDialogSave}
-        onClose={closeTagsDialog}
-      />
-      <ChangeEmojiDialog
-        isOpen={isEmojiDialogOpen}
-        currentEmoji={editableData?.emoji}
-        onSave={handleEmojiDialogSave}
-        onClose={closeEmojiDialog}
-      />
+      {activeDialog === "title" && (
+        <ChangeTitleDialog
+          isOpen={activeDialog === "title"}
+          currentTitle={editableData.title}
+          onSave={handleSave("title")}
+          onClose={closeDialog}
+        />
+      )}
+      {activeDialog === "tags" && (
+        <ChangeTagsDialog
+          isOpen={activeDialog === "tags"}
+          currentTags={editableData.tags}
+          onSave={handleSave("tags")}
+          onClose={closeDialog}
+        />
+      )}
+      {activeDialog === "emoji" && (
+        <ChangeEmojiDialog
+          isOpen={activeDialog === "emoji"}
+          currentEmoji={editableData.emoji}
+          onSave={handleSave("emoji")}
+          onClose={closeDialog}
+        />
+      )}
     </>
   );
 };

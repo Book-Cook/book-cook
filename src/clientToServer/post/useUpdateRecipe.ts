@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DOMPurify from "dompurify";
+
 import type { UpdateRecipePayload } from "../types";
 
 /**
@@ -42,13 +43,12 @@ export function useUpdateRecipe(recipeId: string | string[] | undefined) {
 
         return response.json();
       } catch (error) {
-        console.log("Error in fetch:", error);
         return error;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
+      await queryClient.invalidateQueries({ queryKey: ["recipes"] });
     },
   });
 }

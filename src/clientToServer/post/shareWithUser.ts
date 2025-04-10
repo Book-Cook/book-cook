@@ -12,7 +12,7 @@ export async function shareWithUser(
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to share recipe book");
+    throw new Error(data.message ?? "Failed to share recipe book");
   }
 
   return data;

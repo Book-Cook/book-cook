@@ -14,6 +14,7 @@ import {
 } from "@fluentui/react-components";
 import type { DialogOpenChangeEvent } from "@fluentui/react-components";
 import { useRouter } from "next/router";
+
 import { useCreateRecipe } from "../../../clientToServer";
 
 const useStyles = makeStyles({
@@ -122,10 +123,10 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
         emoji: "",
       },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
           if (data?.recipeId) {
             onClose();
-            router.push(`/recipes/${data.recipeId}`);
+            await router.push(`/recipes/${data.recipeId}`);
           } else {
             setErrorMessage("Recipe created, but failed to redirect.");
           }

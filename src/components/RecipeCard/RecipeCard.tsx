@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { RecipeCardProps } from "./RecipeCard.types";
+import { useRouter } from "next/router";
+
 import { useRecipeCardStyles } from "./RecipeCard.styles";
+import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
@@ -12,8 +13,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
 
-  const onCardClick = () => {
-    router.push(`/recipes/${id}`);
+  const onCardClick = async () => {
+    await router.push(`/recipes/${id}`);
   };
 
   // Format date to be more readable
@@ -30,7 +31,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
    * TODO: We should check if the user has already clicked the card in the future
    */
   const isNew = React.useMemo(() => {
-    if (!createdDate) return false;
+    if (!createdDate) {
+      return false;
+    }
 
     const recipeDate = new Date(createdDate);
     const currentDate = new Date();

@@ -1,16 +1,6 @@
 import * as React from "react";
-import {
-  createDynamicLightTheme,
-  generateBrandVariants,
-  createDynamicDarkTheme,
-} from "../../components/theme/theme";
 import type { Theme } from "@fluentui/react-components";
-import type {
-  ThemeMode,
-  ThemePreference,
-  ThemeContextProps,
-  InitialValues,
-} from "./ThemeProvider.types";
+
 import {
   DEFAULT_THEME_PREFERENCE,
   DEFAULT_PRIMARY_COLOR,
@@ -18,6 +8,18 @@ import {
   LOCAL_STORAGE_THEME_PREFERENCE_KEY,
   LOCAL_STORAGE_CACHED_THEME_KEY,
 } from "./themeConstants";
+import type {
+  ThemeMode,
+  ThemePreference,
+  ThemeContextProps,
+  InitialValues,
+} from "./ThemeProvider.types";
+
+import {
+  createDynamicLightTheme,
+  generateBrandVariants,
+  createDynamicDarkTheme,
+} from "../../components/theme/theme";
 import { useThemeDetector } from "../../hooks";
 
 const ThemeContext = React.createContext<ThemeContextProps | undefined>(

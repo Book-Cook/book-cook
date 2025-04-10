@@ -9,12 +9,13 @@ import {
   mergeClasses,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
-import { SearchBar } from "../SearchBar";
+
 import { useMobileDrawerStyles } from "./MobileDrawer.styles";
 import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
+import { SearchBar } from "../SearchBar";
 
-export const MobileDrawer: React.FC<MobileDrawerProps> = ({
+const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
   onOpenChange,
   currentPath,
@@ -90,3 +91,5 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
     </Drawer>
   );
 };
+
+export default MobileDrawer;

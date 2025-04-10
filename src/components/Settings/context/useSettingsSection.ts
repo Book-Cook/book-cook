@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useSettingsSearch } from "../context";
+
+import { useSettingsSearch } from ".";
 
 /**
  * Hook for managing settings section visibility during search
@@ -10,7 +11,9 @@ export function useSettingsSection(sectionId: string, keywords: string[]) {
 
   // Check if this section matches the search
   const isVisible = React.useMemo(() => {
-    if (!searchTerm) return true;
+    if (!searchTerm) {
+      return true;
+    }
 
     // Join all keywords and check if they include the search term
     return keywords.some((keyword) =>
@@ -20,7 +23,9 @@ export function useSettingsSection(sectionId: string, keywords: string[]) {
 
   // Register/unregister visibility
   React.useEffect(() => {
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      return;
+    }
 
     if (isVisible) {
       addVisibleSection(sectionId);

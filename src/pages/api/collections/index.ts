@@ -1,8 +1,10 @@
-import clientPromise from "../../../clients/mongo";
-import { getServerSession } from "next-auth/next";
-import authOptions from "../auth/[...nextauth]";
-import type { Session } from "next-auth";
 import { ObjectId } from "mongodb";
+import type { Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
+
+import authOptions from "../auth/[...nextauth]";
+
+import clientPromise from "../../../clients/mongo";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -16,7 +18,7 @@ export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const db = client.db("dev");
 
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -54,7 +56,8 @@ export default async function handler(req: any, res: any) {
       console.error("Failed to fetch recently viewed recipes:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
-  } else { // POST
+  } else {
+    // POST
     try {
       const { recipeId } = req.body;
 
@@ -64,7 +67,7 @@ export default async function handler(req: any, res: any) {
           {
             $addToSet: {
               collections: recipeId, // add the recipeId to the collection
-            }
+            },
           }
         );
 

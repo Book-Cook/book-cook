@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { deleteSharedUser } from "./deleteSharedUser";
 
 export function useDeleteSharedUser() {
@@ -6,8 +7,8 @@ export function useDeleteSharedUser() {
 
   return useMutation({
     mutationFn: deleteSharedUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
     },
     onError: (error) => {
       if (error instanceof Error) {

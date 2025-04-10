@@ -1,9 +1,10 @@
-import { getServerSession } from "next-auth/next";
-import authOptions from "../../auth/[...nextauth]";
-import clientPromise from "../../../../clients/mongo";
-import type { Session } from "next-auth";
-import type { NextApiRequest, NextApiResponse } from "next";
 import type { PullOperator } from "mongodb";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
+
+import clientPromise from "../../../../clients/mongo";
+import authOptions from "../../auth/[...nextauth]";
 
 type ResponseData = {
   message?: string;
@@ -20,7 +21,7 @@ export default async function handler(
 ) {
   // Validate request method
   const allowedMethods = ["GET", "POST", "DELETE"];
-  if (!allowedMethods.includes(req.method || "")) {
+  if (!allowedMethods.includes(req.method ?? "")) {
     res.setHeader("Allow", allowedMethods);
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -46,7 +47,7 @@ export default async function handler(
       }
 
       return res.status(200).json({
-        sharedWithUsers: user.sharedWithUsers || [],
+        sharedWithUsers: user.sharedWithUsers ?? [],
       });
     }
 
@@ -107,16 +108,14 @@ export default async function handler(
           .json({ message: "User not in your shared list" });
       }
 
-      await db
-        .collection("users")
-        .updateOne(
-          { email: userEmail },
-          {
-            $pull: {
-              sharedWithUsers: shareWithEmail,
-            } as PullOperator<Document>,
-          }
-        );
+      await db.collection("users").updateOne(
+        { email: userEmail },
+        {
+          $pull: {
+            sharedWithUsers: shareWithEmail,
+          } as PullOperator<Document>,
+        }
+      );
 
       return res.status(200).json({ message: "Access removed successfully" });
     }

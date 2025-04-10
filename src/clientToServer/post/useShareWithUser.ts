@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { shareWithUser } from "./shareWithUser";
 
 export function useShareWithUser() {
@@ -6,8 +7,8 @@ export function useShareWithUser() {
 
   return useMutation({
     mutationFn: shareWithUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
     },
     onError: (error) => {
       if (error instanceof Error) {
