@@ -1,24 +1,71 @@
-name: Build and Test
-on: [push, pull_request]
+name: Build, Test, Lint
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+  checks: write
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
       image: node:18.19.0
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Yarn
-        run: yarn set version 1.22.1
-      - name: Install dependencies
-        run: yarn install
-      - name: Cache Yarn Cache
-        uses: actions/cache@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory /__w/book-cook/book-cook
+
+      - name: Cache Yarn packages
+        uses: actions/cache@v4
         with:
           path: .yarn/cache
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            yarn-
-      - name: Build
-        run: yarn build
+            ${{ runner.os }}-yarn-
+
+      - name: Setup Node
+        run: |
+          yarn set version 1.22.1
+          yarn install --frozen-lockfile
+
+      - name: Cache Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
       - name: Lint
         run: yarn lint
+
+      - name: Build and analyze bundle
+        run: yarn analyze
+
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-stats
+          path: .next/analyze
+
+      - name: Comment PR with bundle size changes
+        uses: preactjs/compressed-size-action@v2
+        if: github.event_name == 'pull_request'
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: ".next/static/**/*.js"
+          use-check: true
+          build-script: "analyze"

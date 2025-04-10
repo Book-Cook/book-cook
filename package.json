@@ -10,7 +10,9 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "export": "next build && next export"
+    "export": "next build && next export",
+    "analyze": "ANALYZE=true next build && cp .next/analyze/client.html .next/analyze/index.html",
+    "analyze:win": "set ANALYZE=true && next build"
   },
   "compilerOptions": {
     "baseUrl": ".",
@@ -74,6 +76,7 @@
     "renovate": "^37.235.0",
     "ts-jest": "27.1.4",
     "ts-node": "10.7.0",
-    "typescript": "4.9.3"
+    "typescript": "4.9.3",
+    "@next/bundle-analyzer": "^15.3.0"
   }
 }
