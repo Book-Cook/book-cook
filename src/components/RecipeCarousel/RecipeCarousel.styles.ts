@@ -1,5 +1,5 @@
-import { makeStyles, shorthands } from "@griffel/react";
 import { tokens } from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@griffel/react";
 
 export const useRecipeCarouselStyles = makeStyles({
   root: {

@@ -36,9 +36,23 @@ module.exports = {
     },
   },
   rules: {
+    curly: "warn",
+    "prefer-const": "warn",
+    "no-return-await": "warn",
+    "no-unused-expressions": "error",
+    "no-implicit-coercion": "warn",
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: ["node_modules/*"],
+      },
+    ],
     // React
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
+    "react/jsx-fragments": ["error"],
+    "react-hooks/exhaustive-deps": "warn",
+    "react/no-deprecated": "warn",
 
     // TypeScript
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -61,6 +75,52 @@ module.exports = {
     ],
 
     // Import Resolution
+    "import/newline-after-import": [
+      "warn",
+      { exactCount: true, considerComments: true },
+    ],
+    "import/order": [
+      "warn",
+      {
+        groups: ["external", "internal"],
+        pathGroups: [
+          {
+            pattern: "react",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@fluentui/**",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@griffel/react/**",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "@/**",
+            group: "internal",
+            position: "after",
+          },
+          {
+            pattern: "./**",
+            group: "internal",
+            position: "after",
+          },
+          {
+            pattern: "../**",
+            group: "internal",
+            position: "after",
+          },
+        ],
+        distinctGroup: false,
+        pathGroupsExcludedImportTypes: ["react"],
+        "newlines-between": "always",
+        alphabetize: { order: "asc", caseInsensitive: true },
+      },
+    ],
     "import/no-unresolved": [
       "error",
       {

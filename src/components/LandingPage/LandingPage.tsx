@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useStyles } from "./LandingPage.styles";
 import {
   Button,
   Text,
@@ -18,6 +17,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
+
+import { useStyles } from "./LandingPage.styles";
 
 // Animation variants for Framer Motion
 const fadeIn = {

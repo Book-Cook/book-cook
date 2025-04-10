@@ -1,5 +1,4 @@
 import * as React from "react";
-import { makeStyles } from "@griffel/react";
 import {
   tokens,
   AccordionItem,
@@ -7,6 +6,7 @@ import {
   AccordionHeader,
   Divider,
 } from "@fluentui/react-components";
+import { makeStyles } from "@griffel/react";
 
 const useStyles = makeStyles({
   section: {

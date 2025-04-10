@@ -18,6 +18,6 @@ export const useMediaQuery = (query: string): boolean => {
   }, [matches, query]);
 
   // Return false during SSR
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") {return false;}
   return matches;
 };

@@ -1,9 +1,11 @@
 import * as React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { useRecipe } from "../../../context";
-import { useStyles } from "./RecipeImage.styles";
 import { Text } from "@fluentui/react-components";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+import { useStyles } from "./RecipeImage.styles";
+
+import { useRecipe } from "../../../context";
 
 export const RecipeImage = () => {
   const styles = useStyles();

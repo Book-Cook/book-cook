@@ -1,7 +1,9 @@
 import * as React from "react";
-import { useRecipe } from "../../../context";
-import { useStyles } from "./RecipeTags.styles";
 import { useRouter } from "next/router";
+
+import { useStyles } from "./RecipeTags.styles";
+
+import { useRecipe } from "../../../context";
 
 export const RecipeTags = () => {
   const styles = useStyles();

@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+
 import clientPromise from "src/clients/mongo";
 
 export default NextAuth({

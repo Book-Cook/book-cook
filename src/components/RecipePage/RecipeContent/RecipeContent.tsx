@@ -1,7 +1,8 @@
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Editor } from "../../Editor/Editor";
+
 import { useRecipe } from "../../../context";
+import { Editor } from "../../Editor/Editor";
 
 export const RecipeContent = () => {
   const { isLoading, editableData, updateEditableDataKey } = useRecipe();

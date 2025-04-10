@@ -1,5 +1,5 @@
-import type { FallbackScreenProps } from "./FallbackScreen.types";
 import { ErrorScreen } from "./ErrorScreen";
+import type { FallbackScreenProps } from "./FallbackScreen.types";
 import { LoadingScreen } from "./LoadingScreen";
 import { NoDataScreen } from "./NoDataScreen";
 import { Unauthorized } from "./Unathorized";

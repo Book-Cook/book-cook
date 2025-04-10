@@ -11,8 +11,8 @@ import {
   shorthands,
   tokens,
 } from "@fluentui/react-components";
-import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 import type { DialogOpenChangeEvent } from "@fluentui/react-components";
+import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 import { motion, AnimatePresence } from "framer-motion";
 
 const useStyles = makeStyles({

@@ -1,5 +1,4 @@
 import * as React from "react";
-import type { Editor } from "@tiptap/react";
 import {
   Divider,
   Toolbar,
@@ -20,6 +19,8 @@ import {
   TextNumberListLtr24Regular,
   Link24Regular,
 } from "@fluentui/react-icons";
+import type { Editor } from "@tiptap/react";
+
 import { ToolbarButton } from "./EditorToolbarButton";
 
 const useStyles = makeStyles({
@@ -133,7 +134,7 @@ export const EditorMenuBar: React.FC<EditorMenuBarProps> = ({ editor }) => {
   const handleSetLink = React.useCallback(() => {
     const previousUrl = editor.getAttributes("link").href;
     const url = window.prompt("URL", previousUrl);
-    if (url === null) return;
+    if (url === null) {return;}
     if (url === "") {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;

@@ -16,10 +16,12 @@ import {
   TagRegular,
   EmojiRegular,
 } from "@fluentui/react-icons";
-import { useRecipe } from "../../context";
-import type { RecipeActionsProps } from "./RecipeActions.types";
 import isEqual from "lodash/isEqual";
 import dynamic from "next/dynamic";
+
+import type { RecipeActionsProps } from "./RecipeActions.types";
+
+import { useRecipe } from "../../context";
 
 type DialogType = "title" | "tags" | "emoji" | null;
 

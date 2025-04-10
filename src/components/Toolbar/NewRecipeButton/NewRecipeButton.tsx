@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "@fluentui/react-components";
 import { Add24Regular } from "@fluentui/react-icons";
+
 import { useNewRecipeButtonStyles } from "./NewRecipeButton.styles";
 
 export const NewRecipeButton = (props: { onClick: () => void }) => {

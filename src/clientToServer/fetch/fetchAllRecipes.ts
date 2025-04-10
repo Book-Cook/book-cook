@@ -1,5 +1,6 @@
-import type { Recipe } from "../types";
 import DOMPurify from "dompurify";
+
+import type { Recipe } from "../types";
 
 const sortOptions = {
   dateNewest: { property: "createdAt", direction: "desc" },

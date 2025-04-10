@@ -1,8 +1,9 @@
 import * as React from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { getEditorExtensions } from "./utils";
+import { useEditor, EditorContent } from "@tiptap/react";
+
 import type { EditorProps } from "./Editor.types";
+import { getEditorExtensions } from "./utils";
 
 const useStyles = makeStyles({
   editorWrapper: {

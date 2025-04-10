@@ -1,10 +1,13 @@
-import clientPromise from "../../../clients/mongo";
 import { ObjectId } from "mongodb";
-import { getServerSession } from "next-auth/next";
-import authOptions from "../auth/[...nextauth]";
-import type { Session } from "next-auth";
-import type { Recipe } from "src/clientToServer";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
+
+import type { Recipe } from "src/clientToServer";
+import authOptions from "../auth/[...nextauth]";
+
+
+import clientPromise from "../../../clients/mongo";
 
 type UpdateFields = {
   title?: string;
@@ -185,18 +188,31 @@ export default async function handler(
       const addToSetFields: UpdateFields = {};
 
       // Fields that use $set
-      if (title) setFields.title = title;
-      if (data) setFields.data = data;
-      if (imageURL) setFields.imageURL = imageURL;
-      if (emoji) setFields.emoji = emoji;
-      if (isPublic !== undefined) setFields.isPublic = isPublic;
+      if (title) {
+        setFields.title = title;
+      }
+      if (data) {
+        setFields.data = data;
+      }
+      if (imageURL) {
+        setFields.imageURL = imageURL;
+      }
+      if (emoji) {
+        setFields.emoji = emoji;
+      }
+      if (isPublic !== undefined) {
+        setFields.isPublic = isPublic;
+      }
 
       // Fields that use $addToSet
-      if (tags) addToSetFields.tags = { $each: tags } as unknown as string[];
-      if (shareWithEmail)
+      if (tags) {
+        addToSetFields.tags = { $each: tags } as unknown as string[];
+      }
+      if (shareWithEmail) {
         addToSetFields.sharedWith = {
           $each: [shareWithEmail],
         } as unknown as string[];
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =

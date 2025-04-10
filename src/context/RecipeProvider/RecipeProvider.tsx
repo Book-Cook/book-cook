@@ -1,6 +1,10 @@
 import * as React from "react";
-import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
+import isEqual from "lodash/isEqual";
+import { useRouter } from "next/router";
+
+import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
+
 import {
   fetchRecipe,
   useDeleteRecipe,
@@ -8,8 +12,6 @@ import {
   useUpdateRecipe,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
-import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
-import isEqual from "lodash/isEqual";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -47,7 +49,7 @@ export const RecipeProvider: React.FC<{
   } = useQuery({
     queryKey: ["recipe", recipeId],
     queryFn: () => fetchRecipe(recipeId as string),
-    enabled: !!recipeId,
+    enabled: Boolean(recipeId),
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

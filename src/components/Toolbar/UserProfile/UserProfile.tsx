@@ -12,9 +12,9 @@ import {
   Button,
   Spinner,
 } from "@fluentui/react-components";
+import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
-import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 
 export const UserProfile = () => {
   const { data: session, status } = useSession();

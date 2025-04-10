@@ -1,8 +1,8 @@
 import * as React from "react";
-import { makeStyles, shorthands } from "@griffel/react";
 import { Title2, Body1, Button, tokens } from "@fluentui/react-components";
-import { signIn } from "next-auth/react";
 import { LockClosed24Regular } from "@fluentui/react-icons";
+import { makeStyles, shorthands } from "@griffel/react";
+import { signIn } from "next-auth/react";
 
 const useStyles = makeStyles({
   container: {

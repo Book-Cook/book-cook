@@ -159,7 +159,7 @@ const useStyles = makeStyles({
 
 // Check if a string is a single emoji character
 const isSingleEmoji = (value: string): boolean => {
-  if (!value) return false;
+  if (!value) {return false;}
   const graphemes = splitter.splitGraphemes(value);
   return (
     graphemes.length === 1 &&

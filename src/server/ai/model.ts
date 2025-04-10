@@ -1,6 +1,6 @@
-import type { LanguageModel } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
+import type { LanguageModel } from "ai";
 
 /**
  * Gets the configured AI Language Model instance based on environment variables.
@@ -14,14 +14,14 @@ export function getAiModel(): LanguageModel {
     openai: () => {
       const apiKey = process?.env?.OPENAI_API_KEY;
       if (!apiKey)
-        throw new Error("OPENAI_API_KEY environment variable is not set.");
+        {throw new Error("OPENAI_API_KEY environment variable is not set.");}
       const modelName = process?.env?.OPENAI_MODEL || "gpt-4o";
       return createOpenAI({ apiKey })(modelName);
     },
     google: () => {
       const apiKey = process?.env?.GEMINI_API_KEY;
       if (!apiKey)
-        throw new Error("GEMINI_API_KEY environment variable is not set.");
+        {throw new Error("GEMINI_API_KEY environment variable is not set.");}
       const modelName = process?.env?.GEMINI_MODEL || "gemini-1.5-flash";
       return createGoogleGenerativeAI({ apiKey })(modelName);
     },

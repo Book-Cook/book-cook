@@ -4,8 +4,9 @@ import type {
   SearchBoxChangeEvent,
   InputOnChangeData,
 } from "@fluentui/react-components";
-import { useSearchBox } from "../../../context";
 import { useRouter } from "next/router";
+
+import { useSearchBox } from "../../../context";
 
 export const SearchBar = () => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();

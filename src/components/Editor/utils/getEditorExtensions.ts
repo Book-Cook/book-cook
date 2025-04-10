@@ -1,7 +1,7 @@
-import { StarterKit } from "@tiptap/starter-kit";
-import { Placeholder } from "@tiptap/extension-placeholder";
 import { Link } from "@tiptap/extension-link";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { Underline } from "@tiptap/extension-underline";
+import { StarterKit } from "@tiptap/starter-kit";
 
 export const getEditorExtensions = (placeholder: string) => [
   StarterKit.configure({

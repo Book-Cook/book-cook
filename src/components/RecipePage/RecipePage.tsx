@@ -1,11 +1,13 @@
 import * as React from "react";
 import { motion } from "framer-motion";
-import { RecipeProvider } from "../../context";
-import { RecipeImage } from "./RecipeImage/RecipeImage";
-import { RecipeHeader } from "./RecipeHeader/RecipeHeader";
-import { RecipeTags } from "./RecipeTags/RecipeTags";
+
 import { RecipeContent } from "./RecipeContent/RecipeContent";
+import { RecipeHeader } from "./RecipeHeader/RecipeHeader";
+import { RecipeImage } from "./RecipeImage/RecipeImage";
 import { useStyles } from "./RecipePage.styles";
+import { RecipeTags } from "./RecipeTags/RecipeTags";
+
+import { RecipeProvider } from "../../context";
 
 export const RecipePage = () => {
   const styles = useStyles();

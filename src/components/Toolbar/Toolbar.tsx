@@ -4,17 +4,19 @@ import {
   Button,
 } from "@fluentui/react-components";
 import { Navigation24Regular } from "@fluentui/react-icons";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
-import { UserProfile } from "./UserProfile";
+
 import { Logo } from "./Logo";
-import { SearchBar } from "./SearchBar";
 import { NavigationLinks } from "./NavigationLinks";
-import { useMediaQuery } from "../../hooks";
-import { useToolbarStyles } from "./Toolbar.styles";
 import { NewRecipeButton } from "./NewRecipeButton";
 import { NewRecipeDialog } from "./NewRecipeDialog";
-import dynamic from "next/dynamic";
+import { SearchBar } from "./SearchBar";
+import { useToolbarStyles } from "./Toolbar.styles";
+import { UserProfile } from "./UserProfile";
+
+import { useMediaQuery } from "../../hooks";
 
 const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
   loading: () => null,
