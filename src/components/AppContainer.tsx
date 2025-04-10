@@ -2,8 +2,9 @@ import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
 import { SessionProvider } from "next-auth/react";
 
-import { Toolbar } from "./";
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
+
+import { Toolbar } from ".";
 
 const AppContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { theme } = useTheme();

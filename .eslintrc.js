@@ -37,6 +37,9 @@ module.exports = {
   },
   rules: {
     curly: "warn",
+    eqeqeq: ["error", "always", { null: "ignore" }],
+    "no-debugger": "error",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
     "prefer-const": "warn",
     "no-return-await": "warn",
     "no-unused-expressions": "error",
@@ -84,6 +87,8 @@ module.exports = {
       "warn",
       { exactCount: true, considerComments: true },
     ],
+    "import/no-duplicates": "warn",
+    "import/no-useless-path-segments": "warn",
     "import/order": [
       "warn",
       {

@@ -43,7 +43,6 @@ export function useUpdateRecipe(recipeId: string | string[] | undefined) {
 
         return response.json();
       } catch (error) {
-        console.log("Error in fetch:", error);
         return error;
       }
     },
