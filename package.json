@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "jest --config jest.config.js --watch",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
