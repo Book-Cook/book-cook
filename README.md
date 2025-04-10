@@ -5,6 +5,7 @@
 
 [![Live Site](https://img.shields.io/badge/Live-Site-success?style=flat-square&logo=vercel)](https://book-cook.vercel.app)
 [![License](https://img.shields.io/github/license/czearing/book-cook?style=flat-square)](LICENSE)
+[![RelativeCI](https://badges.relative-ci.com/badges/MXkw9Xco7tbckJiJJWBB?branch=main&style=flat-square)](https://app.relative-ci.com/projects/MXkw9Xco7tbckJiJJWBB)
 [![Build Status](https://github.com/Book-Cook/book-cook/actions/workflows/build-test-lint.yml/badge.svg)](https://github.com/Book-Cook/book-cook/actions/workflows/build-test-lint.yml)
 
 </div>

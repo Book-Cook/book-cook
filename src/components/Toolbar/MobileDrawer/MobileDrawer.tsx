@@ -14,7 +14,7 @@ import { useMobileDrawerStyles } from "./MobileDrawer.styles";
 import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
 
-export const MobileDrawer: React.FC<MobileDrawerProps> = ({
+const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
   onOpenChange,
   currentPath,
@@ -90,3 +90,5 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
     </Drawer>
   );
 };
+
+export default MobileDrawer;

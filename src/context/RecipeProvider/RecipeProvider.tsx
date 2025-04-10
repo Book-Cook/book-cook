@@ -9,7 +9,7 @@ import {
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
-import { isEqual } from "lodash";
+import isEqual from "lodash/isEqual";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null

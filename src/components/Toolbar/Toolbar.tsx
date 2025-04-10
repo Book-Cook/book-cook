@@ -10,11 +10,16 @@ import { UserProfile } from "./UserProfile";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
 import { NavigationLinks } from "./NavigationLinks";
-import { MobileDrawer } from "./MobileDrawer";
 import { useMediaQuery } from "../../hooks";
 import { useToolbarStyles } from "./Toolbar.styles";
 import { NewRecipeButton } from "./NewRecipeButton";
 import { NewRecipeDialog } from "./NewRecipeDialog";
+import dynamic from "next/dynamic";
+
+const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
+  loading: () => null,
+  ssr: false,
+});
 
 export const Toolbar = () => {
   const styles = useToolbarStyles();

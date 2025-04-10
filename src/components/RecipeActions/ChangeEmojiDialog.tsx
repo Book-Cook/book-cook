@@ -224,7 +224,7 @@ export const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     }
 
     debounceTimeout.current = setTimeout(() => {
-      const trimmedValue = newValue.trim();
+      const trimmedValue = newValue.trim().toLowerCase();
 
       if (isSingleEmoji(trimmedValue)) {
         setSelectedEmoji(trimmedValue);

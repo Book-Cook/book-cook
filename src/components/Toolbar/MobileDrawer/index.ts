@@ -1,2 +1,2 @@
-export * from "./MobileDrawer";
+export { default } from "./MobileDrawer";
 export * from "./MobileDrawer.types";

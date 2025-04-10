@@ -2184,7 +2184,7 @@
     "@griffel/react" "^1.5.22"
     "@swc/helpers" "^0.5.1"
 
-"@fluentui/react-context-selector@^9.1.54", "@fluentui/react-context-selector@^9.1.75":
+"@fluentui/react-context-selector@^9.1.75":
   version "9.1.75"
   resolved "https://registry.yarnpkg.com/@fluentui/react-context-selector/-/react-context-selector-9.1.75.tgz#51722f6c2e4a9cb66acceda78369f70f69107e35"
   integrity sha512-LJcn8mrbkhj5ucTYU3Gk+EJGnEqzRuRC3JOeyNotMPGavUSSCYfjwmG8Q6/Ms7c2tY6kFr+PbJVpkMFgvbG52w==
@@ -2905,7 +2905,7 @@
     "@griffel/react" "^1.5.22"
     "@swc/helpers" "^0.5.1"
 
-"@fluentui/react-window-provider@^2.2.18":
+"@fluentui/react-window-provider@^2.2.29":
   version "2.2.29"
   resolved "https://registry.yarnpkg.com/@fluentui/react-window-provider/-/react-window-provider-2.2.29.tgz#48f5e82eeed6361c1eb7da36b5a6a4d08072afd6"
   integrity sha512-4hK3UFH/TESnkuwTsE5yPTa0tgCmdoMHVynJrPQj0cBKcgZfcbb/l2lUwwtdxtAJ7K1x6yeNUC1rMLGosfeDJQ==
