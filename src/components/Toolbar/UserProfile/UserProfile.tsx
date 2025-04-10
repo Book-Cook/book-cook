@@ -20,8 +20,8 @@ export const UserProfile = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const userName = session?.user?.name || session?.user?.email || "Unknown";
-  const userImage = session?.user?.image || undefined;
+  const userName = session?.user?.name ?? session?.user?.email ?? "Unknown";
+  const userImage = session?.user?.image ?? undefined;
 
   if (status === "loading") {
     return <Spinner size="tiny" />;

@@ -24,7 +24,7 @@ export const RecipeProvider: React.FC<{
   const router = useRouter();
   const { recipes: routerRecipeId } = router.query;
   const recipeId =
-    specificRecipeId ||
+    specificRecipeId ??
     (typeof routerRecipeId === "string" ? routerRecipeId : undefined);
 
   const [editableData, setEditableData] = React.useState<EditableData>({
@@ -39,7 +39,7 @@ export const RecipeProvider: React.FC<{
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
   const { mutate: updateRecipe } = useUpdateRecipe(
-    recipeId || editableData._id
+    recipeId ?? editableData._id
   );
 
   const {
@@ -112,7 +112,7 @@ export const RecipeProvider: React.FC<{
   };
 
   const deleteRecipe = () => {
-    const idToDelete = recipe?._id || editableData._id;
+    const idToDelete = recipe?._id ?? editableData._id;
 
     if (idToDelete) {
       if (window.confirm("Are you sure you want to delete this recipe?")) {

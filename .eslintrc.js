@@ -50,6 +50,9 @@ module.exports = {
     // React
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/no-danger": "warn",
+    "react/self-closing-comp": "warn",
     "react/jsx-fragments": ["error"],
     "react-hooks/exhaustive-deps": "warn",
     "react/no-deprecated": "warn",
@@ -65,6 +68,8 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/prefer-nullish-coalescing": "warn",
+    "@typescript-eslint/prefer-optional-chain": "warn",
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {

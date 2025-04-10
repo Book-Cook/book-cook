@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import { Html, Head, Main, NextScript } from "next/document";
 
 import { blockingThemeScript } from "../context";

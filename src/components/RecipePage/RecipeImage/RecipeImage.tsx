@@ -12,7 +12,7 @@ export const RecipeImage = () => {
   const { recipe } = useRecipe();
 
   const defaultEmoji = "🍽️";
-  const displayEmoji = recipe?.emoji || defaultEmoji;
+  const displayEmoji = recipe?.emoji ?? defaultEmoji;
 
   return recipe?.imageURL ? (
     <motion.div

@@ -17,7 +17,7 @@ export function useCreateRecipe() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to upload recipe");
+        throw new Error(errorData.message ?? "Failed to upload recipe");
       }
       return (await response.json()) as CreateRecipeResponse;
     },

@@ -23,5 +23,6 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = (props) => {
     return <Unauthorized />;
   }
 
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   return children ? <>{children}</> : null;
 };

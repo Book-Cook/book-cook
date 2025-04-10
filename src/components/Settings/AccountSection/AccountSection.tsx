@@ -154,8 +154,8 @@ export const AccountSection: React.FC = () => {
           {user && (
             <div className={styles.profileInfo}>
               <Avatar
-                name={user.name || undefined}
-                image={{ src: user.image || undefined }}
+                name={user.name ?? undefined}
+                image={{ src: user.image ?? undefined }}
                 size={48}
                 color="colorful"
               />

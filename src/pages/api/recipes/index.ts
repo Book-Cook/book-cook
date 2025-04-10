@@ -113,7 +113,7 @@ export default async function handler(req: any, res: any) {
     // Create a new recipe
     try {
       // Check if the user is authenticated
-      if (!session || !session.user) {
+      if (!session?.user) {
         return res
           .status(401)
           .json({ message: "Unauthorized. Please log in to create a recipe." });
@@ -132,7 +132,7 @@ export default async function handler(req: any, res: any) {
         isPublic: false,
         title,
         data,
-        tags: tags || [],
+        tags: tags ?? [],
         createdAt: new Date(),
         emoji: "🍽️",
         imageURL: "",

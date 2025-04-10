@@ -144,7 +144,7 @@ export default async function handler(
         return;
       }
 
-      if (session && session.user?.email) {
+      if (session?.user?.email) {
         // Update the recently viewed recipes for the user
         // First, remove the recipe id if it exists.
         await db.collection("users").updateOne(

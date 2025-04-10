@@ -54,10 +54,10 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
 
       const newData = {
         _id: _id,
-        title: title || "",
-        tags: tags || [],
-        emoji: emoji || "",
-        imageURL: imageURL || "",
+        title: title ?? "",
+        tags: tags ?? [],
+        emoji: emoji ?? "",
+        imageURL: imageURL ?? "",
         content: "",
       };
 

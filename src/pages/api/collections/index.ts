@@ -18,7 +18,7 @@ export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const db = client.db("dev");
 
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 

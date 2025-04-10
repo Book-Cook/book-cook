@@ -50,7 +50,7 @@ export default function App(props: AppProps) {
       </style>
 
       <QueryClientProvider client={queryClient}>
-        <RendererProvider renderer={pageProps.renderer || createDOMRenderer()}>
+        <RendererProvider renderer={pageProps.renderer ?? createDOMRenderer()}>
           <SSRProvider>
             {isMounted && (
               <AppContainer>

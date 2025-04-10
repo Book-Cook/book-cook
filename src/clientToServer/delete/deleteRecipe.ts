@@ -7,7 +7,7 @@ export async function deleteRecipe(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to delete recipe");
+    throw new Error(errorData.message ?? "Failed to delete recipe");
   }
 
   return response.json();

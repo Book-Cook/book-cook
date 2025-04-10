@@ -8,5 +8,5 @@ export async function fetchSharedUsers(): Promise<string[]> {
   }
 
   const data = await response.json();
-  return data.sharedWithUsers || [];
+  return data.sharedWithUsers ?? [];
 }
