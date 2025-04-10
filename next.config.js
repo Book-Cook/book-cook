@@ -99,10 +99,11 @@ const nextConfig = {
         new StatsWriterPlugin({
           filename: "../.next/analyze/webpack-stats.json",
           stats: {
+            preset: "detailed",
             assets: true,
             chunks: true,
             modules: true,
-            excludeAssets: [/webpack-stats.json/],
+            excludeAssets: [/webpack-stats.json/, /\.map$/],
             excludeModules: [/custom-module.js/],
           },
           transform: (webpackStats) => {
