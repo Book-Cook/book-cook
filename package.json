@@ -70,7 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-config-next": "^15.2.4",
-    "husky": "7.0.4",
+    "husky": "9.1.7",
     "prettier": "^3.2.5",
     "renovate": "^37.235.0",
     "ts-jest": "27.1.5",
