@@ -2,7 +2,7 @@ import * as React from "react";
 import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { RecipeCardProps } from "./RecipeCard.types";
+import type { RecipeCardProps } from "./RecipeCard.types";
 import { useRecipeCardStyles } from "./RecipeCard.styles";
 import { RecipeActions } from "../RecipeActions";
 

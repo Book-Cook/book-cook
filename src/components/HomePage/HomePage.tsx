@@ -8,7 +8,7 @@ import {
 } from "../../clientToServer";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { Recipe } from "../../clientToServer/types";
+import type { Recipe } from "../../clientToServer/types";
 
 const useStyles = makeStyles({
   container: {

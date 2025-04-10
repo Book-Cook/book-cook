@@ -1,8 +1,9 @@
 import * as React from "react";
+import type {
+  ToggleButtonProps} from "@fluentui/react-components";
 import {
   Tooltip,
-  ToggleButton,
-  ToggleButtonProps,
+  ToggleButton
 } from "@fluentui/react-components";
 
 interface ToolbarButtonProps

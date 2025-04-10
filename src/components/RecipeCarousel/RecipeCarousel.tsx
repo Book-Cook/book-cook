@@ -11,9 +11,9 @@ import {
 import { ArrowLeftRegular, ArrowRightRegular } from "@fluentui/react-icons";
 import { RecipeCard } from "../RecipeCard/RecipeCard";
 import useEmblaCarousel from "embla-carousel-react";
-import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
+import type { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
-import { RecipesCarouselProps } from "./RecipeCarousel.types";
+import type { RecipesCarouselProps } from "./RecipeCarousel.types";
 import { useRouter } from "next/router";
 
 const emblaOptions: EmblaOptionsType = {

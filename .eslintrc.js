@@ -51,6 +51,14 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        prefer: "type-imports",
+        disallowTypeAnnotations: true,
+        fixStyle: "separate-type-imports",
+      },
+    ],
 
     // Import Resolution
     "import/no-unresolved": [

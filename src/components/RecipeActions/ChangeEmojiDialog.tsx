@@ -1,4 +1,7 @@
 import * as React from "react";
+import type {
+  SearchBoxChangeEvent,
+  InputOnChangeData} from "@fluentui/react-components";
 import {
   SearchBox,
   Dialog,
@@ -8,9 +11,7 @@ import {
   makeStyles,
   shorthands,
   tokens,
-  Text,
-  SearchBoxChangeEvent,
-  InputOnChangeData,
+  Text
 } from "@fluentui/react-components";
 import GraphemeSplitter from "grapheme-splitter";
 import * as emoji from "node-emoji";

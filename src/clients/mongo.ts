@@ -1,4 +1,5 @@
-import { MongoClient, MongoClientOptions } from "mongodb";
+import type { MongoClientOptions } from "mongodb";
+import { MongoClient } from "mongodb";
 
 // Check for MongoDB URI in environment variables
 if (!process.env.MONGODB_URI) {
