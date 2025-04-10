@@ -55,12 +55,6 @@ jobs:
       - name: Build and analyze bundle
         run: yarn analyze
 
-      - name: Upload bundle stats
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-stats
-          path: .next/analyze
-
       - name: Upload bundle stats to RelativeCI
         uses: relative-ci/agent-action@v2
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
