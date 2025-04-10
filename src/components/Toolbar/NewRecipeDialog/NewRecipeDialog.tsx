@@ -123,10 +123,10 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
         emoji: "",
       },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
           if (data?.recipeId) {
             onClose();
-            router.push(`/recipes/${data.recipeId}`);
+            await router.push(`/recipes/${data.recipeId}`);
           } else {
             setErrorMessage("Recipe created, but failed to redirect.");
           }

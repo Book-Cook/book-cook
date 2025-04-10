@@ -40,8 +40,8 @@ export function useAddToCollection() {
 
       return (await response.json()) as AddToCollectionResponse;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["collections"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["collections"] });
     },
   });
 }

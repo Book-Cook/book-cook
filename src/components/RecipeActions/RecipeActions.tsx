@@ -53,7 +53,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       e.nativeEvent.stopImmediatePropagation();
 
       const newData = {
-        _id: _id,
+        _id,
         title: title ?? "",
         tags: tags ?? [],
         emoji: emoji ?? "",
@@ -152,7 +152,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       {activeDialog === "emoji" && (
         <ChangeEmojiDialog
           isOpen={activeDialog === "emoji"}
-          currentEmoji={editableData?.emoji}
+          currentEmoji={editableData.emoji}
           onSave={handleSave("emoji")}
           onClose={closeDialog}
         />

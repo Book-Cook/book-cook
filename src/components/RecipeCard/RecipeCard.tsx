@@ -13,8 +13,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
 
-  const onCardClick = () => {
-    router.push(`/recipes/${id}`);
+  const onCardClick = async () => {
+    await router.push(`/recipes/${id}`);
   };
 
   // Format date to be more readable
@@ -31,7 +31,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
    * TODO: We should check if the user has already clicked the card in the future
    */
   const isNew = React.useMemo(() => {
-    if (!createdDate) {return false;}
+    if (!createdDate) {
+      return false;
+    }
 
     const recipeDate = new Date(createdDate);
     const currentDate = new Date();

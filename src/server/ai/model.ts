@@ -27,7 +27,7 @@ export function getAiModel(): LanguageModel {
       const modelName = process?.env?.GEMINI_MODEL ?? "gemini-1.5-flash";
       return createGoogleGenerativeAI({ apiKey })(modelName);
     },
-    gemini: function () {
+    gemini() {
       return this.google();
     },
   };

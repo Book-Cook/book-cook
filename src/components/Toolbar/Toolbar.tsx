@@ -84,8 +84,8 @@ export const Toolbar = () => {
           onNewRecipeDialogOpen={() => setIsNewRecipeDialogOpen(true)}
           onOpenChange={setIsMenuOpen}
           currentPath={router.pathname}
-          onNavigate={(url) => {
-            router.push(url);
+          onNavigate={async (url) => {
+            await router.push(url);
             setIsMenuOpen(false);
           }}
         />

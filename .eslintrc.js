@@ -42,6 +42,8 @@ module.exports = {
     "no-console": ["warn", { allow: ["warn", "error"] }],
     "prefer-const": "warn",
     "no-return-await": "warn",
+    "prefer-template": "warn",
+    "object-shorthand": "warn",
     "no-unused-expressions": "error",
     "no-implicit-coercion": "warn",
     "no-restricted-imports": [
@@ -61,6 +63,7 @@ module.exports = {
     "react/no-deprecated": "warn",
 
     // TypeScript
+    "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -71,6 +74,7 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/prefer-nullish-coalescing": "warn",
     "@typescript-eslint/prefer-optional-chain": "warn",
     "@typescript-eslint/consistent-type-imports": [

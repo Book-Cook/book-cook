@@ -10,8 +10,8 @@ export const RecipeTags = () => {
   const { recipe } = useRecipe();
   const router = useRouter();
 
-  const handleTagClick = (tag: string) => {
-    router.push(`/recipes?tag=${encodeURIComponent(tag)}`);
+  const handleTagClick = async (tag: string) => {
+    await router.push(`/recipes?tag=${encodeURIComponent(tag)}`);
   };
 
   return recipe && recipe?.tags?.length > 0 ? (
@@ -24,9 +24,9 @@ export const RecipeTags = () => {
           style={{ cursor: "pointer" }}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => {
+          onKeyDown={async (e) => {
             if (e.key === "Enter" || e.key === " ") {
-              handleTagClick(tag);
+              await handleTagClick(tag);
               e.preventDefault();
             }
           }}

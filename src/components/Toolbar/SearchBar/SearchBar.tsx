@@ -22,11 +22,11 @@ export const SearchBar = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = async (event: any) => {
     if (event.key === "Enter") {
       if (path !== "/recipes") {
         // User is not on the home page, reroute
-        router.push(`/recipes`);
+        await router.push(`/recipes`);
       }
     }
   };

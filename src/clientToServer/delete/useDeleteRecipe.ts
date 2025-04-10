@@ -7,8 +7,8 @@ export function useDeleteRecipe() {
 
   return useMutation({
     mutationFn: deleteRecipe,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["recipes"] });
     },
     onError: (error) => {
       if (error instanceof Error) {

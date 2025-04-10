@@ -117,9 +117,9 @@ export const RecipeProvider: React.FC<{
     if (idToDelete) {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
         deleteMutate(idToDelete, {
-          onSuccess: () => {
+          onSuccess: async () => {
             if (router.pathname.includes("/recipes/[recipes]")) {
-              router.push("/");
+              await router.push("/");
             }
           },
           onError: (error) => {
@@ -133,7 +133,7 @@ export const RecipeProvider: React.FC<{
   };
 
   const onAddToCollection = async (recipeId: string) => {
-    await addToCollection(recipeId);
+    addToCollection(recipeId);
   };
 
   React.useEffect(() => {

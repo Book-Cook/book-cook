@@ -44,7 +44,9 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   );
 
   const updateState = React.useCallback(() => {
-    if (!emblaApi) {return;}
+    if (!emblaApi) {
+      return;
+    }
     setScrollSnaps(emblaApi.scrollSnapList());
     setSelectedIndex(emblaApi.selectedScrollSnap());
     setCanScrollPrev(emblaApi.canScrollPrev());
@@ -52,7 +54,9 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
   }, [emblaApi]);
 
   React.useEffect(() => {
-    if (!emblaApi) {return;}
+    if (!emblaApi) {
+      return;
+    }
     updateState();
     emblaApi.on("select", updateState);
     emblaApi.on("reInit", updateState);
@@ -93,8 +97,8 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
   } = useCarouselControls(emblaApi);
 
   const handleCardClick = React.useCallback(
-    (id: string) => {
-      router.push(`/recipes/${id}`);
+    async (id: string) => {
+      await router.push(`/recipes/${id}`);
     },
     [router]
   );

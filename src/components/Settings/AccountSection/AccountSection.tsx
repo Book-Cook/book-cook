@@ -105,8 +105,8 @@ export const AccountSection: React.FC = () => {
   const dangerItemMatches =
     !searchTerm || dangerKeywords.some((k) => k.includes(searchTerm));
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" });
   };
 
   const clearRecents = async () => {
