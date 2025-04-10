@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build, Test, Lint
 on:
   push:
     branches: [main]
@@ -12,6 +12,7 @@ permissions:
   pull-requests: write
   issues: write
   statuses: write
+  checks: write
 
 jobs:
   build:
@@ -21,8 +22,6 @@ jobs:
       image: node:18.19.0
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Git Safe Directory
         run: git config --global --add safe.directory /__w/book-cook/book-cook
