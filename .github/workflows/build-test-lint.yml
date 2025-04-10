@@ -22,7 +22,8 @@ jobs:
       image: node:18.19.0
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
       - name: Git Safe Directory
         run: git config --global --add safe.directory /__w/book-cook/book-cook
 
@@ -67,3 +68,4 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: ".next/static/**/*.js"
           use-check: true
+          build-script: "analyze"
