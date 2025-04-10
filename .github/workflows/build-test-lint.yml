@@ -10,6 +10,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
+  statuses: write
 
 jobs:
   build:
@@ -18,25 +20,25 @@ jobs:
     container:
       image: node:18.19.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Git Safe Directory
         run: git config --global --add safe.directory /__w/book-cook/book-cook
 
+      - name: Cache Yarn packages
+        uses: actions/cache@v4
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Setup Node
         run: |
           yarn set version 1.22.1
-          yarn install
-
-      - name: Cache Yarn packages
-        uses: actions/cache@v3
-        with:
-          path: .yarn/cache
-          key: yarn-${{ github.sha }}
-          restore-keys: |
-            yarn-
+          yarn install --frozen-lockfile
 
       - name: Cache Next.js build cache
         uses: actions/cache@v4
@@ -61,6 +63,7 @@ jobs:
 
       - name: Comment PR with bundle size changes
         uses: preactjs/compressed-size-action@v2
+        if: github.event_name == 'pull_request'
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: ".next/static/**/*.js"
