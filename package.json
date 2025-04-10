@@ -11,7 +11,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "export": "next build && next export",
-    "analyze": "ANALYZE=true next build",
+    "analyze": "ANALYZE=true next build && cp .next/analyze/client.html .next/analyze/index.html",
     "analyze:win": "set ANALYZE=true && next build"
   },
   "compilerOptions": {
