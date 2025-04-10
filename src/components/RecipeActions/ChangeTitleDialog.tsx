@@ -89,7 +89,7 @@ export type ChangeTitleDialogProps = {
   maxLength?: number;
 };
 
-export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
+const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   isOpen,
   currentTitle,
   onSave,
@@ -193,3 +193,5 @@ export const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
     </Dialog>
   );
 };
+
+export default ChangeTitleDialog;

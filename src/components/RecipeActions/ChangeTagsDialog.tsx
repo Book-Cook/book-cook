@@ -146,7 +146,7 @@ const tagVariants = {
   },
 };
 
-export const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
+const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   isOpen,
   currentTags,
   onSave,
@@ -304,3 +304,5 @@ export const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
     </Dialog>
   );
 };
+
+export default ChangeTagsDialog;

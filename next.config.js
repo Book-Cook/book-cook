@@ -3,7 +3,11 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   disable: process.env.NODE_ENV === "development",
   register: true,
   skipWaiting: true,
-  buildExcludes: [/middleware-manifest\.json$/],
+  buildExcludes: [
+    /middleware-manifest\.json$/,
+    /\.map$/,
+    /react-loadable-manifest\.json$/,
+  ],
   // Better caching strategy
   runtimeCaching: [
     {
@@ -51,7 +55,21 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    optimizePackageImports: ["@fluentui/react-components", "lodash"],
+    optimizePackageImports: [
+      "@fluentui/react-components",
+      "lodash",
+      "node-emoji",
+      "grapheme-splitter",
+      "framer-motion",
+      "dompurify",
+      "chroma-js",
+      "@tiptap/extension-link",
+      "@tiptap/extension-placeholder",
+      "@tiptap/extension-underline",
+      "@tiptap/pm",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+    ],
   },
   images: {
     remotePatterns: [

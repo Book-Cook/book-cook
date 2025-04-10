@@ -173,7 +173,7 @@ export type ChangeEmojiDialogProps = {
   onClose: () => void;
 };
 
-export const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
+const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
   isOpen,
   currentEmoji,
   onSave,
@@ -333,3 +333,5 @@ export const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     </Dialog>
   );
 };
+
+export default ChangeEmojiDialog;

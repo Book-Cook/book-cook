@@ -19,24 +19,24 @@ import {
 import { useRecipe } from "../../context";
 import type { RecipeActionsProps } from "./RecipeActions.types";
 import isEqual from "lodash/isEqual";
+import dynamic from "next/dynamic";
 
 type DialogType = "title" | "tags" | "emoji" | null;
 
-const ChangeTitleDialog = React.lazy(() =>
-  import("./ChangeTitleDialog").then((mod) => ({
-    default: mod.ChangeTitleDialog,
-  }))
-);
-const ChangeTagsDialog = React.lazy(() =>
-  import("./ChangeTagsDialog").then((mod) => ({
-    default: mod.ChangeTagsDialog,
-  }))
-);
-const ChangeEmojiDialog = React.lazy(() =>
-  import("./ChangeEmojiDialog").then((mod) => ({
-    default: mod.ChangeEmojiDialog,
-  }))
-);
+const ChangeTitleDialog = dynamic(() => import("./ChangeTitleDialog"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ChangeTagsDialog = dynamic(() => import("./ChangeTagsDialog"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
+  loading: () => null,
+  ssr: false,
+});
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { _id, title, tags, emoji, imageURL } = props;
@@ -132,34 +132,28 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         <MenuPopover>{menuContent}</MenuPopover>
       </Menu>
       {activeDialog === "title" && (
-        <React.Suspense fallback={null}>
-          <ChangeTitleDialog
-            isOpen={activeDialog === "title"}
-            currentTitle={editableData.title}
-            onSave={handleSave("title")}
-            onClose={closeDialog}
-          />
-        </React.Suspense>
+        <ChangeTitleDialog
+          isOpen={activeDialog === "title"}
+          currentTitle={editableData.title}
+          onSave={handleSave("title")}
+          onClose={closeDialog}
+        />
       )}
       {activeDialog === "tags" && (
-        <React.Suspense fallback={null}>
-          <ChangeTagsDialog
-            isOpen={activeDialog === "tags"}
-            currentTags={editableData.tags}
-            onSave={handleSave("tags")}
-            onClose={closeDialog}
-          />
-        </React.Suspense>
+        <ChangeTagsDialog
+          isOpen={activeDialog === "tags"}
+          currentTags={editableData.tags}
+          onSave={handleSave("tags")}
+          onClose={closeDialog}
+        />
       )}
       {activeDialog === "emoji" && (
-        <React.Suspense fallback={null}>
-          <ChangeEmojiDialog
-            isOpen={activeDialog === "emoji"}
-            currentEmoji={editableData?.emoji}
-            onSave={handleSave("emoji")}
-            onClose={closeDialog}
-          />
-        </React.Suspense>
+        <ChangeEmojiDialog
+          isOpen={activeDialog === "emoji"}
+          currentEmoji={editableData?.emoji}
+          onSave={handleSave("emoji")}
+          onClose={closeDialog}
+        />
       )}
     </>
   );
