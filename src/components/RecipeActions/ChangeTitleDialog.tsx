@@ -123,15 +123,6 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
     onClose();
   };
 
-  const handleOpenChange = (
-    _event: DialogOpenChangeEvent,
-    data: { open: boolean }
-  ) => {
-    if (!data.open) {
-      onClose();
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -142,7 +133,10 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={handleOpenChange}
+      onOpenChange={(ev, data) => {
+        ev.stopPropagation();
+        return !data.open && onClose();
+      }}
       modalType="modal"
       surfaceMotion={null}
     >

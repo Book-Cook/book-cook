@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth/next";
 import type { Recipe } from "src/clientToServer";
 import authOptions from "../auth/[...nextauth]";
 
-
 import clientPromise from "../../../clients/mongo";
 
 type UpdateFields = {
@@ -203,11 +202,11 @@ export default async function handler(
       if (isPublic !== undefined) {
         setFields.isPublic = isPublic;
       }
+      if (tags) {
+        setFields.tags = tags;
+      }
 
       // Fields that use $addToSet
-      if (tags) {
-        addToSetFields.tags = { $each: tags } as unknown as string[];
-      }
       if (shareWithEmail) {
         addToSetFields.sharedWith = {
           $each: [shareWithEmail],

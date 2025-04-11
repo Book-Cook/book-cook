@@ -46,7 +46,9 @@ export const TagPicker: React.FC<TagFilterProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
-    if (!isDropdownOpen) {setIsDropdownOpen(true);}
+    if (!isDropdownOpen) {
+      setIsDropdownOpen(true);
+    }
   };
 
   const handleAddTag = (tagToAdd: string = tagInput.trim()) => {

@@ -2,44 +2,41 @@ import { tokens, makeStyles, shorthands } from "@fluentui/react-components";
 
 export const useHeaderStyles = makeStyles({
   headerSection: {
+    width: "100%",
     display: "flex",
     flexDirection: "column",
-    ...shorthands.gap(tokens.spacingVerticalL),
+    ...shorthands.gap(tokens.spacingVerticalM),
   },
   titleRow: {
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
     alignItems: "center",
+    width: "100%",
     ...shorthands.gap(tokens.spacingHorizontalL),
-    minHeight: "48px",
   },
   titleContainer: {
     flexGrow: 1,
     minWidth: 0,
     fontFamily: "'Georgia', serif",
-    padding: "6px",
+    padding: "0px 6px",
     fontSize: tokens.fontSizeHero800,
     lineHeight: tokens.lineHeightHero800,
     fontWeight: tokens.fontWeightSemibold,
-  },
-  title: {
-    margin: 0,
-    fontWeight: tokens.fontWeightSemibold,
-    fontSize: tokens.fontSizeHero800,
-    lineHeight: tokens.lineHeightHero800,
+    whiteSpace: "normal",
     overflowWrap: "break-word",
+    wordWrap: "break-word",
   },
-  actionButtons: {
+  subContentContainer: {
     display: "flex",
-    flexShrink: 0,
-    ...shorthands.gap(tokens.spacingHorizontalS),
-    alignItems: "center",
+    gap: "8px",
+    flexDirection: "column",
+    paddingLeft: tokens.spacingHorizontalSNudge,
   },
   date: {
     color: tokens.colorNeutralForeground3,
     fontStyle: "italic",
     fontSize: tokens.fontSizeBase200,
     lineHeight: tokens.lineHeightBase200,
-    paddingLeft: tokens.spacingHorizontalSNudge,
   },
   favoriteButton: {
     color: tokens.colorPaletteRedForeground1,
@@ -54,5 +51,7 @@ export const useHeaderStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     ...shorthands.gap(tokens.spacingHorizontalS),
+    flexShrink: 0,
+    justifyContent: "flex-end",
   },
 });

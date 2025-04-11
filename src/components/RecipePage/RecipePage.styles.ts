@@ -1,4 +1,4 @@
-import { makeStyles } from "@fluentui/react-components";
+import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
 export const useStyles = makeStyles({
   pageContainer: {
@@ -13,14 +13,14 @@ export const useStyles = makeStyles({
     marginTop: "20px",
     display: "flex",
     flexDirection: "column",
-    gap: "30px",
+    ...shorthands.gap(tokens.spacingVerticalM),
     overflow: "hidden",
   },
   topSection: {
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    gap: "30px",
+    ...shorthands.gap(tokens.spacingVerticalM),
     "@media (max-width: 768px)": {
       flexDirection: "column",
     },

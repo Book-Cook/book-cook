@@ -49,6 +49,7 @@ export function useUpdateRecipe(recipeId: string | string[] | undefined) {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
       await queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      await queryClient.invalidateQueries({ queryKey: ["allTags"] });
     },
   });
 }

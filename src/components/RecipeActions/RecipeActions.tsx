@@ -19,6 +19,7 @@ import {
 import isEqual from "lodash/isEqual";
 import dynamic from "next/dynamic";
 
+import { useFetchAllTags } from "src/clientToServer";
 import type { RecipeActionsProps } from "./RecipeActions.types";
 
 import { useRecipe } from "../../context";
@@ -44,6 +45,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { _id, title, tags, emoji, imageURL } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
+  const { availableTags } = useFetchAllTags();
 
   const [activeDialog, setActiveDialog] = React.useState<DialogType>(null);
 
@@ -146,6 +148,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           isOpen={activeDialog === "tags"}
           currentTags={editableData.tags}
           onSave={handleSave("tags")}
+          availableTags={availableTags}
           onClose={closeDialog}
         />
       )}

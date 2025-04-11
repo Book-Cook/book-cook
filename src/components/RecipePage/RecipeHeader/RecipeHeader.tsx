@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
+import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
 
 import { useConvertMeasurements } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
@@ -143,11 +144,14 @@ export const RecipeHeader = () => {
           onSave={saveChanges}
           onCancel={cancelEditing}
         />
-        {formattedDate && (
-          <Text block italic className={styles.date}>
-            Created: {formattedDate}
-          </Text>
-        )}
+        <div className={styles.subContentContainer}>
+          <RecipeAuthor />
+          {formattedDate && (
+            <Text block italic className={styles.date}>
+              Created: {formattedDate}
+            </Text>
+          )}
+        </div>
       </motion.div>
     </>
   );
