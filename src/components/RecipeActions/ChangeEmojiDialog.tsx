@@ -1,7 +1,8 @@
 import * as React from "react";
 import type {
   SearchBoxChangeEvent,
-  InputOnChangeData} from "@fluentui/react-components";
+  InputOnChangeData,
+} from "@fluentui/react-components";
 import {
   SearchBox,
   Dialog,
@@ -11,7 +12,7 @@ import {
   makeStyles,
   shorthands,
   tokens,
-  Text
+  Text,
 } from "@fluentui/react-components";
 import GraphemeSplitter from "grapheme-splitter";
 import * as emoji from "node-emoji";
@@ -159,7 +160,9 @@ const useStyles = makeStyles({
 
 // Check if a string is a single emoji character
 const isSingleEmoji = (value: string): boolean => {
-  if (!value) {return false;}
+  if (!value) {
+    return false;
+  }
   const graphemes = splitter.splitGraphemes(value);
   return (
     graphemes.length === 1 &&
