@@ -5714,9 +5714,9 @@ aggregate-error@3.1.0, aggregate-error@^3.0.0:
     indent-string "^4.0.0"
 
 ai@^4.3.2:
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-4.3.4.tgz#91b44a0b803a079f2f87988d12b1433e7484dadb"
-  integrity sha512-uMjzrowIqfU8CCCxhx8QGl7ETydHBROeNL0VoEwetkmDCY6Q8ZTacj6jNNqGJOiCk595aUrGR9VHPY9Ylvy1fg==
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-4.3.5.tgz#8c902bfbf3cf7a04a50a2bad4bd5519b8aad13fa"
+  integrity sha512-hxJ+6YCdGOK1MVPGITmz1if+LXR/aW72w8TI8kiV+3R7lpK1hfpApR8EjqN2ag6cWa0R7OEI3gb/srWkQ3hT2Q==
   dependencies:
     "@ai-sdk/provider" "1.1.2"
     "@ai-sdk/provider-utils" "2.2.6"
