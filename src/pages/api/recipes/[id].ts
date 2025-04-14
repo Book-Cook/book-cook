@@ -55,9 +55,14 @@ export default async function handler(
 
   // Check if the user can delete the recipe (only the owner can delete)
   const canDelete = async (id: string) => {
+    const currentUser = await db
+      .collection("users")
+      .findOne({ email: session?.user?.email });
+    const currentUserId = currentUser?._id?.toString() || "";
+
     const recipe = await recipesCollection.findOne({
       _id: new ObjectId(id),
-      owner: session?.user?.email,
+      owner: currentUserId,
     });
 
     if (!recipe) {
@@ -70,10 +75,15 @@ export default async function handler(
   // Check if the user can update the recipe
   // (only the owner or a user in the owner's sharedWith list can update)
   const canUpdate = async (id: string) => {
+    const currentUser = await db
+      .collection("users")
+      .findOne({ email: session?.user?.email });
+    const currentUserId = currentUser?._id?.toString() || "";
+
     const recipe = await recipesCollection.findOne({
       _id: new ObjectId(id),
       $or: [
-        { owner: session?.user?.email },
+        { owner: currentUserId },
         {
           $and: [
             { owner: { $exists: true } },
@@ -102,11 +112,16 @@ export default async function handler(
   // Check if the user can view the recipe
   // (either public, owned by the user, or shared with the user)
   const canView = async (id: string) => {
+    const currentUser = await db
+      .collection("users")
+      .findOne({ email: session?.user?.email });
+    const currentUserId = currentUser?._id?.toString() || "";
+
     const recipe = await db.collection("recipes").findOne({
       _id: new ObjectId(id),
       $or: [
         { isPublic: true },
-        { owner: session?.user?.email },
+        { owner: currentUserId },
         { sharedWith: session?.user?.email },
         // Check if the recipe owner has shared their entire BookCook
         {

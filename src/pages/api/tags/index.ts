@@ -33,9 +33,14 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("dev");
 
+    const currentUser = await db
+      .collection("users")
+      .findOne({ email: session?.user?.email });
+    const currentUserId = currentUser?._id?.toString() || "";
+
     const visibilityConditions: VisibilityCondition[] = [
       { isPublic: true }, // Public recipes are always visible
-      { owner: session.user.email }, // User's own recipes
+      { owner: currentUserId }, // User's own recipes
       { sharedWith: session.user.email }, // Recipes shared directly
     ];
 

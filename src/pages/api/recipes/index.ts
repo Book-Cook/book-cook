@@ -42,16 +42,21 @@ export default async function handler(req: any, res: any) {
       ];
 
       if (session?.user?.email) {
+        const currentUser = await db
+          .collection("users")
+          .findOne({ email: session.user.email });
+        const currentUserId = currentUser?._id?.toString() || "";
+
         visibilityConditions.push(
-          { owner: session.user.email }, // User's own recipes
+          { owner: currentUserId }, // User's own recipes
           { sharedWith: session.user.email }, // Recipes shared directly
           // Recipes from users who shared their BookCook
           {
             owner: {
               $in: await db
                 .collection("users")
-                .find({ sharedWithUsers: session.user.email })
-                .map((user) => user.email)
+                .find({ sharedWithUsers: currentUserId })
+                .map((user) => user._id.toString())
                 .toArray(),
             },
           }
@@ -126,8 +131,13 @@ export default async function handler(req: any, res: any) {
         return res.status(400).json({ message: "Title required." });
       }
 
+      const currentUser = await db
+        .collection("users")
+        .findOne({ email: session.user.email });
+      const currentUserId = currentUser?._id?.toString();
+
       const newRecipe = {
-        owner: session?.user?.email,
+        owner: currentUserId,
         sharedWith: [],
         isPublic: false,
         title,

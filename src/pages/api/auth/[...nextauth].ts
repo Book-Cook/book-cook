@@ -23,11 +23,14 @@ export default NextAuth({
       if (!existingUser) {
         await users.insertOne({
           email,
+          name: message?.user?.name,
           createdAt: new Date(),
           recentlyViewedRecipes: [],
           collections: [],
           sharedWithUsers: [],
         });
+      } else if (!existingUser.name && message.user.name) {
+        await users.updateOne({ email }, { $set: { name: message.user.name } });
       }
     },
   },
