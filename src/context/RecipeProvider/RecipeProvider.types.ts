@@ -11,6 +11,7 @@ export type EditableData = {
 
 export type RecipeContextType = {
   recipe: Recipe | undefined;
+  isAuthorized: boolean;
   isLoading: boolean;
   error: unknown;
   hasEdits: boolean;

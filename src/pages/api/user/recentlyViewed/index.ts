@@ -1,9 +1,7 @@
-import type { Session } from "next-auth";
+import clientPromise from "../../../../clients/mongo";
 import { getServerSession } from "next-auth/next";
-
-import authOptions from "../auth/[...nextauth]";
-
-import clientPromise from "../../../clients/mongo";
+import authOptions from "../../auth/[...nextauth]";
+import type { Session } from "next-auth";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -22,7 +20,6 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  // Retrieve all recipes that the user has viewed recently
   try {
     if (req.method === "DELETE") {
       // Clear the recentlyViewedRecipes array
@@ -39,9 +36,9 @@ export default async function handler(req: any, res: any) {
       }
 
       res.status(200).json({ message: "Recently viewed recipes cleared" });
-    } else {
-      // GET
-      // Find the user document and project only recentlyViewedRecipes.
+
+    } else { // GET
+      // Retrieve all recipes that the user has viewed recently
       const userDoc = await db
         .collection("users")
         .findOne(
@@ -62,14 +59,14 @@ export default async function handler(req: any, res: any) {
         })
         .toArray();
 
-      const orderedRecipes = userDoc.recentlyViewedRecipes
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((id: any) =>
-          recipes.find((recipe) => recipe._id.toString() === id.toString())
-        )
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((recipe: any) => recipe) // remove any null/undefined
-        .reverse();
+    const orderedRecipes = userDoc.recentlyViewedRecipes
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((id: any) =>
+        recipes.find((recipe) => recipe._id.toString() === id.toString())
+      )
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((recipe: any) => recipe) // remove any null/undefined
+      .reverse();
 
       res.status(200).json(orderedRecipes);
     }
