@@ -5598,16 +5598,16 @@
   resolved "https://registry.yarnpkg.com/@vercel/speed-insights/-/speed-insights-1.2.0.tgz#1656c3596d4ec02d93d301ca45944c1b9b245186"
   integrity sha512-y9GVzrUJ2xmgtQlzFP2KhVRoCglwfRQgjyfY607aU0hh0Un6d0OUyrJkjuAlsV18qR4zfoFPs/BiIj9YDS6Wzw==
 
-"@yarnpkg/core@4.4.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/core/-/core-4.4.0.tgz#bab4623a3fd58631a2b5740547a984775f926804"
-  integrity sha512-ZT+dPniRDJEyH+z0oOXS+nNkrssJ2jsmqoKDP5y8wQpbHlG+bxqEq8Ri1uDQGLh+43LkEh1Brih9QMs9p3f5/A==
+"@yarnpkg/core@4.4.1":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/core/-/core-4.4.1.tgz#4e00187b90719523961304c2672d6dbbd1b6c02f"
+  integrity sha512-iWCcc7BVN2SPZahM55FoOL36NvfOnw8j90G5PqOyjBwfCJngj7jTeT16cj27fFfHYlq+gwuu4I/tkHYzZ2mplQ==
   dependencies:
     "@arcanis/slice-ansi" "^1.1.1"
     "@types/semver" "^7.1.0"
     "@types/treeify" "^1.0.0"
     "@yarnpkg/fslib" "^3.1.2"
-    "@yarnpkg/libzip" "^3.2.0"
+    "@yarnpkg/libzip" "^3.2.1"
     "@yarnpkg/parsers" "^3.0.3"
     "@yarnpkg/shell" "^4.1.2"
     camelcase "^5.3.1"
@@ -5637,7 +5637,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@yarnpkg/libzip@^3.2.0":
+"@yarnpkg/libzip@^3.2.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@yarnpkg/libzip/-/libzip-3.2.1.tgz#f690dc981f8f513f112cac93bfab0386fba7bee9"
   integrity sha512-xPdiZxwCXGXxc1GDEyPjRQ5KqkgoOmieDNszLozbqghaeXIaokRbMKLUNx0Mr0LAnzII64kN3gl5qVyzfMxnIg==
@@ -11297,9 +11297,9 @@ remark@13.0.0:
     unified "^9.1.0"
 
 renovate@^39.0.0:
-  version "39.252.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-39.252.0.tgz#b29b25dfa4e01ac0adf61606983933d0917f76ae"
-  integrity sha512-b0KazOYynirDsPZ7bgNsBNw+IkEmAIT9JLxKrvLgu5KOVv9/9rCYRqPnlTWD0lSG3+L9sKkZYSF4EtNwSk1Y7w==
+  version "39.253.2"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-39.253.2.tgz#da05e114f9d126a024ce0735f9bfb936ca2b448a"
+  integrity sha512-K5S8ZAUTRzXcQdVsXWdVoVZf3t/Znh/huvot779ou2oJdk59wHv+LoTMJbWOXQF11omTgy+oa0jv10cuyFcggA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.777.0"
     "@aws-sdk/client-ec2" "3.779.0"
@@ -11333,7 +11333,7 @@ renovate@^39.0.0:
     "@renovatebot/pep440" "4.1.0"
     "@renovatebot/ruby-semver" "4.0.0"
     "@sindresorhus/is" "4.6.0"
-    "@yarnpkg/core" "4.4.0"
+    "@yarnpkg/core" "4.4.1"
     "@yarnpkg/parsers" "3.0.3"
     agentkeepalive "4.6.0"
     aggregate-error "3.1.0"
