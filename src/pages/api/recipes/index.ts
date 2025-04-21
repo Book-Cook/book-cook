@@ -41,21 +41,16 @@ export default async function handler(req: any, res: any) {
         { isPublic: true }, // Public recipes are always visible
       ];
 
-      if (session?.user?.email) {
-        const currentUser = await db
-          .collection("users")
-          .findOne({ email: session.user.email });
-        const currentUserId = currentUser?._id?.toString() || "";
-
+      if (session?.user?.email && session?.user?.id) {
         visibilityConditions.push(
-          { owner: currentUserId }, // User's own recipes
+          { owner: session.user.id as string }, // User's own recipes
           { sharedWith: session.user.email }, // Recipes shared directly
           // Recipes from users who shared their BookCook
           {
             owner: {
               $in: await db
                 .collection("users")
-                .find({ sharedWithUsers: currentUserId })
+                .find({ sharedWithUsers: session.user.id })
                 .map((user) => user._id.toString())
                 .toArray(),
             },
@@ -131,13 +126,8 @@ export default async function handler(req: any, res: any) {
         return res.status(400).json({ message: "Title required." });
       }
 
-      const currentUser = await db
-        .collection("users")
-        .findOne({ email: session.user.email });
-      const currentUserId = currentUser?._id?.toString();
-
       const newRecipe = {
-        owner: currentUserId,
+        owner: session.user.id,
         sharedWith: [],
         isPublic: false,
         title,
