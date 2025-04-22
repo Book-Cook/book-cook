@@ -6,14 +6,14 @@ import { fetchUser } from "./fetchUser";
  *
  * This only fetches the user name.
  */
-export function useFetchUser(userId: string) {
+export function useFetchUser(userId?: string) {
   const {
     data: user,
     isLoading,
     error,
   } = useQuery({
     queryKey: ["user", userId],
-    queryFn: () => fetchUser(userId),
+    queryFn: () => (userId ? fetchUser(userId) : null),
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
   });
