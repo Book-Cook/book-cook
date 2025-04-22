@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import isEqual from "lodash/isEqual";
+import { isEqual } from "lodash";
 import { useRouter } from "next/router";
-
+import { useSession } from "next-auth/react";
 import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
 
 import {
@@ -10,6 +10,7 @@ import {
   useDeleteRecipe,
   useAddToCollection,
   useUpdateRecipe,
+  useCheckFullyShared
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 
@@ -22,6 +23,7 @@ export const RecipeProvider: React.FC<{
   specificRecipeId?: string;
 }> = ({ children, specificRecipeId }) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const { recipes: routerRecipeId } = router.query;
   const recipeId =
     specificRecipeId ??
@@ -51,6 +53,11 @@ export const RecipeProvider: React.FC<{
     queryFn: () => fetchRecipe(recipeId as string),
     enabled: Boolean(recipeId),
   });
+
+  const { data: hasSharedAccess } = useCheckFullyShared(
+    recipe?.owner,
+    session?.user?.email
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateEditableDataKey = (field: string, value: any) => {
@@ -169,9 +176,21 @@ export const RecipeProvider: React.FC<{
     return !isEqual(editableData, initialEditableData);
   }, [editableData, initialEditableData]);
 
+  const isAuthorized = React.useMemo(() => {
+    if (!recipe || !session?.user?.email) {
+      return false;
+    }
+    return (
+      recipe.owner === session.user.email ||
+      (recipe.sharedWith || []).includes(session.user.email) ||
+      hasSharedAccess
+    );
+  }, [recipe, session, hasSharedAccess]);
+
   const contextValue = {
     recipe,
     isLoading,
+    isAuthorized,
     error,
     editableData,
     updateEditableDataKey,

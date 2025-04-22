@@ -23,7 +23,7 @@ export function useAddToCollection() {
         throw new Error("Recipe ID is required.");
       }
 
-      const response = await fetch("/api/collections", {
+      const response = await fetch("/api/users/collections", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ recipeId }),

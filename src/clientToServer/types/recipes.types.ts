@@ -39,6 +39,11 @@ export type Recipe = {
    * The owner of the recipe.
    */
   owner: string;
+
+  /**
+   * The list of users with whom the recipe is shared.
+   */
+  sharedWith: string[];
 };
 
 export type UpdateRecipePayload = {
