@@ -30,6 +30,26 @@ node_modules
 .pnp.loader.mjs
 package-lock.json
 
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map
+**/public/fallback-*.js
+
+# PWA assets (if generated)
+**/public/precache-manifest.*.js
+**/public/service-worker.js
+
+# PWA manifests
+public/manifest.json.gz
+public/manifest.webmanifest.gz
+
+# Browser cache files
+.cache/
+
 # Production
 build*
 

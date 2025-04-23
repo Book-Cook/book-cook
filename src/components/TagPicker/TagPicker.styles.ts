@@ -1,5 +1,5 @@
-import { makeStyles, shorthands } from "@griffel/react";
 import { tokens } from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@griffel/react";
 
 export const useStyles = makeStyles({
   container: {
@@ -7,6 +7,7 @@ export const useStyles = makeStyles({
     flexDirection: "column",
     gap: "8px",
     width: "100%",
+    maxWidth: "600px",
     position: "relative",
   },
   inputContainer: {

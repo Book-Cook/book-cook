@@ -1,24 +1,70 @@
-name: Build and Test
-on: [push, pull_request]
+name: Build, Test, Lint
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+  checks: write
 
 jobs:
   build:
-      image: node:18.19.0
-
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: node:22.14.0
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Yarn
-        run: yarn set version 1.22.1
-      - name: Install dependencies
-        run: yarn install
-      - name: Cache Yarn Cache
-        uses: actions/cache@v2
+      - uses: actions/checkout@v4
         with:
-          path: .yarn/cache
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          fetch-depth: 0
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory /__w/book-cook/book-cook
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: "yarn"
+
+      - name: Install project dependencies
+        run: yarn
+
+      - name: Cache Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
           restore-keys: |
-            yarn-
-      - name: Build
-        run: yarn build
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.js') }}
+            nextjs-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
       - name: Lint
         run: yarn lint
+
+      - name: Build and analyze bundle
+        run: yarn build
+
+      - name: Upload bundle stats to RelativeCI
+        uses: relative-ci/agent-action@v2
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        continue-on-error: true
+        with:
+          key: ${{ secrets.RELATIVE_CI_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webpackStatsFile: .next/analyze/webpack-stats.json
+
+      - name: Test
+        run: yarn test:coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

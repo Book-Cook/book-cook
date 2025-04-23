@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useStyles } from "./TagPicker.styles";
-import type { TagFilterProps } from "./TagPicker.types";
 import { SearchRegular } from "@fluentui/react-icons";
 
-export const TagFilter: React.FC<TagFilterProps> = ({
+import { useStyles } from "./TagPicker.styles";
+import type { TagFilterProps } from "./TagPicker.types";
+
+export const TagPicker: React.FC<TagFilterProps> = ({
   availableTags,
   selectedTags,
   onTagsChange,
@@ -45,7 +46,9 @@ export const TagFilter: React.FC<TagFilterProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
-    if (!isDropdownOpen) setIsDropdownOpen(true);
+    if (!isDropdownOpen) {
+      setIsDropdownOpen(true);
+    }
   };
 
   const handleAddTag = (tagToAdd: string = tagInput.trim()) => {

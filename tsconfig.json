@@ -1,8 +1,8 @@
 {
-  "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "lib",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "sourceMap": true,
     "declaration": true,
@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
     "types": ["jest", "@types/jest"],
@@ -30,5 +29,6 @@
     "src/pages/index.js",
     "src/pages/api/auth/[...nextauth].ts",
     "src/clients/mongo.js"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }

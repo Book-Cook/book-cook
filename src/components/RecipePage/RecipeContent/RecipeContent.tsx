@@ -1,20 +1,18 @@
 import * as React from "react";
-import { Textarea } from "@fluentui/react-components";
 import { motion } from "framer-motion";
-import { MarkdownParser, FallbackScreen } from "../..";
+
 import { useRecipe } from "../../../context";
-import { useStyles } from "./RecipeContent.styles";
+import { Editor } from "../../Editor/Editor";
 
 export const RecipeContent = () => {
-  const styles = useStyles();
-  const {
-    recipe,
-    isLoading,
-    error,
-    isEditing,
-    editableData,
-    updateEditableData,
-  } = useRecipe();
+  const { isLoading, editableData, updateEditableDataKey, isAuthorized } = useRecipe();
+
+  const handleEditorChange = React.useCallback(
+    (htmlContent: string) => {
+      updateEditableDataKey("content", htmlContent);
+    },
+    [updateEditableDataKey]
+  );
 
   return (
     <motion.div
@@ -22,27 +20,18 @@ export const RecipeContent = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.6, duration: 0.5 }}
     >
-      <FallbackScreen
-        isLoading={isLoading}
-        isError={Boolean(error)}
-        dataLength={recipe?.data?.length}
-      >
-        {isEditing ? (
-          <Textarea
-            value={editableData.content}
-            onChange={(e) => updateEditableData("content", e.target.value)}
-            className={styles.contentTextarea}
-            placeholder="Write your recipe content in markdown..."
-            resize="vertical"
-          />
-        ) : (
-          recipe?.data && (
-            <div className={styles.recipeContent}>
-              <MarkdownParser markdownInput={recipe.data} />
-            </div>
-          )
-        )}
-      </FallbackScreen>
+      {!isLoading && isAuthorized ? (
+        <Editor
+          value={editableData?.content || ""}
+          onChange={handleEditorChange}
+          placeholder="Write your recipe content..."
+          readOnly={isLoading}
+        />
+      ) : null}
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && !isAuthorized && (
+        <div>You are not authorized to view this recipe</div>
+      )}
     </motion.div>
   );
 };

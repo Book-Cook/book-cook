@@ -1,5 +1,6 @@
-import type { Recipe } from "../types";
 import DOMPurify from 'dompurify';
+
+import type { Recipe } from "../types";
 
 export const fetchRecipe = async (id: string): Promise<Recipe> => {
   const sanitized = DOMPurify.sanitize(id)

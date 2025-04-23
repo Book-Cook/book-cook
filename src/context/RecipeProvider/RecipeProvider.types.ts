@@ -1,20 +1,28 @@
+import type { Recipe, UpdateRecipePayload } from "../../clientToServer";
+
+export type EditableData = {
+  title: string;
+  content: string;
+  tags: string[];
+  imageURL: string;
+  emoji: string;
+  _id?: string;
+};
+
 export type RecipeContextType = {
-  recipe: any;
+  recipe: Recipe | undefined;
+  isAuthorized: boolean;
   isLoading: boolean;
   error: unknown;
-  isEditing: boolean;
-  setIsEditing: (value: boolean) => void;
-  editableData: {
-    title: string;
-    content: string;
-    tags: string[];
-    imageURL: string;
-  };
-  updateEditableData: (field: string, value: any) => void;
+  hasEdits: boolean;
+  editableData: EditableData;
+  updateEditableData: (value: EditableData) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateEditableDataKey: (field: string, value: any) => void;
   handleAddTag: (tag: string) => void;
   handleRemoveTag: (tag: string) => void;
-  saveChanges: () => void;
+  saveChanges: (immediateUpdate?: Partial<UpdateRecipePayload>) => void;
   cancelEditing: () => void;
   deleteRecipe: () => void;
-  handleImageUpload: (file: File) => void;
+  onAddToCollection: (recipeId: string) => void;
 };

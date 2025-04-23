@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useStyles } from "./LandingPage.styles";
 import {
   Button,
   Text,
@@ -18,6 +17,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
+
+import { useStyles } from "./LandingPage.styles";
 
 // Animation variants for Framer Motion
 const fadeIn = {
@@ -63,12 +64,7 @@ const featuredRecipes = [
 const LandingPage = () => {
   const styles = useStyles();
   const router = useRouter();
-  const { data: session, status } = useSession();
-
-  // Replace with actual images for production
-  const placeholderImages = featuredRecipes.map(
-    (recipe) => `/placeholder-${recipe.id}.jpg`
-  );
+  const { data: session } = useSession();
 
   return (
     <div className={styles.container}>
@@ -188,7 +184,7 @@ const LandingPage = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {featuredRecipes.map((recipe, index) => (
+          {featuredRecipes.map((recipe) => (
             <motion.div key={recipe.id} variants={fadeIn}>
               <Card
                 className={styles.recipeCard}
@@ -196,7 +192,7 @@ const LandingPage = () => {
               >
                 <CardPreview>
                   <Image
-                    src={placeholderImages[index]}
+                    src={""}
                     alt={recipe.title}
                     width={300}
                     height={200}

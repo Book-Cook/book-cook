@@ -23,4 +23,14 @@ export type RecipeCardProps = {
    * The id of the recipe to navigate to
    */
   id: string;
+
+  /**
+   * The emoji to render for the recipe card.
+   */
+  emoji: string;
+
+  /**
+   * Whether to render the card in a minimal style.
+   */
+  isMinimal?: boolean;
 };

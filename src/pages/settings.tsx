@@ -1,7 +1,5 @@
-import * as React from "react";
-
-import { useSession } from "next-auth/react";
+import { SettingsPage } from "../components/Settings";
 
 export default function Settings() {
-  return <div>Settings</div>;
+  return <SettingsPage />;
 }

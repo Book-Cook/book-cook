@@ -1,5 +1,6 @@
 import React from "react";
-import { SearchBoxContextValue } from "./SearchBoxProvider.types";
+
+import type { SearchBoxContextValue } from "./SearchBoxProvider.types";
 
 export const SearchBoxContext = React.createContext<SearchBoxContextValue>({
   searchBoxValue: "",
@@ -9,4 +10,3 @@ export const SearchBoxContext = React.createContext<SearchBoxContextValue>({
 export const SearchBoxProvider = SearchBoxContext.Provider;
 
 export const useSearchBox = () => React.useContext(SearchBoxContext);
-1;

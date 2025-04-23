@@ -1,12 +1,15 @@
 import * as React from "react";
 import { tokens } from "@fluentui/react-components";
 import { SSRProvider } from "@fluentui/react-utilities";
+import { RendererProvider, createDOMRenderer } from "@griffel/react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { RendererProvider, createDOMRenderer } from "@griffel/react";
-import { AppContainer } from "../components";
+
 import { queryClient } from "../clients/react-query";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { AppContainer } from "../components";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -29,10 +32,10 @@ export default function App(props: AppProps) {
           href="/image/Book-Cook-Logo.svg"
         />
       </Head>
-      <style jsx global>
+      <style>
         {`
           body {
-            background-color: #fcfaff;
+            background-color: ${tokens.colorNeutralBackground1};
             padding: 0px;
             margin: 0px;
             height: 100%;
@@ -45,12 +48,15 @@ export default function App(props: AppProps) {
           }
         `}
       </style>
+
       <QueryClientProvider client={queryClient}>
-        <RendererProvider renderer={pageProps.renderer || createDOMRenderer()}>
+        <RendererProvider renderer={pageProps.renderer ?? createDOMRenderer()}>
           <SSRProvider>
             {isMounted && (
               <AppContainer>
                 <Component {...pageProps} />
+                <Analytics />
+                <SpeedInsights />
               </AppContainer>
             )}
           </SSRProvider>
