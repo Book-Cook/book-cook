@@ -1,8 +1,9 @@
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 
-import { authOptions } from "../../auth/[...nextauth]";
 import { getDb } from "src/utils";
+
+import { authOptions } from "../../auth/[...nextauth]";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {

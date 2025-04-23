@@ -2,11 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 
+import { getDb } from "src/utils";
 import { authOptions } from "../auth/[...nextauth]";
 
 import clientPromise from "../../../clients/mongo";
-
-import { getDb } from "src/utils";
 
 type ResponseData = { message: string };
 

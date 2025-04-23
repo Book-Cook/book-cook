@@ -3,8 +3,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "../../auth/[...nextauth]";
 import { getDb } from "src/utils";
+
+import { authOptions } from "../../auth/[...nextauth]";
 
 type ResponseData = { message?: string; sharedWithUsers?: string[] };
 
