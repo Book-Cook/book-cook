@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useSession } from "next-auth/react";
+
 import { useFetchUser } from "src/clientToServer/fetch/useFetchUser";
 
 export default function CollectionsPage() {
