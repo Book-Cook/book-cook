@@ -34,7 +34,7 @@ export default async function handler(
 
   // Connect to database
   const client = await clientPromise;
-  const db = client.db("dev");
+  const db = client.db(process.env.MONGODB_DB);
   const userEmail = session.user.email;
 
   try {

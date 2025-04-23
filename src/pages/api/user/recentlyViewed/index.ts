@@ -12,7 +12,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const client = await clientPromise;
-  const db = client.db("dev");
+  const db = client.db(process.env.MONGODB_DB);
   const session: Session | null = await getServerSession(req, res, authOptions);
 
   if (!session) {

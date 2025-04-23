@@ -14,7 +14,7 @@ export default async function handler(req: any, res: any) {
 
   const session: Session | null = await getServerSession(req, res, authOptions);
   const client = await clientPromise;
-  const db = client.db("dev");
+  const db = client.db(process.env.MONGODB_DB);
 
   if (!session || !session.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });

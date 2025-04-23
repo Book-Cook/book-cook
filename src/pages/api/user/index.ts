@@ -26,7 +26,7 @@ export default async function handler(
 
   try {
     const client = await clientPromise;
-    const db = client.db("dev");
+    const db = client.db(process.env.MONGODB_DB);
 
     // Start a session for transaction
     const mongoSession = client.startSession();

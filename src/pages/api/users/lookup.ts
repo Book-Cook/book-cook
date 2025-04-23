@@ -45,7 +45,7 @@ export default async function handler(
     }
 
     const client = await clientPromise;
-    const db = client.db("dev");
+    const db = client.db(process.env.MONGODB_DB);
 
     const user = await db
       .collection("users")

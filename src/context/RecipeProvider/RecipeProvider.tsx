@@ -10,7 +10,7 @@ import {
   useDeleteRecipe,
   useAddToCollection,
   useUpdateRecipe,
-  useCheckFullyShared
+  useCheckFullyShared,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 
@@ -181,7 +181,7 @@ export const RecipeProvider: React.FC<{
       return false;
     }
     return (
-      recipe.owner === session.user.email ||
+      recipe.owner === session.user.id ||
       (recipe.sharedWith || []).includes(session.user.email) ||
       hasSharedAccess
     );

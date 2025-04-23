@@ -31,7 +31,7 @@ export default async function handler(
 
   try {
     const client = await clientPromise;
-    const db = client.db("dev");
+    const db = client.db(process.env.MONGODB_DB);
 
     const visibilityConditions: VisibilityCondition[] = [
       { isPublic: true }, // Public recipes are always visible

@@ -39,7 +39,7 @@ export default async function handler(
 
   const client = await clientPromise;
   const session: Session | null = await getServerSession(req, res, authOptions);
-  const db = client.db("dev");
+  const db = client.db(process.env.MONGODB_DB);
   const recipesCollection = db.collection("recipes");
   const { id } = req.query as { id: string }; // Extract the recipe ID from the query parameters
 
