@@ -9,7 +9,7 @@ import type { UpdateRecipePayload } from "../types";
  *
  * @param recipeId The ID of the recipe to update.
  */
-export function useUpdateRecipe(recipeId: string | string[] | undefined) {
+export function useUpdateRecipe(recipeId: string | undefined) {
   const queryClient = useQueryClient();
 
   return useMutation<unknown, Error, UpdateRecipePayload>({

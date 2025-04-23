@@ -140,7 +140,7 @@ export const RecipeProvider: React.FC<{
     }
   };
 
-  const onAddToCollection = async (recipeId: string) => {
+  const onAddToCollection = (recipeId: string) => {
     addToCollection(recipeId);
   };
 

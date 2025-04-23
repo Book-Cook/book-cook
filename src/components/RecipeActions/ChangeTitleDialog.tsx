@@ -11,7 +11,6 @@ import {
   shorthands,
   tokens,
 } from "@fluentui/react-components";
-import type { DialogOpenChangeEvent } from "@fluentui/react-components";
 
 const useStyles = makeStyles({
   dialogSurface: {

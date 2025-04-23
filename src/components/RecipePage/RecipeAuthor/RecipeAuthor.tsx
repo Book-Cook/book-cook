@@ -10,7 +10,7 @@ import { useRecipe } from "../../../context";
 export const RecipeAuthor: React.FC = () => {
   const styles = useStyles();
   const { recipe } = useRecipe();
-  const { user } = useFetchUser(recipe?.owner || "");
+  const { user } = useFetchUser(recipe?.owner ?? "");
 
   return recipe?.owner ? (
     <div className={styles.authorContainer}>

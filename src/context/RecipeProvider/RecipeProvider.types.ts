@@ -24,5 +24,5 @@ export type RecipeContextType = {
   saveChanges: (immediateUpdate?: Partial<UpdateRecipePayload>) => void;
   cancelEditing: () => void;
   deleteRecipe: () => void;
-  onAddToCollection: (recipeId: string) => Promise<void>;
+  onAddToCollection: (recipeId: string) => void;
 };
