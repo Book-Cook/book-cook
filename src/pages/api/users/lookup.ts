@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { ObjectId } from "mongodb";
 
-import authOptions from "../auth/[...nextauth]";
+import { authOptions } from "../auth/[...nextauth]";
 import clientPromise from "../../../clients/mongo";
 import type { Session } from "next-auth";
 

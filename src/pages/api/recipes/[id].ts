@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 
 import type { Recipe } from "src/clientToServer";
-import authOptions from "../auth/[...nextauth]";
+import { authOptions } from "../auth/[...nextauth]";
 
 import clientPromise from "../../../clients/mongo";
 

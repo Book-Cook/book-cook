@@ -1,10 +1,6 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
 import clientPromise from "src/clients/mongo";
-import "next-auth";
-
-import "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -17,11 +13,11 @@ declare module "next-auth" {
   }
 }
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process?.env?.GOOGLE_CLIENT_ID as string,
-      clientSecret: process?.env?.GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
   callbacks: {
@@ -46,7 +42,6 @@ export default NextAuth({
       const db = client.db(process.env.MONGODB_DB);
       const users = db.collection("users");
 
-      // Check if a user with this email already exists
       const email = message.user.email;
       const existingUser = await users.findOne({ email });
 
@@ -64,4 +59,6 @@ export default NextAuth({
       }
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

@@ -1,7 +1,7 @@
 import type { PullOperator } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 
 import clientPromise from "../../../../clients/mongo";
 import authOptions from "../../auth/[...nextauth]";

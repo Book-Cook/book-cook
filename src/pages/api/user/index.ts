@@ -1,6 +1,6 @@
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import clientPromise from "../../../clients/mongo";
-import authOptions from "../auth/[...nextauth]";
+import { authOptions } from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -19,7 +19,7 @@ export default async function handler(
 
   const session: Session | null = await getServerSession(req, res, authOptions);
 
-  if (!session?.user?.email) {
+  if (!session?.user?.id || !session?.user?.email) {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
@@ -36,10 +36,7 @@ export default async function handler(
         // Delete all recipes owned by the user
         await db
           .collection("recipes")
-          .deleteMany(
-            { owner: session?.user?.email },
-            { session: mongoSession }
-          );
+          .deleteMany({ owner: session?.user?.id }, { session: mongoSession });
 
         // Remove user from any shared recipes
         await db.collection("recipes").updateMany(

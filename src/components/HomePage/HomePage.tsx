@@ -59,13 +59,13 @@ const HomePage = () => {
   const { data: session } = useSession();
 
   const { data: recentlyViewed } = useQuery<Recipe[]>({
-    queryKey: ["recentlyViewed", session?.user?.email],
+    queryKey: ["recentlyViewed", session?.user?.id],
     queryFn: () => fetchRecentlyViewed(),
     enabled: Boolean(session),
   });
 
   const { data: recipeCollections } = useQuery<Recipe[]>({
-    queryKey: ["recipeCollections", session?.user?.email],
+    queryKey: ["recipeCollections", session?.user?.id],
     queryFn: () => fetchRecipeCollections(),
     enabled: Boolean(session),
   });

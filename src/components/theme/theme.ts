@@ -1,11 +1,5 @@
-// src/theme.ts
-import type {
-  BrandVariants,
-  Theme} from "@fluentui/react-components";
-import {
-  createDarkTheme,
-  createLightTheme
-} from "@fluentui/react-components";
+import type { BrandVariants, Theme } from "@fluentui/react-components";
+import { createDarkTheme, createLightTheme } from "@fluentui/react-components";
 import chroma from "chroma-js";
 
 export type ThemeMode = "light" | "dark";
@@ -42,11 +36,22 @@ const generateFallbackVariants = (): BrandVariants => {
 
 export const generateBrandVariants = (primaryColor: string): BrandVariants => {
   try {
-    const primary = chroma(primaryColor);
+    const safePrimaryColor =
+      typeof primaryColor === "string"
+        ? primaryColor.trim()
+        : FALLBACK_PRIMARY_COLOR;
+
+    if (!chroma.valid(safePrimaryColor)) {
+      console.warn("Invalid color format:", safePrimaryColor);
+      return generateFallbackVariants();
+    }
+
+    const primary = chroma(safePrimaryColor);
     const [primaryH, primaryS, primaryL] = primary.hsl();
 
     if (isNaN(primaryH)) {
-      return generateBrandVariants(FALLBACK_PRIMARY_COLOR);
+      console.warn("NaN hue detected for color:", safePrimaryColor);
+      return generateFallbackVariants();
     }
 
     const variants: Partial<BrandVariants> = {};
@@ -58,10 +63,9 @@ export const generateBrandVariants = (primaryColor: string): BrandVariants => {
     const targetIndex = steps.indexOf(PRIMARY_BRAND_SHADE_INDEX);
 
     steps.forEach((step, index) => {
-      const ratio = index / (steps.length - 1); // Position in scale (0 to 1)
+      const ratio = index / (steps.length - 1);
       let targetL: number;
 
-      // Interpolate lightness pivoting around the primary color's lightness
       if (index <= targetIndex) {
         targetL = maxL - (maxL - primaryL) * (index / targetIndex);
       } else {
@@ -78,9 +82,6 @@ export const generateBrandVariants = (primaryColor: string): BrandVariants => {
         .hsl(primaryH, targetS, Math.max(minL, Math.min(maxL, targetL)))
         .hex();
     });
-
-    // Optional: Force the target shade to match input exactly if needed
-    // variants[PRIMARY_BRAND_SHADE_INDEX] = primary.hex();
 
     return variants as BrandVariants;
   } catch (error) {

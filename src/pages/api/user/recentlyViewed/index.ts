@@ -1,5 +1,5 @@
 import clientPromise from "../../../../clients/mongo";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import authOptions from "../../auth/[...nextauth]";
 import type { Session } from "next-auth";
 
@@ -36,8 +36,8 @@ export default async function handler(req: any, res: any) {
       }
 
       res.status(200).json({ message: "Recently viewed recipes cleared" });
-
-    } else { // GET
+    } else {
+      // GET
       // Retrieve all recipes that the user has viewed recently
       const userDoc = await db
         .collection("users")
@@ -59,14 +59,14 @@ export default async function handler(req: any, res: any) {
         })
         .toArray();
 
-    const orderedRecipes = userDoc.recentlyViewedRecipes
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((id: any) =>
-        recipes.find((recipe) => recipe._id.toString() === id.toString())
-      )
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .filter((recipe: any) => recipe) // remove any null/undefined
-      .reverse();
+      const orderedRecipes = userDoc.recentlyViewedRecipes
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((id: any) =>
+          recipes.find((recipe) => recipe._id.toString() === id.toString())
+        )
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((recipe: any) => recipe) // remove any null/undefined
+        .reverse();
 
       res.status(200).json(orderedRecipes);
     }
