@@ -1,8 +1,9 @@
-import clientPromise from "../../../../clients/mongo";
-import { getServerSession } from "next-auth";
-import authOptions from "../../auth/[...nextauth]";
-import type { Session } from "next-auth";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
+
+import clientPromise from "../../../../clients/mongo";
+import { authOptions } from "../../auth/[...nextauth]";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -16,7 +17,7 @@ export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const db = client.db(process.env.MONGODB_DB);
 
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 

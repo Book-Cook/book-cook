@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { fetchUser } from "./fetchUser";
 
 /**
@@ -14,7 +15,7 @@ export function useFetchUser(userId?: string) {
   } = useQuery({
     queryKey: ["user", userId],
     queryFn: () => (userId ? fetchUser(userId) : null),
-    enabled: !!userId,
+    enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
   });
 

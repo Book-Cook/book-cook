@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { isEqual } from "lodash";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+
 import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
 
 import {
@@ -86,11 +87,11 @@ export const RecipeProvider: React.FC<{
     if (immediateUpdate) {
       updateRecipe({
         ...{
-          title: editableData?.title as string,
-          data: editableData?.content as string,
-          tags: editableData?.tags as string[],
-          imageURL: editableData?.imageURL as string,
-          emoji: editableData?.emoji as string,
+          title: editableData?.title,
+          data: editableData?.content,
+          tags: editableData?.tags,
+          imageURL: editableData?.imageURL,
+          emoji: editableData?.emoji,
         },
         ...(immediateUpdate || {}),
       });

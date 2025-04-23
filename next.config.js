@@ -1,4 +1,9 @@
-const withPWA = require("@ducanh2912/next-pwa").default({
+import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
+import pwa from "@ducanh2912/next-pwa";
+import bundleAnalyzer from "@next/bundle-analyzer";
+import { StatsWriterPlugin } from "webpack-stats-plugin";
+
+const withPWA = pwa({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   register: true,
@@ -8,7 +13,6 @@ const withPWA = require("@ducanh2912/next-pwa").default({
     /\.map$/,
     /react-loadable-manifest\.json$/,
   ],
-  // Better caching strategy
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
@@ -46,7 +50,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   ],
 });
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
@@ -91,9 +95,6 @@ const nextConfig = {
     const { dev, isServer } = options;
 
     if (!dev && !isServer) {
-      const { StatsWriterPlugin } = require("webpack-stats-plugin");
-      const filterWebpackStats = require("@bundle-stats/plugin-webpack-filter");
-
       config.plugins.push(
         new StatsWriterPlugin({
           filename: "../.next/analyze/webpack-stats.json",
@@ -116,4 +117,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withBundleAnalyzer(withPWA(nextConfig));
+export default withBundleAnalyzer(withPWA(nextConfig));

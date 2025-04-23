@@ -1,8 +1,10 @@
-import { getServerSession } from "next-auth";
-import clientPromise from "../../../clients/mongo";
-import { authOptions } from "../auth/[...nextauth]";
-import type { Session } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
+
+import { authOptions } from "../auth/[...nextauth]";
+
+import clientPromise from "../../../clients/mongo";
 
 type ResponseData = {
   message: string;

@@ -41,11 +41,6 @@ export const generateBrandVariants = (primaryColor: string): BrandVariants => {
         ? primaryColor.trim()
         : FALLBACK_PRIMARY_COLOR;
 
-    if (!chroma.valid(safePrimaryColor)) {
-      console.warn("Invalid color format:", safePrimaryColor);
-      return generateFallbackVariants();
-    }
-
     const primary = chroma(safePrimaryColor);
     const [primaryH, primaryS, primaryL] = primary.hsl();
 

@@ -213,7 +213,6 @@ export default async function handler(
         } as unknown as string[];
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =
         {};
       if (Object.keys(setFields).length > 0) {

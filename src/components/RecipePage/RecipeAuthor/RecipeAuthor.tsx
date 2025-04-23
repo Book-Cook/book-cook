@@ -4,8 +4,9 @@ import { PersonRegular } from "@fluentui/react-icons";
 
 import { useStyles } from "./RecipeAuthor.styles";
 
-import { useRecipe } from "../../../context";
 import { useFetchUser } from "../../../clientToServer/fetch/useFetchUser";
+import { useRecipe } from "../../../context";
+
 export const RecipeAuthor: React.FC = () => {
   const styles = useStyles();
   const { recipe } = useRecipe();

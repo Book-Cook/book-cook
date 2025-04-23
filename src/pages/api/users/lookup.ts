@@ -1,10 +1,10 @@
+import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { ObjectId } from "mongodb";
 
 import { authOptions } from "../auth/[...nextauth]";
+
 import clientPromise from "../../../clients/mongo";
-import type { Session } from "next-auth";
 
 type ResponseData = {
   name?: string;
@@ -21,13 +21,9 @@ export default async function handler(
   }
 
   // Verify the user is authenticated
-  const session = (await getServerSession(
-    req,
-    res,
-    authOptions
-  )) as Session | null;
+  const session = await getServerSession(req, res, authOptions);
 
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
@@ -40,6 +36,7 @@ export default async function handler(
     let objectId;
     try {
       objectId = new ObjectId(userId);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return res.status(400).json({ error: "Invalid userId format" });
     }

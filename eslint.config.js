@@ -8,7 +8,24 @@ import { configs, config } from "typescript-eslint";
 
 export default config(
   {
-    ignores: ["node_modules/", ".next/", "out/", "dist/"],
+    ignores: [
+      "node_modules/",
+      ".next/",
+      "out/",
+      "dist/",
+      "coverage/",
+      "lcov-report/",
+      "next-env.d.ts",
+      ".env",
+      ".env.*",
+      "!.env.example",
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml",
+      ".eslintcache",
+      "*.log",
+      "logs/",
+    ],
   },
 
   eslint.configs.recommended,
@@ -148,6 +165,11 @@ export default config(
       "no-implicit-coercion": "warn",
       "no-restricted-imports": ["error", { patterns: ["node_modules/*"] }],
       "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

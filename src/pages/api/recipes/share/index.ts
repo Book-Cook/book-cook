@@ -4,7 +4,7 @@ import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
 import clientPromise from "../../../../clients/mongo";
-import authOptions from "../../auth/[...nextauth]";
+import { authOptions } from "../../auth/[...nextauth]";
 
 type ResponseData = {
   message?: string;

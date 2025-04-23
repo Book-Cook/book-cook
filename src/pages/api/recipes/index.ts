@@ -1,8 +1,7 @@
+import type { Filter, SortDirection, Db, ObjectId } from "mongodb";
+import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { Filter, SortDirection, Db } from "mongodb";
-import { ObjectId } from "mongodb";
 
 import { authOptions } from "../auth/[...nextauth]";
 

@@ -8,6 +8,6 @@ export const getUserId = async (email: string | undefined | null) => {
     const user = await db
       .collection("users")
       .findOne({ email }, { projection: { _id: 1 } });
-    return user?._id?.toString() || "";
+    return user?._id?.toString() ?? "";
   }
 };
