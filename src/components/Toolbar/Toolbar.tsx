@@ -26,6 +26,8 @@ const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
 export const Toolbar = () => {
   const styles = useToolbarStyles();
   const router = useRouter();
+  const path = router.asPath;
+
   const { data: session } = useSession();
   const isMobile = useMediaQuery("(max-width: 900px)");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -64,9 +66,11 @@ export const Toolbar = () => {
           {session?.user && (
             <>
               <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
-              <div className={styles.searchBarWrapper}>
-                <SearchBar />
-              </div>
+              {path !== "/recipes" && (
+                <div className={styles.searchBarWrapper}>
+                  <SearchBar />
+                </div>
+              )}
             </>
           )}
           {session?.user ? (

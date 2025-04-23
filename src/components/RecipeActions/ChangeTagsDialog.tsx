@@ -11,72 +11,46 @@ import {
   shorthands,
   tokens,
 } from "@fluentui/react-components";
-import type { DialogOpenChangeEvent } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
-import { motion, AnimatePresence } from "framer-motion";
 
 const useStyles = makeStyles({
   dialogSurface: {
     maxWidth: "450px",
     width: "100%",
     ...shorthands.borderRadius("14px"),
-    boxShadow: tokens.shadow16,
   },
-  dialogTitle: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    paddingBottom: "4px",
-  },
-  dialogBody: {
-    paddingTop: "12px",
-    paddingBottom: "24px",
+  dialogBody: { display: "flex", flexDirection: "column", gap: "16px" },
+  inputContainer: { display: "flex", alignItems: "center", gap: "8px" },
+  dropdownContainer: { position: "relative", width: "100%" },
+  suggestionsDropdown: {
+    position: "absolute",
+    top: "100%",
+    left: 0,
     width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
+    backgroundColor: tokens.colorNeutralBackground1,
+    ...shorthands.borderRadius("4px"),
+    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
+    boxShadow: tokens.shadow8,
+    maxHeight: "200px",
+    overflowY: "auto",
+    zIndex: 100,
   },
-  tagInput: {
-    width: "100%",
-    fontSize: tokens.fontSizeBase300,
-  },
-  inputContainer: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-  },
-  addButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-    },
-    minWidth: "40px",
-  },
-  dialogActions: {
-    paddingTop: "0",
-    ...shorthands.gap("12px"),
-  },
-  primaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    },
-  },
-  secondaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-    },
+  suggestionItem: {
+    ...shorthands.padding("8px"),
+    cursor: "pointer",
+    ":hover": { backgroundColor: tokens.colorNeutralBackground2 },
   },
   tagsContainer: {
     display: "flex",
     flexWrap: "wrap",
     gap: "8px",
-    minHeight: "40px", // Add minimum height to prevent layout shift
+    minHeight: "40px",
+  },
+  dialogTitle: {
+    paddingBottom: "8px",
   },
   tag: {
     backgroundColor: tokens.colorNeutralBackground2,
-    color: tokens.colorNeutralForeground1,
     padding: "4px 8px",
     ...shorthands.borderRadius("4px"),
     fontSize: tokens.fontSizeBase200,
@@ -84,142 +58,112 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: "6px",
     cursor: "pointer",
-    transition: "background-color 0.2s ease",
-    ":hover": {
-      backgroundColor: tokens.colorNeutralBackground3,
-    },
-  },
-  tagText: {
-    marginRight: "4px",
+    ":hover": { backgroundColor: tokens.colorNeutralBackground3 },
   },
   noTagsMessage: {
     color: tokens.colorNeutralForeground3,
-    fontSize: tokens.fontSizeBase300,
-    textAlign: "center",
     padding: "16px 0",
+    textAlign: "center",
   },
 });
 
 export type ChangeTagsDialogProps = {
-  /**
-   * Whether the dialog is open or closed.
-   */
   isOpen: boolean;
-  /**
-   * The current tags of the recipe.
-   */
   currentTags: string[];
-  /**
-   * Callback function to handle saving the updated tags.
-   */
   onSave: (updatedTags: string[]) => void;
-  /**
-   * Callback function to handle closing the dialog.
-   */
   onClose: () => void;
-  /**
-   * Maximum allowed length for a tag
-   */
-  maxTagLength?: number;
+  availableTags?: string[];
 };
 
-// Animation variants
-const tagVariants = {
-  hidden: { opacity: 0, scale: 0.8, duration: 0.1 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.15,
-      type: "spring",
-      stiffness: 500,
-      damping: 25,
-    },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.8,
-    transition: {
-      duration: 0.1,
-      ease: "easeOut",
-    },
-  },
-};
+const maxTagLength = 30;
 
 const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   isOpen,
   currentTags,
   onSave,
   onClose,
-  maxTagLength = 30,
+  availableTags = [],
 }) => {
   const styles = useStyles();
   const [tags, setTags] = React.useState<string[]>(currentTags);
   const [newTag, setNewTag] = React.useState("");
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
+  // Get filtered suggestions
+  const suggestions = React.useMemo(() => {
+    if (!newTag.trim()) {
+      return [];
+    }
+    return availableTags
+      .filter(
+        (tag) =>
+          tag.toLowerCase().includes(newTag.toLowerCase()) &&
+          !tags.includes(tag) &&
+          tag.toLowerCase() !== newTag.toLowerCase()
+      )
+      .slice(0, 5);
+  }, [availableTags, newTag, tags]);
+
+  // Handlers
+  const handleAddTag = () => {
+    const trimmedTag = newTag.trim();
+    if (trimmedTag && !tags.includes(trimmedTag)) {
+      setTags([...tags, trimmedTag]);
+      setNewTag("");
+      setShowSuggestions(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  const handleKeyDown = (ev: React.KeyboardEvent) => {
+    ev.stopPropagation();
+    if (ev.key === "Enter") {
+      ev.preventDefault();
+      handleAddTag();
+    } else if (ev.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Reset and focus on open
   React.useEffect(() => {
     if (isOpen) {
       setTags(currentTags);
       setNewTag("");
-      // Schedule focus on input after the dialog renders
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 50);
+      setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [currentTags, isOpen]);
 
-  const handleAddTag = () => {
-    if (newTag.trim() && !tags.includes(newTag.trim())) {
-      setTags([...tags, newTag.trim()]);
-      setNewTag("");
-      // Focus back on input for quick multiple entries
-      if (inputRef.current) {
-        inputRef.current.focus();
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        inputRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
+        !inputRef.current.contains(e.target as Node)
+      ) {
+        setShowSuggestions(false);
       }
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
-  };
-
-  const handleSaveClick = () => {
-    onSave(tags);
-  };
-
-  const handleCancelClick = () => {
-    onClose();
-  };
-
-  const handleOpenChange = (
-    _event: DialogOpenChangeEvent,
-    data: { open: boolean }
-  ) => {
-    if (!data.open) {
-      onClose();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAddTag();
-    }
-  };
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={handleOpenChange}
+      onOpenChange={(ev, data) => {
+        ev.stopPropagation();
+        return !data.open && onClose();
+      }}
       modalType="modal"
       surfaceMotion={null}
     >
       <DialogSurface
         className={styles.dialogSurface}
-        aria-describedby={undefined}
         onClick={(ev) => ev.stopPropagation()}
       >
         <DialogTitle className={styles.dialogTitle}>
@@ -227,76 +171,73 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
         </DialogTitle>
         <DialogBody className={styles.dialogBody}>
           <div className={styles.inputContainer}>
-            <Input
-              placeholder="Add a new tag"
-              value={newTag}
-              onChange={(_e, data) =>
-                setNewTag(data.value.substring(0, maxTagLength))
-              }
-              className={styles.tagInput}
-              ref={inputRef}
-              onKeyDown={handleKeyDown}
-              maxLength={maxTagLength}
-              aria-label="New tag"
-            />
+            <div className={styles.dropdownContainer}>
+              <Input
+                placeholder="Add a new tag"
+                value={newTag}
+                onChange={(_, data) => {
+                  setNewTag(
+                    data.value.substring(0, maxTagLength).toLowerCase()
+                  );
+                  setShowSuggestions(true);
+                }}
+                ref={inputRef}
+                onKeyDown={handleKeyDown}
+                onFocus={() => newTag.trim() && setShowSuggestions(true)}
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <div className={styles.suggestionsDropdown} ref={dropdownRef}>
+                  {suggestions.map((suggestion) => (
+                    <div
+                      key={suggestion}
+                      className={styles.suggestionItem}
+                      onClick={(ev) => {
+                        ev.stopPropagation();
+                        if (!tags.includes(suggestion)) {
+                          setTags([...tags, suggestion]);
+                          setNewTag("");
+                          setShowSuggestions(false);
+                          inputRef.current?.focus();
+                        }
+                      }}
+                    >
+                      {suggestion}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <Button
               icon={<AddRegular />}
               appearance="primary"
               onClick={handleAddTag}
               disabled={!newTag.trim() || tags.includes(newTag.trim())}
-              className={styles.addButton}
-              aria-label="Add tag"
             />
           </div>
-
           <div className={styles.tagsContainer}>
-            <AnimatePresence>
-              {tags.length > 0 ? (
-                tags.map((tag) => (
-                  <motion.div
-                    key={tag}
-                    variants={tagVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    layout
-                    transition={{
-                      type: "spring",
-                      stiffness: 600,
-                      damping: 35,
-                    }}
-                    className={styles.tag}
-                    onClick={() => handleRemoveTag(tag)}
-                  >
-                    <span className={styles.tagText}>{tag}</span>
-                    <DismissRegular fontSize={12} />
-                  </motion.div>
-                ))
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={styles.noTagsMessage}
+            {tags.length > 0 ? (
+              tags.map((tag) => (
+                <div
+                  key={tag}
+                  className={styles.tag}
+                  onClick={() => setTags(tags.filter((t) => t !== tag))}
                 >
-                  No tags added yet. Add a tag to help organize your recipe.
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  <span>{tag}</span>
+                  <DismissRegular fontSize={12} />
+                </div>
+              ))
+            ) : (
+              <div className={styles.noTagsMessage}>
+                No tags added yet. Add a tag to help organize your recipe.
+              </div>
+            )}
           </div>
         </DialogBody>
-        <DialogActions className={styles.dialogActions}>
-          <Button
-            appearance="subtle"
-            onClick={handleCancelClick}
-            className={styles.secondaryButton}
-          >
+        <DialogActions>
+          <Button appearance="subtle" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            appearance="primary"
-            onClick={handleSaveClick}
-            className={styles.primaryButton}
-          >
+          <Button appearance="primary" onClick={() => onSave(tags)}>
             Save
           </Button>
         </DialogActions>

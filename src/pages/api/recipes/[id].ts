@@ -1,11 +1,10 @@
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 
 import type { Recipe } from "src/clientToServer";
-import authOptions from "../auth/[...nextauth]";
-
+import { authOptions } from "../auth/[...nextauth]";
 
 import clientPromise from "../../../clients/mongo";
 
@@ -40,7 +39,7 @@ export default async function handler(
 
   const client = await clientPromise;
   const session: Session | null = await getServerSession(req, res, authOptions);
-  const db = client.db("dev");
+  const db = client.db(process.env.MONGODB_DB);
   const recipesCollection = db.collection("recipes");
   const { id } = req.query as { id: string }; // Extract the recipe ID from the query parameters
 
@@ -58,7 +57,7 @@ export default async function handler(
   const canDelete = async (id: string) => {
     const recipe = await recipesCollection.findOne({
       _id: new ObjectId(id),
-      owner: session?.user?.email,
+      owner: session?.user?.id,
     });
 
     if (!recipe) {
@@ -74,7 +73,7 @@ export default async function handler(
     const recipe = await recipesCollection.findOne({
       _id: new ObjectId(id),
       $or: [
-        { owner: session?.user?.email },
+        { owner: session?.user?.id },
         {
           $and: [
             { owner: { $exists: true } },
@@ -107,7 +106,7 @@ export default async function handler(
       _id: new ObjectId(id),
       $or: [
         { isPublic: true },
-        { owner: session?.user?.email },
+        { owner: session?.user?.id },
         { sharedWith: session?.user?.email },
         // Check if the recipe owner has shared their entire BookCook
         {
@@ -203,18 +202,17 @@ export default async function handler(
       if (isPublic !== undefined) {
         setFields.isPublic = isPublic;
       }
+      if (tags) {
+        setFields.tags = tags;
+      }
 
       // Fields that use $addToSet
-      if (tags) {
-        addToSetFields.tags = { $each: tags } as unknown as string[];
-      }
       if (shareWithEmail) {
         addToSetFields.sharedWith = {
           $each: [shareWithEmail],
         } as unknown as string[];
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =
         {};
       if (Object.keys(setFields).length > 0) {

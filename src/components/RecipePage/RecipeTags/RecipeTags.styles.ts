@@ -5,7 +5,6 @@ export const useStyles = makeStyles({
     display: "flex",
     flexWrap: "wrap",
     ...shorthands.gap("10px"),
-    marginTop: "12px",
     alignItems: "center",
   },
   tag: {

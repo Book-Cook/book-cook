@@ -1,4 +1,4 @@
-const nextJest = require("next/jest.js");
+import nextJest from "next/jest.js";
 
 const createJestConfig = nextJest({
   dir: "./",
@@ -14,16 +14,19 @@ const customJestConfig = {
     "!**/.next/**",
     "!**/coverage/**",
     "!jest.config.js",
-    "!next.config.js",
+    "!next.config.{js,cjs,mjs}",
     "!**/*.test.{js,jsx,ts,tsx}",
     "!**/__tests__/**",
     "!**/__mocks__/**",
+    "!eslint.config.js",
+    "!jest.setup.ts",
   ],
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: [
     "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi)/)",
   ],
+  moduleDirectories: ["node_modules", "<rootDir>/"],
 };
 
-module.exports = createJestConfig(customJestConfig);
+export default createJestConfig(customJestConfig);

@@ -32,7 +32,7 @@ export default function App(props: AppProps) {
           href="/image/Book-Cook-Logo.svg"
         />
       </Head>
-      <style jsx global>
+      <style>
         {`
           body {
             background-color: ${tokens.colorNeutralBackground1};
