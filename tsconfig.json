@@ -1,5 +1,4 @@
 {
-  "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "lib",
     "module": "esnext",
@@ -29,8 +28,7 @@
     "**/*.tsx",
     "src/pages/index.js",
     "src/pages/api/auth/[...nextauth].ts",
-    "src/clients/mongo.js",
-    "jest.config.js",
-    "jest.config.js"
-  ]
+    "src/clients/mongo.js"
+  ],
+  "exclude": ["node_modules"]
 }
