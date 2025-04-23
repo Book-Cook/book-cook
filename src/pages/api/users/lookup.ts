@@ -2,14 +2,10 @@ import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
+import { getDb } from "src/utils";
 import { authOptions } from "../auth/[...nextauth]";
 
-import clientPromise from "../../../clients/mongo";
-
-type ResponseData = {
-  name?: string;
-  error?: string;
-};
+type ResponseData = { name?: string; error?: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,8 +37,7 @@ export default async function handler(
       return res.status(400).json({ error: "Invalid userId format" });
     }
 
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const db = await getDb();
 
     const user = await db
       .collection("users")
@@ -55,9 +50,7 @@ export default async function handler(
       return res.status(404).json({ error: "User not found" });
     }
 
-    return res.status(200).json({
-      name: user.name,
-    });
+    return res.status(200).json({ name: user.name });
   } catch (error) {
     console.error("Error looking up user:", error);
     return res.status(500).json({ error: "Internal server error" });
