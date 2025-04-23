@@ -24,7 +24,7 @@ import type { RecipeActionsProps } from "./RecipeActions.types";
 
 import { useRecipe } from "../../context";
 
-type DialogType = "title" | "tags" | "emoji" | null;
+type DialogType = "title" | "tags" | "emoji" | "sharedWith" | null;
 
 const ChangeTitleDialog = dynamic(() => import("./ChangeTitleDialog"), {
   loading: () => null,
@@ -40,6 +40,11 @@ const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
   loading: () => null,
   ssr: false,
 });
+
+const ChangeSharedWithDialog = dynamic(
+  () => import("./ChangeSharedWithDialog"),
+  { loading: () => null, ssr: false }
+);
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { _id, title, tags, emoji, imageURL } = props;
@@ -60,6 +65,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         tags: tags ?? [],
         emoji: emoji ?? "",
         imageURL: imageURL ?? "",
+        sharedWith: [],
         content: "",
       };
 
@@ -106,6 +112,9 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuItem>
         <MenuItem icon={<EmojiRegular />} onClick={openDialog("emoji")}>
           Change Emoji
+        </MenuItem>
+        <MenuItem icon={<EmojiRegular />} onClick={openDialog("sharedWith")}>
+          Share with
         </MenuItem>
         <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
@@ -157,6 +166,14 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           isOpen={activeDialog === "emoji"}
           currentEmoji={editableData.emoji}
           onSave={handleSave("emoji")}
+          onClose={closeDialog}
+        />
+      )}
+      {activeDialog === "sharedWith" && (
+        <ChangeSharedWithDialog
+          isOpen={activeDialog === "sharedWith"}
+          sharedWith={editableData.sharedWith}
+          onSave={handleSave("sharedWith")}
           onClose={closeDialog}
         />
       )}
