@@ -11,6 +11,10 @@ import Head from "next/head";
 import { queryClient } from "../clients/react-query";
 import { AppContainer } from "../components";
 
+const SITE_NAME = "Book Cook";
+const DEFAULT_DESCRIPTION =
+  "Discover, create, and store your favorite recipes with Book Cook. Your personal digital cookbook.";
+
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
@@ -24,8 +28,11 @@ export default function App(props: AppProps) {
     <>
       <Head>
         <title>Book Cook</title>
-        <meta name="title" content="Book Cook" />
-        <meta name="description" content="A site for storing recipes." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="title" content={SITE_NAME} />
+        <meta name="description" content={DEFAULT_DESCRIPTION} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:type" content="website" />
         <link
           rel="icon"
           type="image/svg+xml"
@@ -48,7 +55,6 @@ export default function App(props: AppProps) {
           }
         `}
       </style>
-
       <QueryClientProvider client={queryClient}>
         <RendererProvider renderer={pageProps.renderer ?? createDOMRenderer()}>
           <SSRProvider>
