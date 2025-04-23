@@ -116,7 +116,7 @@ const handleGetRequest = async (
     const direction: SortDirection = sortDirection === "asc" ? 1 : -1;
 
     const recipes = await db
-      .collection<Omit<RecipeDocument, "_id">>("recipes")
+      .collection<RecipeDocument>("recipes")
       .find(query, { projection })
       .sort({ [sortProperty]: direction })
       .toArray();
