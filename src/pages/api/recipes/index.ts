@@ -134,9 +134,6 @@ const handlePostRequest = async (
   session: Session | null
 ) => {
   try {
-    // Log the session object received in this specific handler
-    console.log("POST Handler Session user:", session);
-
     if (!session?.user?.id) {
       return res
         .status(401)
