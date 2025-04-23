@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "../auth/[...nextauth]";
 
-import clientPromise from "../../../clients/mongo";
+import { getDb } from "src/utils";
 
 interface RecipeDocument {
   _id: ObjectId | string;
@@ -29,16 +29,6 @@ type VisibilityCondition =
 const ALLOWED_METHODS = ["GET", "POST"];
 const VALID_SORT_PROPERTIES = ["createdAt", "title"];
 const VALID_SORT_DIRECTIONS = ["asc", "desc"];
-
-const getDb = async (): Promise<Db> => {
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
-  if (!db?.databaseName) {
-    console.error("API Route Error: Database name missing from MONGODB_URI!");
-    throw new Error("Database not found in MONGODB_URI.");
-  }
-  return db;
-};
 
 const handleGetRequest = async (
   req: NextApiRequest,
@@ -106,9 +96,7 @@ const handleGetRequest = async (
         (tag) => typeof tag === "string" && tag.trim()
       );
       if (tagsList.length > 0) {
-        query = {
-          $and: [query, { tags: { $all: tagsList } }],
-        };
+        query = { $and: [query, { tags: { $all: tagsList } }] };
       }
     }
 
@@ -162,10 +150,12 @@ const handlePostRequest = async (
 
     const result = await db.collection("recipes").insertOne(newRecipe);
 
-    res.status(201).json({
-      message: "Recipe uploaded successfully.",
-      recipeId: result.insertedId,
-    });
+    res
+      .status(201)
+      .json({
+        message: "Recipe uploaded successfully.",
+        recipeId: result.insertedId,
+      });
   } catch (error) {
     console.error("Failed to upload recipe:", error);
     res.status(500).json({ message: "Internal Server Error" });

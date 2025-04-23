@@ -1,8 +1,7 @@
-import clientPromise from "../../../clients/mongo";
+import { getDb } from "src/utils";
 
 export const getUserId = async (email: string | undefined | null) => {
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
+  const db = await getDb();
 
   if (email) {
     const user = await db

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import type { Recipe } from "src/clientToServer";
 import { authOptions } from "../auth/[...nextauth]";
 
-import clientPromise from "../../../clients/mongo";
+import { getDb } from "../../../utils";
 
 type UpdateFields = {
   title?: string;
@@ -19,11 +19,7 @@ type UpdateFields = {
 };
 
 type ResponseData =
-  | {
-      message?: string;
-      error?: string;
-      recipeId?: string;
-    }
+  | { message?: string; error?: string; recipeId?: string }
   | Recipe;
 
 export default async function handler(
@@ -37,9 +33,8 @@ export default async function handler(
       .json({ message: `Method ${req.method} not allowed` });
   }
 
-  const client = await clientPromise;
   const session: Session | null = await getServerSession(req, res, authOptions);
-  const db = client.db(process.env.MONGODB_DB);
+  const db = await getDb();
   const recipesCollection = db.collection("recipes");
   const { id } = req.query as { id: string }; // Extract the recipe ID from the query parameters
 
@@ -254,10 +249,9 @@ export default async function handler(
         return;
       }
 
-      res.status(200).json({
-        message: "Recipe deleted successfully.",
-        recipeId: id,
-      });
+      res
+        .status(200)
+        .json({ message: "Recipe deleted successfully.", recipeId: id });
     } catch (error) {
       console.error("Failed to delete recipe:", error);
       res.status(500).json({ message: "Internal Server Error" });

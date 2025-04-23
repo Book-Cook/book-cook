@@ -3,17 +3,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
-import clientPromise from "../../../../clients/mongo";
 import { authOptions } from "../../auth/[...nextauth]";
+import { getDb } from "src/utils";
 
-type ResponseData = {
-  message?: string;
-  sharedWithUsers?: string[];
-};
+type ResponseData = { message?: string; sharedWithUsers?: string[] };
 
-type ShareRequestBody = {
-  shareWithEmail: string;
-};
+type ShareRequestBody = { shareWithEmail: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,8 +28,7 @@ export default async function handler(
   }
 
   // Connect to database
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
+  const db = await getDb();
   const userEmail = session.user.email;
 
   try {
@@ -46,9 +40,9 @@ export default async function handler(
         return res.status(404).json({ message: "User not found" });
       }
 
-      return res.status(200).json({
-        sharedWithUsers: user.sharedWithUsers ?? [],
-      });
+      return res
+        .status(200)
+        .json({ sharedWithUsers: user.sharedWithUsers ?? [] });
     }
 
     // Validate shareWithEmail for POST and DELETE requests
@@ -73,9 +67,9 @@ export default async function handler(
     // POST - Share recipes with another user
     if (req.method === "POST") {
       // Verify target user exists
-      const otherUser = await db.collection("users").findOne({
-        email: shareWithEmail,
-      });
+      const otherUser = await db
+        .collection("users")
+        .findOne({ email: shareWithEmail });
 
       if (!otherUser) {
         return res.status(404).json({ message: "User not found" });
@@ -97,10 +91,9 @@ export default async function handler(
     // DELETE - Remove user access
     if (req.method === "DELETE") {
       // Verify the user actually exists in your sharedWithUsers
-      const currentUser = await db.collection("users").findOne({
-        email: userEmail,
-        sharedWithUsers: shareWithEmail,
-      });
+      const currentUser = await db
+        .collection("users")
+        .findOne({ email: userEmail, sharedWithUsers: shareWithEmail });
 
       if (!currentUser) {
         return res
@@ -108,14 +101,16 @@ export default async function handler(
           .json({ message: "User not in your shared list" });
       }
 
-      await db.collection("users").updateOne(
-        { email: userEmail },
-        {
-          $pull: {
-            sharedWithUsers: shareWithEmail,
-          } as PullOperator<Document>,
-        }
-      );
+      await db
+        .collection("users")
+        .updateOne(
+          { email: userEmail },
+          {
+            $pull: {
+              sharedWithUsers: shareWithEmail,
+            } as PullOperator<Document>,
+          }
+        );
 
       return res.status(200).json({ message: "Access removed successfully" });
     }

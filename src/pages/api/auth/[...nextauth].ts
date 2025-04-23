@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-import clientPromise from "src/clients/mongo";
+import { getDb } from "src/utils";
 
 declare module "next-auth" {
   interface Session {
@@ -25,8 +25,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session }) {
       if (session.user?.email) {
-        const client = await clientPromise;
-        const db = client.db(process.env.MONGODB_DB);
+        const db = await getDb();
         const user = await db
           .collection("users")
           .findOne({ email: session.user.email }, { projection: { _id: 1 } });
@@ -40,8 +39,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn(message) {
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGODB_DB);
+      const db = await getDb();
       const users = db.collection("users");
 
       const email = message.user.email;

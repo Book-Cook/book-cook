@@ -6,9 +6,9 @@ import { authOptions } from "../auth/[...nextauth]";
 
 import clientPromise from "../../../clients/mongo";
 
-type ResponseData = {
-  message: string;
-};
+import { getDb } from "src/utils";
+
+type ResponseData = { message: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,7 +28,7 @@ export default async function handler(
 
   try {
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const db = await getDb();
 
     // Start a session for transaction
     const mongoSession = client.startSession();

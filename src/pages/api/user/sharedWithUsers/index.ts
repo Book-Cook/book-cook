@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import clientPromise from "../../../../clients/mongo";
+import { getDb } from "src/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,13 +17,14 @@ export default async function handler(
   }
 
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const db = await getDb();
 
-    const ownerDoc = await db.collection("users").findOne({
-      email: owner,
-      sharedWithUsers: { $elemMatch: { $eq: user } },
-    });
+    const ownerDoc = await db
+      .collection("users")
+      .findOne({
+        email: owner,
+        sharedWithUsers: { $elemMatch: { $eq: user } },
+      });
 
     return res.status(200).json({ hasAccess: Boolean(ownerDoc) });
   } catch (error) {

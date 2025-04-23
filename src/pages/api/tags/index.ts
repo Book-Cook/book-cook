@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "../auth/[...nextauth]";
 
-import clientPromise from "../../../clients/mongo";
+import { getDb } from "src/utils";
 
 type StringOrInQuery = string | { $in: string[] };
 
@@ -30,8 +30,7 @@ export default async function handler(
   }
 
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const db = await getDb();
 
     const visibilityConditions: VisibilityCondition[] = [
       { isPublic: true }, // Public recipes are always visible

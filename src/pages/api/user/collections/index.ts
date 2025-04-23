@@ -2,8 +2,10 @@ import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 
-import clientPromise from "../../../../clients/mongo";
+import { getDb } from "src/utils";
+
 import { authOptions } from "../../auth/[...nextauth]";
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -14,8 +16,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const session: Session | null = await getServerSession(req, res, authOptions);
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
+  const db = await getDb();
 
   if (!session?.user?.email) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -45,9 +46,7 @@ export default async function handler(req: any, res: any) {
       // Query the recipes collection using the $in operator.
       const recipes = await db
         .collection("recipes")
-        .find({
-          _id: { $in: objectIds },
-        })
+        .find({ _id: { $in: objectIds } })
         .toArray();
 
       res.status(200).json(recipes);
