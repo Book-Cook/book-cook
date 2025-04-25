@@ -85,6 +85,7 @@ export const RecipeProvider: React.FC<{
   };
 
   const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
+    console.log(immediateUpdate);
     if (immediateUpdate) {
       updateRecipe({
         ...{

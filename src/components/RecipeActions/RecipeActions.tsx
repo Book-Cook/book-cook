@@ -15,6 +15,7 @@ import {
   EditRegular,
   TagRegular,
   EmojiRegular,
+  PeopleTeamRegular,
 } from "@fluentui/react-icons";
 import isEqual from "lodash/isEqual";
 import dynamic from "next/dynamic";
@@ -113,15 +114,18 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         <MenuItem icon={<EmojiRegular />} onClick={openDialog("emoji")}>
           Change Emoji
         </MenuItem>
-        <MenuItem icon={<EmojiRegular />} onClick={openDialog("sharedWith")}>
-          Share with
+        <MenuItem
+          icon={<PeopleTeamRegular />}
+          onClick={openDialog("sharedWith")}
+        >
+          Share Recipe
         </MenuItem>
         <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
         </MenuItem>
         <MenuDivider />
         <MenuItem icon={<DeleteRegular />} onClick={handleDeleteClick}>
-          Delete recipe
+          Delete Recipe
         </MenuItem>
       </MenuList>
     ),
