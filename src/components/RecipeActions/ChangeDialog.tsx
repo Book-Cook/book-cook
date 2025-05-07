@@ -49,7 +49,7 @@ export type ChangeDialogProps = {
   /**
    * Actions to be displayed in the dialog
    */
-  actions: React.ReactNode;
+  actions?: React.ReactNode;
 
   /**
    * Children to be displayed in the dialog
@@ -80,7 +80,7 @@ export const ChangeDialog: React.FC<ChangeDialogProps> = (props) => {
       >
         <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
         <DialogBody className={styles.dialogBody}>{props.children}</DialogBody>
-        <DialogActions>{actions}</DialogActions>
+        {actions && <DialogActions>{actions}</DialogActions>}
       </DialogSurface>
     </Dialog>
   );
