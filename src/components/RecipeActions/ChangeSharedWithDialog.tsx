@@ -13,6 +13,7 @@ import {
   SendRegular,
 } from "@fluentui/react-icons";
 import { motion } from "framer-motion";
+
 import { ChangeDialog } from "./ChangeDialog";
 
 const useStyles = makeStyles({
@@ -57,6 +58,11 @@ const useStyles = makeStyles({
       color: tokens.colorNeutralForeground1,
       backgroundColor: tokens.colorNeutralBackground4,
     },
+  },
+  mainContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
   },
   helperText: {
     color: tokens.colorNeutralForeground2,
@@ -103,24 +109,6 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   const [newEmail, setNewEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
-
-  // Reset state when dialog opens with new props
-  React.useEffect(() => {
-    if (isOpen) {
-      setSharedWithUsers(sharedWith || []);
-      setNewEmail("");
-      setEmailError(null);
-    }
-  }, [isOpen, sharedWith]);
-
-  // Focus the input when the dialog opens
-  React.useEffect(() => {
-    if (isOpen && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    }
-  }, [isOpen]);
 
   const handleSaveClick = () => {
     onSave(sharedWithUsers);
@@ -169,6 +157,24 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
     }
   };
 
+  // Reset state when dialog opens with new props
+  React.useEffect(() => {
+    if (isOpen) {
+      setSharedWithUsers(sharedWith || []);
+      setNewEmail("");
+      setEmailError(null);
+    }
+  }, [isOpen, sharedWith]);
+
+  // Focus the input when the dialog opens
+  React.useEffect(() => {
+    if (isOpen && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen]);
+
   return (
     <ChangeDialog
       title="Share Recipe"
@@ -190,7 +196,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
       }
     >
       <>
-        <div>
+        <div className={styles.mainContainer}>
           <Text className={styles.helperText}>
             Share this recipe with other users by adding their email addresses
           </Text>
@@ -202,7 +208,9 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
               value={newEmail}
               onChange={(e) => {
                 setNewEmail(e.target.value);
-                if (emailError) setEmailError(null);
+                if (emailError) {
+                  setEmailError(null);
+                }
               }}
               onKeyDown={handleKeyDown}
               placeholder="Enter email address"

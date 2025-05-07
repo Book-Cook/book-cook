@@ -48,7 +48,7 @@ const ChangeSharedWithDialog = dynamic(
 );
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { _id, title, tags, emoji, imageURL } = props;
+  const { _id, title, tags, emoji, imageURL, sharedWith } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
   const { availableTags } = useFetchAllTags();
@@ -66,7 +66,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         tags: tags ?? [],
         emoji: emoji ?? "",
         imageURL: imageURL ?? "",
-        sharedWith: [],
+        sharedWith: sharedWith ?? [],
         content: "",
       };
 
@@ -74,7 +74,16 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         updateEditableData(newData);
       }
     },
-    [_id, editableData, title, tags, emoji, imageURL, updateEditableData]
+    [
+      _id,
+      title,
+      tags,
+      emoji,
+      imageURL,
+      sharedWith,
+      editableData,
+      updateEditableData,
+    ]
   );
 
   const openDialog = React.useCallback(

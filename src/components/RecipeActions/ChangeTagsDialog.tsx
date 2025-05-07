@@ -106,7 +106,6 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   };
 
   const handleKeyDown = (ev: React.KeyboardEvent) => {
-    // ev.stopPropagation();
     if (ev.key === "Enter") {
       ev.preventDefault();
       handleAddTag();
