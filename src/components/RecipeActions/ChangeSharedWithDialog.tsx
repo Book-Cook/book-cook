@@ -213,6 +213,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
                 }
               }}
               onKeyDown={handleKeyDown}
+              type="email"
               placeholder="Enter email address"
               aria-label="Email address"
             />
@@ -223,7 +224,6 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
               aria-label="Add email"
             />
           </div>
-
           {emailError && (
             <Text
               className={styles.helperText}

@@ -85,18 +85,6 @@ export const RecipeProvider: React.FC<{
   };
 
   const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
-    console.log(immediateUpdate);
-    console.log({
-      ...{
-        title: editableData?.title,
-        data: editableData?.content,
-        tags: editableData?.tags,
-        imageURL: editableData?.imageURL,
-        emoji: editableData?.emoji,
-        sharedWith: editableData?.sharedWith || [],
-      },
-      ...(immediateUpdate || {}),
-    });
     if (immediateUpdate) {
       updateRecipe({
         ...{
@@ -184,7 +172,7 @@ export const RecipeProvider: React.FC<{
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
-      sharedWith: [],
+      sharedWith: recipe.sharedWith || [],
     };
   }, [recipe]);
 
