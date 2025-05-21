@@ -1,10 +1,5 @@
 import * as React from "react";
 import {
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
-  DialogActions,
   Button,
   Input,
   makeStyles,
@@ -13,13 +8,9 @@ import {
 } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 
+import { ChangeDialog } from "./ChangeDialog";
+
 const useStyles = makeStyles({
-  dialogSurface: {
-    maxWidth: "450px",
-    width: "100%",
-    ...shorthands.borderRadius("14px"),
-  },
-  dialogBody: { display: "flex", flexDirection: "column", gap: "16px" },
   inputContainer: { display: "flex", alignItems: "center", gap: "8px" },
   dropdownContainer: { position: "relative", width: "100%" },
   suggestionsDropdown: {
@@ -45,9 +36,6 @@ const useStyles = makeStyles({
     flexWrap: "wrap",
     gap: "8px",
     minHeight: "40px",
-  },
-  dialogTitle: {
-    paddingBottom: "8px",
   },
   tag: {
     backgroundColor: tokens.colorNeutralBackground2,
@@ -118,7 +106,6 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   };
 
   const handleKeyDown = (ev: React.KeyboardEvent) => {
-    ev.stopPropagation();
     if (ev.key === "Enter") {
       ev.preventDefault();
       handleAddTag();
@@ -153,96 +140,82 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   }, []);
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(ev, data) => {
-        ev.stopPropagation();
-        return !data.open && onClose();
-      }}
-      modalType="modal"
-      surfaceMotion={null}
-    >
-      <DialogSurface
-        className={styles.dialogSurface}
-        onClick={(ev) => ev.stopPropagation()}
-      >
-        <DialogTitle className={styles.dialogTitle}>
-          Manage Recipe Tags
-        </DialogTitle>
-        <DialogBody className={styles.dialogBody}>
-          <div className={styles.inputContainer}>
-            <div className={styles.dropdownContainer}>
-              <Input
-                placeholder="Add a new tag"
-                value={newTag}
-                onChange={(_, data) => {
-                  setNewTag(
-                    data.value.substring(0, maxTagLength).toLowerCase()
-                  );
-                  setShowSuggestions(true);
-                }}
-                ref={inputRef}
-                onKeyDown={handleKeyDown}
-                onFocus={() => newTag.trim() && setShowSuggestions(true)}
-              />
-              {showSuggestions && suggestions.length > 0 && (
-                <div className={styles.suggestionsDropdown} ref={dropdownRef}>
-                  {suggestions.map((suggestion) => (
-                    <div
-                      key={suggestion}
-                      className={styles.suggestionItem}
-                      onClick={(ev) => {
-                        ev.stopPropagation();
-                        if (!tags.includes(suggestion)) {
-                          setTags([...tags, suggestion]);
-                          setNewTag("");
-                          setShowSuggestions(false);
-                          inputRef.current?.focus();
-                        }
-                      }}
-                    >
-                      {suggestion}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <Button
-              icon={<AddRegular />}
-              appearance="primary"
-              onClick={handleAddTag}
-              disabled={!newTag.trim() || tags.includes(newTag.trim())}
-            />
-          </div>
-          <div className={styles.tagsContainer}>
-            {tags.length > 0 ? (
-              tags.map((tag) => (
-                <div
-                  key={tag}
-                  className={styles.tag}
-                  onClick={() => setTags(tags.filter((t) => t !== tag))}
-                >
-                  <span>{tag}</span>
-                  <DismissRegular fontSize={12} />
-                </div>
-              ))
-            ) : (
-              <div className={styles.noTagsMessage}>
-                No tags added yet. Add a tag to help organize your recipe.
-              </div>
-            )}
-          </div>
-        </DialogBody>
-        <DialogActions>
+    <ChangeDialog
+      isOpen={isOpen}
+      title="Manage Recipe Tags"
+      onClose={onClose}
+      actions={
+        <>
           <Button appearance="subtle" onClick={onClose}>
             Cancel
           </Button>
           <Button appearance="primary" onClick={() => onSave(tags)}>
             Save
           </Button>
-        </DialogActions>
-      </DialogSurface>
-    </Dialog>
+        </>
+      }
+    >
+      <div className={styles.inputContainer}>
+        <div className={styles.dropdownContainer}>
+          <Input
+            placeholder="Add a new tag"
+            value={newTag}
+            onChange={(_, data) => {
+              setNewTag(data.value.substring(0, maxTagLength).toLowerCase());
+              setShowSuggestions(true);
+            }}
+            ref={inputRef}
+            onKeyDown={handleKeyDown}
+            onFocus={() => newTag.trim() && setShowSuggestions(true)}
+          />
+          {showSuggestions && suggestions.length > 0 && (
+            <div className={styles.suggestionsDropdown} ref={dropdownRef}>
+              {suggestions.map((suggestion) => (
+                <div
+                  key={suggestion}
+                  className={styles.suggestionItem}
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    if (!tags.includes(suggestion)) {
+                      setTags([...tags, suggestion]);
+                      setNewTag("");
+                      setShowSuggestions(false);
+                      inputRef.current?.focus();
+                    }
+                  }}
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <Button
+          icon={<AddRegular />}
+          appearance="primary"
+          onClick={handleAddTag}
+          disabled={!newTag.trim() || tags.includes(newTag.trim())}
+        />
+      </div>
+      <div className={styles.tagsContainer}>
+        {tags.length > 0 ? (
+          tags.map((tag) => (
+            <div
+              key={tag}
+              className={styles.tag}
+              onClick={() => setTags(tags.filter((t) => t !== tag))}
+            >
+              <span>{tag}</span>
+              <DismissRegular fontSize={12} />
+            </div>
+          ))
+        ) : (
+          <div className={styles.noTagsMessage}>
+            No tags added yet. Add a tag to help organize your recipe.
+          </div>
+        )}
+      </div>
+    </ChangeDialog>
   );
 };
 

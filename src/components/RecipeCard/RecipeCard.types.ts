@@ -33,4 +33,9 @@ export type RecipeCardProps = {
    * Whether to render the card in a minimal style.
    */
   isMinimal?: boolean;
+
+  /**
+   * The list of users the recipe is shared with.
+   */
+  sharedWith?: string[];
 };
