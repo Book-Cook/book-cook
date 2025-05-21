@@ -17,6 +17,9 @@
     "export": "next build && next export",
     "analyze": "ANALYZE=true next build"
   },
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
