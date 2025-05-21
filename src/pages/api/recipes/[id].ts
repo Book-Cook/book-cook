@@ -176,7 +176,7 @@ export default async function handler(
         return;
       }
 
-      const { title, data, tags, imageURL, shareWithEmail, emoji, isPublic } =
+      const { title, data, tags, imageURL, sharedWith, emoji, isPublic } =
         req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
@@ -201,11 +201,8 @@ export default async function handler(
         setFields.tags = tags;
       }
 
-      // Fields that use $addToSet
-      if (shareWithEmail) {
-        addToSetFields.sharedWith = {
-          $each: [shareWithEmail],
-        } as unknown as string[];
+      if (sharedWith) {
+        setFields.sharedWith = sharedWith;
       }
 
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =

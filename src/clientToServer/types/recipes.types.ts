@@ -52,9 +52,7 @@ export type UpdateRecipePayload = {
   tags: string[];
   imageURL: string;
   emoji: string;
+  sharedWith: string[];
 };
 
-export type CreateRecipeResponse = {
-  message: string;
-  recipeId: string;
-};
+export type CreateRecipeResponse = { message: string; recipeId: string };

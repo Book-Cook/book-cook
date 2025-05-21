@@ -1,36 +1,14 @@
 import * as React from "react";
 import {
   Textarea,
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
-  DialogActions,
   Button,
   makeStyles,
-  shorthands,
   tokens,
 } from "@fluentui/react-components";
 
+import { ChangeDialog } from "./ChangeDialog";
+
 const useStyles = makeStyles({
-  dialogSurface: {
-    maxWidth: "450px",
-    width: "100%",
-    ...shorthands.borderRadius("14px"),
-    boxShadow: tokens.shadow16,
-  },
-  dialogTitle: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    paddingBottom: "4px",
-  },
-  dialogBody: {
-    paddingTop: "12px",
-    paddingBottom: "24px",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
   textArea: {
     width: "100%",
     flexGrow: 1,
@@ -38,11 +16,6 @@ const useStyles = makeStyles({
     lineHeight: tokens.lineHeightBase300,
     minHeight: "80px",
     resize: "none",
-  },
-  dialogActions: {
-    paddingTop: "0",
-
-    ...shorthands.gap("12px"),
   },
   primaryButton: {
     transition: "all 0.2s ease",
@@ -53,9 +26,7 @@ const useStyles = makeStyles({
   },
   secondaryButton: {
     transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-    },
+    ":hover": { transform: "translateY(-1px)" },
   },
   characterCount: {
     fontSize: tokens.fontSizeBase200,
@@ -88,12 +59,13 @@ export type ChangeTitleDialogProps = {
   maxLength?: number;
 };
 
+const maxLength = 100;
+
 const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   isOpen,
   currentTitle,
   onSave,
   onClose,
-  maxLength = 100,
 }) => {
   const styles = useStyles();
   const [newTitle, setNewTitle] = React.useState(currentTitle);
@@ -130,42 +102,12 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(ev, data) => {
-        ev.stopPropagation();
-        return !data.open && onClose();
-      }}
-      modalType="modal"
-      surfaceMotion={null}
-    >
-      <DialogSurface
-        className={styles.dialogSurface}
-        aria-describedby={undefined}
-        onClick={(ev) => ev.stopPropagation()}
-      >
-        <DialogTitle className={styles.dialogTitle}>
-          Change Recipe Title
-        </DialogTitle>
-        <DialogBody className={styles.dialogBody}>
-          <Textarea
-            placeholder="Enter recipe title"
-            value={newTitle}
-            onChange={(_e, data) =>
-              setNewTitle(data.value.substring(0, maxLength))
-            }
-            className={styles.textArea}
-            ref={textareaRef}
-            onKeyDown={handleKeyDown}
-            maxLength={maxLength}
-            aria-label="Recipe title"
-            resize="none"
-          />
-          <div className={styles.characterCount}>
-            {newTitle.length}/{maxLength}
-          </div>
-        </DialogBody>
-        <DialogActions className={styles.dialogActions}>
+    <ChangeDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Change Recipe Title"
+      actions={
+        <>
           <Button
             appearance="subtle"
             onClick={handleCancelClick}
@@ -181,9 +123,24 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
           >
             Save
           </Button>
-        </DialogActions>
-      </DialogSurface>
-    </Dialog>
+        </>
+      }
+    >
+      <Textarea
+        placeholder="Enter recipe title"
+        value={newTitle}
+        onChange={(_e, data) => setNewTitle(data.value.substring(0, maxLength))}
+        className={styles.textArea}
+        ref={textareaRef}
+        onKeyDown={handleKeyDown}
+        maxLength={maxLength}
+        aria-label="Recipe title"
+        resize="none"
+      />
+      <div className={styles.characterCount}>
+        {newTitle.length}/{maxLength}
+      </div>
+    </ChangeDialog>
   );
 };
 

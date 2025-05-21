@@ -15,6 +15,7 @@ import {
   EditRegular,
   TagRegular,
   EmojiRegular,
+  PeopleTeamRegular,
 } from "@fluentui/react-icons";
 import isEqual from "lodash/isEqual";
 import dynamic from "next/dynamic";
@@ -24,7 +25,7 @@ import type { RecipeActionsProps } from "./RecipeActions.types";
 
 import { useRecipe } from "../../context";
 
-type DialogType = "title" | "tags" | "emoji" | null;
+type DialogType = "title" | "tags" | "emoji" | "sharedWith" | null;
 
 const ChangeTitleDialog = dynamic(() => import("./ChangeTitleDialog"), {
   loading: () => null,
@@ -41,8 +42,13 @@ const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
   ssr: false,
 });
 
+const ChangeSharedWithDialog = dynamic(
+  () => import("./ChangeSharedWithDialog"),
+  { loading: () => null, ssr: false }
+);
+
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { _id, title, tags, emoji, imageURL } = props;
+  const { _id, title, tags, emoji, imageURL, sharedWith } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
   const { availableTags } = useFetchAllTags();
@@ -60,6 +66,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         tags: tags ?? [],
         emoji: emoji ?? "",
         imageURL: imageURL ?? "",
+        sharedWith: sharedWith ?? [],
         content: "",
       };
 
@@ -67,7 +74,16 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         updateEditableData(newData);
       }
     },
-    [_id, editableData, title, tags, emoji, imageURL, updateEditableData]
+    [
+      _id,
+      title,
+      tags,
+      emoji,
+      imageURL,
+      sharedWith,
+      editableData,
+      updateEditableData,
+    ]
   );
 
   const openDialog = React.useCallback(
@@ -107,12 +123,18 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         <MenuItem icon={<EmojiRegular />} onClick={openDialog("emoji")}>
           Change Emoji
         </MenuItem>
+        <MenuItem
+          icon={<PeopleTeamRegular />}
+          onClick={openDialog("sharedWith")}
+        >
+          Share Recipe
+        </MenuItem>
         <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
         </MenuItem>
         <MenuDivider />
         <MenuItem icon={<DeleteRegular />} onClick={handleDeleteClick}>
-          Delete recipe
+          Delete Recipe
         </MenuItem>
       </MenuList>
     ),
@@ -157,6 +179,14 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           isOpen={activeDialog === "emoji"}
           currentEmoji={editableData.emoji}
           onSave={handleSave("emoji")}
+          onClose={closeDialog}
+        />
+      )}
+      {activeDialog === "sharedWith" && (
+        <ChangeSharedWithDialog
+          isOpen={activeDialog === "sharedWith"}
+          sharedWith={editableData.sharedWith}
+          onSave={handleSave("sharedWith")}
           onClose={closeDialog}
         />
       )}

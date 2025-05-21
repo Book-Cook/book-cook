@@ -223,6 +223,7 @@ export default function Recipes() {
                       )
                     }
                     imageSrc={recipe?.imageURL}
+                    sharedWith={recipe?.sharedWith}
                     tags={recipe?.tags}
                   />
                 </div>
