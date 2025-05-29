@@ -60,8 +60,8 @@
     "next-auth": "^4.24.11",
     "node-emoji": "^2.2.0",
     "openai": "^4.28.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@bundle-stats/plugin-webpack-filter": "^4.19.1",
@@ -74,8 +74,8 @@
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.14.191",
     "@types/node": "^22.14.0",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@types/turndown": "^5.0.5",
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "@typescript-eslint/parser": "^8.29.1",
