@@ -47,45 +47,32 @@ export default async function handler(
     return;
   }
 
-  // Check if the user can delete the recipe (only the owner can delete)
-  const canDelete = async (id: string) => {
-    const recipe = await recipesCollection.findOne({
-      _id: new ObjectId(id),
-      owner: session?.user?.id,
-    });
+  // Check if the user can update the recipe
+  // (only the owner or a user in the owner's sharedWith list can update or delete)
+  const canUpdateOrDelete = async (id: string) => {
+    const recipe = await recipesCollection.findOne({ _id: new ObjectId(id) });
 
     if (!recipe) {
-      res.status(403).json({ message: "Not authorized to delete this recipe" });
+      res.status(404).json({ message: "Recipe not found" });
       return undefined;
     }
-    return recipe;
-  };
 
-  // Check if the user can update the recipe
-  // (only the owner or a user in the owner's sharedWith list can update)
-  const canUpdate = async (id: string) => {
-    const recipe = await recipesCollection.findOne({
-      _id: new ObjectId(id),
-      $or: [
-        { owner: session?.user?.id },
-        {
-          $and: [
-            { owner: { $exists: true } },
-            {
-              owner: {
-                $in: await db
-                  .collection("users")
-                  .find({ sharedWithUsers: session?.user?.email })
-                  .map((user) => user.email)
-                  .toArray(),
-              },
-            },
-          ],
-        },
-      ],
-    });
+    // Case 1: User is the recipe owner
+    const isOwner = recipe.owner === session?.user?.id;
 
-    if (!recipe) {
+    // Case 2: Recipe owner has shared with the current user via sharedWithUsers
+    let isSharedViaOwner = false;
+    if (session?.user?.email && recipe.owner) {
+      const ownerUser = await db.collection("users").findOne({
+        _id: new ObjectId(recipe.owner),
+        sharedWithUsers: session.user.email,
+      });
+
+      isSharedViaOwner = Boolean(ownerUser);
+    }
+
+    // If neither condition is met, user is not authorized
+    if (!isOwner && !isSharedViaOwner) {
       res.status(403).json({ message: "Not authorized to update this recipe" });
       return undefined;
     }
@@ -93,34 +80,35 @@ export default async function handler(
     return recipe;
   };
 
-  // Check if the user can view the recipe
-  // (either public, owned by the user, or shared with the user)
-  const canView = async (id: string) => {
-    const recipe = await db.collection("recipes").findOne({
-      _id: new ObjectId(id),
-      $or: [
-        { isPublic: true },
-        { owner: session?.user?.id },
-        // Check if the recipe owner has shared their entire BookCook
-        {
-          $and: [
-            { owner: { $exists: true } },
-            {
-              owner: {
-                $in: await db
-                  .collection("users")
-                  .find({ sharedWithUsers: session?.user?.email })
-                  .map((user) => user.email)
-                  .toArray(),
-              },
-            },
-          ],
-        },
-      ],
-    });
+  const isAuthorized = async (id: string) => {
+    const recipe = await recipesCollection.findOne({ _id: new ObjectId(id) });
 
     if (!recipe) {
-      res.status(404).json({ message: "Recipe not found or access denied" });
+      res.status(404).json({ message: "Recipe not found" });
+      return undefined;
+    }
+
+    // Check if the user is authorized to view:
+    // 1. Recipe is public, OR
+    // 2. User is the recipe owner, OR
+    // 3. Recipe owner has shared with the current user via sharedWithUsers
+    const isPublic = recipe.isPublic === true;
+    const isOwner = recipe.owner === session?.user?.id;
+
+    // Check if user is part of sharedWithUsers in the owner's profile
+    let isSharedViaUser = false;
+    if (session?.user?.email && recipe.owner) {
+      // Find if the owner has shared with this user
+      const ownerUser = await db.collection("users").findOne({
+        _id: new ObjectId(recipe.owner),
+        sharedWithUsers: session.user.email,
+      });
+
+      isSharedViaUser = Boolean(ownerUser);
+    }
+
+    if (!isPublic && !isOwner && !isSharedViaUser) {
+      res.status(403).json({ message: "Not authorized to view this recipe" });
       return undefined;
     }
 
@@ -131,7 +119,7 @@ export default async function handler(
     // Get a certain recipe
     try {
       // Find the recipe with the given ID
-      const recipe = await canView(id);
+      const recipe = await isAuthorized(id);
       if (recipe === undefined) {
         return;
       }
@@ -169,13 +157,12 @@ export default async function handler(
     // Update a specific recipe
     // Sharing, updating tags, and other fields
     try {
-      const recipe = await canUpdate(id);
+      const recipe = await canUpdateOrDelete(id);
       if (recipe === undefined) {
         return;
       }
 
-      const { title, data, tags, imageURL, emoji, isPublic } =
-        req.body;
+      const { title, data, tags, imageURL, emoji, isPublic } = req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
 
@@ -226,7 +213,7 @@ export default async function handler(
     // if (req.method === "DELETE")
     // Delete a recipe by ID
     try {
-      const recipe = await canDelete(id);
+      const recipe = await canUpdateOrDelete(id);
       if (recipe === undefined) {
         return;
       }

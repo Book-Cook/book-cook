@@ -60,7 +60,7 @@ const handleGetRequest = async (
         const sharedOwners = await db
           .collection("users")
           .find(
-            { sharedWithUsers: session.user.id },
+            { sharedWithUsers: session.user.email },
             { projection: { _id: 1 } }
           )
           .map((user) => user._id.toString())
