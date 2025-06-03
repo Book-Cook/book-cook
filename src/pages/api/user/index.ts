@@ -39,14 +39,6 @@ export default async function handler(
           .collection("recipes")
           .deleteMany({ owner: session?.user?.id }, { session: mongoSession });
 
-        // Remove user from any shared recipes
-        await db.collection("recipes").updateMany(
-          { sharedWith: session.user?.email },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          { $pull: { sharedWith: session?.user?.email } } as any,
-          { session: mongoSession }
-        );
-
         // Remove user from any sharedWithUsers arrays
         await db.collection("users").updateMany(
           { sharedWithUsers: session.user?.email },

@@ -13,7 +13,6 @@ type UpdateFields = {
   data?: string;
   tags?: string[];
   imageURL?: string;
-  sharedWith?: string[];
   emoji?: string;
   isPublic?: boolean;
 };

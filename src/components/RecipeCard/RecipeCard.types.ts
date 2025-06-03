@@ -35,7 +35,7 @@ export type RecipeCardProps = {
   isMinimal?: boolean;
 
   /**
-   * The list of users the recipe is shared with.
+   * Whether the recipe card is public or not.
    */
-  sharedWith?: string[];
+  isPublic?: boolean;
 };

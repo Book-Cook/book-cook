@@ -25,7 +25,7 @@ import type { RecipeActionsProps } from "./RecipeActions.types";
 
 import { useRecipe } from "../../context";
 
-type DialogType = "title" | "tags" | "emoji" | "sharedWith" | null;
+type DialogType = "title" | "tags" | "emoji" | "isPublic" | null;
 
 const ChangeTitleDialog = dynamic(() => import("./ChangeTitleDialog"), {
   loading: () => null,
@@ -42,13 +42,8 @@ const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
   ssr: false,
 });
 
-const ChangeSharedWithDialog = dynamic(
-  () => import("./ChangeSharedWithDialog"),
-  { loading: () => null, ssr: false }
-);
-
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { _id, title, tags, emoji, imageURL, sharedWith } = props;
+  const { _id, title, tags, emoji, imageURL, isPublic } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
   const { availableTags } = useFetchAllTags();
@@ -66,7 +61,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         tags: tags ?? [],
         emoji: emoji ?? "",
         imageURL: imageURL ?? "",
-        sharedWith: sharedWith ?? [],
+        isPublic: isPublic ?? false,
         content: "",
       };
 
@@ -80,7 +75,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       tags,
       emoji,
       imageURL,
-      sharedWith,
+      isPublic,
       editableData,
       updateEditableData,
     ]
@@ -125,7 +120,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuItem>
         <MenuItem
           icon={<PeopleTeamRegular />}
-          onClick={openDialog("sharedWith")}
+          onClick={openDialog("isPublic")}
         >
           Share Recipe
         </MenuItem>
@@ -179,14 +174,6 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           isOpen={activeDialog === "emoji"}
           currentEmoji={editableData.emoji}
           onSave={handleSave("emoji")}
-          onClose={closeDialog}
-        />
-      )}
-      {activeDialog === "sharedWith" && (
-        <ChangeSharedWithDialog
-          isOpen={activeDialog === "sharedWith"}
-          sharedWith={editableData.sharedWith}
-          onSave={handleSave("sharedWith")}
           onClose={closeDialog}
         />
       )}
