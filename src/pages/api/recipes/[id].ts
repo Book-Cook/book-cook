@@ -163,8 +163,7 @@ export default async function handler(
         return;
       }
 
-      const { title, data, tags, imageURL, shareWithEmail, emoji, isPublic } =
-        req.body;
+      const { title, data, tags, imageURL, emoji, isPublic } = req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
 
@@ -187,13 +186,6 @@ export default async function handler(
       if (tags) {
         setFields.tags = tags;
       }
-
-      // Fields that use $addToSet
-      // if (shareWithEmail) {
-      //   addToSetFields.sharedWith = {
-      //     $each: [shareWithEmail],
-      //   } as unknown as string[];
-      // }
 
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =
         {};

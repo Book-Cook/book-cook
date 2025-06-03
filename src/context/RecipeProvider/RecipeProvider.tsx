@@ -36,6 +36,7 @@ export const RecipeProvider: React.FC<{
     imageURL: "",
     emoji: "",
     _id: undefined,
+    sharedWith: [],
   });
 
   const { mutate: deleteMutate } = useDeleteRecipe();
@@ -86,6 +87,7 @@ export const RecipeProvider: React.FC<{
           tags: editableData?.tags,
           imageURL: editableData?.imageURL,
           emoji: editableData?.emoji,
+          sharedWith: editableData?.sharedWith || [],
         },
         ...(immediateUpdate || {}),
       });
@@ -96,6 +98,7 @@ export const RecipeProvider: React.FC<{
         tags: editableData.tags,
         imageURL: editableData.imageURL,
         emoji: editableData?.emoji,
+        sharedWith: editableData?.sharedWith || [],
       });
     }
   };
@@ -108,6 +111,7 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
+        sharedWith: recipe.sharedWith || [],
       };
       setEditableData(initialData);
     }
@@ -146,6 +150,7 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
+        sharedWith: recipe.sharedWith || [],
       };
       setEditableData(initialData);
     }
@@ -161,6 +166,7 @@ export const RecipeProvider: React.FC<{
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
+      sharedWith: recipe.sharedWith || [],
     };
   }, [recipe]);
 

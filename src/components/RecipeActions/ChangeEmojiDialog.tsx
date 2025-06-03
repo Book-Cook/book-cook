@@ -5,10 +5,6 @@ import type {
 } from "@fluentui/react-components";
 import {
   SearchBox,
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
   makeStyles,
   shorthands,
   tokens,
@@ -16,6 +12,8 @@ import {
 } from "@fluentui/react-components";
 import GraphemeSplitter from "grapheme-splitter";
 import * as emoji from "node-emoji";
+
+import { ChangeDialog } from "./ChangeDialog";
 
 // Default emojis for food categories
 const defaultSuggestedEmojis = [
@@ -56,27 +54,6 @@ const DEFAULT_EMOJI = "🍽️";
 const splitter = new GraphemeSplitter();
 
 const useStyles = makeStyles({
-  dialogSurface: {
-    maxWidth: "480px",
-    width: "100%",
-    ...shorthands.borderRadius("16px"),
-    boxShadow: tokens.shadow64,
-    border: "none",
-  },
-  dialogTitle: {
-    fontSize: tokens.fontSizeHero700,
-    fontWeight: tokens.fontWeightSemibold,
-    paddingBottom: "8px",
-    color: tokens.colorNeutralForeground1,
-  },
-  dialogBody: {
-    paddingTop: "16px",
-    paddingBottom: "24px",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
   gridContainer: {
     minHeight: "220px",
     display: "flex",
@@ -300,41 +277,21 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     : "Common food emojis";
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(ev, data) => {
-        ev.stopPropagation();
-        return !data.open && onClose();
-      }}
-      modalType="modal"
-      surfaceMotion={null}
-    >
-      <DialogSurface
-        className={styles.dialogSurface}
-        onClick={(ev) => {
-          ev.stopPropagation();
-        }}
-      >
-        <DialogTitle className={styles.dialogTitle}>
-          Change Recipe Emoji
-        </DialogTitle>
-        <DialogBody className={styles.dialogBody}>
-          <SearchBox
-            placeholder="Filter..."
-            appearance="filled-darker"
-            onChange={handleInputChange}
-            value={inputValue}
-            ref={inputRef}
-            aria-label="Recipe emoji search or selection"
-            maxLength={50}
-          />
-          <div className={styles.gridContainer}>
-            <Text className={styles.emojiSectionTitle}>{gridTitle}</Text>
-            {emojiGrid}
-          </div>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
+    <ChangeDialog isOpen={isOpen} title="Change Recipe Emoji" onClose={onClose}>
+      <SearchBox
+        placeholder="Filter..."
+        appearance="filled-darker"
+        onChange={handleInputChange}
+        value={inputValue}
+        ref={inputRef}
+        aria-label="Recipe emoji search or selection"
+        maxLength={50}
+      />
+      <div className={styles.gridContainer}>
+        <Text className={styles.emojiSectionTitle}>{gridTitle}</Text>
+        {emojiGrid}
+      </div>
+    </ChangeDialog>
   );
 };
 

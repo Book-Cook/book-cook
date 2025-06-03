@@ -41,13 +41,9 @@ const handleGetRequest = async (
       sortProperty = "createdAt",
       sortDirection = "desc",
       tags,
-    } = req.query as {
-      search?: string;
-      sortProperty?: string;
-      sortDirection?: string;
-      tags?: string | string[];
-    };
+    } = req.query;
 
+    // 1. Validate query parameters
     if (
       typeof sortProperty !== "string" ||
       !VALID_SORT_PROPERTIES.includes(sortProperty) ||
@@ -57,10 +53,12 @@ const handleGetRequest = async (
       return res.status(400).json({ message: "Invalid sorting parameters." });
     }
 
+    // 2. Define visibility conditions
     const visibilityConditions: VisibilityCondition[] = [{ isPublic: true }];
 
-    if (session?.user?.email && session?.user?.id) {
+    if (session?.user?.id) {
       try {
+        // Find all globally shared recipes
         const sharedOwners = await db
           .collection("users")
           .find(
@@ -70,6 +68,7 @@ const handleGetRequest = async (
           .map((user) => user._id.toString())
           .toArray();
 
+        // Find all recipes explicitly shared with the user
         visibilityConditions.push(
           { owner: session.user.id },
           { owner: { $in: sharedOwners } }
