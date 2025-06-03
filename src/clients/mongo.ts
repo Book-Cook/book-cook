@@ -8,8 +8,15 @@ if (
   !process.env.MONGODB_CLUSTER ||
   !process.env.MONGODB_DB
 ) {
+  const missingVars = [
+    !process.env.MONGODB_USER && "MONGODB_USER",
+    !process.env.MONGODB_PASSWORD && "MONGODB_PASSWORD",
+    !process.env.MONGODB_CLUSTER && "MONGODB_CLUSTER",
+    !process.env.MONGODB_DB && "MONGODB_DB",
+  ].filter(Boolean);
+
   throw new Error(
-    "Missing MONGO_DB environment variable. Please add it to .env.local"
+    `Missing MongoDB environment variables: ${missingVars.join(", ")}. Please add them to .env.local`
   );
 }
 

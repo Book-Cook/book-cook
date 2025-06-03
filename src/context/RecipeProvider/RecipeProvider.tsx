@@ -11,7 +11,6 @@ import {
   useDeleteRecipe,
   useAddToCollection,
   useUpdateRecipe,
-  useCheckFullyShared,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 
@@ -54,11 +53,6 @@ export const RecipeProvider: React.FC<{
     queryFn: () => fetchRecipe(recipeId as string),
     enabled: Boolean(recipeId),
   });
-
-  const { data: hasSharedAccess } = useCheckFullyShared(
-    recipe?.owner,
-    session?.user?.email
-  );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateEditableDataKey = (field: string, value: any) => {
@@ -181,12 +175,9 @@ export const RecipeProvider: React.FC<{
     if (!recipe || !session?.user?.email) {
       return false;
     }
-    return (
-      recipe.owner === session.user.id ||
-      (recipe.sharedWith || []).includes(session.user.email) ||
-      hasSharedAccess
-    );
-  }, [recipe, session, hasSharedAccess]);
+
+    return true;
+  }, [recipe, session]);
 
   const contextValue = {
     recipe,

@@ -64,7 +64,7 @@ const handleGetRequest = async (
         const sharedOwners = await db
           .collection("users")
           .find(
-            { sharedWithUsers: session.user.id },
+            { sharedWithUsers: session.user.email },
             { projection: { _id: 1 } }
           )
           .map((user) => user._id.toString())
@@ -72,7 +72,6 @@ const handleGetRequest = async (
 
         visibilityConditions.push(
           { owner: session.user.id },
-          { sharedWith: session.user.email },
           { owner: { $in: sharedOwners } }
         );
       } catch (dbError) {
@@ -149,12 +148,10 @@ const handlePostRequest = async (
 
     const result = await db.collection("recipes").insertOne(newRecipe);
 
-    res
-      .status(201)
-      .json({
-        message: "Recipe uploaded successfully.",
-        recipeId: result.insertedId,
-      });
+    res.status(201).json({
+      message: "Recipe uploaded successfully.",
+      recipeId: result.insertedId,
+    });
   } catch (error) {
     console.error("Failed to upload recipe:", error);
     res.status(500).json({ message: "Internal Server Error" });
