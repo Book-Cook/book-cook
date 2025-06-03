@@ -6,8 +6,8 @@ export type EditableData = {
   tags: string[];
   imageURL: string;
   emoji: string;
-  sharedWith: string[];
   _id?: string;
+  isPublic?: boolean;
 };
 
 export type RecipeContextType = {

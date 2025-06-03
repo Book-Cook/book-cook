@@ -10,7 +10,6 @@ type StringOrInQuery = string | { $in: string[] };
 type VisibilityCondition =
   | { isPublic: boolean }
   | { owner: StringOrInQuery }
-  | { sharedWith: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,7 +33,6 @@ export default async function handler(
     const visibilityConditions: VisibilityCondition[] = [
       { isPublic: true }, // Public recipes are always visible
       { owner: session.user.id as string }, // User's own recipes
-      { sharedWith: session.user.email }, // Recipes shared directly
     ];
 
     const sharedUsers = await db

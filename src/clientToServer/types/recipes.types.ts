@@ -41,9 +41,9 @@ export type Recipe = {
   owner: string;
 
   /**
-   * The list of users with whom the recipe is shared.
+   * Whether the recipe is public or not.
    */
-  sharedWith: string[];
+  isPublic: boolean
 };
 
 export type UpdateRecipePayload = {
@@ -52,7 +52,7 @@ export type UpdateRecipePayload = {
   tags: string[];
   imageURL: string;
   emoji: string;
-  sharedWith: string[];
+  isPublic: boolean;
 };
 
 export type CreateRecipeResponse = { message: string; recipeId: string };

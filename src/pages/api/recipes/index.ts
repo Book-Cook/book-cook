@@ -9,7 +9,6 @@ import { authOptions } from "../auth/[...nextauth]";
 interface RecipeDocument {
   _id: ObjectId | string;
   owner: string;
-  sharedWith: string[];
   isPublic: boolean;
   title: string;
   data: unknown;
@@ -22,7 +21,6 @@ interface RecipeDocument {
 type VisibilityCondition =
   | { isPublic: boolean }
   | { owner: string }
-  | { sharedWith: string }
   | { owner: { $in: string[] } };
 
 const ALLOWED_METHODS = ["GET", "POST"];
@@ -71,7 +69,6 @@ const handleGetRequest = async (
         // Find all recipes explicitly shared with the user
         visibilityConditions.push(
           { owner: session.user.id },
-          { sharedWith: session.user.id },
           { owner: { $in: sharedOwners } }
         );
       } catch (dbError) {
@@ -134,7 +131,6 @@ const handlePostRequest = async (
 
     const newRecipe = {
       owner: session.user.id,
-      sharedWith: [],
       isPublic: false,
       title: title.trim(),
       data: data ?? null,

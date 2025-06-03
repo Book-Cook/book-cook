@@ -13,7 +13,6 @@ type UpdateFields = {
   data?: string;
   tags?: string[];
   imageURL?: string;
-  sharedWith?: string[];
   emoji?: string;
   isPublic?: boolean;
 };
@@ -102,7 +101,6 @@ export default async function handler(
       $or: [
         { isPublic: true },
         { owner: session?.user?.id },
-        { sharedWith: session?.user?.email },
         // Check if the recipe owner has shared their entire BookCook
         {
           $and: [
@@ -176,7 +174,7 @@ export default async function handler(
         return;
       }
 
-      const { title, data, tags, imageURL, sharedWith, emoji, isPublic } =
+      const { title, data, tags, imageURL, emoji, isPublic } =
         req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
@@ -199,10 +197,6 @@ export default async function handler(
       }
       if (tags) {
         setFields.tags = tags;
-      }
-
-      if (sharedWith) {
-        setFields.sharedWith = sharedWith;
       }
 
       const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =
