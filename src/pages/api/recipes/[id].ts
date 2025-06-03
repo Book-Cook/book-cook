@@ -48,6 +48,39 @@ export default async function handler(
     return;
   }
 
+  // Check if the user can update the recipe
+  // (only the owner or a user in the owner's sharedWith list can update or delete)
+  const canUpdateOrDelete = async (id: string) => {
+    const recipe = await recipesCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!recipe) {
+      res.status(404).json({ message: "Recipe not found" });
+      return undefined;
+    }
+
+    // Case 1: User is the recipe owner
+    const isOwner = recipe.owner === session?.user?.id;
+
+    // Case 2: Recipe owner has shared with the current user via sharedWithUsers
+    let isSharedViaOwner = false;
+    if (session?.user?.email && recipe.owner) {
+      const ownerUser = await db.collection("users").findOne({
+        _id: new ObjectId(recipe.owner),
+        sharedWithUsers: session.user.email,
+      });
+
+      isSharedViaOwner = Boolean(ownerUser);
+    }
+
+    // If neither condition is met, user is not authorized
+    if (!isOwner && !isSharedViaOwner) {
+      res.status(403).json({ message: "Not authorized to update this recipe" });
+      return undefined;
+    }
+
+    return recipe;
+  };
+
   const isAuthorized = async (id: string) => {
     const recipe = await recipesCollection.findOne({ _id: new ObjectId(id) });
 
@@ -125,12 +158,13 @@ export default async function handler(
     // Update a specific recipe
     // Sharing, updating tags, and other fields
     try {
-      const recipe = await isAuthorized(id);
+      const recipe = await canUpdateOrDelete(id);
       if (recipe === undefined) {
         return;
       }
 
-      const { title, data, tags, imageURL, emoji, isPublic } = req.body;
+      const { title, data, tags, imageURL, shareWithEmail, emoji, isPublic } =
+        req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
 
@@ -188,7 +222,7 @@ export default async function handler(
     // if (req.method === "DELETE")
     // Delete a recipe by ID
     try {
-      const recipe = await isAuthorized(id);
+      const recipe = await canUpdateOrDelete(id);
       if (recipe === undefined) {
         return;
       }
