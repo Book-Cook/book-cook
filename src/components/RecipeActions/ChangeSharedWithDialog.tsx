@@ -96,7 +96,7 @@ export type ChangeTitleDialogProps = {
   onClose: () => void;
 };
 
-const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
+const ChangeIsPublicDialog: React.FC<ChangeTitleDialogProps> = ({
   isOpen,
   sharedWith,
   onClose,
@@ -177,7 +177,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
 
   return (
     <ChangeDialog
-      title="Share Recipe"
+      title="Make recipe public"
       isOpen={isOpen}
       onClose={onClose}
       actions={
@@ -263,4 +263,4 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   );
 };
 
-export default ChangeSharedWithDialog;
+export default ChangeIsPublicDialog;
