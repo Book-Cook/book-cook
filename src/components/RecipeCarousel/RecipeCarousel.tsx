@@ -154,7 +154,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
                     imageSrc={recipe.imageURL}
                     tags={recipe.tags}
                     createdDate={recipe.createdAt}
-                    sharedWith={recipe?.sharedWith}
+                    isPublic={recipe?.isPublic}
                     isMinimal
                   />
                   <div

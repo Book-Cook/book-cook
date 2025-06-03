@@ -16,7 +16,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
     id,
     emoji,
     isMinimal,
-    sharedWith,
+    isPublic
   } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -111,10 +111,10 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                 <RecipeActions
                   title={title}
                   imageURL={imageSrc}
-                  sharedWith={sharedWith}
                   tags={tags}
                   _id={id}
                   emoji={emoji || "🍽️"}
+                  isPublic={isPublic || false}
                 />
               </div>
             )}

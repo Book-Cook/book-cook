@@ -26,11 +26,7 @@ export function useUpdateRecipe(recipeId: string | undefined) {
           : [],
         imageURL: DOMPurify.sanitize(String(updatedRecipeData.imageURL || "")),
         emoji: DOMPurify.sanitize(String(updatedRecipeData.emoji || "")),
-        sharedWith: Array.isArray(updatedRecipeData.sharedWith)
-          ? updatedRecipeData.sharedWith.map((user) =>
-              DOMPurify.sanitize(String(user))
-            )
-          : [],
+        isPublic: Boolean(updatedRecipeData.isPublic),
       };
 
       try {

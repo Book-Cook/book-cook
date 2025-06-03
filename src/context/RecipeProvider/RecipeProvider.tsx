@@ -37,7 +37,7 @@ export const RecipeProvider: React.FC<{
     imageURL: "",
     emoji: "",
     _id: undefined,
-    sharedWith: [],
+    isPublic: false,
   });
 
   const { mutate: deleteMutate } = useDeleteRecipe();
@@ -93,7 +93,7 @@ export const RecipeProvider: React.FC<{
           tags: editableData?.tags,
           imageURL: editableData?.imageURL,
           emoji: editableData?.emoji,
-          sharedWith: editableData?.sharedWith || [],
+          isPublic: editableData?.isPublic || false,
         },
         ...(immediateUpdate || {}),
       });
@@ -103,8 +103,8 @@ export const RecipeProvider: React.FC<{
         data: editableData.content,
         tags: editableData.tags,
         imageURL: editableData.imageURL,
-        emoji: editableData?.emoji,
-        sharedWith: editableData?.sharedWith || [],
+        emoji: editableData?.emoji || "",
+        isPublic: editableData.isPublic || false,
       });
     }
   };
@@ -117,7 +117,7 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
-        sharedWith: recipe.sharedWith || [],
+        isPublic: recipe.isPublic || false,
       };
       setEditableData(initialData);
     }
@@ -156,7 +156,7 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
-        sharedWith: recipe.sharedWith || [],
+        isPublic: recipe.isPublic || false,
       };
       setEditableData(initialData);
     }
@@ -172,7 +172,7 @@ export const RecipeProvider: React.FC<{
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
-      sharedWith: recipe.sharedWith || [],
+      isPublic: recipe.isPublic || false,
     };
   }, [recipe]);
 
@@ -189,8 +189,7 @@ export const RecipeProvider: React.FC<{
     }
     return (
       recipe.owner === session.user.id ||
-      (recipe.sharedWith || []).includes(session.user.email) ||
-      hasSharedAccess
+      recipe.isPublic || hasSharedAccess
     );
   }, [recipe, session, hasSharedAccess]);
 
