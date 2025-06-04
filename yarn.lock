@@ -4791,9 +4791,9 @@
   integrity sha512-g2Es97uwFk7omkWiH9JmtLWSA8lTUFVseIyzqbjqJEEx7qN+Hg6jbBdDvelqtakamppaJtGORQ64hEJ5S6ojSg==
 
 "@tanstack/react-query@^5.25.0":
-  version "5.80.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.80.2.tgz#42f1231a9f7cc78fb0906f38b7851d4662cbb95c"
-  integrity sha512-LfA0SVheJBOqC8RfJw/JbOW3yh2zuONQeWU5Prjm7yjUGUONeOedky1Bj39Cfj8MRdXrZV+DxNT7/DN/M907lQ==
+  version "5.80.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.80.3.tgz#5637e3e7a45c4d42d347b4bcff2716bd8795eae1"
+  integrity sha512-psqr/QRzYfqJvgD8F2teMO6mL4hN4gzkOra9BlPplNhwByviZIhHUrWTXQEMmUdPWHNkGjA1SP6xG2+brhmIoQ==
   dependencies:
     "@tanstack/query-core" "5.80.2"
 
@@ -11380,9 +11380,9 @@ remark@13.0.0:
     unified "^9.1.0"
 
 renovate@^40.0.0:
-  version "40.40.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-40.40.1.tgz#601c9fc5f42cd0c3aa9bd16070c547634a2b746c"
-  integrity sha512-3POpcatPeUhaTzJ0fbtRKd/R230pvvcs66HYaSM3yTc4DVS1jPeaPI8NrrKrD6v2ZSoEhftenU7exONtXkqMkA==
+  version "40.41.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-40.41.0.tgz#9f225fae9fba64553133604bd21197b5deb7f120"
+  integrity sha512-56Et2Wug7YVIL9J8h/og2tJOtzeRBDeaYSHEXJZdNlPk7dqcuGwmoGoTsygmAXUFKT+/kZ9hvqDInBDTOM1G+w==
   dependencies:
     "@aws-sdk/client-codecommit" "3.821.0"
     "@aws-sdk/client-ec2" "3.821.0"
@@ -11499,7 +11499,7 @@ renovate@^40.0.0:
     vuln-vects "1.1.0"
     xmldoc "1.3.0"
     yaml "2.8.0"
-    zod "3.25.30"
+    zod "3.25.32"
   optionalDependencies:
     better-sqlite3 "11.10.0"
     openpgp "6.1.1"
@@ -13665,15 +13665,15 @@ zod-to-json-schema@^3.24.1:
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.5.tgz#d1095440b147fb7c2093812a53c54df8d5df50a3"
   integrity sha512-/AuWwMP+YqiPbsJx5D6TfgRTc4kTLjsh5SOcd4bLsfUg2RcEXrFMJl1DGgdHy2aCfsIA/cr/1JM0xcB2GZji8g==
 
-zod@3.25.30:
-  version "3.25.30"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.30.tgz#ffd1b5cc06ff6de4ab35134d8eadb945314c4898"
-  integrity sha512-VolhdEtu6TJr/fzGuHA/SZ5ixvXqA6ADOG9VRcQ3rdOKmF5hkmcJbyaQjUH5BgmpA9gej++zYRX7zjSmdReIwA==
+zod@3.25.32:
+  version "3.25.32"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.32.tgz#769cc684072df780fc8f38130b0cd9283a8d3818"
+  integrity sha512-OSm2xTIRfW8CV5/QKgngwmQW/8aPfGdaQFlrGoErlgg/Epm7cjb6K6VEyExfe65a3VybUOnu381edLb0dfJl0g==
 
 zod@^3.23.0:
-  version "3.25.49"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.49.tgz#e044541aac57bd12d1cec5dbf9309cdc768774c2"
-  integrity sha512-JMMPMy9ZBk3XFEdbM3iL1brx4NUSejd6xr3ELrrGEfGb355gjhiAWtG3K5o+AViV/3ZfkIrCzXsZn6SbLwTR8Q==
+  version "3.25.51"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.51.tgz#aa2cf648e54f6f060f139cf77b694819f63c9f3a"
+  integrity sha512-TQSnBldh+XSGL+opiSIq0575wvDPqu09AqWe1F7JhUMKY+M91/aGlK4MhpVNO7MgYfHcVCB1ffwAUTJzllKJqg==
 
 zwitch@^1.0.0:
   version "1.0.5"
