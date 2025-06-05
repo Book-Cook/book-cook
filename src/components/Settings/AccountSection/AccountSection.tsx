@@ -118,7 +118,7 @@ export const AccountSection: React.FC = () => {
 
     setIsClearing(true);
     try {
-      const response = await fetch("/api/recentlyViewed", {
+      const response = await fetch("/api/user/recentlyViewed", {
         method: "DELETE",
       });
 
