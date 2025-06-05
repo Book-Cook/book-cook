@@ -3,7 +3,7 @@ import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
 import { getDb } from "src/utils";
-import { authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "../../auth/[...nextauth]";
 
 type StringOrInQuery = string | { $in: string[] };
 

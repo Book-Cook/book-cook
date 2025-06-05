@@ -9,7 +9,7 @@ export async function fetchUser(userId?: string): Promise<UserInfo | null> {
 
   try {
     const response = await fetch(
-      `/api/users/lookup?userId=${encodeURIComponent(userId)}`
+      `/api/user/lookup?userId=${encodeURIComponent(userId)}`
     );
 
     if (!response.ok) {

@@ -1,5 +1,5 @@
 export async function fetchSharedUsers(): Promise<string[]> {
-  const response = await fetch("/api/recipes/share", {
+  const response = await fetch("/api/user/sharing", {
     method: "GET",
   });
 
