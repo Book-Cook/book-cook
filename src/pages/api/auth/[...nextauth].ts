@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
     async signIn(message) {
       const db = await getDb();
       const users = db.collection("users");
+      const collections = db.collection("collections");
 
       const email = message.user.email;
       const existingUser = await users.findOne({ email });
@@ -51,12 +52,16 @@ export const authOptions: NextAuthOptions = {
           name: message?.user?.name,
           createdAt: new Date(),
           recentlyViewedRecipes: [],
-          collections: [],
           sharedWithUsers: [],
         });
       } else if (!existingUser.name && message.user.name) {
         await users.updateOne({ email }, { $set: { name: message.user.name } });
       }
+
+      await collections.insertOne({
+        userId: existingUser?._id,
+        collections: [],
+      });
     },
   },
 };
