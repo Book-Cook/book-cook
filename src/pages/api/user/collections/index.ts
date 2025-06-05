@@ -26,9 +26,9 @@ export default async function handler(req: any, res: any) {
     try {
       // Find the user document and project only collections.
       const userDoc = await db
-        .collection("users")
+        .collection("collections")
         .findOne(
-          { email: session?.user?.email },
+          { userId: session?.user?.id },
           { projection: { collections: 1, _id: 0 } }
         );
 
@@ -58,9 +58,10 @@ export default async function handler(req: any, res: any) {
     try {
       const { recipeId } = req.body;
 
-      if (session.user?.email) {
-        const result = await db.collection("users").updateOne(
-          { email: session.user.email },
+      if (session.user?.id) {
+
+        const result = await db.collection("collections").updateOne(
+          { userId: session.user.id },
           {
             $addToSet: {
               collections: recipeId, // add the recipeId to the collection
@@ -69,8 +70,7 @@ export default async function handler(req: any, res: any) {
         );
 
         if (!result.matchedCount) {
-          res.status(404).json({ message: "User not found" });
-          return;
+          return res.status(404).json({ message: "User not found" });
         }
 
         res.status(201).json(result);
