@@ -38,31 +38,41 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: {
-    async signIn(message) {
-      const db = await getDb();
-      const users = db.collection("users");
-      const collections = db.collection("collections");
+      async signIn(message) {
+        const db = await getDb();
+        const users = db.collection("users");
+        const collections = db.collection("collections");
 
-      const email = message.user.email;
-      const existingUser = await users.findOne({ email });
+        const email = message.user.email;
+        const existingUser = await users.findOne({ email });
 
-      if (!existingUser) {
-        await users.insertOne({
-          email,
-          name: message?.user?.name,
-          createdAt: new Date(),
-          recentlyViewedRecipes: [],
-          sharedWithUsers: [],
-        });
-      } else if (!existingUser.name && message.user.name) {
-        await users.updateOne({ email }, { $set: { name: message.user.name } });
-      }
+        let userId = existingUser?._id;
 
-      await collections.insertOne({
-        userId: existingUser?._id,
-        collections: [],
-      });
-    },
+        if (!existingUser) {
+          const result = await users.insertOne({
+            email,
+            name: message?.user?.name,
+            createdAt: new Date(),
+            recentlyViewedRecipes: [],
+            sharedWithUsers: [],
+          });
+          userId = result.insertedId;
+        } else {
+          if (!existingUser.name && message.user.name) {
+            await users.updateOne({ email }, { $set: { name: message.user.name } });
+          }
+        }
+
+        if (userId) {
+          const existingCollection = await collections.findOne({ userId });
+          if (!existingCollection) {
+            await collections.insertOne({
+              userId,
+              collections: [],
+            });
+          }
+        }
+      },
   },
 };
 
