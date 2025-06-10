@@ -7,9 +7,21 @@ import type {
 import { useRouter } from "next/router";
 
 import { useSearchBox } from "../../../context";
+import { useDebounce } from "../../../hooks";
 
 export const SearchBar = () => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
+
+  const [inputValue, setInputValue] = React.useState(searchBoxValue);
+  const debouncedValue = useDebounce(inputValue, 300);
+
+  React.useEffect(() => {
+    onSearchBoxValueChange(debouncedValue);
+  }, [debouncedValue, onSearchBoxValueChange]);
+
+  React.useEffect(() => {
+    setInputValue(searchBoxValue);
+  }, [searchBoxValue]);
 
   const router = useRouter();
   const path = router.asPath;
@@ -18,7 +30,7 @@ export const SearchBar = () => {
     _ev: SearchBoxChangeEvent,
     data: InputOnChangeData
   ) => {
-    onSearchBoxValueChange(data.value);
+    setInputValue(data.value);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +45,7 @@ export const SearchBar = () => {
 
   return (
     <SearchBox
-      value={searchBoxValue}
+      value={inputValue}
       onChange={onSearchBarChange}
       appearance="outline"
       placeholder="Search for snacks"
