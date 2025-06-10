@@ -1,5 +1,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
+import { Spinner } from "@fluentui/react-components";
 
 import { useRecipe } from "../../../context";
 import { Editor } from "../../Editor/Editor";
@@ -28,7 +29,7 @@ export const RecipeContent = () => {
           readOnly={isLoading}
         />
       ) : null}
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <Spinner label="Loading recipe..." />}
       {!isLoading && !isAuthorized && (
         <div>You are not authorized to view this recipe</div>
       )}
