@@ -1,7 +1,7 @@
 export async function deleteSharedUser(
   shareWithEmail: string
 ): Promise<{ message: string }> {
-  const response = await fetch("/api/recipes/share", {
+  const response = await fetch("/api/user/sharing", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

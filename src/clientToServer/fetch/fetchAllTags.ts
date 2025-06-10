@@ -1,6 +1,6 @@
 export const fetchAllTags = async (): Promise<string[]> => {
   try {
-    const response = await fetch("/api/tags");
+    const response = await fetch("/api/recipes/tags");
 
     if (!response.ok) {
       throw new Error(`Error fetching tags: ${response.status}`);
