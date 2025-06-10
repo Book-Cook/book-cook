@@ -3,3 +3,4 @@ export * from "./useAddToCollection";
 export * from "./useUpdateRecipe";
 export * from "./useProcessRecipe";
 export * from "./useShareWithUser";
+export * from "./useSuggestMeals";

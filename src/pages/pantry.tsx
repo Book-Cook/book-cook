@@ -25,6 +25,7 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { AddRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
+import { useSuggestMeals } from "../clientToServer";
 
 // Simple type to track pantry items
 interface PantryItem {
@@ -66,6 +67,9 @@ export default function PantryPage() {
     expirationDate: "",
     dateAdded: "",
   });
+  const { mutate: suggestMeals, isPending: isSuggesting } = useSuggestMeals();
+  const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
+  const [suggestionsText, setSuggestionsText] = React.useState("");
 
   // Save to localStorage when items change
   React.useEffect(() => {
@@ -126,6 +130,24 @@ export default function PantryPage() {
     }
   };
 
+  const handleSuggestMeals = () => {
+    if (!pantryItems.length || isSuggesting) {
+      return;
+    }
+    suggestMeals(
+      { ingredients: pantryItems.map((i) => i.name) },
+      {
+        onSuccess: (data) => {
+          setSuggestionsText(data.suggestions);
+          setSuggestionsOpen(true);
+        },
+        onError: () => {
+          alert("Failed to generate suggestions.");
+        },
+      }
+    );
+  };
+
   // Check expiration status
   const getExpirationStatus = (date: string) => {
     if (!date) {
@@ -175,13 +197,23 @@ export default function PantryPage() {
           <Subtitle1>Track your ingredients and expiration dates</Subtitle1>
         }
         action={
-          <Button
-            appearance="primary"
-            icon={<AddRegular />}
-            onClick={handleOpenAddDialog}
-          >
-            Add Ingredient
-          </Button>
+          <>
+            <Button
+              appearance="primary"
+              icon={<AddRegular />}
+              onClick={handleOpenAddDialog}
+            >
+              Add Ingredient
+            </Button>
+            <Button
+              appearance="secondary"
+              onClick={handleSuggestMeals}
+              disabled={isSuggesting || pantryItems.length === 0}
+              style={{ marginLeft: "8px" }}
+            >
+              Suggest Recipes
+            </Button>
+          </>
         }
       />
 
@@ -341,6 +373,24 @@ export default function PantryPage() {
               </DialogActions>
             </DialogBody>
           </form>
+        </DialogSurface>
+      </Dialog>
+      <Dialog
+        open={suggestionsOpen}
+        onOpenChange={(e, data) => setSuggestionsOpen(data.open)}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>Recipe Suggestions</DialogTitle>
+            <DialogContent>
+              <Text as="pre">{suggestionsText}</Text>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setSuggestionsOpen(false)} appearance="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </DialogBody>
         </DialogSurface>
       </Dialog>
     </div>
