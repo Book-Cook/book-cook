@@ -5,9 +5,12 @@ import { Spinner } from "@fluentui/react-components";
 import { useRecipe } from "../../../context";
 import dynamic from "next/dynamic";
 
-const Editor = dynamic(() => import("../../Editor/Editor"), {
-  ssr: false,
-});
+const Editor = dynamic<import("../../Editor/Editor").EditorProps>(
+  () => import("../../Editor/Editor").then((mod) => mod.Editor),
+  {
+    ssr: false,
+  }
+);
 
 export const RecipeContent = () => {
   const { isLoading, editableData, updateEditableDataKey, isAuthorized } = useRecipe();
