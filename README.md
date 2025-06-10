@@ -37,3 +37,13 @@ yarn install
 # Start the development server
 yarn dev
 ```
+
+## 📦 Bundle Analysis
+
+To inspect the client bundle and identify large dependencies, run:
+
+```bash
+yarn analyze
+```
+
+This command uses `next-bundle-analyzer` and outputs a detailed report in `.next/analyze/webpack-stats.json`. Review the top modules to spot libraries that significantly impact bundle size.
