@@ -26,6 +26,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "vitest.shims.d.ts",
     "src/pages/index.js",
     "src/pages/api/auth/[...nextauth].ts",
     "src/clients/mongo.js"
