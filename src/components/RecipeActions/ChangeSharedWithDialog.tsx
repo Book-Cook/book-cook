@@ -43,7 +43,7 @@ export type ChangeTitleDialogProps = {
   /**
    * Callback function to handle saving the sharing status.
    */
-  onSave: (newIsPublic: boolean) => void;
+  onSave: (newIsPublic: string) => void;
   /**
    * Callback function to handle closing the dialog.
    */
@@ -61,7 +61,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
 
   const handleSaveClick = () => {
     if (newIsPublic) {
-      onSave(newIsPublic);
+      onSave(newIsPublic.toString());
     }
   };
 
