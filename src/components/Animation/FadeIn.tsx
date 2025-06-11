@@ -16,8 +16,8 @@ const useStyles = makeStyles({
   },
   fadeInUp: {
     animationName: {
-      from: { opacity: 0, transform: "translateY(20px)" },
-      to: { opacity: 1, transform: "translateY(0)" },
+      from: { opacity: 0, top: "20px", position: "relative" },
+      to: { opacity: 1, top: 0, position: "relative" },
     },
     animationDuration: "0.5s",
   },
@@ -29,11 +29,21 @@ export type FadeInProps = React.HTMLAttributes<HTMLDivElement> & {
   up?: boolean;
 };
 
-export const FadeIn: React.FC<FadeInProps> = ({ delay = 0, up = false, className, children, ...rest }) => {
+export const FadeIn: React.FC<FadeInProps> = ({
+  delay = 0,
+  up = false,
+  className,
+  children,
+  ...rest
+}) => {
   const styles = useStyles();
   return (
     <div
-      className={mergeClasses(styles.root, up ? styles.fadeInUp : styles.fadeIn, className)}
+      className={mergeClasses(
+        styles.root,
+        up ? styles.fadeInUp : styles.fadeIn,
+        className
+      )}
       style={{ animationDelay: `${delay}s` }}
       {...rest}
     >

@@ -11,7 +11,6 @@ import {
   useId,
 } from "@fluentui/react-components";
 import { Heart20Regular, SparkleRegular } from "@fluentui/react-icons";
-import { FadeIn } from "../../Animation";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
@@ -19,6 +18,7 @@ import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
 
 import { useConvertMeasurements } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
+import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
 
 export const RecipeHeader = () => {
