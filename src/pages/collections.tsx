@@ -47,6 +47,7 @@ export default function CollectionsPage() {
                 }
                 imageSrc={recipe?.imageURL}
                 tags={recipe?.tags}
+                rating={recipe?.rating || 0}
               />
             </div>
           );

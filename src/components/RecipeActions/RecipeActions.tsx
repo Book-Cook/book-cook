@@ -24,6 +24,7 @@ import { useFetchAllTags } from "src/clientToServer";
 import type { RecipeActionsProps } from "./RecipeActions.types";
 
 import { useRecipe } from "../../context";
+import type { EditableData } from "../../context";
 
 type DialogType = "title" | "tags" | "emoji" | "isPublic" | null;
 
@@ -43,7 +44,7 @@ const ChangeEmojiDialog = dynamic(() => import("./ChangeEmojiDialog"), {
 });
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { _id, title, tags, emoji, imageURL, isPublic } = props;
+  const { _id, title, tags, emoji, imageURL, isPublic, rating } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
   const { availableTags } = useFetchAllTags();
@@ -62,8 +63,9 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         emoji: emoji ?? "",
         imageURL: imageURL ?? "",
         isPublic: isPublic ?? false,
+        rating: rating ?? 0,
         content: "",
-      };
+      } as EditableData;
 
       if (_id && !isEqual(editableData, newData)) {
         updateEditableData(newData);
