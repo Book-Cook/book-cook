@@ -23,6 +23,7 @@ import {
   Text,
   makeStyles,
   tokens,
+  Checkbox,
 } from "@fluentui/react-components";
 import { AddRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useSuggestMeals } from "../clientToServer";
@@ -70,6 +71,7 @@ export default function PantryPage() {
   const { mutate: suggestMeals, isPending: isSuggesting } = useSuggestMeals();
   const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
   const [suggestionsText, setSuggestionsText] = React.useState("");
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
 
   // Save to localStorage when items change
   React.useEffect(() => {
@@ -127,15 +129,34 @@ export default function PantryPage() {
   const handleDeleteItem = (id: string) => {
     if (confirm("Are you sure you want to remove this item?")) {
       setPantryItems((prev) => prev.filter((item) => item.id !== id));
+      setSelectedIds((prev) => prev.filter((selected) => selected !== id));
+    }
+  };
+
+  const toggleSelectItem = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(pantryItems.map((i) => i.id));
+    } else {
+      setSelectedIds([]);
     }
   };
 
   const handleSuggestMeals = () => {
-    if (!pantryItems.length || isSuggesting) {
+    const itemsToUse =
+      selectedIds.length > 0
+        ? pantryItems.filter((i) => selectedIds.includes(i.id))
+        : pantryItems;
+    if (!itemsToUse.length || isSuggesting) {
       return;
     }
     suggestMeals(
-      { ingredients: pantryItems.map((i) => i.name) },
+      { ingredients: itemsToUse.map((i) => i.name) },
       {
         onSuccess: (data) => {
           setSuggestionsText(data.suggestions);
@@ -222,6 +243,17 @@ export default function PantryPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHeaderCell>
+                  <Checkbox
+                    checked={selectedIds.length === pantryItems.length}
+                    indeterminate={
+                      selectedIds.length > 0 &&
+                      selectedIds.length < pantryItems.length
+                    }
+                    onChange={(_, data) => toggleSelectAll(data.checked)}
+                    aria-label="Select all"
+                  />
+                </TableHeaderCell>
                 <TableHeaderCell>Ingredient</TableHeaderCell>
                 <TableHeaderCell>Quantity</TableHeaderCell>
                 <TableHeaderCell>Expiration</TableHeaderCell>
@@ -237,6 +269,13 @@ export default function PantryPage() {
 
                 return (
                   <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => toggleSelectItem(item.id)}
+                        aria-label={`Select ${item.name}`}
+                      />
+                    </TableCell>
                     <TableCell>
                       <Text
                         className={
