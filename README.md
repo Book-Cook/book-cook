@@ -13,7 +13,7 @@
 
 ## 📖 Overview
 
-Book Cook is an AI-powered recipe management application that empowers individuals to create their own digital cookbook. With Book Cook, you can generate custom recipes tailored to your preferences, organize your recipe collection, and plan meals collaboratively.
+Book Cook is an AI-powered recipe management application that empowers individuals to create their own digital cookbook. With Book Cook, you can generate custom recipes tailored to your preferences, organize your recipe collection, and plan meals collaboratively. You can also create a weekly meal plan by selecting recipes for each day.
 
 ## 🚀 Getting Started
 
