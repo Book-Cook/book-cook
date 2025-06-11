@@ -1,4 +1,4 @@
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 
 export const getUserId = async (email: string | undefined | null) => {
   const db = await getDb();

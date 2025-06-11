@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 import { authOptions } from "../auth/[...nextauth]";
 
 type ResponseData = { name?: string; error?: string };
