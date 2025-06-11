@@ -4,8 +4,10 @@ interface SuggestMealsPayload {
   ingredients: string[];
 }
 
+import type { Recipe } from "../types";
+
 interface SuggestMealsResponse {
-  suggestions: string;
+  recipes: Recipe[];
 }
 
 export const useSuggestMeals = () => {

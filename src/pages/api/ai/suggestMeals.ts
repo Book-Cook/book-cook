@@ -1,44 +1,66 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
 
-import { mealPlanPrompt } from "../../../constants";
-import { processWithAI } from "../../../server";
+import { authOptions } from "../auth/[...nextauth]";
+import { getDb } from "../../../utils";
 
-export const runtime = "edge";
-
-export default async function handler(req: NextRequest) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
-    return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
+    res.status(405).json({ message: "Method Not Allowed" });
+    return;
   }
 
   try {
-    const { ingredients } = await req.json();
-    if (!Array.isArray(ingredients) || !ingredients.every((i: unknown) => typeof i === "string")) {
-      return NextResponse.json(
-        { message: "Missing or invalid ingredients in request body" },
-        { status: 400 }
-      );
+    const { ingredients } = req.body;
+
+    if (!Array.isArray(ingredients) || !ingredients.every((i) => typeof i === "string")) {
+      res.status(400).json({ message: "Missing or invalid ingredients in request body" });
+      return;
     }
 
-    const userPrompt = ingredients.map((i) => `- ${i}`).join("\n");
+    const session = await getServerSession(req, res, authOptions);
+    const db = await getDb();
 
-    const { processedContent } = await processWithAI({
-      systemPrompt: mealPlanPrompt,
-      userPrompt,
-    });
+    const visibilityConditions: any[] = [{ isPublic: true }];
 
-    return NextResponse.json({ suggestions: processedContent });
+    if (session?.user?.id) {
+      try {
+        const sharedOwners = await db
+          .collection("users")
+          .find({ sharedWithUsers: session.user.email }, { projection: { _id: 1 } })
+          .map((u) => u._id.toString())
+          .toArray();
+
+        visibilityConditions.push({ owner: session.user.id }, { owner: { $in: sharedOwners } });
+      } catch (dbError) {
+        console.error("Error fetching shared owners:", dbError);
+      }
+    }
+
+    const regexes = ingredients
+      .filter((i) => i && typeof i === "string")
+      .map((i) => new RegExp(i.trim(), "i"));
+
+    let query: any = { $or: visibilityConditions };
+
+    if (regexes.length > 0) {
+      const searchConditions = regexes.flatMap((r) => [
+        { title: { $regex: r } },
+        { tags: { $regex: r } },
+      ]);
+      query = { $and: [query, { $or: searchConditions }] };
+    }
+
+    const recipes = await db
+      .collection("recipes")
+      .find(query, { projection: { data: 0 } })
+      .limit(5)
+      .toArray();
+
+    res.status(200).json({ recipes });
   } catch (error) {
-    console.error("[AI Suggest Meals Error]", error);
-    const message =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    const displayMessage =
-      process.env.NODE_ENV === "development"
-        ? message
-        : "Server error during meal suggestion";
-    return NextResponse.json(
-      { message: `Error generating suggestions: ${displayMessage}` },
-      { status: 500 }
-    );
+    console.error("[Suggest Recipes Error]", error);
+    const message = error instanceof Error ? error.message : "Internal Error";
+    res.status(500).json({ message: `Error fetching recipes: ${message}` });
   }
 }

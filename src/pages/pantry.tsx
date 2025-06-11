@@ -27,6 +27,8 @@ import {
 } from "@fluentui/react-components";
 import { AddRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useSuggestMeals } from "../clientToServer";
+import type { Recipe } from "../clientToServer";
+import Link from "next/link";
 
 // Simple type to track pantry items
 interface PantryItem {
@@ -70,7 +72,7 @@ export default function PantryPage() {
   });
   const { mutate: suggestMeals, isPending: isSuggesting } = useSuggestMeals();
   const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
-  const [suggestionsText, setSuggestionsText] = React.useState("");
+  const [suggestedRecipes, setSuggestedRecipes] = React.useState<Recipe[]>([]);
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
 
   // Save to localStorage when items change
@@ -159,11 +161,11 @@ export default function PantryPage() {
       { ingredients: itemsToUse.map((i) => i.name) },
       {
         onSuccess: (data) => {
-          setSuggestionsText(data.suggestions);
+          setSuggestedRecipes(data.recipes);
           setSuggestionsOpen(true);
         },
         onError: () => {
-          alert("Failed to generate suggestions.");
+          alert("Failed to fetch suggestions.");
         },
       }
     );
@@ -422,7 +424,17 @@ export default function PantryPage() {
           <DialogBody>
             <DialogTitle>Recipe Suggestions</DialogTitle>
             <DialogContent>
-              <Text as="pre">{suggestionsText}</Text>
+              {suggestedRecipes.length > 0 ? (
+                <ul style={{ paddingLeft: "20px" }}>
+                  {suggestedRecipes.map((r) => (
+                    <li key={r._id}>
+                      <Link href={`/recipes/${r._id}`}>{r.title}</Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Text>No matching recipes found.</Text>
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setSuggestionsOpen(false)} appearance="primary">
