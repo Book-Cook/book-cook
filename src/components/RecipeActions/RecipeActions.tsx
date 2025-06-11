@@ -17,7 +17,7 @@ import {
   EmojiRegular,
   PeopleTeamRegular,
 } from "@fluentui/react-icons";
-import isEqual from "lodash/isEqual";
+import isEqual from "fast-deep-equal";
 import dynamic from "next/dynamic";
 
 import { useFetchAllTags } from "src/clientToServer";

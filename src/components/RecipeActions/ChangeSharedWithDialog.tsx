@@ -2,6 +2,7 @@ import * as React from "react";
 import { Button, makeStyles, Switch, tokens } from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
+import { FadeIn } from "../Animation";
 
 const useStyles = makeStyles({
   textArea: {
