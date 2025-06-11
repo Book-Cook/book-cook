@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { isEqual } from "lodash";
+import isEqual from "fast-deep-equal";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 

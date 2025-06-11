@@ -1,6 +1,6 @@
 import * as React from "react";
-import { motion } from "framer-motion";
 import { Spinner } from "@fluentui/react-components";
+import { FadeIn } from "../../Animation";
 
 import { useRecipe } from "../../../context";
 import { Editor } from "../../Editor/Editor";
@@ -16,11 +16,7 @@ export const RecipeContent = () => {
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.6, duration: 0.5 }}
-    >
+    <FadeIn delay={0.6}>
       {!isLoading && isAuthorized ? (
         <Editor
           value={editableData?.content || ""}
@@ -33,6 +29,6 @@ export const RecipeContent = () => {
       {!isLoading && !isAuthorized && (
         <div>You are not authorized to view this recipe</div>
       )}
-    </motion.div>
+    </FadeIn>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion } from "framer-motion";
+import { FadeIn } from "../Animation";
 
 import { RecipeContent } from "./RecipeContent/RecipeContent";
 import { RecipeHeader } from "./RecipeHeader/RecipeHeader";
@@ -14,18 +14,8 @@ export const RecipePage = () => {
 
   return (
     <RecipeProvider>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={styles.pageContainer}
-      >
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className={styles.recipeCard}
-        >
+      <FadeIn className={styles.pageContainer}>
+        <FadeIn up delay={0.2} className={styles.recipeCard}>
           <div className={styles.topSection}>
             <RecipeImage />
             <div className={styles.contentContainer}>
@@ -36,8 +26,8 @@ export const RecipePage = () => {
           <div className={styles.contentContainer}>
             <RecipeContent />
           </div>
-        </motion.div>
-      </motion.div>
+        </FadeIn>
+      </FadeIn>
     </RecipeProvider>
   );
 };

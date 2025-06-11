@@ -263,6 +263,27 @@ export const useStyles = makeStyles({
     zIndex: 1,
     opacity: 0.5, // Adjust if needed for subtlety
   },
+  floatLarge: {
+    animationName: {
+      "0%": { transform: "translateY(0)", opacity: 0.5 },
+      "50%": { transform: "translateY(-20px)", opacity: 0.7 },
+      "100%": { transform: "translateY(0)", opacity: 0.5 },
+    },
+    animationDuration: "8s",
+    animationTimingFunction: "ease-in-out",
+    animationIterationCount: "infinite",
+  },
+  floatSmall: {
+    animationName: {
+      "0%": { transform: "translateY(0)", opacity: 0.3 },
+      "50%": { transform: "translateY(20px)", opacity: 0.5 },
+      "100%": { transform: "translateY(0)", opacity: 0.3 },
+    },
+    animationDuration: "6s",
+    animationTimingFunction: "ease-in-out",
+    animationIterationCount: "infinite",
+    animationDelay: "1s",
+  },
 
   heroImageContainer: {
     position: "relative",

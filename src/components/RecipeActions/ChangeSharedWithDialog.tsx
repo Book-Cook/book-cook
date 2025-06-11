@@ -12,7 +12,7 @@ import {
   DismissRegular,
   SendRegular,
 } from "@fluentui/react-icons";
-import { motion } from "framer-motion";
+import { FadeIn } from "../Animation";
 
 import { ChangeDialog } from "./ChangeDialog";
 
@@ -238,13 +238,7 @@ const ChangeIsPublicDialog: React.FC<ChangeTitleDialogProps> = ({
             <Text className={styles.sectionLabel}>Shared with:</Text>
             <div className={styles.sharedEmailsList}>
               {sharedWithUsers.map((email, index) => (
-                <motion.div
-                  key={email}
-                  className={styles.emailChip}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2, delay: index * 0.05 }}
-                >
+                <FadeIn up delay={index * 0.05} key={email} className={styles.emailChip}>
                   <Text>{email}</Text>
                   <button
                     className={styles.removeButton}
@@ -253,7 +247,7 @@ const ChangeIsPublicDialog: React.FC<ChangeTitleDialogProps> = ({
                   >
                     <DismissRegular fontSize={16} />
                   </button>
-                </motion.div>
+                </FadeIn>
               ))}
             </div>
           </div>
