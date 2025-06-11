@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useRecipeCardStyles } from "./RecipeCard.styles";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
+import { StarRating } from "../StarRating";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   const {
@@ -16,7 +17,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
     id,
     emoji,
     isMinimal,
-    isPublic
+    isPublic,
+    rating,
   } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -119,6 +121,11 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
               </div>
             )}
           </div>
+          {!isMinimal && (
+            <div className={styles.ratingRow}>
+              <StarRating rating={rating} readOnly size={16} />
+            </div>
+          )}
           {!isMinimal && tags && tags.length > 0 && (
             <div className={styles.tagsContainer}>
               {tags.slice(0, 3).map((tag, i) => (

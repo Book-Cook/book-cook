@@ -36,6 +36,11 @@ export type Recipe = {
   emoji: string;
 
   /**
+   * Numerical rating for the recipe from 0 to 5.
+   */
+  rating: number;
+
+  /**
    * The owner of the recipe.
    */
   owner: string;
@@ -53,6 +58,7 @@ export type UpdateRecipePayload = {
   imageURL: string;
   emoji: string;
   isPublic: boolean;
+  rating: number;
 };
 
 export type CreateRecipeResponse = { message: string; recipeId: string };

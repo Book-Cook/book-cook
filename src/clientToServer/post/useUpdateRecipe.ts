@@ -27,6 +27,7 @@ export function useUpdateRecipe(recipeId: string | undefined) {
         imageURL: DOMPurify.sanitize(String(updatedRecipeData.imageURL || "")),
         emoji: DOMPurify.sanitize(String(updatedRecipeData.emoji || "")),
         isPublic: Boolean(updatedRecipeData.isPublic),
+        rating: Number(updatedRecipeData.rating ?? 0),
       };
 
       try {

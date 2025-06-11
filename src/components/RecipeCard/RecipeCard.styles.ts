@@ -72,6 +72,9 @@ export const useRecipeCardStyles = makeStyles({
   headerAction: {
     flexShrink: 0,
   },
+  ratingRow: {
+    marginBottom: "8px",
+  },
   tagsContainer: {
     display: "flex",
     flexWrap: "wrap",
