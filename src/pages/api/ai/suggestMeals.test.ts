@@ -46,8 +46,11 @@ describe('/api/ai/suggestMeals', () => {
 
     (getServerSession as jest.Mock).mockResolvedValue({ user: { id: '1', email: 't' } });
 
-    const toArrayRecipes = jest.fn().mockResolvedValue([{ _id: 'r1', title: 'Recipe' }]);
-    const findRecipes = jest.fn().mockReturnValue({ limit: () => ({ toArray: toArrayRecipes }) });
+    const toArrayRecipes = jest.fn().mockResolvedValue([
+      { _id: 'r1', title: 'Recipe', data: '## Ingredients\n- egg' },
+      { _id: 'r2', title: 'Other', data: '## Ingredients\n- milk' },
+    ]);
+    const findRecipes = jest.fn().mockReturnValue({ toArray: toArrayRecipes });
 
     const toArrayUsers = jest.fn().mockResolvedValue([]);
     const findUsers = jest.fn().mockReturnValue({ map: () => ({ toArray: toArrayUsers }) });

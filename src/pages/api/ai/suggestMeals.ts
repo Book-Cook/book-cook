@@ -4,6 +4,20 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import { getDb } from "../../../utils";
 
+const extractIngredients = (markdown: string): string[] => {
+  const sectionMatch = /#+\s*ingredients\s*\n([\s\S]*?)(?:\n#+\s*|$)/i.exec(
+    markdown
+  );
+  if (!sectionMatch) {
+    return [];
+  }
+  return sectionMatch[1]
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^(-|\*|\d+\.)\s+/.test(line))
+    .map((line) => line.replace(/^(-|\*|\d+\.)\s+/, "").toLowerCase());
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(405).json({ message: "Method Not Allowed" });
@@ -51,13 +65,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       query = { $and: [query, { $or: searchConditions }] };
     }
 
-    const recipes = await db
-      .collection("recipes")
-      .find(query, { projection: { data: 0 } })
-      .limit(5)
-      .toArray();
+    const recipes = await db.collection("recipes").find(query).toArray();
 
-    res.status(200).json({ recipes });
+    const userIngredients = ingredients.map((i) => i.toLowerCase());
+
+    const matches = recipes.filter((r) => {
+      const ingList = extractIngredients(r.data ?? "");
+      return ingList.length > 0 && ingList.every((ri) =>
+        userIngredients.some((ui) => new RegExp(`\\b${ui}\\b`, "i").test(ri))
+      );
+    });
+
+    const simplified = matches.slice(0, 5).map(({ _id, title }) => ({ _id, title }));
+
+    res.status(200).json({ recipes: simplified });
   } catch (error) {
     console.error("[Suggest Recipes Error]", error);
     const message = error instanceof Error ? error.message : "Internal Error";

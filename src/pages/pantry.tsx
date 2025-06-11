@@ -41,14 +41,20 @@ interface PantryItem {
 }
 
 const useStyles = makeStyles({
-  container: { maxWidth: "1200px", margin: "0 auto", padding: "20px 16px" },
+  container: {
+    maxWidth: "800px",
+    margin: "40px auto",
+    padding: "0 16px",
+  },
   formRow: { display: "flex", gap: tokens.spacingHorizontalM },
+  headerActions: { display: "flex", gap: tokens.spacingHorizontalM },
   expiredText: {
     textDecoration: "line-through",
     color: tokens.colorNeutralForeground3,
   },
   expiringText: { color: tokens.colorPaletteRedForeground1 },
   emptyState: { textAlign: "center", padding: "40px 0" },
+  actionCell: { display: "flex", gap: tokens.spacingHorizontalXS },
 });
 
 export default function PantryPage() {
@@ -220,7 +226,7 @@ export default function PantryPage() {
           <Subtitle1>Track your ingredients and expiration dates</Subtitle1>
         }
         action={
-          <>
+          <div className={styles.headerActions}>
             <Button
               appearance="primary"
               icon={<AddRegular />}
@@ -232,11 +238,10 @@ export default function PantryPage() {
               appearance="secondary"
               onClick={handleSuggestMeals}
               disabled={isSuggesting || pantryItems.length === 0}
-              style={{ marginLeft: "8px" }}
             >
               Suggest Recipes
             </Button>
-          </>
+          </div>
         }
       />
 
@@ -314,7 +319,7 @@ export default function PantryPage() {
                     </TableCell>
                     <TableCell>{item.expirationDate || "Not set"}</TableCell>
                     <TableCell>{item.dateAdded}</TableCell>
-                    <TableCell>
+                    <TableCell className={styles.actionCell}>
                       <Button
                         icon={<EditRegular />}
                         appearance="subtle"
