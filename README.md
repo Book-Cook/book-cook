@@ -47,3 +47,5 @@ yarn analyze
 ```
 
 This command uses `next-bundle-analyzer` and outputs a detailed report in `.next/analyze/webpack-stats.json`. Review the top modules to spot libraries that significantly impact bundle size.
+
+The configuration prefers the font-based variant of `@fluentui/react-icons` by setting `fluentIconFont` in Webpack's `conditionNames`. This avoids bundling thousands of SVG components and keeps the client bundle smaller.

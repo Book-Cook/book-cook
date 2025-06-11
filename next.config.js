@@ -94,6 +94,12 @@ const nextConfig = {
   webpack: (config, options) => {
     const { dev, isServer } = options;
 
+    config.resolve = config.resolve || {};
+    config.resolve.conditionNames = [
+      'fluentIconFont',
+      ...(config.resolve.conditionNames || [])
+    ];
+
     if (!dev && !isServer) {
       config.plugins.push(
         new StatsWriterPlugin({
