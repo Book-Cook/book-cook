@@ -1,5 +1,5 @@
-import type { Recipe } from "../types";
 import { fetchJson } from "src/utils";
+import type { Recipe } from "../types";
 
 export const fetchRecipeCollections = async (): Promise<Recipe[]> => {
   try {

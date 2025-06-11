@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type { UpdateRecipePayload, CreateRecipeResponse } from "../types";
 import { fetchJson } from "src/utils";
+import type { UpdateRecipePayload, CreateRecipeResponse } from "../types";
 
 export function useCreateRecipe() {
   const queryClient = useQueryClient();

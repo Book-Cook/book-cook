@@ -1,14 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { fetchJson } from "src/utils";
 
 interface AddToCollectionResponse {
   success: boolean;
   message?: string;
   updatedCollection?: { id: string; name: string };
-}
-
-interface ApiErrorResponse {
-  message: string;
 }
 
 /**

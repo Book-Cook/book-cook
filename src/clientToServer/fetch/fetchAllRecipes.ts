@@ -1,6 +1,6 @@
 import DOMPurify from "dompurify";
-import { fetchJson } from "src/utils";
 
+import { fetchJson } from "src/utils";
 import type { Recipe } from "../types";
 
 const sortOptions = {

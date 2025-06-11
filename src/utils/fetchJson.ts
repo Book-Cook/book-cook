@@ -1,4 +1,7 @@
-export async function fetchJson<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
+export async function fetchJson<T>(
+  input: RequestInfo | URL,
+  init?: RequestInit
+): Promise<T> {
   const response = await fetch(input, init);
   let data: unknown;
   try {
@@ -11,7 +14,7 @@ export async function fetchJson<T>(input: RequestInfo | URL, init?: RequestInit)
       data && typeof data === "object" && "message" in data
         ? (data as { message?: string }).message
         : response.statusText;
-    throw new Error(message || "Network response was not ok");
+    throw new Error(message ?? "Network response was not ok");
   }
   return data as T;
 }
