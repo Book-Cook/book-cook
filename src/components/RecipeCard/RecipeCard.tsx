@@ -8,16 +8,8 @@ import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
 
 export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
-  const {
-    title,
-    createdDate,
-    imageSrc,
-    tags,
-    id,
-    emoji,
-    isMinimal,
-    isPublic
-  } = props;
+  const { title, createdDate, imageSrc, tags, id, emoji, isMinimal, isPublic } =
+    props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -114,7 +106,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                   tags={tags}
                   _id={id}
                   emoji={emoji || "🍽️"}
-                  isPublic={isPublic || false}
+                  isPublic={isPublic ?? false}
                 />
               </div>
             )}

@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Spinner } from "@fluentui/react-components";
-import { FadeIn } from "../../Animation";
 
 import { useRecipe } from "../../../context";
+import { FadeIn } from "../../Animation";
 import { Editor } from "../../Editor/Editor";
 
 export const RecipeContent = () => {
-  const { isLoading, editableData, updateEditableDataKey, isAuthorized } = useRecipe();
+  const { isLoading, editableData, updateEditableDataKey, isAuthorized } =
+    useRecipe();
 
   const handleEditorChange = React.useCallback(
     (htmlContent: string) => {

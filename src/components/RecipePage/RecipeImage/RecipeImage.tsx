@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Text } from "@fluentui/react-components";
-import { ScaleOnHover } from "../../Animation";
 import Image from "next/image";
 
 import { useStyles } from "./RecipeImage.styles";
 
 import { useRecipe } from "../../../context";
+import { ScaleOnHover } from "../../Animation";
 
 export const RecipeImage = () => {
   const styles = useStyles();

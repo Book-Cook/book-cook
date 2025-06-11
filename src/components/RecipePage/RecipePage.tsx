@@ -1,11 +1,11 @@
 import * as React from "react";
-import { FadeIn } from "../Animation";
 
 import { RecipeContent } from "./RecipeContent/RecipeContent";
 import { RecipeHeader } from "./RecipeHeader/RecipeHeader";
 import { RecipeImage } from "./RecipeImage/RecipeImage";
 import { useStyles } from "./RecipePage.styles";
 import { RecipeTags } from "./RecipeTags/RecipeTags";
+import { FadeIn } from "../Animation";
 
 import { RecipeProvider } from "../../context";
 

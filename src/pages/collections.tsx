@@ -1,16 +1,13 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
+
 import { fetchRecipeCollections } from "src/clientToServer";
-import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
 import { RecipeCard } from "../components/RecipeCard";
+import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
 import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
 
 export default function CollectionsPage() {
-  const {
-    data: recipes,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: recipes } = useQuery({
     queryKey: ["collections"],
     queryFn: () => fetchRecipeCollections(),
   });

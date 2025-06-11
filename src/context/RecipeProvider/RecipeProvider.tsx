@@ -87,7 +87,7 @@ export const RecipeProvider: React.FC<{
           tags: editableData?.tags,
           imageURL: editableData?.imageURL,
           emoji: editableData?.emoji,
-          isPublic: editableData?.isPublic || false,
+          isPublic: editableData?.isPublic ?? false,
         },
         ...(immediateUpdate || {}),
       });
@@ -98,7 +98,7 @@ export const RecipeProvider: React.FC<{
         tags: editableData.tags,
         imageURL: editableData.imageURL,
         emoji: editableData?.emoji || "",
-        isPublic: editableData.isPublic || false,
+        isPublic: editableData.isPublic ?? false,
       });
     }
   };

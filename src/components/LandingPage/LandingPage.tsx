@@ -5,6 +5,7 @@ import {
   Card,
   CardPreview,
   CardHeader,
+  mergeClasses,
 } from "@fluentui/react-components";
 import {
   ArrowRight24Regular,
@@ -13,13 +14,12 @@ import {
   ClockRegular,
   CollectionsRegular,
 } from "@fluentui/react-icons";
-import { FadeIn, ScaleOnHover } from "../Animation";
-import { mergeClasses } from "@fluentui/react-components";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 
 import { useStyles } from "./LandingPage.styles";
+import { FadeIn, ScaleOnHover } from "../Animation";
 
 // Mock data for featured recipes
 const featuredRecipes = [
@@ -113,7 +113,9 @@ const LandingPage = () => {
 
       {/* Featured Recipes Section */}
       <section className={styles.featuredSection}>
-        <FadeIn up className={styles.sectionTitle}>Featured Recipes</FadeIn>
+        <FadeIn up className={styles.sectionTitle}>
+          Featured Recipes
+        </FadeIn>
 
         <div className={styles.recipesGrid}>
           {featuredRecipes.map((recipe) => (
@@ -184,7 +186,9 @@ const LandingPage = () => {
       {!session && (
         <>
           <section className={styles.featuresSection}>
-            <FadeIn up className={styles.sectionTitle}>Why Choose Book Cook</FadeIn>
+            <FadeIn up className={styles.sectionTitle}>
+              Why Choose Book Cook
+            </FadeIn>
 
             <div className={styles.featuresGrid}>
               <FadeIn up className={styles.featureItem}>
@@ -228,7 +232,7 @@ const LandingPage = () => {
             <p className={styles.ctaDesc}>
               Join others in creating and sharing amazing recipes every day.
             </p>
-            <ScaleOnHover scale={1.05} style={{ display: 'inline-block' }}>
+            <ScaleOnHover scale={1.05} style={{ display: "inline-block" }}>
               <Button
                 className={styles.ctaButton}
                 onClick={() => signIn("google")}

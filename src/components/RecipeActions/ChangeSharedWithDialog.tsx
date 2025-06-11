@@ -12,9 +12,9 @@ import {
   DismissRegular,
   SendRegular,
 } from "@fluentui/react-icons";
-import { FadeIn } from "../Animation";
 
 import { ChangeDialog } from "./ChangeDialog";
+import { FadeIn } from "../Animation";
 
 const useStyles = makeStyles({
   inputContainer: {
@@ -238,7 +238,12 @@ const ChangeIsPublicDialog: React.FC<ChangeTitleDialogProps> = ({
             <Text className={styles.sectionLabel}>Shared with:</Text>
             <div className={styles.sharedEmailsList}>
               {sharedWithUsers.map((email, index) => (
-                <FadeIn up delay={index * 0.05} key={email} className={styles.emailChip}>
+                <FadeIn
+                  up
+                  delay={index * 0.05}
+                  key={email}
+                  className={styles.emailChip}
+                >
                   <Text>{email}</Text>
                   <button
                     className={styles.removeButton}
