@@ -64,7 +64,6 @@ const nextConfig = {
       "lodash",
       "node-emoji",
       "grapheme-splitter",
-      "framer-motion",
       "dompurify",
       "chroma-js",
       "@tiptap/extension-link",

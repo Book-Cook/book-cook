@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Text } from "@fluentui/react-components";
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 import { useStyles } from "./RecipeImage.styles";
 
 import { useRecipe } from "../../../context";
+import { ScaleOnHover } from "../../Animation";
 
 export const RecipeImage = () => {
   const styles = useStyles();
@@ -15,11 +15,7 @@ export const RecipeImage = () => {
   const displayEmoji = recipe?.emoji ?? defaultEmoji;
 
   return recipe?.imageURL ? (
-    <motion.div
-      whileHover={{ scale: 1.01 }}
-      transition={{ duration: 0.2 }}
-      className={styles.imageContainer}
-    >
+    <ScaleOnHover className={styles.imageContainer}>
       <Image
         src={recipe.imageURL}
         alt={recipe.title}
@@ -28,18 +24,14 @@ export const RecipeImage = () => {
         sizes="(max-width: 840px) 100vw, 840px"
         priority
       />
-    </motion.div>
+    </ScaleOnHover>
   ) : (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      className={styles.emojiMainContainer}
-    >
+    <ScaleOnHover className={styles.emojiMainContainer} scale={1.02}>
       <div className={styles.emojiContainer}>
         <Text className={styles.emoji} aria-hidden="true">
           {displayEmoji}
         </Text>
       </div>
-    </motion.div>
+    </ScaleOnHover>
   );
 };

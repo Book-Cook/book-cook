@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { isEqual } from "lodash";
+import isEqual from "fast-deep-equal";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -87,7 +87,7 @@ export const RecipeProvider: React.FC<{
           tags: editableData?.tags,
           imageURL: editableData?.imageURL,
           emoji: editableData?.emoji,
-          isPublic: editableData?.isPublic || false,
+          isPublic: editableData?.isPublic ?? false,
         },
         ...(immediateUpdate || {}),
       });
@@ -98,7 +98,7 @@ export const RecipeProvider: React.FC<{
         tags: editableData.tags,
         imageURL: editableData.imageURL,
         emoji: editableData?.emoji || "",
-        isPublic: editableData.isPublic || false,
+        isPublic: editableData.isPublic ?? false,
       });
     }
   };
