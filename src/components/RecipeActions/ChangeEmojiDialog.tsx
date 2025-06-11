@@ -135,12 +135,6 @@ const useStyles = makeStyles({
   },
 });
 
-type EmojiEntry = {
-  emoji: string;
-  name: string;
-  keywords: string[];
-};
-
 const isSingleEmoji = (value: string): boolean => {
   if (!value) {
     return false;
