@@ -1,3 +1,5 @@
+import { fetchJson } from "src/utils";
+
 export interface UserInfo {
   name?: string;
 }
@@ -8,18 +10,9 @@ export async function fetchUser(userId?: string): Promise<UserInfo | null> {
   }
 
   try {
-    const response = await fetch(
+    return await fetchJson<UserInfo | null>(
       `/api/user/lookup?userId=${encodeURIComponent(userId)}`
     );
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`Failed to fetch user: ${response.statusText}`);
-    }
-
-    return response.json();
   } catch (error) {
     console.error("Error fetching user:", error);
     return null;

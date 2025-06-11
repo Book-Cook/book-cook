@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { fetchJson } from "src/utils";
 
 interface ConvertMeasurementsPayload {
   htmlContent: string;
@@ -16,21 +17,21 @@ export const useConvertMeasurements = () => {
   >({
     mutationKey: ["convertMeasurementsAI"],
     mutationFn: async (payload) => {
-      const response = await fetch("/api/ai/processRecipe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        let errorMsg = "API request failed";
-        try {
-          errorMsg = (await response.json()).message ?? errorMsg;
-        } catch (e) {
-          console.error("Failed to parse error response", e);
+      try {
+        return await fetchJson<ConvertMeasurementsResponse>(
+          "/api/ai/processRecipe",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
         }
-        throw new Error(errorMsg);
+        throw error;
       }
-      return response.json();
     },
   });
 };

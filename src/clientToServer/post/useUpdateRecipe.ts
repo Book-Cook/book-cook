@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DOMPurify from "dompurify";
 
 import type { UpdateRecipePayload } from "../types";
+import { fetchJson } from "src/utils";
 
 /**
  * Hook to update a recipe via post request.
@@ -30,19 +31,11 @@ export function useUpdateRecipe(recipeId: string | undefined) {
       };
 
       try {
-        const response = await fetch(`/api/recipes/${recipeId}`, {
+        return await fetchJson(`/api/recipes/${recipeId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(sanitizedData),
         });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to update recipe (Status: ${response.status})`
-          );
-        }
-
-        return response.json();
       } catch (error) {
         return error;
       }
