@@ -15,6 +15,16 @@ export default function Document() {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#e1d7ff" />
         <script dangerouslySetInnerHTML={{ __html: blockingThemeScript }} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/icons/favicon.ico" />

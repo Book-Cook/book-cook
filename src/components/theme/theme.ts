@@ -8,7 +8,7 @@ export type ThemeMode = "light" | "dark";
 const NEUTRAL_SATURATION_LIGHT = 0.05;
 const NEUTRAL_SATURATION_DARK = 0.1;
 const PRIMARY_BRAND_SHADE_INDEX: keyof BrandVariants = 80;
-const FONT_FAMILY_BASE = `"Nunito", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif`;
+const FONT_FAMILY_BASE = `"Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif`;
 const FALLBACK_PRIMARY_COLOR = "#6264a7";
 
 // --- Color Scale Generation ---

@@ -262,6 +262,8 @@ export const useStyles = makeStyles({
     backgroundColor: tokens.colorBrandBackground2, // Subtle brand background
     zIndex: 1,
     opacity: 0.5, // Adjust if needed for subtlety
+    willChange: "transform",
+    pointerEvents: "none",
   },
 
   heroImageContainer: {

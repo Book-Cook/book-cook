@@ -46,8 +46,13 @@ export default function App(props: AppProps) {
             padding: 0px;
             margin: 0px;
             height: 100%;
+            font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont,
+              sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
           }
           html {
+            scroll-behavior: smooth;
             height: 100%;
           }
           #__next {
