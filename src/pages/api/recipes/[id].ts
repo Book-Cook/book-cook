@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import type { Recipe } from "src/clientToServer";
 import { authOptions } from "../auth/[...nextauth]";
 
-import { getDb } from "../../../utils";
+import { getDb } from "../../../utils/db";
 
 type UpdateFields = {
   title?: string;

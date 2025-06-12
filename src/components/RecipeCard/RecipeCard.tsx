@@ -20,6 +20,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
     isPublic,
     rating,
   } = props;
+
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -116,7 +117,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
                   tags={tags}
                   _id={id}
                   emoji={emoji || "🍽️"}
-                  isPublic={isPublic || false}
+                  isPublic={isPublic ?? false}
                 />
               </div>
             )}

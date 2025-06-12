@@ -5,6 +5,7 @@ import {
   Card,
   CardPreview,
   CardHeader,
+  mergeClasses,
 } from "@fluentui/react-components";
 import {
   ArrowRight24Regular,
@@ -13,28 +14,12 @@ import {
   ClockRegular,
   CollectionsRegular,
 } from "@fluentui/react-icons";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 
 import { useStyles } from "./LandingPage.styles";
-
-// Animation variants for Framer Motion
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
+import { FadeIn, ScaleOnHover } from "../Animation";
 
 // Mock data for featured recipes
 const featuredRecipes = [
@@ -71,66 +56,32 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className={styles.hero}>
         {/* Decorative animated elements */}
-        <motion.div
-          className={styles.floatingBubble}
+        <div
+          className={mergeClasses(styles.floatingBubble, styles.floatLarge)}
           style={{ top: "10%", left: "10%", width: "300px", height: "300px" }}
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.5, 0.7, 0.5],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
         />
 
-        <motion.div
-          className={styles.floatingBubble}
+        <div
+          className={mergeClasses(styles.floatingBubble, styles.floatSmall)}
           style={{
             bottom: "15%",
             right: "10%",
             width: "200px",
             height: "200px",
           }}
-          animate={{
-            y: [0, 20, 0],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
         />
 
         <div className={styles.heroContent}>
-          <motion.h1
-            className={styles.heading}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <FadeIn up className={styles.heading}>
             Cook with Confidence, Create with Joy
-          </motion.h1>
+          </FadeIn>
 
-          <motion.p
-            className={styles.subHeading}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <FadeIn up delay={0.2} className={styles.subHeading}>
             Discover, save, and create delicious recipes from around the world.
             Your personal cookbook, reimagined for the digital age.
-          </motion.p>
+          </FadeIn>
 
-          <motion.div
-            className={styles.buttonGroup}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
+          <FadeIn up delay={0.4} className={styles.buttonGroup}>
             <Button
               className={styles.primaryButton}
               onClick={() => router.push("/recipes")}
@@ -145,14 +96,9 @@ const LandingPage = () => {
             >
               Create Recipe
             </Button>
-          </motion.div>
+          </FadeIn>
 
-          <motion.div
-            className={styles.heroImageContainer}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-          >
+          <FadeIn up delay={0.6} className={styles.heroImageContainer}>
             {/* Replace with your hero image */}
             {/* <Image
               src="/hero-image.jpg"
@@ -161,31 +107,19 @@ const LandingPage = () => {
               style={{ objectFit: "cover", borderRadius: "16px" }}
               priority
             /> */}
-          </motion.div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Featured Recipes Section */}
       <section className={styles.featuredSection}>
-        <motion.h2
-          className={styles.sectionTitle}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeIn}
-        >
+        <FadeIn up className={styles.sectionTitle}>
           Featured Recipes
-        </motion.h2>
+        </FadeIn>
 
-        <motion.div
-          className={styles.recipesGrid}
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
+        <div className={styles.recipesGrid}>
           {featuredRecipes.map((recipe) => (
-            <motion.div key={recipe.id} variants={fadeIn}>
+            <FadeIn up key={recipe.id}>
               <Card
                 className={styles.recipeCard}
                 onClick={() => router.push(`/recipes/${recipe.id}`)}
@@ -233,16 +167,11 @@ const LandingPage = () => {
                   }
                 />
               </Card>
-            </motion.div>
+            </FadeIn>
           ))}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          viewport={{ once: true }}
-        >
+        <FadeIn up delay={0.4}>
           <Button
             className={styles.primaryButton}
             style={{ marginTop: "40px" }}
@@ -250,31 +179,19 @@ const LandingPage = () => {
           >
             View All Recipes
           </Button>
-        </motion.div>
+        </FadeIn>
       </section>
 
       {/* Features Section */}
       {!session && (
         <>
           <section className={styles.featuresSection}>
-            <motion.h2
-              className={styles.sectionTitle}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={fadeIn}
-            >
+            <FadeIn up className={styles.sectionTitle}>
               Why Choose Book Cook
-            </motion.h2>
+            </FadeIn>
 
-            <motion.div
-              className={styles.featuresGrid}
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-            >
-              <motion.div className={styles.featureItem} variants={fadeIn}>
+            <div className={styles.featuresGrid}>
+              <FadeIn up className={styles.featureItem}>
                 <div className={styles.featureIcon}>
                   <SparkleRegular />
                 </div>
@@ -283,9 +200,9 @@ const LandingPage = () => {
                   Discover new recipes tailored to your taste preferences and
                   cooking history.
                 </p>
-              </motion.div>
+              </FadeIn>
 
-              <motion.div className={styles.featureItem} variants={fadeIn}>
+              <FadeIn up className={styles.featureItem}>
                 <div className={styles.featureIcon}>
                   <CollectionsRegular />
                 </div>
@@ -294,9 +211,9 @@ const LandingPage = () => {
                   Create custom collections to organize your favorite recipes by
                   occasion, cuisine, or diet.
                 </p>
-              </motion.div>
+              </FadeIn>
 
-              <motion.div className={styles.featureItem} variants={fadeIn}>
+              <FadeIn up className={styles.featureItem}>
                 <div className={styles.featureIcon}>
                   <ClockRegular />
                 </div>
@@ -305,31 +222,25 @@ const LandingPage = () => {
                   Meal planning and shopping lists all in one place to
                   streamline your cooking.
                 </p>
-              </motion.div>
-            </motion.div>
+              </FadeIn>
+            </div>
           </section>
-          <motion.section
-            className={styles.ctaSection}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8 }}
-          >
+          <FadeIn className={styles.ctaSection}>
             <h2 className={styles.ctaTitle}>
               Ready to Start Your Culinary Journey?
             </h2>
             <p className={styles.ctaDesc}>
               Join others in creating and sharing amazing recipes every day.
             </p>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <ScaleOnHover scale={1.05} style={{ display: "inline-block" }}>
               <Button
                 className={styles.ctaButton}
                 onClick={() => signIn("google")}
               >
                 Sign up
               </Button>
-            </motion.div>
-          </motion.section>
+            </ScaleOnHover>
+          </FadeIn>
         </>
       )}
     </div>

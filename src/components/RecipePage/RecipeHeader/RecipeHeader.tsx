@@ -11,7 +11,6 @@ import {
   useId,
 } from "@fluentui/react-components";
 import { Heart20Regular, SparkleRegular } from "@fluentui/react-icons";
-import { motion } from "framer-motion";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
@@ -20,6 +19,7 @@ import { StarRating } from "../../StarRating";
 
 import { useConvertMeasurements } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
+import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
 
 export const RecipeHeader = () => {
@@ -108,12 +108,7 @@ export const RecipeHeader = () => {
   return (
     <>
       <Toaster toasterId={toasterId} />
-      <motion.div
-        initial={{ y: 10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className={styles.headerSection}
-      >
+      <FadeIn up delay={0.4} className={styles.headerSection}>
         <div className={styles.titleRow}>
           <div className={styles.titleContainer}>{editableData.title}</div>
           <div className={styles.actionsContainer}>
@@ -160,7 +155,7 @@ export const RecipeHeader = () => {
             </Text>
           )}
         </div>
-      </motion.div>
+      </FadeIn>
     </>
   );
 };

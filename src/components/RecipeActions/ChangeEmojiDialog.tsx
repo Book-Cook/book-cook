@@ -10,8 +10,9 @@ import {
   tokens,
   Text,
 } from "@fluentui/react-components";
-import GraphemeSplitter from "grapheme-splitter";
+import emojiRegex from "emoji-regex";
 import * as emoji from "node-emoji";
+import emojiData from "unicode-emoji-json";
 
 import { ChangeDialog } from "./ChangeDialog";
 
@@ -51,7 +52,6 @@ const defaultSuggestedEmojis = [
   "🍼",
 ];
 const DEFAULT_EMOJI = "🍽️";
-const splitter = new GraphemeSplitter();
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -135,18 +135,24 @@ const useStyles = makeStyles({
   },
 });
 
-// Check if a string is a single emoji character
 const isSingleEmoji = (value: string): boolean => {
   if (!value) {
     return false;
   }
-  const graphemes = splitter.splitGraphemes(value);
-  return (
-    graphemes.length === 1 &&
-    /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u.test(graphemes[0])
-  );
+  const regex = emojiRegex();
+  const match = value.match(regex);
+  return Boolean(match) && match?.length === 1 && match[0] === value;
 };
 
+const searchByKeyword = (keyword: string): string[] => {
+  const results: string[] = [];
+  for (const [char, info] of Object.entries(emojiData)) {
+    if (info.name.toLowerCase().includes(keyword)) {
+      results.push(char);
+    }
+  }
+  return results;
+};
 export type ChangeEmojiDialogProps = {
   isOpen: boolean;
   currentEmoji: string;
@@ -161,28 +167,23 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
   onClose,
 }) => {
   const styles = useStyles();
-  const [inputValue, setInputValue] = React.useState<string>("");
-  const [selectedEmoji, setSelectedEmoji] =
-    React.useState<string>(DEFAULT_EMOJI);
-  const [displayedEmojis, setDisplayedEmojis] = React.useState<string[]>(
+  const [inputValue, setInputValue] = React.useState("");
+  const [selectedEmoji, setSelectedEmoji] = React.useState(DEFAULT_EMOJI);
+  const [displayedEmojis, setDisplayedEmojis] = React.useState(
     defaultSuggestedEmojis
   );
-  const [isSearching, setIsSearching] = React.useState<boolean>(false);
+  const [isSearching, setIsSearching] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const debounceTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Reset state when dialog opens
   React.useEffect(() => {
     if (isOpen) {
-      // Initialize state with memoized values to prevent unnecessary re-renders
       const initialEmoji = isSingleEmoji(currentEmoji)
         ? currentEmoji
         : DEFAULT_EMOJI;
       setSelectedEmoji(initialEmoji);
       setDisplayedEmojis(defaultSuggestedEmojis);
       setIsSearching(false);
-
-      // Focus without timeout for faster response
       requestAnimationFrame(() => {
         if (inputRef.current) {
           inputRef.current.focus();
@@ -192,7 +193,6 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     }
   }, [isOpen, currentEmoji]);
 
-  // Handle input changes for emoji search
   const handleInputChange = (
     _e: SearchBoxChangeEvent,
     data: InputOnChangeData
@@ -203,33 +203,33 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
-
     debounceTimeout.current = setTimeout(() => {
-      const trimmedValue = newValue.trim().toLowerCase();
+      const trimmed = newValue.trim().toLowerCase();
 
-      if (isSingleEmoji(trimmedValue)) {
-        setSelectedEmoji(trimmedValue);
+      if (isSingleEmoji(trimmed)) {
+        setSelectedEmoji(trimmed);
         setIsSearching(false);
         setDisplayedEmojis(defaultSuggestedEmojis);
-      } else if (trimmedValue === "") {
+      } else if (trimmed === "") {
         setSelectedEmoji("");
         setIsSearching(false);
         setDisplayedEmojis(defaultSuggestedEmojis);
       } else {
         setIsSearching(true);
-        const searchResults = emoji.search(trimmedValue);
-        setDisplayedEmojis(searchResults.map((result) => result.emoji));
+        const nameHits = emoji.search(trimmed).map((r) => r.emoji);
+        const unicodeHits = searchByKeyword(trimmed);
+        const merged = Array.from(new Set([...nameHits, ...unicodeHits]));
+        setDisplayedEmojis(merged);
       }
     }, 150);
   };
 
   const handleEmojiGridSelect = React.useCallback(
-    (emojiChar: string) => {
-      setSelectedEmoji(emojiChar);
+    (char: string) => {
+      setSelectedEmoji(char);
       setIsSearching(false);
-
-      if (isSingleEmoji(emojiChar)) {
-        onSave(emojiChar);
+      if (isSingleEmoji(char)) {
+        onSave(char);
         onClose();
       }
     },
@@ -237,40 +237,47 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
   );
 
   const emojiGrid = React.useMemo(() => {
-    return displayedEmojis.length > 0 ? (
-      <div className={styles.emojiGrid}>
-        {displayedEmojis.map((emojiChar, index) => (
-          <div
-            key={`${emojiChar}-${index}`}
-            className={`${styles.emojiButton} ${selectedEmoji === emojiChar ? styles.selectedEmoji : ""}`}
-            onClick={() => handleEmojiGridSelect(emojiChar)}
-            role="button"
-            tabIndex={0}
-            aria-label={`Select emoji ${emojiChar}`}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleEmojiGridSelect(emojiChar);
-              }
-            }}
-          >
-            {emojiChar}
-          </div>
-        ))}
-      </div>
-    ) : isSearching ? (
-      <Text className={styles.noResultsText}>No emojis found</Text>
-    ) : null;
+    if (displayedEmojis.length > 0) {
+      return (
+        <div className={styles.emojiGrid}>
+          {displayedEmojis.map((char, i) => (
+            <div
+              key={`${char}-${i}`}
+              className={`${styles.emojiButton} ${
+                selectedEmoji === char ? styles.selectedEmoji : ""
+              }`}
+              onClick={() => handleEmojiGridSelect(char)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Select emoji ${char}`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleEmojiGridSelect(char);
+                }
+              }}
+            >
+              {char}
+            </div>
+          ))}
+        </div>
+      );
+    } else if (isSearching) {
+      return <Text className={styles.noResultsText}>No emojis found</Text>;
+    } else {
+      return null;
+    }
   }, [
     displayedEmojis,
     handleEmojiGridSelect,
     isSearching,
     selectedEmoji,
-    styles.emojiButton,
-    styles.emojiGrid,
-    styles.noResultsText,
-    styles.selectedEmoji,
+    styles,
   ]);
+
+  // If nothing matched but the user typed a valid emoji, let them “Use it anyway”
+  const canUseCustomEmoji =
+    displayedEmojis.length === 0 && isSingleEmoji(inputValue.trim());
 
   const gridTitle = isSearching
     ? `Results for "${inputValue}"`
@@ -290,6 +297,19 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
       <div className={styles.gridContainer}>
         <Text className={styles.emojiSectionTitle}>{gridTitle}</Text>
         {emojiGrid}
+        {canUseCustomEmoji && (
+          <div
+            className={styles.emojiButton}
+            onClick={() => {
+              onSave(inputValue.trim());
+              onClose();
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            Use {`"${inputValue.trim()}"`}
+          </div>
+        )}
       </div>
     </ChangeDialog>
   );

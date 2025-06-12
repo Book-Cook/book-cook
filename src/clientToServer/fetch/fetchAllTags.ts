@@ -1,12 +1,8 @@
+import { fetchJson } from "src/utils";
+
 export const fetchAllTags = async (): Promise<string[]> => {
   try {
-    const response = await fetch("/api/recipes/tags");
-
-    if (!response.ok) {
-      throw new Error(`Error fetching tags: ${response.status}`);
-    }
-
-    return response.json();
+    return await fetchJson("/api/recipes/tags");
   } catch (error) {
     console.error("Failed to fetch tags:", error);
     throw error;

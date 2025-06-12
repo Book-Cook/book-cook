@@ -9,11 +9,12 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
-import { RecipeCard, FallbackScreen, Unauthorized } from "..";
+import { useStyles } from "./RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
 import { SearchBar } from "../Toolbar/SearchBar";
+
+import { RecipeCard, FallbackScreen, Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
-import { useStyles } from "./RecipeGallery.styles";
 
 export const RecipeGallery = () => {
   const styles = useStyles();

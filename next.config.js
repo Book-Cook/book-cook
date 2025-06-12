@@ -60,10 +60,10 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       "@fluentui/react-components",
+      "@fluentui/react-icons",
       "lodash",
       "node-emoji",
       "grapheme-splitter",
-      "framer-motion",
       "dompurify",
       "chroma-js",
       "@tiptap/extension-link",

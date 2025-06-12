@@ -2,14 +2,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
+
 import { authOptions } from "../../auth/[...nextauth]";
 
 type StringOrInQuery = string | { $in: string[] };
 
-type VisibilityCondition =
-  | { isPublic: boolean }
-  | { owner: StringOrInQuery }
+type VisibilityCondition = { isPublic: boolean } | { owner: StringOrInQuery };
 
 export default async function handler(
   req: NextApiRequest,
