@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 
 import { authOptions } from "../../auth/[...nextauth]";
 
@@ -102,16 +102,14 @@ export default async function handler(
           .json({ message: "User not in your shared list" });
       }
 
-      await db
-        .collection("users")
-        .updateOne(
-          { email: userEmail },
-          {
-            $pull: {
-              sharedWithUsers: shareWithEmail,
-            } as PullOperator<Document>,
-          }
-        );
+      await db.collection("users").updateOne(
+        { email: userEmail },
+        {
+          $pull: {
+            sharedWithUsers: shareWithEmail,
+          } as PullOperator<Document>,
+        }
+      );
 
       return res.status(200).json({ message: "Access removed successfully" });
     }

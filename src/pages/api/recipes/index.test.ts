@@ -1,12 +1,12 @@
 /** @jest-environment node */
 
 jest.mock("../auth/[...nextauth]", () => ({ authOptions: {} }));
-jest.mock("src/utils", () => ({ getDb: jest.fn() }));
+jest.mock("src/utils/db", () => ({ getDb: jest.fn() }));
 jest.mock("next-auth", () => ({ getServerSession: jest.fn() }));
 
 import { getServerSession } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 import handler from "./index";
 
 const mockRes = () => {

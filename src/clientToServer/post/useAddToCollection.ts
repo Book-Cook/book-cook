@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { fetchJson } from "src/utils";
+
 interface AddToCollectionResponse {
   success: boolean;
   message?: string;
   updatedCollection?: { id: string; name: string };
-}
-
-interface ApiErrorResponse {
-  message: string;
 }
 
 /**
@@ -23,22 +21,22 @@ export function useAddToCollection() {
         throw new Error("Recipe ID is required.");
       }
 
-      const response = await fetch("/api/user/collections", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipeId }),
-      });
-
-      if (!response.ok) {
-        let errorInfo = `Status: ${response.status} ${response.statusText}`;
-
-        const errorData = (await response?.json()) as ApiErrorResponse;
-        errorInfo = errorData.message || errorInfo;
-
+      try {
+        return await fetchJson<AddToCollectionResponse>(
+          "/api/user/collections",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ recipeId }),
+          }
+        );
+      } catch (error) {
+        let errorInfo = "";
+        if (error instanceof Error) {
+          errorInfo = error.message;
+        }
         throw new Error(`Failed to add recipe to collection: ${errorInfo}`);
       }
-
-      return (await response.json()) as AddToCollectionResponse;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["collections"] });
