@@ -16,6 +16,7 @@ interface RecipeDocument {
   createdAt: Date;
   emoji: string;
   imageURL: string;
+  rating: number;
 }
 
 type VisibilityCondition =
@@ -123,7 +124,7 @@ const handlePostRequest = async (
         .json({ message: "Unauthorized. Please log in to create a recipe." });
     }
 
-    const { title, data, tags } = req.body;
+    const { title, data, tags, rating } = req.body;
 
     if (!title || typeof title !== "string" || !title.trim()) {
       return res.status(400).json({ message: "Title required." });
@@ -140,6 +141,7 @@ const handlePostRequest = async (
       createdAt: new Date(),
       emoji: "🍽️",
       imageURL: "",
+      rating: typeof rating === "number" ? rating : 0,
     };
 
     const result = await db.collection("recipes").insertOne(newRecipe);

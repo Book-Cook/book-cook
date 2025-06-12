@@ -8,6 +8,7 @@ export type EditableData = {
   emoji: string;
   _id?: string;
   isPublic?: boolean;
+  rating: number;
 };
 
 export type RecipeContextType = {

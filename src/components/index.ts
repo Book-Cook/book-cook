@@ -3,4 +3,5 @@ export * from "./Toolbar";
 export * from "./FallbackScreens";
 export * from "./RecipeCard";
 export * from "./TagPicker";
+export * from "./StarRating";
 export * from "./Animation";
