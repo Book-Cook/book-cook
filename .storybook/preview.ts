@@ -1,5 +1,9 @@
 import type { Preview } from "@storybook/nextjs";
+import { initialize, mswDecorator } from "msw-storybook-addon";
 import { withProviders } from "../src/stories/decorators";
+import { handlers } from "../src/mocks/handlers";
+
+initialize({ onUnhandledRequest: "bypass" });
 
 export const globalTypes = {
   themeMode: {
@@ -25,8 +29,9 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    msw: { handlers },
   },
-  decorators: [withProviders],
+  decorators: [mswDecorator, withProviders],
 };
 
 export default preview;
