@@ -17,8 +17,7 @@
     "export": "next build && next export",
     "analyze": "ANALYZE=true next build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_c51e8d435253ab5"
+    "build-storybook": "storybook build"
   },
   "engines": {
     "node": ">=22.5.1"
