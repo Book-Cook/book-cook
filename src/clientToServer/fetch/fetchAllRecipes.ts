@@ -1,5 +1,6 @@
 import DOMPurify from "dompurify";
 
+import { fetchJson } from "src/utils";
 import type { Recipe } from "../types";
 
 const sortOptions = {
@@ -34,13 +35,7 @@ export const fetchAllRecipes = async (
   }
 
   try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching recipes: ${response.status}`);
-    }
-
-    return response.json();
+    return await fetchJson(url);
   } catch (error) {
     console.error("Failed to fetch recipes:", error);
     throw error;

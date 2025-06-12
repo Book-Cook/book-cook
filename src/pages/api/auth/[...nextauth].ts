@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 
 declare module "next-auth" {
   interface Session {

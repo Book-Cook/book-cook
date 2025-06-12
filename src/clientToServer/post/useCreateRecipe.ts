@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { fetchJson } from "src/utils";
 import type { UpdateRecipePayload, CreateRecipeResponse } from "../types";
 
 export function useCreateRecipe() {
@@ -9,17 +10,11 @@ export function useCreateRecipe() {
     mutationFn: async (
       newRecipe: Omit<UpdateRecipePayload, "_id" | "createdAt">
     ) => {
-      const response = await fetch("/api/recipes", {
+      return fetchJson<CreateRecipeResponse>("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newRecipe),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message ?? "Failed to upload recipe");
-      }
-      return (await response.json()) as CreateRecipeResponse;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["recipes"] });

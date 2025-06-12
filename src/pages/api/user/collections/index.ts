@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 
 import { authOptions } from "../../auth/[...nextauth]";
 
@@ -59,7 +59,6 @@ export default async function handler(req: any, res: any) {
       const { recipeId } = req.body;
 
       if (session.user?.id) {
-
         const result = await db.collection("collections").updateOne(
           { userId: session.user.id },
           {

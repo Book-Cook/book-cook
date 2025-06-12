@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 
-import { getDb } from "src/utils";
+import { getDb } from "src/utils/db";
 
 import { authOptions } from "../../auth/[...nextauth]";
 
