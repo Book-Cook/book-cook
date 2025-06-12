@@ -14,13 +14,13 @@ export const mockRecipes = [
 ];
 
 export const handlers = [
-  http.get("/api/recipes", ({ params }) => {
+  http.get("/api/recipes", () => {
     return HttpResponse.json(mockRecipes);
   }),
-  http.get("/api/recipes/:id", ({ params }) => {
+  http.get("/api/recipes/:id", () => {
     return HttpResponse.json(mockRecipes);
   }),
-  http.get("/api/recipes/tags", ({ params }) => {
+  http.get("/api/recipes/tags", () => {
     return HttpResponse.json(mockRecipes.flatMap((r) => r.tags));
   }),
 ];
