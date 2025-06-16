@@ -13300,9 +13300,9 @@ renderkid@^3.0.0:
     strip-ansi "^6.0.1"
 
 renovate@^40.0.0:
-  version "40.59.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-40.59.1.tgz#879866e800a3e184b8ae314ef718a90f7361c094"
-  integrity sha512-hEclL9nAu9zYoL5KIYlYw7eht9useUZn83r3xiT2eBMzdDMqzjc4MuCmJqAL8N/sWwuxtOkX1wHcW6woUrCAww==
+  version "40.59.2"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-40.59.2.tgz#ac0b88b7a13438096c7c44d37a4a78420692aa6a"
+  integrity sha512-0h5n1xP/fym5/7vUm8gTGuF2KuCdtzHxSnolIcHhT4fjyj83EIBivcmF6erBHYRrKRbIpEhEkLeZ5HCXnu12qA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.821.0"
     "@aws-sdk/client-ec2" "3.821.0"
@@ -15860,9 +15860,9 @@ zod@3.25.56:
   integrity sha512-rd6eEF3BTNvQnR2e2wwolfTmUTnp70aUTqr0oaGbHifzC3BKJsoV+Gat8vxUMR1hwOKBs6El+qWehrHbCpW6SQ==
 
 zod@^3.23.0:
-  version "3.25.65"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.65.tgz#190cb604e1b45e0f789a315f65463953d4d4beee"
-  integrity sha512-kMyE2qsXK1p+TAvO7zsf5wMFiCejU3obrUDs9bR1q5CBKykfvp7QhhXrycUylMoOow0iEUSyjLlZZdCsHwSldQ==
+  version "3.25.66"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.66.tgz#09d9af61a842846b0420a9a0a427c52e48ec28b6"
+  integrity sha512-qr0yTfytD1ne6C9uZi0iu4+TGp+1J6wqoC17ugWg7EPuqT/ml21I2rqYbfeOPjeg6vHPnayIsD3CS3egsPaBrg==
 
 zwitch@^2.0.0:
   version "2.0.4"
