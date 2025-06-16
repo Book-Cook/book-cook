@@ -44,24 +44,32 @@ export const authOptions: NextAuthOptions = {
       const collections = db.collection("collections");
 
       const email = message.user.email;
-      const existingUser = await users.findOne({ email });
+      let existingUser = await users.findOne({ email });
 
       if (!existingUser) {
-        await users.insertOne({
+        const result = await users.insertOne({
           email,
           name: message?.user?.name,
           createdAt: new Date(),
           recentlyViewedRecipes: [],
           sharedWithUsers: [],
         });
+        existingUser = { _id: result.insertedId, email };
       } else if (!existingUser.name && message.user.name) {
         await users.updateOne({ email }, { $set: { name: message.user.name } });
       }
 
-      await collections.insertOne({
-        userId: existingUser?._id,
-        collections: [],
+      // Check if user already has a collections document
+      const existingCollection = await collections.findOne({
+        userId: existingUser?._id.toString()
       });
+
+      if (!existingCollection) {
+        await collections.insertOne({
+          userId: existingUser?._id.toString(),
+          collections: [],
+        });
+      }
     },
   },
 };
