@@ -1,4 +1,6 @@
 import React, { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import {
   Button,
   Tooltip,
@@ -10,13 +12,21 @@ import {
   Toaster,
   useId,
 } from "@fluentui/react-components";
-import { Heart20Regular, SparkleRegular } from "@fluentui/react-icons";
+import {
+  Heart20Regular,
+  Heart20Filled,
+  SparkleRegular,
+} from "@fluentui/react-icons";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
 
-import { useConvertMeasurements } from "../../../clientToServer";
+import {
+  useConvertMeasurements,
+  fetchRecipeCollections,
+} from "../../../clientToServer";
+import type { Recipe } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
@@ -35,6 +45,20 @@ export const RecipeHeader = () => {
 
   const toasterId = useId("toaster");
   const { dispatchToast } = useToastController(toasterId);
+
+  const { data: session } = useSession();
+  const { data: collections } = useQuery<Recipe[]>({
+    queryKey: ["collections"],
+    queryFn: () => fetchRecipeCollections(),
+    enabled: Boolean(session),
+  });
+
+  const isLiked = useMemo(() => {
+    if (!collections || !recipe?._id) {
+      return false;
+    }
+    return collections.some((r) => r._id === recipe._id);
+  }, [collections, recipe?._id]);
 
   const {
     mutate: convertRecipeContent,
@@ -125,7 +149,7 @@ export const RecipeHeader = () => {
               <Button
                 aria-label="Add to Collection"
                 appearance="transparent"
-                icon={<Heart20Regular />}
+                icon={isLiked ? <Heart20Filled /> : <Heart20Regular />}
                 shape="circular"
                 onClick={handleAddToCollection}
                 className={styles.favoriteButton}
