@@ -49,7 +49,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
       <DrawerBody className={styles.mobileMenu}>
         <div className={styles.drawerContentWrapper}>
           <div className={styles.searchWrapper}>
-            <SearchBar />
+            <SearchBar onSearch={() => onOpenChange(false)} />
           </div>
 
           <div className={styles.navSection}>

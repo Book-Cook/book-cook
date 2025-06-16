@@ -9,7 +9,14 @@ import { useRouter } from "next/router";
 import { useSearchBox } from "../../../context";
 import { useDebounce } from "../../../hooks";
 
-export const SearchBar = () => {
+export type SearchBarProps = {
+  /**
+   * Optional callback fired when the user submits a search.
+   */
+  onSearch?: () => void;
+};
+
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
   const [inputValue, setInputValue] = React.useState(searchBoxValue);
@@ -40,6 +47,7 @@ export const SearchBar = () => {
         // User is not on the home page, reroute
         await router.push(`/recipes`);
       }
+      onSearch?.();
     }
   };
 
