@@ -155,6 +155,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
                     tags={recipe.tags}
                     createdDate={recipe.createdAt}
                     isPublic={recipe?.isPublic}
+                    rating={recipe.rating || 0}
                     isMinimal
                   />
                   <div
