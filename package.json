@@ -94,7 +94,7 @@
     "jest-environment-jsdom": "^30.0.0",
     "next-router-mock": "^1.0.0",
     "prettier": "^3.2.5",
-    "renovate": "^40.0.0",
+    "renovate": "^41.0.0",
     "storybook": "^9.0.8",
     "ts-jest": "^29.3.1",
     "ts-node": "^10.9.2",
