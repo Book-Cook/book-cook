@@ -7737,10 +7737,10 @@ crelt@^1.0.0:
   resolved "https://registry.yarnpkg.com/crelt/-/crelt-1.0.6.tgz#7cc898ea74e190fb6ef9dae57f8f81cf7302df72"
   integrity sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==
 
-croner@9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/croner/-/croner-9.0.0.tgz#1db62160142cf32eb22622e9ae27ba29156883f7"
-  integrity sha512-onMB0OkDjkXunhdW9htFjEhqrD54+M94i6ackoUkjHKbRnXdyEyKRelp4nJ1kAz32+s27jP1FsebpJCVl0BsvA==
+croner@9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/croner/-/croner-9.1.0.tgz#94ccbba2570bca329f60f36ec19875dccf9a63aa"
+  integrity sha512-p9nwwR4qyT5W996vBZhdvBCnMhicY5ytZkR4D1Xj0wuTDEiMnjwR57Q3RXYY/s0EpX6Ay3vgIcfaR+ewGHsi+g==
 
 cronstrue@2.61.0:
   version "2.61.0"
@@ -13323,9 +13323,9 @@ renderkid@^3.0.0:
     strip-ansi "^6.0.1"
 
 renovate@^41.0.0:
-  version "41.6.0"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.6.0.tgz#640ebe97d51aac963500e33e4577bd4c1f4827f2"
-  integrity sha512-X2707Ws8be6T7s2Vng56Onmof8MKlSWiX+/j9jCs+lpUnsR+jpt/BoCaHXFkvOsPWQeCdRyu8ilUC3jENEON+Q==
+  version "41.6.4"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.6.4.tgz#310e75f450b2c7d1551bcba5aef91bd07f739140"
+  integrity sha512-mhRgaHPqNiSX+Zb6tfPmHxT3O8Fz5lHqSYriiiSeoPVCj32ikO+DtNZVQFJViwFLH9/McIWln8O/kBDMHherGA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.821.0"
     "@aws-sdk/client-ec2" "3.821.0"
@@ -13373,7 +13373,7 @@ renovate@^41.0.0:
     clean-git-ref "2.0.1"
     commander "14.0.0"
     conventional-commits-detector "1.0.3"
-    croner "9.0.0"
+    croner "9.1.0"
     cronstrue "2.61.0"
     deepmerge "4.3.1"
     dequal "2.0.3"
@@ -13442,7 +13442,7 @@ renovate@^41.0.0:
     vuln-vects "1.1.0"
     xmldoc "1.3.0"
     yaml "2.8.0"
-    zod "3.25.65"
+    zod "3.25.67"
   optionalDependencies:
     better-sqlite3 "11.10.0"
     openpgp "6.1.1"
@@ -15894,12 +15894,7 @@ zod-to-json-schema@^3.24.1:
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.5.tgz#d1095440b147fb7c2093812a53c54df8d5df50a3"
   integrity sha512-/AuWwMP+YqiPbsJx5D6TfgRTc4kTLjsh5SOcd4bLsfUg2RcEXrFMJl1DGgdHy2aCfsIA/cr/1JM0xcB2GZji8g==
 
-zod@3.25.65:
-  version "3.25.65"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.65.tgz#190cb604e1b45e0f789a315f65463953d4d4beee"
-  integrity sha512-kMyE2qsXK1p+TAvO7zsf5wMFiCejU3obrUDs9bR1q5CBKykfvp7QhhXrycUylMoOow0iEUSyjLlZZdCsHwSldQ==
-
-zod@^3.23.0:
+zod@3.25.67, zod@^3.23.0:
   version "3.25.67"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.67.tgz#62987e4078e2ab0f63b491ef0c4f33df24236da8"
   integrity sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==
