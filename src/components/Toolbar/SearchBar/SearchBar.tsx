@@ -43,10 +43,16 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleKeyDown = async (event: any) => {
     if (event.key === "Enter") {
+      // Immediately update the shared search value so that navigating
+      // to the recipes page reflects the typed query even if the
+      // debounced update has not fired yet.
+      onSearchBoxValueChange(inputValue);
+
       if (path !== "/recipes") {
         // User is not on the home page, reroute
         await router.push(`/recipes`);
       }
+
       onSearch?.();
     }
   };
