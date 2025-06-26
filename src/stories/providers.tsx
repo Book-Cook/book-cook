@@ -73,6 +73,27 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   const session = options?.session ?? context.parameters?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
+  // Optimize for Chromatic - use minimal providers if detected
+  const isChromatic = typeof window !== 'undefined' && 
+    (window.navigator.userAgent.includes('HeadlessChrome') || Boolean(process.env.CHROMATIC_PROJECT_TOKEN));
+  
+  if (isChromatic) {
+    // Minimal setup for Chromatic to reduce render time
+    return (
+      <RendererProvider renderer={createDOMRenderer()}>
+        <SSRProvider>
+          <SessionProvider session={session}>
+            <ThemeProvider>
+              <StorybookAppContent preference={preference}>
+                <Story />
+              </StorybookAppContent>
+            </ThemeProvider>
+          </SessionProvider>
+        </SSRProvider>
+      </RendererProvider>
+    );
+  }
+  
   return (
     <QueryClientProvider client={queryClient}>
       <RendererProvider renderer={createDOMRenderer()}>

@@ -22,6 +22,8 @@ const config: StorybookConfig = {
     ...config,
     // Ensure MSW worker is available in all environments
     STORYBOOK_ENV: process.env.NODE_ENV || 'development',
+    // Pass Chromatic detection to stories
+    CHROMATIC_PROJECT_TOKEN: process.env.CHROMATIC_PROJECT_TOKEN,
   }),
   // Add webpack configuration for better compatibility
   "webpackFinal": async (config) => {

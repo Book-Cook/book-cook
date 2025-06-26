@@ -10,12 +10,34 @@ const meta: Meta<typeof HomePage> = {
   component: HomePage,
   parameters: {
     layout: 'fullscreen',
+    // Optimize for Chromatic - disable interactions that cause delays
+    chromatic: {
+      disableSnapshot: false,
+      delay: 300,
+    },
   },
 };
 
 export default meta;
 
 type Story = StoryObj<typeof HomePage>;
+
+// Chromatic-optimized story with minimal setup for fast rendering
+export const ChromaticOptimized: Story = {
+  name: "Chromatic Optimized",
+  parameters: {
+    chromatic: {
+      delay: 100,
+      disableSnapshot: false,
+    },
+    msw: {
+      handlers: createMockHandlers.withData(
+        [chocolateChipCookies], // Single item for speed
+        [thaiGreenCurry] // Single item for speed
+      ),
+    },
+  },
+};
 
 // Default story with the standard MSW handlers (shows actual mock data)
 export const Default: Story = {

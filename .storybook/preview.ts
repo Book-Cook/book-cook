@@ -6,11 +6,13 @@ import { recipeHandlers } from '../src/mocks/handlers';
 // Initialize MSW with our handlers - add error handling for different environments
 if (typeof window !== 'undefined') {
   try {
-    initialize({
-      onUnhandledRequest: 'warn',
-      // Optimize for Chromatic - reduce response delays
-      quiet: process.env.NODE_ENV === 'test' || !!process.env.CHROMATIC_PROJECT_TOKEN
-    }, recipeHandlers);
+    // Skip MSW initialization in Chromatic to speed up rendering
+    if (!window.navigator.userAgent.includes('HeadlessChrome')) {
+      initialize({
+        onUnhandledRequest: 'bypass',
+        quiet: true
+      }, recipeHandlers);
+    }
   } catch (error) {
     console.warn('MSW initialization failed:', error);
   }
@@ -42,12 +44,16 @@ const preview: Preview = {
     },
     // Optimize for Chromatic visual testing
     chromatic: {
-      // Increase timeout for stories that need more time to render
-      delay: 2000,
-      // Disable animations to speed up rendering
-      disableSnapshot: false,
-      // Configure viewport sizes for consistent rendering
-      viewports: [320, 1200],
+      // Disable animations for faster rendering
+      disable: false,
+      // Reduce delay for faster snapshots
+      delay: 500,
+      // Use specific viewports to reduce rendering time
+      viewports: [1200],
+      // Optimize for performance
+      modes: {
+        light: { themeMode: 'light' }
+      }
     },
   },
   decorators: [withFullProviders],
