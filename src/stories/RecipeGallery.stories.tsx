@@ -113,12 +113,12 @@ export const EmptyState: Story = {
   },
 };
 
-// Loading state story
+// Loading state story - minimal delay for testing
 export const LoadingState: Story = {
   name: "Loading State",
   parameters: {
     msw: {
-      handlers: createMockHandlers.loadingState(1500), // 1.5 second delay
+      handlers: createMockHandlers.loadingState(300), // Short delay for testing
     },
   },
 };

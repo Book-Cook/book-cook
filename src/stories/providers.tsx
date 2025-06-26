@@ -82,21 +82,25 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   
   if (isChromatic) {
     try {
-      // Use minimal setup for Chromatic performance
+      // Use minimal but stable setup for Chromatic
       return (
-        <div style={{ 
-          '--colorNeutralBackground1': '#ffffff',
-          '--colorBrandBackground': '#0078d4',
-          '--colorNeutralForeground1': '#242424',
-          '--colorBrandForeground1': '#ffffff',
-          fontFamily: '"Segoe UI", sans-serif',
-          padding: '12px 24px',
-          backgroundColor: '#ffffff',
-          color: '#242424',
-          minHeight: '100vh'
-        } as React.CSSProperties}>
-          <Story />
-        </div>
+        <RendererProvider renderer={createDOMRenderer()}>
+          <SSRProvider>
+            <div style={{ 
+              '--colorNeutralBackground1': '#ffffff',
+              '--colorBrandBackground': '#0078d4',
+              '--colorNeutralForeground1': '#242424',
+              '--colorBrandForeground1': '#ffffff',
+              fontFamily: '"Segoe UI", sans-serif',
+              padding: '12px 24px',
+              backgroundColor: '#ffffff',
+              color: '#242424',
+              minHeight: '100vh'
+            } as React.CSSProperties}>
+              {withStaticData(Story)}
+            </div>
+          </SSRProvider>
+        </RendererProvider>
       );
     } catch (error) {
       console.warn('Chromatic optimization failed, falling back to standard providers:', error);

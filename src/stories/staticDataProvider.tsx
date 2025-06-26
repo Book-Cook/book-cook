@@ -50,31 +50,23 @@ const setupStaticData = () => {
 const StaticDataContext = React.createContext(staticData);
 
 export const WithStaticData: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Skip useEffect in Chromatic for instant rendering
   const isChromatic = typeof window !== 'undefined' && 
     (window.navigator.userAgent.includes('HeadlessChrome') || 
      window.navigator.userAgent.includes('Chrome-Lighthouse') ||
      window.location.hostname.includes('chromatic'));
 
   if (isChromatic) {
-    // Super fast: provide static data via context without React Query
+    // Use static query client with pre-populated data for Chromatic
     return (
       <StaticDataContext.Provider value={staticData}>
-        {children}
+        <QueryClientProvider client={staticQueryClient}>
+          {children}
+        </QueryClientProvider>
       </StaticDataContext.Provider>
     );
   }
 
-  // Standard path with React Query for development
-  React.useEffect(() => {
-    try {
-      setupStaticData();
-      console.log('Static data setup completed for development');
-    } catch (error) {
-      console.warn('Static data setup failed:', error);
-    }
-  }, []);
-
+  // Use the pre-populated static query client for Storybook
   return (
     <QueryClientProvider client={staticQueryClient}>
       {children}

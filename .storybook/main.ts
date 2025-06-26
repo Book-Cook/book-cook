@@ -23,15 +23,18 @@ const config: StorybookConfig = {
     // Ensure MSW worker is available in all environments
     STORYBOOK_ENV: process.env.NODE_ENV || 'development',
   }),
-  // Add webpack configuration for better compatibility
   "webpackFinal": async (config) => {
-    // Ensure proper handling of ES modules and polyfills
     config.resolve = config.resolve || {};
     config.resolve.fallback = {
       ...config.resolve.fallback,
       "fs": false,
       "path": false,
       "crypto": false,
+    };
+    
+    // Optimize build performance
+    config.cache = {
+      type: 'filesystem',
     };
     
     return config;
