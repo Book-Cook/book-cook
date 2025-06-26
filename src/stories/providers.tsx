@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
+import { withStaticData, staticQueryClient } from "./staticDataProvider";
 import { queryClient } from "../clients/react-query";
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 import type { ThemePreference } from "../context/ThemeProvider";
@@ -78,19 +79,21 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
     (window.navigator.userAgent.includes('HeadlessChrome') || Boolean(process.env.CHROMATIC_PROJECT_TOKEN));
   
   if (isChromatic) {
-    // Minimal setup for Chromatic to reduce render time
+    // Ultra-fast setup for Chromatic with static data and no async operations
     return (
-      <RendererProvider renderer={createDOMRenderer()}>
-        <SSRProvider>
-          <SessionProvider session={session}>
-            <ThemeProvider>
-              <StorybookAppContent preference={preference}>
-                <Story />
-              </StorybookAppContent>
-            </ThemeProvider>
-          </SessionProvider>
-        </SSRProvider>
-      </RendererProvider>
+      <QueryClientProvider client={staticQueryClient}>
+        <RendererProvider renderer={createDOMRenderer()}>
+          <SSRProvider>
+            <SessionProvider session={session}>
+              <ThemeProvider>
+                <StorybookAppContent preference={preference}>
+                  {withStaticData(Story)}
+                </StorybookAppContent>
+              </ThemeProvider>
+            </SessionProvider>
+          </SSRProvider>
+        </RendererProvider>
+      </QueryClientProvider>
     );
   }
   

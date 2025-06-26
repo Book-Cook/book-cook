@@ -22,20 +22,16 @@ export default meta;
 
 type Story = StoryObj<typeof HomePage>;
 
-// Chromatic-optimized story with minimal setup for fast rendering
+// Chromatic-optimized story with static data for instant rendering
 export const ChromaticOptimized: Story = {
-  name: "Chromatic Optimized",
+  name: "Chromatic Fast",
   parameters: {
     chromatic: {
-      delay: 100,
+      delay: 25, // Ultra-fast delay
       disableSnapshot: false,
     },
-    msw: {
-      handlers: createMockHandlers.withData(
-        [chocolateChipCookies], // Single item for speed
-        [thaiGreenCurry] // Single item for speed
-      ),
-    },
+    // No MSW handlers needed - using static data
+    staticData: true,
   },
 };
 

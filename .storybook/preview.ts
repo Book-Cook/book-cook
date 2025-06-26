@@ -6,8 +6,12 @@ import { recipeHandlers } from '../src/mocks/handlers';
 // Initialize MSW with our handlers - add error handling for different environments
 if (typeof window !== 'undefined') {
   try {
-    // Skip MSW initialization in Chromatic to speed up rendering
-    if (!window.navigator.userAgent.includes('HeadlessChrome')) {
+    // Completely skip MSW in Chromatic and CI environments for maximum speed
+    const isChromatic = window.navigator.userAgent.includes('HeadlessChrome') || 
+                       Boolean(process.env.CHROMATIC_PROJECT_TOKEN) ||
+                       process.env.NODE_ENV === 'test';
+    
+    if (!isChromatic) {
       initialize({
         onUnhandledRequest: 'bypass',
         quiet: true
@@ -34,6 +38,9 @@ export const globalTypes = {
   },
 };
 
+// Detect Chromatic environment for conditional configuration
+const isChromatic = typeof process !== 'undefined' && Boolean(process.env.CHROMATIC_PROJECT_TOKEN);
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -42,22 +49,29 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    // Optimize for Chromatic visual testing
+    // Optimize for Chromatic visual testing - maximum speed settings
     chromatic: {
-      // Disable animations for faster rendering
+      // Disable animations completely for instant rendering
       disable: false,
-      // Reduce delay for faster snapshots
-      delay: 500,
-      // Use specific viewports to reduce rendering time
+      // Minimal delay for maximum speed
+      delay: 50,
+      // Single viewport to minimize rendering overhead
       viewports: [1200],
-      // Optimize for performance
+      // Force hardware acceleration and optimize rendering
       modes: {
-        light: { themeMode: 'light' }
-      }
+        light: { 
+          themeMode: 'light',
+          // Additional performance hints
+          prefersReducedMotion: 'reduce'
+        }
+      },
+      // Skip diffing for faster builds (if using paid plan)
+      threshold: 0.2,
     },
   },
   decorators: [withFullProviders],
-  loaders: [mswLoader],
+  // Only load MSW in development, skip completely in Chromatic
+  loaders: isChromatic ? [] : [mswLoader],
 };
 
 export default preview;
