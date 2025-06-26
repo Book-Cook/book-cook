@@ -28,12 +28,19 @@ const createStaticQueryClient = () => {
     },
   });
   
-  // Pre-populate cache immediately upon creation
-  client.setQueryData(['user', 'collections'], staticData.collections);
-  client.setQueryData(['user', 'recentlyViewed'], staticData.recentlyViewed);
+  // Pre-populate cache with correct query keys that match the components
+  const userId = 'user_123';
+  
+  // HomePage queries
+  client.setQueryData(['recentlyViewed', userId], staticData.recentlyViewed);
+  client.setQueryData(['recipeCollections', userId], staticData.collections);
+  
+  // RecipeGallery queries  
   client.setQueryData(['recipes'], staticData.recipes);
   client.setQueryData(['recipes', { search: '', sortProperty: 'createdAt', sortDirection: 'desc', tags: [] }], staticData.recipes);
-  client.setQueryData(['user'], { id: 'user_123', email: 'test@example.com', name: 'Test User' });
+  
+  // User session data
+  client.setQueryData(['user'], { id: userId, email: 'test@example.com', name: 'Test User' });
   
   return client;
 };

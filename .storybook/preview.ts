@@ -3,33 +3,7 @@ import { withFullProviders } from "../src/stories/providers";
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import { recipeHandlers } from '../src/mocks/handlers';
 
-// Initialize MSW with our handlers
-if (typeof window !== 'undefined') {
-  try {
-    // Simple runtime detection without environment variables
-    const isChromatic = window.navigator.userAgent.includes('HeadlessChrome') || 
-                       window.navigator.userAgent.includes('Chrome-Lighthouse') ||
-                       window.location.hostname.includes('chromatic');
-    
-    console.log('Storybook environment:', { 
-      isChromatic, 
-      userAgent: window.navigator.userAgent,
-      hostname: window.location.hostname
-    });
-    
-    if (!isChromatic) {
-      initialize({
-        onUnhandledRequest: 'bypass',
-        quiet: true
-      }, recipeHandlers);
-    } else {
-      console.log('Skipping MSW initialization in Chromatic for faster rendering');
-    }
-  } catch (error) {
-    console.warn('MSW initialization failed:', error);
-    // Graceful fallback - continue without MSW
-  }
-}
+// Disable MSW for now - use staticQueryClient with pre-populated data instead
 
 export const globalTypes = {
   themeMode: {
@@ -75,8 +49,8 @@ const preview: Preview = {
     },
   },
   decorators: [withFullProviders], // Re-enable providers to test minimal setup
-  // Re-enable MSW loaders now that providers are working
-  loaders: [mswLoader],
+  // Disable MSW loaders - using staticQueryClient instead
+  loaders: [],
 };
 
 export default preview;
