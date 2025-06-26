@@ -58,24 +58,20 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    // Optimize for Chromatic visual testing - maximum speed settings
+    // Optimize for Chromatic visual testing
     chromatic: {
-      // Disable animations completely for instant rendering
       disable: false,
-      // Minimal delay for maximum speed
-      delay: 50,
-      // Single viewport to minimize rendering overhead
+      delay: 0,
       viewports: [1200],
-      // Force hardware acceleration and optimize rendering
       modes: {
         light: { 
           themeMode: 'light',
-          // Additional performance hints
-          prefersReducedMotion: 'reduce'
+          prefersReducedMotion: 'reduce',
+          reducedMotion: 'reduce'
         }
       },
-      // Skip diffing for faster builds (if using paid plan)
-      threshold: 0.2,
+      threshold: 0.3,
+      pauseAnimationAtEnd: true,
     },
   },
   decorators: [withFullProviders],

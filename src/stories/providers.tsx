@@ -82,22 +82,21 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   
   if (isChromatic) {
     try {
-      // Ultra-fast setup for Chromatic with static data and no async operations
-      console.log('Using Chromatic-optimized providers with static data');
+      // Use minimal setup for Chromatic performance
       return (
-        <QueryClientProvider client={staticQueryClient}>
-          <RendererProvider renderer={createDOMRenderer()}>
-            <SSRProvider>
-              <SessionProvider session={session}>
-                <ThemeProvider>
-                  <StorybookAppContent preference={preference}>
-                    {withStaticData(Story)}
-                  </StorybookAppContent>
-                </ThemeProvider>
-              </SessionProvider>
-            </SSRProvider>
-          </RendererProvider>
-        </QueryClientProvider>
+        <div style={{ 
+          '--colorNeutralBackground1': '#ffffff',
+          '--colorBrandBackground': '#0078d4',
+          '--colorNeutralForeground1': '#242424',
+          '--colorBrandForeground1': '#ffffff',
+          fontFamily: '"Segoe UI", sans-serif',
+          padding: '12px 24px',
+          backgroundColor: '#ffffff',
+          color: '#242424',
+          minHeight: '100vh'
+        } as React.CSSProperties}>
+          <Story />
+        </div>
       );
     } catch (error) {
       console.warn('Chromatic optimization failed, falling back to standard providers:', error);
