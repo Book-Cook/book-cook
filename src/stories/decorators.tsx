@@ -3,6 +3,7 @@ import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 
+import { withMSW } from "./mswDecorator";
 import { queryClient } from "../clients/react-query";
 import { AppContainer } from "../components";
 import { useTheme } from "../context";
@@ -40,3 +41,6 @@ export const withProviders = (
     </QueryClientProvider>
   );
 };
+
+// Export MSW decorator for individual story use
+export { withMSW };
