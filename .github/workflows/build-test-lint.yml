@@ -19,11 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     container:
-<<<<<<< HEAD
-      image: node:22.16.0
-=======
       image: node:22.17.0
->>>>>>> c535a0efb2aa137fc7279c1abaa49e62c1e17cd6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,11 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
-          node-version: "22.16.0"
-=======
           node-version: "22.17.0"
->>>>>>> c535a0efb2aa137fc7279c1abaa49e62c1e17cd6
           cache: "yarn"
 
       - name: Install project dependencies
