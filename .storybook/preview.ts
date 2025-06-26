@@ -74,7 +74,7 @@ const preview: Preview = {
       pauseAnimationAtEnd: true,
     },
   },
-  decorators: [withFullProviders],
+  decorators: [], // Temporarily disable all decorators to debug DOM issues
   // Only load MSW in development, skip completely in Chromatic
   loaders: isChromatic ? [] : [mswLoader],
 };

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Text } from "@fluentui/react-components";
 
-// Simple test component without any complex interactions
+// Minimal component with no Fluent UI to test if that's the issue
 const DebugComponent = () => {
   return (
-    <div style={{ padding: '20px' }}>
-      <Text size={500}>Debug Component - Testing DOM Issues</Text>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Debug Component - No Fluent UI</h1>
+      <p>Testing DOM Issues</p>
     </div>
   );
 };
@@ -16,10 +16,13 @@ const meta: Meta<typeof DebugComponent> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [], // No decorators to bypass all providers
 };
 
 export default meta;
 
 type Story = StoryObj<typeof DebugComponent>;
 
-export const Simple: Story = {};
+export const Simple: Story = {
+  decorators: [], // Ensure no providers are used
+};
