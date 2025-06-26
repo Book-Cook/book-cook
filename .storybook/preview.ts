@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/nextjs";
-import { withProviders } from "../src/stories/decorators";
+import { withFullProviders } from "../src/stories/providers";
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import { recipeHandlers } from '../src/mocks/handlers';
 
@@ -50,7 +50,7 @@ const preview: Preview = {
       viewports: [320, 1200],
     },
   },
-  decorators: [withProviders],
+  decorators: [withFullProviders],
   loaders: [mswLoader],
 };
 

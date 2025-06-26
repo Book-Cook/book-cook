@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { withMSW, createMockHandlers } from "./mswDecorator";
-import { withFullProviders } from "./providers";
+import { createMockHandlers } from "./mswDecorator";
 import HomePage from "../components/HomePage/HomePage";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
 import { recipeHandlers } from "../mocks/handlers";
@@ -9,7 +8,6 @@ import { recipeHandlers } from "../mocks/handlers";
 const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
   component: HomePage,
-  decorators: [withMSW, withFullProviders],
   parameters: {
     layout: 'fullscreen',
   },

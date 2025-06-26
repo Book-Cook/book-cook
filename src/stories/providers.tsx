@@ -70,7 +70,7 @@ const StorybookAppContent: React.FC<{
 
 // Provider decorator that wraps stories with all necessary providers including auth
 export const withFullProviders = (Story: StoryFn, context: StoryContext, options?: { session?: Session | null }) => {
-  const session = options?.session ?? mockSession;
+  const session = options?.session ?? context.parameters?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
   return (

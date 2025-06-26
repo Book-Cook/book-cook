@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { withMSW, createMockHandlers } from "./mswDecorator";
-import { withFullProviders, withFullProvidersNoAuth } from "./providers";
+import { createMockHandlers } from "./mswDecorator";
 import { RecipeGallery } from "../components/RecipeGallery/RecipeGallery";
 import {
   chocolateChipCookies,
@@ -16,7 +15,6 @@ import { recipeHandlers } from "../mocks/handlers";
 const meta: Meta<typeof RecipeGallery> = {
   title: "Pages/RecipeGallery",
   component: RecipeGallery,
-  decorators: [withMSW, withFullProviders],
   parameters: {
     layout: "fullscreen",
   },
@@ -193,11 +191,11 @@ export const ByCategory: Story = {
   },
 };
 
-// Unauthorized state (no session)
+// Unauthorized state (no session)  
 export const Unauthorized: Story = {
   name: "Unauthorized",
-  decorators: [withMSW, withFullProvidersNoAuth],
   parameters: {
+    session: null, // No authentication for this story
     msw: {
       handlers: [...recipeHandlers],
     },
