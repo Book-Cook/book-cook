@@ -75,11 +75,10 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
   // Optimize for Chromatic - use minimal providers if detected
-  const isChromatic = (typeof window !== 'undefined' && 
+  const isChromatic = typeof window !== 'undefined' && 
     (window.navigator.userAgent.includes('HeadlessChrome') || 
-     window.navigator.userAgent.includes('Chrome-Lighthouse'))) ||
-    Boolean(process.env.CHROMATIC_PROJECT_TOKEN) ||
-    Boolean(process.env.STORYBOOK_CHROMATIC);
+     window.navigator.userAgent.includes('Chrome-Lighthouse') ||
+     window.location.hostname.includes('chromatic'));
   
   if (isChromatic) {
     try {

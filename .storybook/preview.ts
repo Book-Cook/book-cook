@@ -6,17 +6,15 @@ import { recipeHandlers } from '../src/mocks/handlers';
 // Initialize MSW with our handlers - add error handling for different environments
 if (typeof window !== 'undefined') {
   try {
-    // Detect Chromatic environment more reliably
+    // Simple runtime detection without environment variables
     const isChromatic = window.navigator.userAgent.includes('HeadlessChrome') || 
                        window.navigator.userAgent.includes('Chrome-Lighthouse') ||
-                       Boolean(process.env.CHROMATIC_PROJECT_TOKEN) ||
-                       Boolean(process.env.STORYBOOK_CHROMATIC) ||
-                       process.env.NODE_ENV === 'test';
+                       window.location.hostname.includes('chromatic');
     
     console.log('Storybook environment:', { 
       isChromatic, 
       userAgent: window.navigator.userAgent,
-      chromaticToken: Boolean(process.env.CHROMATIC_PROJECT_TOKEN)
+      hostname: window.location.hostname
     });
     
     if (!isChromatic) {
@@ -49,9 +47,8 @@ export const globalTypes = {
   },
 };
 
-// Detect Chromatic environment for conditional configuration
-const isChromatic = typeof process !== 'undefined' && 
-  (Boolean(process.env.CHROMATIC_PROJECT_TOKEN) || Boolean(process.env.STORYBOOK_CHROMATIC));
+// Detect Chromatic environment for conditional configuration - use simple detection
+const isChromatic = false; // Will be detected at runtime in browser
 
 const preview: Preview = {
   parameters: {
