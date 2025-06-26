@@ -49,8 +49,8 @@ export class RecipeService {
     const urlObj = new URL(url);
     const params = urlObj.searchParams;
 
-    const sortProperty = params.get("sortProperty") || "createdAt";
-    const sortDirection = params.get("sortDirection") || "desc";
+    const sortProperty = params.get("sortProperty") ?? "createdAt";
+    const sortDirection = params.get("sortDirection") ?? "desc";
 
     // Validation
     const validSortProperties = ["createdAt", "title"];
@@ -64,7 +64,7 @@ export class RecipeService {
     }
 
     return {
-      search: params.get("search") || "",
+      search: params.get("search") ?? "",
       sortProperty,
       sortDirection,
       tags: params.getAll("tags"),
@@ -118,12 +118,12 @@ export class RecipeService {
 
     const recipe = RecipeFactory.create({
       title: data.title.trim(),
-      data: data.data || "",
+      data: data.data ?? "",
       tags: Array.isArray(data.tags) ? data.tags : [],
-      imageURL: data.imageURL || "",
-      emoji: data.emoji || "🍽️",
+      imageURL: data.imageURL ?? "",
+      emoji: data.emoji ?? "🍽️",
       owner: userId,
-      isPublic: data.isPublic || false,
+      isPublic: data.isPublic ?? false,
     });
 
     return store.addRecipe(recipe);

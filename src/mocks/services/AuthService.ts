@@ -9,15 +9,15 @@ export class AuthService {
    * In real app, this would validate JWT/session
    */
   static getCurrentUser(request: Request) {
-    const userId = request.headers.get("x-user-id") || TestUsers.owner.id;
+    const userId = request.headers.get("x-user-id") ?? TestUsers.owner.id;
     const user = Object.values(TestUsers).find((u) => u.id === userId);
-    return user || TestUsers.owner;
+    return user ?? TestUsers.owner;
   }
 
   /**
    * Check if user is authenticated (always true in tests)
    */
-  static isAuthenticated(request: Request): boolean {
+  static isAuthenticated(_request: Request): boolean {
     return true; // For testing purposes
   }
 

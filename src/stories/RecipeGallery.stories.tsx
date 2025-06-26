@@ -143,7 +143,7 @@ export const WithSearchFilter: Story = {
       handlers: [...recipeHandlers],
     },
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement: _canvasElement }) => {
     // This would simulate searching but requires additional setup
     // For now, just show the default state
   },

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
 import { withMSW, createMockHandlers } from "./mswDecorator";
-import { withFullProviders, withFullProvidersNoAuth } from "./providers";
+import { withFullProviders } from "./providers";
 import HomePage from "../components/HomePage/HomePage";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
 import { recipeHandlers } from "../mocks/handlers";

@@ -4,6 +4,7 @@ import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import type { StoryFn, StoryContext } from '@storybook/react';
 import { QueryClientProvider } from "@tanstack/react-query";
+import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
 import { queryClient } from "../clients/react-query";
@@ -11,7 +12,7 @@ import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 import type { ThemePreference } from "../context/ThemeProvider";
 
 // Default mock session for stories
-export const mockSession = {
+export const mockSession: Session = {
   user: {
     id: "user_123",
     email: "test@example.com", 
@@ -28,7 +29,7 @@ const ThemeSync: React.FC<{
   React.useEffect(() => {
     setThemePreference(preference);
   }, [preference, setThemePreference]);
-  return <>{children}</>;
+  return children;
 };
 
 // Storybook-specific app content without toolbar
@@ -68,7 +69,7 @@ const StorybookAppContent: React.FC<{
 };
 
 // Provider decorator that wraps stories with all necessary providers including auth
-export const withFullProviders = (Story: StoryFn, context: StoryContext, options?: { session?: any }) => {
+export const withFullProviders = (Story: StoryFn, context: StoryContext, options?: { session?: Session | null }) => {
   const session = options?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
@@ -95,7 +96,7 @@ export const withFullProvidersNoAuth = (Story: StoryFn, context: StoryContext) =
 };
 
 // Provider decorator for minimal setup (no SearchBoxProvider or AppContainer)
-export const withMinimalProviders = (Story: StoryFn, options?: { session?: any }) => {
+export const withMinimalProviders = (Story: StoryFn, options?: { session?: Session | null }) => {
   const session = options?.session ?? mockSession;
   
   return (

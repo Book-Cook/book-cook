@@ -88,4 +88,6 @@ export class TestUtils {
  * Convenient aliases for common operations
  */
 export const mockUtils = TestUtils;
-export const { reset, setUser, getState } = TestUtils;
+export const reset = () => TestUtils.reset();
+export const setUser = (userId?: string) => TestUtils.setUser(userId);
+export const getState = () => TestUtils.getState();

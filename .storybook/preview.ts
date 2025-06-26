@@ -7,7 +7,9 @@ import { recipeHandlers } from '../src/mocks/handlers';
 if (typeof window !== 'undefined') {
   try {
     initialize({
-      onUnhandledRequest: 'warn'
+      onUnhandledRequest: 'warn',
+      // Optimize for Chromatic - reduce response delays
+      quiet: process.env.NODE_ENV === 'test' || !!process.env.CHROMATIC_PROJECT_TOKEN
     }, recipeHandlers);
   } catch (error) {
     console.warn('MSW initialization failed:', error);
@@ -37,6 +39,15 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    // Optimize for Chromatic visual testing
+    chromatic: {
+      // Increase timeout for stories that need more time to render
+      delay: 2000,
+      // Disable animations to speed up rendering
+      disableSnapshot: false,
+      // Configure viewport sizes for consistent rendering
+      viewports: [320, 1200],
     },
   },
   decorators: [withProviders],

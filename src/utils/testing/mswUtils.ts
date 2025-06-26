@@ -1,8 +1,8 @@
 import { http, HttpResponse } from "msw";
 
-import { server } from "../../mocks/server";
 import { resetMockData, getMockState } from "../../mocks/handlers";
 import { mockUsers } from "../../mocks/mockData";
+import { server } from "../../mocks/server";
 
 /**
  * Test utilities for MSW setup with recipe API
@@ -109,7 +109,7 @@ export const mockAuthError = () => {
  * This is a utility to help with API call verification in tests
  */
 export const createApiCallVerifier = () => {
-  const calls: Array<{ method: string; url: string; body?: any }> = [];
+  const calls: Array<{ method: string; url: string; body?: unknown }> = [];
 
   // Override console.log temporarily to capture calls
   const originalFetch = global.fetch;
@@ -118,7 +118,7 @@ export const createApiCallVerifier = () => {
     calls.length = 0;
     global.fetch = jest.fn().mockImplementation(async (url, options) => {
       calls.push({
-        method: options?.method || "GET",
+        method: options?.method ?? "GET",
         url: url.toString(),
         body: options?.body ? JSON.parse(options.body as string) : undefined,
       });

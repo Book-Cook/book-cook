@@ -26,9 +26,9 @@ let sharedUsersStore = { ...mockSharedUsers };
 const getCurrentUser = (request: Request) => {
   // In real app, this would check session/token
   // For mocking, we'll use a header or default to testUser
-  const userId = request.headers.get("x-user-id") || mockUsers.testUser.id;
+  const userId = request.headers.get("x-user-id") ?? mockUsers.testUser.id;
   return (
-    Object.values(mockUsers).find((user) => user.id === userId) ||
+    Object.values(mockUsers).find((user) => user.id === userId) ??
     mockUsers.testUser
   );
 };
@@ -58,9 +58,9 @@ export const recipeHandlers = [
   // GET /api/recipes - Fetch all recipes with filtering
   http.get("/api/recipes", ({ request }) => {
     const url = new URL(request.url);
-    const search = url.searchParams.get("search") || "";
-    const sortProperty = url.searchParams.get("sortProperty") || "createdAt";
-    const sortDirection = url.searchParams.get("sortDirection") || "desc";
+    const search = url.searchParams.get("search") ?? "";
+    const sortProperty = url.searchParams.get("sortProperty") ?? "createdAt";
+    const sortDirection = url.searchParams.get("sortDirection") ?? "desc";
     const tags = url.searchParams.getAll("tags");
 
     const currentUser = getCurrentUser(request);
@@ -107,7 +107,7 @@ export const recipeHandlers = [
       );
 
       return HttpResponse.json(sortedRecipes);
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
         { status: 500 }
@@ -138,12 +138,12 @@ export const recipeHandlers = [
 
       const newRecipe = createMockRecipe({
         title: body.title.trim(),
-        data: body.data || "",
+        data: body.data ?? "",
         tags: Array.isArray(body.tags) ? body.tags : [],
-        imageURL: body.imageURL || "",
-        emoji: body.emoji || "🍽️",
+        imageURL: body.imageURL ?? "",
+        emoji: body.emoji ?? "🍽️",
         owner: currentUser.id,
-        isPublic: body.isPublic || false,
+        isPublic: body.isPublic ?? false,
       });
 
       recipesStore.push(newRecipe);
@@ -155,7 +155,7 @@ export const recipeHandlers = [
         },
         { status: 201 }
       );
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
         { status: 500 }
@@ -250,7 +250,7 @@ export const recipeHandlers = [
       return HttpResponse.json({
         message: "Recipe updated successfully",
       });
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
         { status: 500 }
@@ -374,7 +374,7 @@ export const recipeHandlers = [
         { message: "Recipe added to collection" },
         { status: 201 }
       );
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
         { status: 500 }
@@ -472,7 +472,7 @@ export const recipeHandlers = [
       return HttpResponse.json({
         message: "Recipe book shared successfully",
       });
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
         { status: 500 }
@@ -511,7 +511,7 @@ export const recipeHandlers = [
       return HttpResponse.json({
         message: "Access removed successfully",
       });
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
         { status: 500 }
@@ -537,7 +537,7 @@ export const recipeHandlers = [
         .replace(/tbsp/g, "ml");
 
       return HttpResponse.json({ processedContent });
-    } catch (error) {
+    } catch (_error) {
       return HttpResponse.json(
         {
           message:

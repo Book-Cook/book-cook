@@ -30,7 +30,7 @@ export interface MSWParameters {
  * }
  * ```
  */
-export const withMSW = (Story: StoryFn, context: StoryContext) => {
+export const withMSW = (Story: StoryFn, _context: StoryContext) => {
   // MSW integration is now handled by msw-storybook-addon in preview.ts
   // This decorator is kept for compatibility but does nothing
   return <Story />;
@@ -75,7 +75,7 @@ export const createMockHandlers = {
   ],
 
   // Mock with custom data
-  withData: (collections: any[] = [], recentlyViewed: any[] = [], recipes: any[] = []) => [
+  withData: (collections: unknown[] = [], recentlyViewed: unknown[] = [], recipes: unknown[] = []) => [
     http.get('/api/user/collections', () => HttpResponse.json(collections)),
     http.get('/api/user/recentlyViewed', () => HttpResponse.json(recentlyViewed)),
     http.get('/api/recipes', () => HttpResponse.json(recipes)),
