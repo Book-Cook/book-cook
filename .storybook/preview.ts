@@ -3,7 +3,7 @@ import { withFullProviders } from "../src/stories/providers";
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import { recipeHandlers } from '../src/mocks/handlers';
 
-// Initialize MSW with our handlers - add error handling for different environments
+// Initialize MSW with our handlers
 if (typeof window !== 'undefined') {
   try {
     // Simple runtime detection without environment variables
@@ -74,9 +74,9 @@ const preview: Preview = {
       pauseAnimationAtEnd: true,
     },
   },
-  decorators: [], // Temporarily disable all decorators to debug DOM issues
-  // Only load MSW in development, skip completely in Chromatic
-  loaders: isChromatic ? [] : [mswLoader],
+  decorators: [withFullProviders], // Re-enable providers to test minimal setup
+  // Re-enable MSW loaders now that providers are working
+  loaders: [mswLoader],
 };
 
 export default preview;

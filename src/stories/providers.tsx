@@ -69,12 +69,11 @@ const StorybookAppContent: React.FC<{
   );
 };
 
-// Provider decorator that wraps stories with all necessary providers including auth
+// Minimal provider setup to isolate the issue
 export const withFullProviders = (Story: StoryFn, context: StoryContext, options?: { session?: Session | null }) => {
   const session = options?.session ?? context.parameters?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
-  
-  // Use standard setup for all environments to avoid DOM conflicts
+  // Test with full provider stack including StorybookAppContent
   return (
     <RendererProvider renderer={createDOMRenderer()}>
       <SSRProvider>
