@@ -7,7 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-import { withStaticData, staticQueryClient } from "./staticDataProvider";
+import { staticQueryClient } from "./staticDataProvider";
 import { queryClient } from "../clients/react-query";
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 import type { ThemePreference } from "../context/ThemeProvider";
@@ -74,44 +74,11 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   const session = options?.session ?? context.parameters?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
-  // Optimize for Chromatic - use minimal providers if detected
-  const isChromatic = typeof window !== 'undefined' && 
-    (window.navigator.userAgent.includes('HeadlessChrome') || 
-     window.navigator.userAgent.includes('Chrome-Lighthouse') ||
-     window.location.hostname.includes('chromatic'));
-  
-  if (isChromatic) {
-    try {
-      // Use minimal but stable setup for Chromatic
-      return (
-        <RendererProvider renderer={createDOMRenderer()}>
-          <SSRProvider>
-            <div style={{ 
-              '--colorNeutralBackground1': '#ffffff',
-              '--colorBrandBackground': '#0078d4',
-              '--colorNeutralForeground1': '#242424',
-              '--colorBrandForeground1': '#ffffff',
-              fontFamily: '"Segoe UI", sans-serif',
-              padding: '12px 24px',
-              backgroundColor: '#ffffff',
-              color: '#242424',
-              minHeight: '100vh'
-            } as React.CSSProperties}>
-              {withStaticData(Story)}
-            </div>
-          </SSRProvider>
-        </RendererProvider>
-      );
-    } catch (error) {
-      console.warn('Chromatic optimization failed, falling back to standard providers:', error);
-      // Fallback to standard providers if Chromatic optimization fails
-    }
-  }
-  
+  // Use standard setup for all environments to avoid DOM conflicts
   return (
-    <QueryClientProvider client={queryClient}>
-      <RendererProvider renderer={createDOMRenderer()}>
-        <SSRProvider>
+    <RendererProvider renderer={createDOMRenderer()}>
+      <SSRProvider>
+        <QueryClientProvider client={staticQueryClient}>
           <SessionProvider session={session}>
             <ThemeProvider>
               <StorybookAppContent preference={preference}>
@@ -119,9 +86,9 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
               </StorybookAppContent>
             </ThemeProvider>
           </SessionProvider>
-        </SSRProvider>
-      </RendererProvider>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </SSRProvider>
+    </RendererProvider>
   );
 };
 
@@ -135,14 +102,14 @@ export const withMinimalProviders = (Story: StoryFn, options?: { session?: Sessi
   const session = options?.session ?? mockSession;
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <RendererProvider renderer={createDOMRenderer()}>
-        <SSRProvider>
+    <RendererProvider renderer={createDOMRenderer()}>
+      <SSRProvider>
+        <QueryClientProvider client={staticQueryClient}>
           <SessionProvider session={session}>
             <Story />
           </SessionProvider>
-        </SSRProvider>
-      </RendererProvider>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </SSRProvider>
+    </RendererProvider>
   );
 };
