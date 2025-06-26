@@ -48,7 +48,12 @@ const setupStaticData = () => {
 
 export const WithStaticData: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   React.useEffect(() => {
-    setupStaticData();
+    try {
+      setupStaticData();
+      console.log('Static data setup completed for Chromatic');
+    } catch (error) {
+      console.warn('Static data setup failed:', error);
+    }
   }, []);
 
   return (

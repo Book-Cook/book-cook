@@ -75,26 +75,35 @@ export const withFullProviders = (Story: StoryFn, context: StoryContext, options
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
   
   // Optimize for Chromatic - use minimal providers if detected
-  const isChromatic = typeof window !== 'undefined' && 
-    (window.navigator.userAgent.includes('HeadlessChrome') || Boolean(process.env.CHROMATIC_PROJECT_TOKEN));
+  const isChromatic = (typeof window !== 'undefined' && 
+    (window.navigator.userAgent.includes('HeadlessChrome') || 
+     window.navigator.userAgent.includes('Chrome-Lighthouse'))) ||
+    Boolean(process.env.CHROMATIC_PROJECT_TOKEN) ||
+    Boolean(process.env.STORYBOOK_CHROMATIC);
   
   if (isChromatic) {
-    // Ultra-fast setup for Chromatic with static data and no async operations
-    return (
-      <QueryClientProvider client={staticQueryClient}>
-        <RendererProvider renderer={createDOMRenderer()}>
-          <SSRProvider>
-            <SessionProvider session={session}>
-              <ThemeProvider>
-                <StorybookAppContent preference={preference}>
-                  {withStaticData(Story)}
-                </StorybookAppContent>
-              </ThemeProvider>
-            </SessionProvider>
-          </SSRProvider>
-        </RendererProvider>
-      </QueryClientProvider>
-    );
+    try {
+      // Ultra-fast setup for Chromatic with static data and no async operations
+      console.log('Using Chromatic-optimized providers with static data');
+      return (
+        <QueryClientProvider client={staticQueryClient}>
+          <RendererProvider renderer={createDOMRenderer()}>
+            <SSRProvider>
+              <SessionProvider session={session}>
+                <ThemeProvider>
+                  <StorybookAppContent preference={preference}>
+                    {withStaticData(Story)}
+                  </StorybookAppContent>
+                </ThemeProvider>
+              </SessionProvider>
+            </SSRProvider>
+          </RendererProvider>
+        </QueryClientProvider>
+      );
+    } catch (error) {
+      console.warn('Chromatic optimization failed, falling back to standard providers:', error);
+      // Fallback to standard providers if Chromatic optimization fails
+    }
   }
   
   return (

@@ -6,19 +6,30 @@ import { recipeHandlers } from '../src/mocks/handlers';
 // Initialize MSW with our handlers - add error handling for different environments
 if (typeof window !== 'undefined') {
   try {
-    // Completely skip MSW in Chromatic and CI environments for maximum speed
+    // Detect Chromatic environment more reliably
     const isChromatic = window.navigator.userAgent.includes('HeadlessChrome') || 
+                       window.navigator.userAgent.includes('Chrome-Lighthouse') ||
                        Boolean(process.env.CHROMATIC_PROJECT_TOKEN) ||
+                       Boolean(process.env.STORYBOOK_CHROMATIC) ||
                        process.env.NODE_ENV === 'test';
+    
+    console.log('Storybook environment:', { 
+      isChromatic, 
+      userAgent: window.navigator.userAgent,
+      chromaticToken: Boolean(process.env.CHROMATIC_PROJECT_TOKEN)
+    });
     
     if (!isChromatic) {
       initialize({
         onUnhandledRequest: 'bypass',
         quiet: true
       }, recipeHandlers);
+    } else {
+      console.log('Skipping MSW initialization in Chromatic for faster rendering');
     }
   } catch (error) {
     console.warn('MSW initialization failed:', error);
+    // Graceful fallback - continue without MSW
   }
 }
 
@@ -39,7 +50,8 @@ export const globalTypes = {
 };
 
 // Detect Chromatic environment for conditional configuration
-const isChromatic = typeof process !== 'undefined' && Boolean(process.env.CHROMATIC_PROJECT_TOKEN);
+const isChromatic = typeof process !== 'undefined' && 
+  (Boolean(process.env.CHROMATIC_PROJECT_TOKEN) || Boolean(process.env.STORYBOOK_CHROMATIC));
 
 const preview: Preview = {
   parameters: {
