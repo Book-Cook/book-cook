@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
+
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from '../mocks/data/recipes';
 
 export interface ApiMockConfig {
   [endpoint: string]: {
     method?: string;
-    response: any;
+    response: unknown;
     status?: number;
     delay?: number;
   };
@@ -26,11 +27,11 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
   const originalFetch = window.fetch;
   
   window.fetch = async (url: string | Request | URL, options?: RequestInit) => {
-    const urlString = url.toString();
-    const method = options?.method?.toUpperCase() || 'GET';
+    const urlString = typeof url === 'string' ? url : url instanceof URL ? url.href : url.url;
+    const method = options?.method?.toUpperCase() ?? 'GET';
     
     for (const [endpoint, config] of Object.entries(mockConfig)) {
-      const mockMethod = config.method?.toUpperCase() || 'GET';
+      const mockMethod = config.method?.toUpperCase() ?? 'GET';
       
       if (urlString.includes(endpoint) && method === mockMethod) {
         if (config.delay) {
@@ -38,7 +39,7 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
         }
         
         return new Response(JSON.stringify(config.response), {
-          status: config.status || 200,
+          status: config.status ?? 200,
           headers: { 'Content-Type': 'application/json' }
         });
       }
@@ -53,7 +54,7 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
 };
 
 export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
-  return (Story: any) => {
+  const ApiMockWrapper = (Story: React.ComponentType) => {
     const cleanup = createFetchMock(mockConfig);
     
     const MockWrapper = () => {
@@ -66,6 +67,9 @@ export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
     
     return <MockWrapper />;
   };
+  
+  ApiMockWrapper.displayName = 'ApiMockWrapper';
+  return ApiMockWrapper;
 };
 
 export const withRecipeMocks = withApiMocks();

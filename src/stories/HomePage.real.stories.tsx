@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import HomePage from "../components/HomePage/HomePage";
+
 import { 
   withHomepageMocks, 
   withEmptyMocks, 
@@ -7,6 +7,7 @@ import {
   withLoadingMocks,
   withApiMocks 
 } from "./mockApi";
+import HomePage from "../components/HomePage/HomePage";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
 
 const meta: Meta<typeof HomePage> = {

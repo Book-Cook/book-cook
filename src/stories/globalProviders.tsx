@@ -1,11 +1,11 @@
 import React from 'react';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "next-auth/react";
 import { FluentProvider } from "@fluentui/react-components";
 import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import type { Session } from "next-auth";
 import type { StoryFn, StoryContext } from '@storybook/react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SessionProvider } from "next-auth/react";
 
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 
@@ -28,7 +28,7 @@ const globalQueryClient = new QueryClient({
   },
 });
 
-export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
+export const withGlobalProviders = (Story: StoryFn, _context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { theme } = useTheme();
     

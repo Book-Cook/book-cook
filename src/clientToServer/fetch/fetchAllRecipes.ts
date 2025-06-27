@@ -31,10 +31,5 @@ export const fetchAllRecipes = async (
     url += `&${tagsParam}`;
   }
 
-  try {
-    const result = await fetchJson(url);
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  return fetchJson(url);
 };

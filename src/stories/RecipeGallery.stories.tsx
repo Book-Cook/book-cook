@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import { RecipeGallery } from "../components/RecipeGallery/RecipeGallery";
+
 import { 
   withRecipeMocks, 
   withEmptyMocks, 
@@ -7,6 +7,7 @@ import {
   withLoadingMocks,
   withApiMocks 
 } from "./mockApi";
+import { RecipeGallery } from "../components/RecipeGallery/RecipeGallery";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../mocks/data/recipes";
 
 const meta: Meta<typeof RecipeGallery> = {
