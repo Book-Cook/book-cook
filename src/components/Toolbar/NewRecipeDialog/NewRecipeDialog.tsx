@@ -122,6 +122,7 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
         imageURL: "",
         emoji: "",
         isPublic: false,
+        rating: 0,
       },
       {
         onSuccess: async (data) => {

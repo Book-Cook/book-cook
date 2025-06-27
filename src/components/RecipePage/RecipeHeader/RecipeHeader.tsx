@@ -21,6 +21,7 @@ import {
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
+import { StarRating } from "../../StarRating";
 
 import {
   useConvertMeasurements,
@@ -165,6 +166,13 @@ export const RecipeHeader = () => {
         />
         <div className={styles.subContentContainer}>
           <RecipeAuthor />
+          <StarRating
+            rating={editableData.rating}
+            onChange={(value) => {
+              updateEditableDataKey("rating", value);
+              saveChanges({ rating: value });
+            }}
+          />
           {formattedDate && (
             <Text block italic className={styles.date}>
               Created: {formattedDate}

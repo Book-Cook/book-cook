@@ -160,6 +160,7 @@ export const RecipeGallery = () => {
                     }
                     imageSrc={recipe?.imageURL}
                     tags={recipe?.tags}
+                    rating={recipe?.rating || 0}
                   />
                 </div>
               );

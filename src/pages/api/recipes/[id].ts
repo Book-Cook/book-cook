@@ -15,6 +15,7 @@ type UpdateFields = {
   imageURL?: string;
   emoji?: string;
   isPublic?: boolean;
+  rating?: number;
 };
 
 type ResponseData =
@@ -162,7 +163,7 @@ export default async function handler(
         return;
       }
 
-      const { title, data, tags, imageURL, emoji, isPublic } = req.body;
+      const { title, data, tags, imageURL, emoji, isPublic, rating } = req.body;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
 
@@ -181,6 +182,9 @@ export default async function handler(
       }
       if (isPublic !== undefined) {
         setFields.isPublic = isPublic;
+      }
+      if (rating !== undefined) {
+        setFields.rating = Number(rating);
       }
       if (tags) {
         setFields.tags = tags;

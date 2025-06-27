@@ -37,6 +37,7 @@ export const RecipeProvider: React.FC<{
     emoji: "",
     _id: undefined,
     isPublic: false,
+    rating: 0,
   });
 
   const { mutate: deleteMutate } = useDeleteRecipe();
@@ -88,6 +89,7 @@ export const RecipeProvider: React.FC<{
           imageURL: editableData?.imageURL,
           emoji: editableData?.emoji,
           isPublic: editableData?.isPublic ?? false,
+          rating: editableData?.rating ?? 0,
         },
         ...(immediateUpdate || {}),
       });
@@ -97,8 +99,9 @@ export const RecipeProvider: React.FC<{
         data: editableData.content,
         tags: editableData.tags,
         imageURL: editableData.imageURL,
-        emoji: editableData?.emoji || "",
+        emoji: editableData?.emoji ?? "",
         isPublic: editableData.isPublic ?? false,
+        rating: editableData.rating ?? 0,
       });
     }
   };
@@ -112,6 +115,7 @@ export const RecipeProvider: React.FC<{
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
         isPublic: recipe.isPublic || false,
+        rating: recipe.rating || 0,
       };
       setEditableData(initialData);
     }
@@ -151,6 +155,7 @@ export const RecipeProvider: React.FC<{
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
         isPublic: recipe.isPublic || false,
+        rating: recipe.rating || 0,
       };
       setEditableData(initialData);
     }
@@ -167,6 +172,7 @@ export const RecipeProvider: React.FC<{
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
       isPublic: recipe.isPublic || false,
+      rating: recipe.rating || 0,
     };
   }, [recipe]);
 

@@ -30,6 +30,11 @@ export type RecipeCardProps = {
   emoji: string;
 
   /**
+   * Rating for the recipe.
+   */
+  rating: number;
+
+  /**
    * Whether to render the card in a minimal style.
    */
   isMinimal?: boolean;
