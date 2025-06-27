@@ -34,10 +34,14 @@ export const fetchAllRecipes = async (
     url += `&${tagsParam}`;
   }
 
+  console.log('🚀 fetchAllRecipes called with URL:', url);
+  
   try {
-    return await fetchJson(url);
+    const result = await fetchJson(url);
+    console.log('🚀 fetchAllRecipes result:', result);
+    return result;
   } catch (error) {
-    console.error("Failed to fetch recipes:", error);
+    console.error("🚀 Failed to fetch recipes:", error);
     throw error;
   }
 };

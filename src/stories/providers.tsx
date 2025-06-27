@@ -7,8 +7,18 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-import { staticQueryClient } from "./staticDataProvider";
-import { queryClient } from "../clients/react-query";
+import { QueryClient } from '@tanstack/react-query';
+
+// Create a clean query client for MSW
+const mswQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 0,
+    },
+  },
+});
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 import type { ThemePreference } from "../context/ThemeProvider";
 
@@ -73,11 +83,13 @@ const StorybookAppContent: React.FC<{
 export const withFullProviders = (Story: StoryFn, context: StoryContext, options?: { session?: Session | null }) => {
   const session = options?.session ?? context.parameters?.session ?? mockSession;
   const preference: ThemePreference = (context.globals?.themeMode as ThemePreference) || "light";
+  
+  console.log('🔐 Provider session:', session);
   // Test with full provider stack including StorybookAppContent
   return (
     <RendererProvider renderer={createDOMRenderer()}>
       <SSRProvider>
-        <QueryClientProvider client={staticQueryClient}>
+        <QueryClientProvider client={mswQueryClient}>
           <SessionProvider session={session}>
             <ThemeProvider>
               <StorybookAppContent preference={preference}>
@@ -103,7 +115,7 @@ export const withMinimalProviders = (Story: StoryFn, options?: { session?: Sessi
   return (
     <RendererProvider renderer={createDOMRenderer()}>
       <SSRProvider>
-        <QueryClientProvider client={staticQueryClient}>
+        <QueryClientProvider client={mswQueryClient}>
           <SessionProvider session={session}>
             <Story />
           </SessionProvider>

@@ -1,20 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-
-import { createMockHandlers } from "./mswDecorator";
 import HomePage from "../components/HomePage/HomePage";
+import { 
+  withHomepageMocks, 
+  withEmptyMocks, 
+  withErrorMocks, 
+  withLoadingMocks,
+  withApiMocks 
+} from "./mockApi";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
-import { recipeHandlers } from "../mocks/handlers";
 
 const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
   component: HomePage,
   parameters: {
     layout: 'fullscreen',
-    // Optimize for Chromatic - disable interactions that cause delays
-    chromatic: {
-      disableSnapshot: false,
-      delay: 300,
-    },
   },
 };
 
@@ -22,96 +21,52 @@ export default meta;
 
 type Story = StoryObj<typeof HomePage>;
 
-// Chromatic-optimized story with static data for instant rendering
-export const ChromaticOptimized: Story = {
-  name: "Chromatic Fast",
-  parameters: {
-    chromatic: {
-      delay: 25, // Ultra-fast delay
-      disableSnapshot: false,
-    },
-    // No MSW handlers needed - using static data
-    staticData: true,
-  },
-};
-
-// Default story with the standard MSW handlers (shows actual mock data)
+// Default story with collections and recently viewed
 export const Default: Story = {
-  name: "Default (With Mock Data)",
-  parameters: {
-    msw: {
-      handlers: [
-        ...recipeHandlers,
-      ],
-    },
-  },
+  name: "Default",
+  decorators: [withHomepageMocks],
 };
 
 // Story with empty state
 export const EmptyState: Story = {
   name: "Empty State",
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.emptyCollections(),
-    },
-  },
+  decorators: [withEmptyMocks],
 };
 
 // Story showing loading states
 export const LoadingState: Story = {
   name: "Loading State",
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.loadingState(2000),
-    },
-  },
+  decorators: [withLoadingMocks],
 };
 
 // Story with API errors
 export const ErrorState: Story = {
   name: "Error State", 
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.apiErrors(),
-    },
-  },
-};
-
-// Story with custom data using new recipe format
-export const WithCustomData: Story = {
-  name: "Custom Recipe Data",
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.withData(
-        [chocolateChipCookies, thaiGreenCurry], // collections
-        [caesarSalad, chocolateChipCookies]     // recently viewed
-      ),
-    },
-  },
+  decorators: [withErrorMocks],
 };
 
 // Story showing only recently viewed (no collections)
 export const OnlyRecentlyViewed: Story = {
   name: "Only Recently Viewed",
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.withData(
-        [], // empty collections
-        [thaiGreenCurry, caesarSalad] // recently viewed
-      ),
+  decorators: [withApiMocks({
+    '/api/user/collections': {
+      response: [], // empty collections
     },
-  },
+    '/api/user/recentlyViewed': {
+      response: [thaiGreenCurry, caesarSalad], // recently viewed
+    },
+  })],
 };
 
 // Story showing only collections (no recently viewed)
 export const OnlyCollections: Story = {
   name: "Only Collections",
-  parameters: {
-    msw: {
-      handlers: createMockHandlers.withData(
-        [chocolateChipCookies, caesarSalad], // collections
-        [] // empty recently viewed
-      ),
+  decorators: [withApiMocks({
+    '/api/user/collections': {
+      response: [chocolateChipCookies, caesarSalad], // collections
     },
-  },
+    '/api/user/recentlyViewed': {
+      response: [], // empty recently viewed
+    },
+  })],
 };

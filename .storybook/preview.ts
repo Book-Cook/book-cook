@@ -1,9 +1,20 @@
 import type { Preview } from "@storybook/nextjs";
-import { withFullProviders } from "../src/stories/providers";
 import { initialize, mswLoader } from 'msw-storybook-addon';
-import { recipeHandlers } from '../src/mocks/handlers';
+import { withGlobalProviders } from "../src/stories/globalProviders";
 
-// Disable MSW for now - use staticQueryClient with pre-populated data instead
+console.log('🔧 Preview.ts loaded');
+
+// Initialize MSW
+initialize({
+  onUnhandledRequest: 'bypass',
+  serviceWorker: {
+    url: './mockServiceWorker.js',
+    options: {
+      scope: '/',
+    }
+  }
+});
+console.log('🔧 MSW initialized');
 
 export const globalTypes = {
   themeMode: {
@@ -48,9 +59,8 @@ const preview: Preview = {
       pauseAnimationAtEnd: true,
     },
   },
-  decorators: [withFullProviders], // Re-enable providers to test minimal setup
-  // Disable MSW loaders - using staticQueryClient instead
-  loaders: [],
+  decorators: [withGlobalProviders],
+  // loaders: [mswLoader], // This breaks component rendering
 };
 
 export default preview;
