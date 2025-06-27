@@ -54,7 +54,6 @@
     "chroma-js": "^3.1.2",
     "dompurify": "^3.2.3",
     "embla-carousel-react": "^8.5.2",
-    "unicode-emoji-json": "^0.8.0",
     "fast-deep-equal": "^3.1.3",
     "grapheme-splitter": "^1.0.4",
     "mongodb": "^6.9.0",
@@ -63,7 +62,8 @@
     "node-emoji": "^2.2.0",
     "openai": "^5.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "unicode-emoji-json": "^0.8.0"
   },
   "devDependencies": {
     "@bundle-stats/plugin-webpack-filter": "^4.19.1",
@@ -92,6 +92,8 @@
     "husky": "9.1.7",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
+    "msw": "^2.10.2",
+    "msw-storybook-addon": "^2.0.5",
     "next-router-mock": "^1.0.0",
     "prettier": "^3.2.5",
     "renovate": "^41.0.0",
@@ -100,6 +102,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0",
-    "webpack-stats-plugin": "^1.1.3"
+    "undici": "^7.10.0",
+    "webpack-stats-plugin": "^1.1.3",
+    "whatwg-fetch": "^3.6.20"
   }
 }

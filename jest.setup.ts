@@ -1,13 +1,12 @@
 import "@testing-library/jest-dom";
-import { TextEncoder, TextDecoder } from "util";
+import { server } from "./src/mocks/server";
 
-global.TextEncoder = TextEncoder as typeof global.TextEncoder;
-global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+// Establish API mocking before all tests
+beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));
 
-const mockClient = { close: jest.fn() };
-jest.mock("src/clients/mongo", () => ({
-  __esModule: true,
-  default: Promise.resolve(mockClient),
-}));
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests
+afterEach(() => server.resetHandlers());
 
-afterAll(() => mockClient.close());
+// Clean up after the tests are finished
+afterAll(() => server.close());

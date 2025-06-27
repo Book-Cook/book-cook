@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/nextjs";
-import { withProviders } from "../src/stories/decorators";
+import { withGlobalProviders } from "../src/stories/globalProviders";
 
 export const globalTypes = {
   themeMode: {
@@ -25,8 +25,15 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    chromatic: {
+      disable: false,
+      delay: 0,
+      viewports: [1200],
+      threshold: 0.3,
+      pauseAnimationAtEnd: true,
+    },
   },
-  decorators: [withProviders],
+  decorators: [withGlobalProviders],
 };
 
 export default preview;
