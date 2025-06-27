@@ -67,6 +67,8 @@ export default async function handler(req: any, res: any) {
         .filter((recipe: any) => recipe) // remove any null/undefined
         .reverse();
 
+      // Add caching headers for better performance
+      res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=180');
       res.status(200).json(orderedRecipes);
     }
   } catch (error) {
