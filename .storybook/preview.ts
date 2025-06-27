@@ -29,13 +29,6 @@ const preview: Preview = {
       disable: false,
       delay: 0,
       viewports: [1200],
-      modes: {
-        light: { 
-          themeMode: 'light',
-          prefersReducedMotion: 'reduce',
-          reducedMotion: 'reduce'
-        }
-      },
       threshold: 0.3,
       pauseAnimationAtEnd: true,
     },
