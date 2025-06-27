@@ -20,9 +20,6 @@ export const RecipeGallery = () => {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
-  
-  console.log('🔐 RecipeGallery session:', session);
-  console.log('🔍 RecipeGallery searchBoxValue:', searchBoxValue);
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);

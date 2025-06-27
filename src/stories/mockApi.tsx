@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from '../mocks/data/recipes';
 
-// Type for API mock configurations
 export interface ApiMockConfig {
   [endpoint: string]: {
     method?: string;
@@ -11,7 +10,6 @@ export interface ApiMockConfig {
   };
 }
 
-// Default mock configurations for common endpoints
 export const defaultMocks: ApiMockConfig = {
   '/api/recipes': {
     response: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
@@ -24,7 +22,6 @@ export const defaultMocks: ApiMockConfig = {
   },
 };
 
-// Create a fetch mock setup function
 const createFetchMock = (mockConfig: ApiMockConfig) => {
   const originalFetch = window.fetch;
   
@@ -32,16 +29,10 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
     const urlString = url.toString();
     const method = options?.method?.toUpperCase() || 'GET';
     
-    console.log(`🔄 Fetch intercepted: ${method} ${urlString}`);
-    
-    // Find matching mock config
     for (const [endpoint, config] of Object.entries(mockConfig)) {
       const mockMethod = config.method?.toUpperCase() || 'GET';
       
       if (urlString.includes(endpoint) && method === mockMethod) {
-        console.log(`🔄 Returning mock data for ${endpoint}`);
-        
-        // Add optional delay
         if (config.delay) {
           await new Promise(resolve => setTimeout(resolve, config.delay));
         }
@@ -53,28 +44,20 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
       }
     }
     
-    // For unmatched requests, use original fetch
     return originalFetch(url, options);
   };
   
-  console.log('🔄 Fetch mock set up with endpoints:', Object.keys(mockConfig));
-  
-  // Return cleanup function
   return () => {
     window.fetch = originalFetch;
-    console.log('🔄 Fetch mock cleaned up');
   };
 };
 
-// Higher-order component for easy mock setup
 export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
   return (Story: any) => {
-    // Set up fetch mock immediately before component renders
     const cleanup = createFetchMock(mockConfig);
     
     const MockWrapper = () => {
       useEffect(() => {
-        // Return cleanup function
         return cleanup;
       }, []);
       
@@ -85,12 +68,7 @@ export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
   };
 };
 
-// Convenience decorators for common scenarios
-export const withRecipeMocks = withApiMocks({
-  '/api/recipes': {
-    response: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
-  },
-});
+export const withRecipeMocks = withApiMocks();
 
 export const withHomepageMocks = withApiMocks({
   '/api/user/collections': {
@@ -131,14 +109,14 @@ export const withErrorMocks = withApiMocks({
 export const withLoadingMocks = withApiMocks({
   '/api/recipes': {
     response: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
-    delay: 2000, // 2 second delay
+    delay: 2000,
   },
   '/api/user/collections': {
     response: [chocolateChipCookies, thaiGreenCurry],
-    delay: 2000, // 2 second delay
+    delay: 2000,
   },
   '/api/user/recentlyViewed': {
     response: [caesarSalad, chocolateChipCookies],
-    delay: 2000, // 2 second delay
+    delay: 2000,
   },
 });

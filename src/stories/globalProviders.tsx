@@ -7,10 +7,8 @@ import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import type { Session } from "next-auth";
 import type { StoryFn, StoryContext } from '@storybook/react';
 
-// Import your existing context providers
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 
-// Mock session
 const mockSession: Session = {
   user: {
     id: "user_123",
@@ -20,7 +18,6 @@ const mockSession: Session = {
   expires: "2024-12-31",
 };
 
-// Global query client
 const globalQueryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,7 +28,6 @@ const globalQueryClient = new QueryClient({
   },
 });
 
-// Global provider decorator
 export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { theme } = useTheme();
