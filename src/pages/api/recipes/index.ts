@@ -103,6 +103,8 @@ const handleGetRequest = async (
       .sort({ [sortProperty]: direction })
       .toArray();
 
+    // Add caching headers for better performance
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
     res.status(200).json(recipes);
   } catch (error) {
     console.error("Failed to fetch recipes:", error);
