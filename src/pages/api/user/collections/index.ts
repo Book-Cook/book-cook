@@ -48,6 +48,8 @@ export default async function handler(req: any, res: any) {
         .find({ _id: { $in: objectIds } })
         .toArray();
 
+      // Add caching headers for better performance
+      res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=600');
       res.status(200).json(recipes);
     } catch (error) {
       console.error("Failed to fetch recently viewed recipes:", error);

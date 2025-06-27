@@ -7,7 +7,7 @@ import { useRecipeCardStyles } from "./RecipeCard.styles";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
 
-export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
+const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
   const { title, createdDate, imageSrc, tags, id, emoji, isMinimal, isPublic } =
     props;
   const router = useRouter();
@@ -61,6 +61,10 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
               draggable={false}
               className={styles.image}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="lazy"
+              quality={75}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
           ) : (
             <div className={styles.placeholderImage}>
@@ -144,3 +148,16 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
     </Card>
   );
 };
+
+export const RecipeCard = React.memo(RecipeCardComponent, (prevProps, nextProps) => {
+  // Only re-render if essential props change
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.title === nextProps.title &&
+    prevProps.createdDate === nextProps.createdDate &&
+    prevProps.imageSrc === nextProps.imageSrc &&
+    prevProps.isPublic === nextProps.isPublic &&
+    prevProps.isMinimal === nextProps.isMinimal &&
+    JSON.stringify(prevProps.tags) === JSON.stringify(nextProps.tags)
+  );
+});
