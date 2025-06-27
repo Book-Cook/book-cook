@@ -1,6 +1,4 @@
 import React, { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import {
   Button,
   Tooltip,
@@ -17,6 +15,8 @@ import {
   Heart20Filled,
   SparkleRegular,
 } from "@fluentui/react-icons";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";

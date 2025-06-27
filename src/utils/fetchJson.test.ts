@@ -1,48 +1,52 @@
+import { http, HttpResponse } from "msw";
+
 import { fetchJson } from "./fetchJson";
+import { server } from "../mocks/server";
 
-/** Mocked fetch function */
-const mockFetch = jest.fn();
-
-global.fetch = mockFetch;
-
-afterEach(() => {
-  mockFetch.mockReset();
+// Set up test handlers for fetchJson testing
+beforeEach(() => {
+  // Reset MSW to clean state for each test
+  server.resetHandlers();
 });
 
 test("returns parsed json when response ok", async () => {
-  mockFetch.mockResolvedValue({
-    ok: true,
-    json: jest.fn().mockResolvedValue({ foo: "bar" }),
-    statusText: "OK",
-  });
-  const data = await fetchJson<{ foo: string }>("test");
+  server.use(
+    http.get("/api/test", () => {
+      return HttpResponse.json({ foo: "bar" });
+    })
+  );
+
+  const data = await fetchJson<{ foo: string }>("/api/test");
   expect(data).toEqual({ foo: "bar" });
 });
 
 test("returns undefined for ok response with no json", async () => {
-  mockFetch.mockResolvedValue({
-    ok: true,
-    json: jest.fn().mockRejectedValue(new Error("no json")),
-    statusText: "OK",
-  });
-  const data = await fetchJson("test");
+  server.use(
+    http.get("/api/test", () => {
+      return new Response("", { status: 200 });
+    })
+  );
+
+  const data = await fetchJson("/api/test");
   expect(data).toBeUndefined();
 });
 
 test("throws error message from response body when not ok", async () => {
-  mockFetch.mockResolvedValue({
-    ok: false,
-    json: jest.fn().mockResolvedValue({ message: "Bad request" }),
-    statusText: "Bad",
-  });
-  await expect(fetchJson("test")).rejects.toThrow("Bad request");
+  server.use(
+    http.get("/api/test", () => {
+      return HttpResponse.json({ message: "Bad request" }, { status: 400 });
+    })
+  );
+
+  await expect(fetchJson("/api/test")).rejects.toThrow("Bad request");
 });
 
 test("throws statusText when body has no message", async () => {
-  mockFetch.mockResolvedValue({
-    ok: false,
-    json: jest.fn().mockResolvedValue({}),
-    statusText: "Server error",
-  });
-  await expect(fetchJson("test")).rejects.toThrow("Server error");
+  server.use(
+    http.get("/api/test", () => {
+      return HttpResponse.json({}, { status: 500, statusText: "Server error" });
+    })
+  );
+
+  await expect(fetchJson("/api/test")).rejects.toThrow("Server error");
 });

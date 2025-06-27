@@ -22,6 +22,7 @@ const customJestConfig = {
     "!jest.setup.ts",
   ],
   testEnvironment: "jsdom",
+  setupFiles: ["<rootDir>/jest.polyfills.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: [
     "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi)/)",
