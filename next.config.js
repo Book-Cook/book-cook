@@ -95,6 +95,14 @@ const nextConfig = {
     const { dev, isServer } = options;
 
     if (!dev && !isServer) {
+      // Ensure the directory exists
+      const fs = require('fs');
+      const path = require('path');
+      const analyzeDir = path.join(process.cwd(), '.next', 'analyze');
+      if (!fs.existsSync(analyzeDir)) {
+        fs.mkdirSync(analyzeDir, { recursive: true });
+      }
+
       config.plugins.push(
         new StatsWriterPlugin({
           filename: "../.next/analyze/webpack-stats.json",
@@ -108,7 +116,7 @@ const nextConfig = {
           },
           transform: (webpackStats) => {
             const filteredSource = filterWebpackStats(webpackStats);
-            return JSON.stringify(filteredSource);
+            return JSON.stringify(filteredSource, null, 2); // Pretty print for better debugging
           },
         })
       );

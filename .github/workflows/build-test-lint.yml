@@ -48,12 +48,18 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Ensure analyze directory exists
+        run: mkdir -p .next/analyze
+
       - name: Build and analyze bundle
         run: yarn build
 
+      - name: Verify webpack stats file exists
+        run: ls -la .next/analyze/webpack-stats.json || echo "webpack-stats.json not found"
+
       - name: Upload bundle stats to RelativeCI
         uses: relative-ci/agent-action@v3
-        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        if: always() && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
         continue-on-error: true
         with:
           key: ${{ secrets.RELATIVE_CI_KEY }}
