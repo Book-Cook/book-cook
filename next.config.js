@@ -2,6 +2,8 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import pwa from "@ducanh2912/next-pwa";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
+import fs from "fs";
+import path from "path";
 
 const withPWA = pwa({
   dest: "public",
@@ -96,8 +98,6 @@ const nextConfig = {
 
     if (!dev && !isServer) {
       // Ensure the directory exists
-      const fs = require('fs');
-      const path = require('path');
       const analyzeDir = path.join(process.cwd(), '.next', 'analyze');
       if (!fs.existsSync(analyzeDir)) {
         fs.mkdirSync(analyzeDir, { recursive: true });
