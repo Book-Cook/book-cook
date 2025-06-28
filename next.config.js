@@ -2,6 +2,8 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import pwa from "@ducanh2912/next-pwa";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
+import fs from "fs";
+import path from "path";
 
 const withPWA = pwa({
   dest: "public",
@@ -95,6 +97,12 @@ const nextConfig = {
     const { dev, isServer } = options;
 
     if (!dev && !isServer) {
+      // Ensure the directory exists
+      const analyzeDir = path.join(process.cwd(), '.next', 'analyze');
+      if (!fs.existsSync(analyzeDir)) {
+        fs.mkdirSync(analyzeDir, { recursive: true });
+      }
+
       config.plugins.push(
         new StatsWriterPlugin({
           filename: "../.next/analyze/webpack-stats.json",
@@ -108,7 +116,7 @@ const nextConfig = {
           },
           transform: (webpackStats) => {
             const filteredSource = filterWebpackStats(webpackStats);
-            return JSON.stringify(filteredSource);
+            return JSON.stringify(filteredSource, null, 2); // Pretty print for better debugging
           },
         })
       );

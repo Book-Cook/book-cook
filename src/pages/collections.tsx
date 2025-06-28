@@ -1,8 +1,14 @@
 import * as React from "react";
+import dynamic from "next/dynamic";
+
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchRecipeCollections } from "src/clientToServer";
-import { RecipeCard } from "../components/RecipeCard";
+
+const RecipeCard = dynamic(() => import("../components/RecipeCard").then((mod) => ({ default: mod.RecipeCard })), {
+  loading: () => <div style={{ height: "200px", backgroundColor: "#f5f5f5", borderRadius: "8px" }} />,
+  ssr: false,
+});
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
 import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
 

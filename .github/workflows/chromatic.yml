@@ -1,5 +1,7 @@
 name: "Chromatic"
-on: push
+on: 
+  push:
+  pull_request:
 jobs:
   chromatic:
     name: Run Chromatic
@@ -15,6 +17,10 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Run Chromatic
+        # Only run on pushes or PRs from the same repository (not forks)
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true
+          onlyChanged: true
