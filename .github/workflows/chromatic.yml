@@ -16,20 +16,8 @@ jobs:
           node-version: 22.17.0
       - name: Install dependencies
         run: yarn
-      - name: Check for Chromatic token
-        id: chromatic-check
-        run: |
-          if [ -z "${{ secrets.CHROMATIC_PROJECT_TOKEN }}" ]; then
-            echo "has-token=false" >> $GITHUB_OUTPUT
-            echo "⚠️ CHROMATIC_PROJECT_TOKEN not set - skipping visual tests"
-          else
-            echo "has-token=true" >> $GITHUB_OUTPUT
-            echo "✅ CHROMATIC_PROJECT_TOKEN found - running visual tests"
-          fi
-          
       - name: Run Chromatic
         uses: chromaui/action@latest
-        if: steps.chromatic-check.outputs.has-token == 'true'
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true
