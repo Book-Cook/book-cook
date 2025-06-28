@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+
 import {
   Button,
   Tooltip,
@@ -10,23 +11,19 @@ import {
   Toaster,
   useId,
 } from "@fluentui/react-components";
-import {
-  Heart20Regular,
-  Heart20Filled,
-  SparkleRegular,
-} from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+
+import { Heart20Regular, Heart20Filled, SparkleRegular } from "../../icons";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
 
 import {
-  useConvertMeasurements,
   fetchRecipeCollections,
+  type Recipe,
 } from "../../../clientToServer";
-import type { Recipe } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
@@ -60,11 +57,26 @@ export const RecipeHeader = () => {
     return collections.some((r) => r._id === recipe._id);
   }, [collections, recipe?._id]);
 
+  // Dynamically load AI conversion only when needed
+  const [useConvertMeasurements, setUseConvertMeasurements] = React.useState<(() => any) | null>(null);
+  
+  React.useEffect(() => {
+    // Only load AI conversion when component mounts (editing mode)
+    void import("../../../clientToServer").then((mod) => {
+      setUseConvertMeasurements(() => mod.useConvertMeasurements);
+    });
+  }, []);
+  
+  const conversionHook = useConvertMeasurements?.() ?? { 
+    mutate: () => {}, 
+    isPending: false, 
+    reset: () => {} 
+  };
   const {
     mutate: convertRecipeContent,
     isPending: isConverting,
     reset: resetConversionState,
-  } = useConvertMeasurements();
+  } = conversionHook;
 
   const formattedDate = useMemo(() => {
     const date = recipe?.createdAt ? new Date(recipe.createdAt) : null;
@@ -103,7 +115,7 @@ export const RecipeHeader = () => {
     convertRecipeContent(
       { htmlContent: editableData.content },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: { processedContent: string }) => {
           updateEditableDataKey("content", data.processedContent);
 
           dispatchToast(
