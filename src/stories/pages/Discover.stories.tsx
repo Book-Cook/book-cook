@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { 
   withHomepageMocks, 
@@ -24,7 +25,18 @@ type Story = StoryObj<typeof DiscoverPage>;
 
 export const Default: Story = {
   name: "Default",
-  render: () => <div key="default-story"><DiscoverPage /></div>,
+  render: () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false, staleTime: 0 },
+      },
+    });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <DiscoverPage />
+      </QueryClientProvider>
+    );
+  },
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -57,7 +69,18 @@ export const Default: Story = {
 
 export const EmptyState: Story = {
   name: "Empty State",
-  render: () => <div key="empty-story"><DiscoverPage /></div>,
+  render: () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false, staleTime: 0 },
+      },
+    });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <DiscoverPage />
+      </QueryClientProvider>
+    );
+  },
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -71,7 +94,18 @@ export const EmptyState: Story = {
 
 export const LoadingState: Story = {
   name: "Loading State",
-  render: () => <div key="loading-story"><DiscoverPage /></div>,
+  render: () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false, staleTime: 0 },
+      },
+    });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <DiscoverPage />
+      </QueryClientProvider>
+    );
+  },
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -86,7 +120,18 @@ export const LoadingState: Story = {
 
 export const ErrorState: Story = {
   name: "Error State",
-  render: () => <div key="error-story"><DiscoverPage /></div>,
+  render: () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false, staleTime: 0 },
+      },
+    });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <DiscoverPage />
+      </QueryClientProvider>
+    );
+  },
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: { error: 'Failed to fetch public recipes' },
