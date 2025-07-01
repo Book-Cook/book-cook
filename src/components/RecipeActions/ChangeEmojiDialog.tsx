@@ -110,7 +110,6 @@ const isSingleEmoji = (value: string): boolean => {
   return Boolean(match) && match?.length === 1 && match[0] === value;
 };
 
-// Removed searchByKeyword function - using optimized searchFoodEmojis instead
 export type ChangeEmojiDialogProps = {
   isOpen: boolean;
   currentEmoji: string;

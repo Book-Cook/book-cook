@@ -63,4 +63,13 @@ export const useStyles = makeStyles({
     animationDelay: "var(--fadeInDelay)",
     width: "100%",
   },
+  emptyState: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: "64px 32px",
+    minHeight: "300px",
+  },
 });

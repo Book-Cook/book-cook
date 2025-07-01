@@ -32,8 +32,8 @@ export default async function handler(req: any, res: any) {
           { projection: { collections: 1, _id: 0 } }
         );
 
-      if (!userDoc || !userDoc.collections) {
-        res.status(404).json({ message: "Collections not found" });
+      if (!userDoc || !userDoc.collections || userDoc.collections.length === 0) {
+        res.status(200).json([]);
         return;
       }
 
@@ -63,18 +63,28 @@ export default async function handler(req: any, res: any) {
       if (session.user?.id) {
         const result = await db.collection("collections").updateOne(
           { userId: session.user.id },
-          {
-            $addToSet: {
-              collections: recipeId, // add the recipeId to the collection
-            },
-          }
+          { $addToSet: { collections: recipeId } },
+          { upsert: true }
         );
 
-        if (!result.matchedCount) {
-          return res.status(404).json({ message: "User not found" });
+        if (!result.upsertedCount && result.modifiedCount === 0) {
+          await db.collection("collections").updateOne(
+            { userId: session.user.id },
+            { $pull: { collections: recipeId } }
+          );
+          
+          return res.status(200).json({ 
+            success: true, 
+            action: "removed",
+            message: "Recipe removed from collection" 
+          });
         }
 
-        res.status(201).json(result);
+        return res.status(201).json({ 
+          success: true, 
+          action: "added",
+          message: "Recipe added to collection" 
+        });
       }
     } catch (error) {
       console.error("Failed to create collection:", error);

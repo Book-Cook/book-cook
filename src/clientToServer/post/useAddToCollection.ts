@@ -4,8 +4,8 @@ import { fetchJson } from "src/utils";
 
 interface AddToCollectionResponse {
   success: boolean;
+  action: "added" | "removed";
   message?: string;
-  updatedCollection?: { id: string; name: string };
 }
 
 /**
@@ -38,8 +38,34 @@ export function useAddToCollection() {
         throw new Error(`Failed to add recipe to collection: ${errorInfo}`);
       }
     },
+    onMutate: async (recipeId: string) => {
+      await queryClient.cancelQueries({ queryKey: ["collections"] });
+      const previousCollections = queryClient.getQueryData(["collections"]);
+
+      queryClient.setQueryData(["collections"], (old: unknown) => {
+        if (!old) {
+          return old;
+        }
+        const recipes = old as Array<{ _id: string }>;
+        const isInCollection = recipes.some((recipe) => recipe._id === recipeId);
+        return isInCollection 
+          ? recipes.filter((recipe) => recipe._id !== recipeId)
+          : recipes;
+      });
+
+      return { previousCollections };
+    },
+    onError: (err, recipeId, context) => {
+      if (context && typeof context === 'object' && 'previousCollections' in context) {
+        queryClient.setQueryData(["collections"], context.previousCollections);
+      }
+    },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["collections"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["collections"], refetchType: "all" }),
+        queryClient.invalidateQueries({ queryKey: ["recipeCollections"], refetchType: "all" }),
+        queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "all" }),
+      ]);
     },
   });
 }

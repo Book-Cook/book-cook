@@ -139,7 +139,14 @@ export const RecipeProvider: React.FC<{
   };
 
   const onAddToCollection = (recipeId: string) => {
-    addToCollection(recipeId);
+    addToCollection(recipeId, {
+      onSuccess: (data) => {
+        console.log(`Recipe ${data.action} collection successfully`);
+      },
+      onError: (error) => {
+        console.error("Failed to update collection:", error);
+      },
+    });
   };
 
   React.useEffect(() => {
