@@ -30,10 +30,16 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
     const urlString = typeof url === 'string' ? url : url instanceof URL ? url.href : url.url;
     const method = options?.method?.toUpperCase() ?? 'GET';
     
+    console.log('Mock fetch called with:', urlString, method);
+    
     for (const [endpoint, config] of Object.entries(mockConfig)) {
       const mockMethod = config.method?.toUpperCase() ?? 'GET';
       
+      console.log('Checking endpoint:', endpoint, 'against URL:', urlString);
+      
       if (urlString.includes(endpoint) && method === mockMethod) {
+        console.log('Mock matched! Returning:', config.response);
+        
         if (config.delay && config.delay > 100000) {
           // For infinite delays, never resolve
           await new Promise(() => {}); 
@@ -48,6 +54,7 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
       }
     }
     
+    console.log('No mock found, calling original fetch');
     return originalFetch(url, options);
   };
   
