@@ -27,7 +27,26 @@ export const Default: Story = {
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
-        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
+        recipes: [
+          {
+            ...chocolateChipCookies,
+            savedCount: 42,
+            viewCount: 203,
+            creatorName: "Baker Beth",
+          },
+          {
+            ...thaiGreenCurry,
+            savedCount: 31,
+            viewCount: 124,
+            creatorName: "Thai Kitchen",
+          },
+          {
+            ...caesarSalad,
+            savedCount: 18,
+            viewCount: 89,
+            creatorName: "Chef Caesar",
+          },
+        ],
         totalCount: 3,
         hasMore: false,
       },
