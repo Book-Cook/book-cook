@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 import DiscoverPage from "../../pages/discover";
 
@@ -118,8 +118,8 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          return res(ctx.json(mockPublicRecipes));
+        http.get("/api/recipes/public", () => {
+          return HttpResponse.json(mockPublicRecipes);
         }),
       ],
     },
@@ -130,14 +130,12 @@ export const EmptyState: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          return res(
-            ctx.json({
-              recipes: [],
-              totalCount: 0,
-              hasMore: false,
-            })
-          );
+        http.get("/api/recipes/public", () => {
+          return HttpResponse.json({
+            recipes: [],
+            totalCount: 0,
+            hasMore: false,
+          });
         }),
       ],
     },
@@ -148,8 +146,8 @@ export const LoadingState: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          return res(ctx.delay("infinite"));
+        http.get("/api/recipes/public", async () => {
+          await new Promise(() => {}); // Infinite delay
         }),
       ],
     },
@@ -160,8 +158,11 @@ export const ErrorState: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          return res(ctx.status(500), ctx.json({ message: "Server error" }));
+        http.get("/api/recipes/public", () => {
+          return HttpResponse.json(
+            { message: "Server error" },
+            { status: 500 }
+          );
         }),
       ],
     },
@@ -172,19 +173,18 @@ export const SearchResults: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          const search = req.url.searchParams.get("search");
+        http.get("/api/recipes/public", ({ request }) => {
+          const url = new URL(request.url);
+          const search = url.searchParams.get("search");
           const filteredRecipes = mockPublicRecipes.recipes.filter((recipe) =>
-            recipe.title.toLowerCase().includes((search || "").toLowerCase())
+            recipe.title.toLowerCase().includes((search ?? "").toLowerCase())
           );
           
-          return res(
-            ctx.json({
-              recipes: filteredRecipes,
-              totalCount: filteredRecipes.length,
-              hasMore: false,
-            })
-          );
+          return HttpResponse.json({
+            recipes: filteredRecipes,
+            totalCount: filteredRecipes.length,
+            hasMore: false,
+          });
         }),
       ],
     },
@@ -199,19 +199,18 @@ export const FilteredByTags: Story = {
   parameters: {
     msw: {
       handlers: [
-        rest.get("/api/recipes/public", (req, res, ctx) => {
-          const tags = req.url.searchParams.getAll("tags");
+        http.get("/api/recipes/public", ({ request }) => {
+          const url = new URL(request.url);
+          const tags = url.searchParams.getAll("tags");
           const filteredRecipes = mockPublicRecipes.recipes.filter((recipe) =>
             tags.some((tag) => recipe.tags.includes(tag))
           );
           
-          return res(
-            ctx.json({
-              recipes: filteredRecipes,
-              totalCount: filteredRecipes.length,
-              hasMore: false,
-            })
-          );
+          return HttpResponse.json({
+            recipes: filteredRecipes,
+            totalCount: filteredRecipes.length,
+            hasMore: false,
+          });
         }),
       ],
     },
