@@ -28,9 +28,19 @@ const globalQueryClient = new QueryClient({
   },
 });
 
-export const withGlobalProviders = (Story: StoryFn, _context: StoryContext) => {
+export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { theme } = useTheme();
+    const { theme, setTheme } = useTheme();
+    
+    // Sync with Storybook theme toggle
+    React.useEffect(() => {
+      const storybookTheme = context.globals.themeMode;
+      if (storybookTheme === 'dark') {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+    }, [context.globals.themeMode, setTheme]);
     
     const fluentProviderStyles = {
       height: "100%",
