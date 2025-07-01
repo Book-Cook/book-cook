@@ -50,10 +50,24 @@ export const EmptyState: Story = {
 
 export const LoadingState: Story = {
   name: "Loading State",
-  decorators: [withLoadingMocks],
+  decorators: [withApiMocks({
+    '/api/recipes/public': {
+      response: {
+        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
+        totalCount: 3,
+        hasMore: false,
+      },
+      delay: 2000,
+    },
+  })],
 };
 
 export const ErrorState: Story = {
   name: "Error State", 
-  decorators: [withErrorMocks],
+  decorators: [withApiMocks({
+    '/api/recipes/public': {
+      response: { error: 'Failed to fetch public recipes' },
+      status: 500,
+    },
+  })],
 };
