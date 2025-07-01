@@ -59,10 +59,13 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   const styles = useStyles();
   const [newIsPublic, setNewIsPublic] = React.useState(isPublic);
 
+  // Reset state when dialog opens or isPublic prop changes
+  React.useEffect(() => {
+    setNewIsPublic(isPublic);
+  }, [isPublic, isOpen]);
+
   const handleSaveClick = () => {
-    if (newIsPublic) {
-      onSave(newIsPublic.toString());
-    }
+    onSave(newIsPublic.toString());
   };
 
   const handleCancelClick = () => {

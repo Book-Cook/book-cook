@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 
 import { useFetchAllTags } from "src/clientToServer";
 import type { RecipeActionsProps } from "./RecipeActions.types";
+import { useToggleRecipeVisibility } from "../../clientToServer/post/useToggleRecipeVisibility";
 
 import { useRecipe } from "../../context";
 
@@ -55,6 +56,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
   const { availableTags } = useFetchAllTags();
+  const { mutate: toggleVisibility } = useToggleRecipeVisibility();
 
   const [activeDialog, setActiveDialog] = React.useState<DialogType>(null);
 
@@ -107,6 +109,29 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       closeDialog();
     },
     [saveChanges, closeDialog]
+  );
+
+  const handleVisibilitySave = React.useCallback(
+    (value: string) => {
+      const isPublic = value === "true";
+      if (editableData._id) {
+        toggleVisibility(
+          { recipeId: editableData._id, isPublic },
+          {
+            onSuccess: () => {
+              // Update local state to reflect the change
+              saveChanges({ isPublic });
+              closeDialog();
+            },
+            onError: (error) => {
+              console.error("Failed to update recipe visibility:", error);
+              // Keep dialog open on error so user can retry
+            },
+          }
+        );
+      }
+    },
+    [editableData._id, toggleVisibility, saveChanges, closeDialog]
   );
 
   const handleDeleteClick = React.useCallback(
@@ -185,8 +210,8 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       {activeDialog === "isPublic" && (
         <ChangeSharedWithDialog
           isOpen={activeDialog === "isPublic"}
-          isPublic={true}
-          onSave={handleSave("isPublic")}
+          isPublic={editableData.isPublic ?? false}
+          onSave={handleVisibilitySave}
           onClose={closeDialog}
         />
       )}
