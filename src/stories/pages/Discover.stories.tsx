@@ -8,7 +8,7 @@ import {
   withApiMocks 
 } from "../mockApi";
 import DiscoverPage from "../../pages/discover";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
+import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
 const meta: Meta<typeof DiscoverPage> = {
   title: "Pages/Discover",
