@@ -12,6 +12,7 @@ import {
   useAddToCollection,
   useUpdateRecipe,
 } from "../../clientToServer";
+import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
 import type { UpdateRecipePayload } from "../../clientToServer";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
@@ -41,6 +42,7 @@ export const RecipeProvider: React.FC<{
 
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
+  const { mutate: saveRecipe } = useSaveRecipe();
   const { mutate: updateRecipe } = useUpdateRecipe(
     recipeId ?? editableData._id
   );
@@ -149,6 +151,17 @@ export const RecipeProvider: React.FC<{
     });
   };
 
+  const onSaveRecipe = (recipeId: string) => {
+    saveRecipe(recipeId, {
+      onSuccess: (data) => {
+        console.log(`Recipe ${data.action} successfully`);
+      },
+      onError: (error) => {
+        console.error("Failed to save recipe:", error);
+      },
+    });
+  };
+
   React.useEffect(() => {
     if (recipe) {
       const initialData = {
@@ -205,6 +218,7 @@ export const RecipeProvider: React.FC<{
     cancelEditing,
     deleteRecipe,
     onAddToCollection,
+    onSaveRecipe,
     hasEdits,
   };
 

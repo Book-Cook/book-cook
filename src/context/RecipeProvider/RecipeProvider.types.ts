@@ -26,4 +26,5 @@ export type RecipeContextType = {
   cancelEditing: () => void;
   deleteRecipe: () => void;
   onAddToCollection: (recipeId: string) => void;
+  onSaveRecipe: (recipeId: string) => void;
 };

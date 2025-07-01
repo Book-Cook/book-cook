@@ -43,7 +43,27 @@ export type Recipe = {
   /**
    * Whether the recipe is public or not.
    */
-  isPublic: boolean
+  isPublic: boolean;
+
+  /**
+   * The number of times this recipe has been saved by users.
+   */
+  savedCount?: number;
+
+  /**
+   * The number of times this recipe has been viewed.
+   */
+  viewCount?: number;
+
+  /**
+   * The date when the recipe was made public.
+   */
+  publishedAt?: string;
+
+  /**
+   * The display name of the recipe creator (for public recipes).
+   */
+  creatorName?: string;
 };
 
 export type UpdateRecipePayload = {
