@@ -33,7 +33,6 @@ export default async function handler(req: any, res: any) {
         );
 
       if (!userDoc || !userDoc.collections || userDoc.collections.length === 0) {
-        // Return empty array instead of 404 for better UX
         res.status(200).json([]);
         return;
       }
@@ -62,27 +61,16 @@ export default async function handler(req: any, res: any) {
       const { recipeId } = req.body;
 
       if (session.user?.id) {
-        // Use upsert to create the document if it doesn't exist
         const result = await db.collection("collections").updateOne(
           { userId: session.user.id },
-          {
-            $addToSet: {
-              collections: recipeId, // add the recipeId to the collection
-            },
-          },
-          { upsert: true } // Create document if it doesn't exist
+          { $addToSet: { collections: recipeId } },
+          { upsert: true }
         );
 
-        // Check if we need to remove the recipe (toggle functionality)
         if (!result.upsertedCount && result.modifiedCount === 0) {
-          // Recipe was already in collection, remove it (toggle off)
-          const removeResult = await db.collection("collections").updateOne(
+          await db.collection("collections").updateOne(
             { userId: session.user.id },
-            {
-              $pull: {
-                collections: recipeId,
-              },
-            }
+            { $pull: { collections: recipeId } }
           );
           
           return res.status(200).json({ 

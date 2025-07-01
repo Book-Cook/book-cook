@@ -39,52 +39,30 @@ export function useAddToCollection() {
       }
     },
     onMutate: async (recipeId: string) => {
-      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({ queryKey: ["collections"] });
-
-      // Snapshot the previous value
       const previousCollections = queryClient.getQueryData(["collections"]);
 
-      // Optimistically update to the new value
-      queryClient.setQueryData(["collections"], (old: any) => {
-        if (!old) return old;
-        
-        // Check if recipe is already in collections
-        const isInCollection = old.some((recipe: any) => recipe._id === recipeId);
-        
-        if (isInCollection) {
-          // Remove from collection (toggle off)
-          return old.filter((recipe: any) => recipe._id !== recipeId);
-        } else {
-          // We can't add it optimistically since we don't have the full recipe data
-          // Just return the old data and let the success handler invalidate
+      queryClient.setQueryData(["collections"], (old: unknown) => {
+        if (!old) {
           return old;
         }
+        const recipes = old as Array<{ _id: string }>;
+        const isInCollection = recipes.some((recipe) => recipe._id === recipeId);
+        return isInCollection 
+          ? recipes.filter((recipe) => recipe._id !== recipeId)
+          : recipes;
       });
 
-      // Return a context object with the snapshotted value
       return { previousCollections };
     },
     onError: (err, recipeId, context) => {
-      // If the mutation fails, use the context returned from onMutate to roll back
       queryClient.setQueryData(["collections"], context?.previousCollections);
     },
     onSuccess: async () => {
-      // Force immediate refetch to update UI - invalidate all related queries
       await Promise.all([
-        queryClient.invalidateQueries({ 
-          queryKey: ["collections"],
-          refetchType: "all"
-        }),
-        queryClient.invalidateQueries({ 
-          queryKey: ["recipeCollections"],
-          refetchType: "all"
-        }),
-        // Also invalidate the main recipes query in case it shows collection status
-        queryClient.invalidateQueries({ 
-          queryKey: ["recipes"],
-          refetchType: "all"
-        }),
+        queryClient.invalidateQueries({ queryKey: ["collections"], refetchType: "all" }),
+        queryClient.invalidateQueries({ queryKey: ["recipeCollections"], refetchType: "all" }),
+        queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "all" }),
       ]);
     },
   });

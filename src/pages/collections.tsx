@@ -26,7 +26,7 @@ export default function CollectionsPage() {
               weight="medium"
               style={{ color: "var(--colorNeutralForeground2)" }}
             >
-              {recipes?.length || 0} favorite recipes
+              {recipes?.length ?? 0} favorite recipes
             </Text>
           </div>
         </div>
