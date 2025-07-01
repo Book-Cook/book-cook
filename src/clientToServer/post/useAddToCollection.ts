@@ -56,7 +56,9 @@ export function useAddToCollection() {
       return { previousCollections };
     },
     onError: (err, recipeId, context) => {
-      queryClient.setQueryData(["collections"], context?.previousCollections);
+      if (context && typeof context === 'object' && 'previousCollections' in context) {
+        queryClient.setQueryData(["collections"], context.previousCollections);
+      }
     },
     onSuccess: async () => {
       await Promise.all([
