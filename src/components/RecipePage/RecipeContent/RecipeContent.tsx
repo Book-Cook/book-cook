@@ -1,9 +1,14 @@
 import * as React from "react";
 import { Spinner } from "@fluentui/react-components";
+import dynamic from "next/dynamic";
 
 import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
-import { Editor } from "../../Editor/Editor";
+
+const Editor = dynamic(() => import("../../Editor/Editor").then(mod => ({ default: mod.Editor })), {
+  loading: () => <Spinner label="Loading editor..." />,
+  ssr: false
+});
 
 export const RecipeContent = () => {
   const { isLoading, editableData, updateEditableDataKey, isAuthorized } =

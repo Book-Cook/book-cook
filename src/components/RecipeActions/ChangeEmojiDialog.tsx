@@ -11,46 +11,12 @@ import {
   Text,
 } from "@fluentui/react-components";
 import emojiRegex from "emoji-regex";
-import * as emoji from "node-emoji";
-import emojiData from "unicode-emoji-json";
+import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
 
 import { ChangeDialog } from "./ChangeDialog";
 
 // Default emojis for food categories
-const defaultSuggestedEmojis = [
-  "🍕",
-  "🍔",
-  "🍗",
-  "🍖",
-  "🍛",
-  "🍜",
-  "🍝",
-  "🍲",
-  "🍳",
-  "🥗",
-  "🥘",
-  "🌮",
-  "🌯",
-  "🍱",
-  "🍚",
-  "🥟",
-  "🍤",
-  "🍙",
-  "🧁",
-  "🍰",
-  "🎂",
-  "🍮",
-  "🍩",
-  "🍪",
-  "🍫",
-  "🍬",
-  "🍷",
-  "🍸",
-  "🍹",
-  "☕",
-  "🍵",
-  "🍼",
-];
+const defaultSuggestedEmojis = getDefaultFoodEmojis();
 const DEFAULT_EMOJI = "🍽️";
 
 const useStyles = makeStyles({
@@ -144,15 +110,7 @@ const isSingleEmoji = (value: string): boolean => {
   return Boolean(match) && match?.length === 1 && match[0] === value;
 };
 
-const searchByKeyword = (keyword: string): string[] => {
-  const results: string[] = [];
-  for (const [char, info] of Object.entries(emojiData)) {
-    if (info.name.toLowerCase().includes(keyword)) {
-      results.push(char);
-    }
-  }
-  return results;
-};
+// Removed searchByKeyword function - using optimized searchFoodEmojis instead
 export type ChangeEmojiDialogProps = {
   isOpen: boolean;
   currentEmoji: string;
@@ -216,9 +174,8 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
         setDisplayedEmojis(defaultSuggestedEmojis);
       } else {
         setIsSearching(true);
-        const nameHits = emoji.search(trimmed).map((r) => r.emoji);
-        const unicodeHits = searchByKeyword(trimmed);
-        const merged = Array.from(new Set([...nameHits, ...unicodeHits]));
+        const foodHits = searchFoodEmojis(trimmed);
+        const merged = Array.from(new Set(foodHits));
         setDisplayedEmojis(merged);
       }
     }, 150);

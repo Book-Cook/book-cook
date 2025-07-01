@@ -2,6 +2,9 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import pwa from "@ducanh2912/next-pwa";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const withPWA = pwa({
   dest: "public",
@@ -93,6 +96,26 @@ const nextConfig = {
 
   webpack: (config, options) => {
     const { dev, isServer } = options;
+
+    // Enhanced tree shaking and optimization
+    if (!dev) {
+      config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+        sideEffects: false,
+        minimize: true,
+      };
+    }
+
+    // Remove problematic React aliases that conflict with Next.js resolution
+    // Next.js handles React resolution automatically
+
+    // Exclude mocks from production bundle (simplified approach)
+    if (!dev) {
+      // Only exclude specific test utilities, not core dependencies
+      config.externals = config.externals || [];
+      // Remove MSW externals as they might interfere with normal dependencies
+    }
 
     if (!dev && !isServer) {
       config.plugins.push(
