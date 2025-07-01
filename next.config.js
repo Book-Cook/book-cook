@@ -107,33 +107,14 @@ const nextConfig = {
       };
     }
 
-    // Resolve extensions for better tree shaking
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      // Prevent duplicate React and ensure jsx-runtime is properly resolved
-      'react': require.resolve('react'),
-      'react-dom': require.resolve('react-dom'),
-      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
-      'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
-    };
+    // Remove problematic React aliases that conflict with Next.js resolution
+    // Next.js handles React resolution automatically
 
-    // Exclude mocks from production bundle
+    // Exclude mocks from production bundle (simplified approach)
     if (!dev) {
+      // Only exclude specific test utilities, not core dependencies
       config.externals = config.externals || [];
-      config.externals.push({
-        // Exclude MSW and test utilities from production bundle
-        'msw': 'msw',
-        'msw/node': 'msw/node',
-        'msw-storybook-addon': 'msw-storybook-addon',
-      });
-      
-      // Add ignore patterns for mock files
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        // Replace mock imports with empty modules in production
-        '^src/mocks/.*$': false,
-        '^@/mocks/.*$': false,
-      };
+      // Remove MSW externals as they might interfere with normal dependencies
     }
 
     if (!dev && !isServer) {
