@@ -6,9 +6,9 @@ import {
   withErrorMocks, 
   withLoadingMocks,
   withApiMocks 
-} from "./mockApi";
-import { RecipeGallery } from "../components/RecipeGallery/RecipeGallery";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../mocks/data/recipes";
+} from "../mockApi";
+import { RecipeGallery } from "../../components/RecipeGallery/RecipeGallery";
+import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../../mocks/data/recipes";
 
 const meta: Meta<typeof RecipeGallery> = {
   title: "Pages/RecipeGallery",

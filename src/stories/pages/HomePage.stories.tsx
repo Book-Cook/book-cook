@@ -6,9 +6,9 @@ import {
   withErrorMocks, 
   withLoadingMocks,
   withApiMocks 
-} from "./mockApi";
-import HomePage from "../components/HomePage/HomePage";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../mocks/data/recipes";
+} from "../mockApi";
+import HomePage from "../../components/HomePage/HomePage";
+import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
 const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
