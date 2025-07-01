@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "description": "Recipe management application",
   "private": true,
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "*.less",
+    "src/mocks/**/*"
+  ],
   "type": "module",
   "scripts": {
     "dev": "next dev ",

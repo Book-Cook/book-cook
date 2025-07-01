@@ -94,6 +94,41 @@ const nextConfig = {
   webpack: (config, options) => {
     const { dev, isServer } = options;
 
+    // Enhanced tree shaking and optimization
+    config.optimization = {
+      ...config.optimization,
+      usedExports: true,
+      sideEffects: false,
+      minimize: !dev,
+    };
+
+    // Resolve extensions for better tree shaking
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Prevent duplicate React
+      'react': require.resolve('react'),
+      'react-dom': require.resolve('react-dom'),
+    };
+
+    // Exclude mocks from production bundle
+    if (!dev) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        // Exclude MSW and test utilities from production bundle
+        'msw': 'msw',
+        'msw/node': 'msw/node',
+        'msw-storybook-addon': 'msw-storybook-addon',
+      });
+      
+      // Add ignore patterns for mock files
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        // Replace mock imports with empty modules in production
+        '^src/mocks/.*$': false,
+        '^@/mocks/.*$': false,
+      };
+    }
+
     if (!dev && !isServer) {
       config.plugins.push(
         new StatsWriterPlugin({

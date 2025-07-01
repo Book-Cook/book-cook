@@ -8,6 +8,7 @@
 
 ## Development Workflow
 
+- Always pull from main before committing changes
 - Run tests before committing changes
 - Check for lint/typecheck commands and run them before completing tasks
 
