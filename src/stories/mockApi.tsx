@@ -59,11 +59,15 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
 
 export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
   const ApiMockWrapper = (Story: React.ComponentType) => {
-    const cleanup = createFetchMock(mockConfig);
-    
     const MockWrapper = () => {
       useEffect(() => {
-        return cleanup;
+        console.log('Setting up mock for:', Object.keys(mockConfig));
+        const cleanup = createFetchMock(mockConfig);
+        
+        return () => {
+          console.log('Cleaning up mock');
+          cleanup();
+        };
       }, []);
       
       return <Story />;
