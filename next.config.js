@@ -2,6 +2,9 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import pwa from "@ducanh2912/next-pwa";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const withPWA = pwa({
   dest: "public",
@@ -95,12 +98,14 @@ const nextConfig = {
     const { dev, isServer } = options;
 
     // Enhanced tree shaking and optimization
-    config.optimization = {
-      ...config.optimization,
-      usedExports: true,
-      sideEffects: false,
-      minimize: !dev,
-    };
+    if (!dev) {
+      config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+        sideEffects: false,
+        minimize: true,
+      };
+    }
 
     // Resolve extensions for better tree shaking
     config.resolve.alias = {
