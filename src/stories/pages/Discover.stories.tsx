@@ -24,6 +24,7 @@ type Story = StoryObj<typeof DiscoverPage>;
 
 export const Default: Story = {
   name: "Default",
+  render: () => <div key="default-story"><DiscoverPage /></div>,
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -56,6 +57,7 @@ export const Default: Story = {
 
 export const EmptyState: Story = {
   name: "Empty State",
+  render: () => <div key="empty-story"><DiscoverPage /></div>,
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -69,6 +71,7 @@ export const EmptyState: Story = {
 
 export const LoadingState: Story = {
   name: "Loading State",
+  render: () => <div key="loading-story"><DiscoverPage /></div>,
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: {
@@ -82,7 +85,8 @@ export const LoadingState: Story = {
 };
 
 export const ErrorState: Story = {
-  name: "Error State", 
+  name: "Error State",
+  render: () => <div key="error-story"><DiscoverPage /></div>,
   decorators: [withApiMocks({
     '/api/recipes/public': {
       response: { error: 'Failed to fetch public recipes' },
