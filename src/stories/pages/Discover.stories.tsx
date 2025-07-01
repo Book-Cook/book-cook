@@ -57,7 +57,7 @@ export const LoadingState: Story = {
         totalCount: 3,
         hasMore: false,
       },
-      delay: 2000,
+      delay: 999999, // Never resolve to show loading state
     },
   })],
 };
