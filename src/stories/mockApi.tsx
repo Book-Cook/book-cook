@@ -34,11 +34,7 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
       const mockMethod = config.method?.toUpperCase() ?? 'GET';
       
       if (urlString.includes(endpoint) && method === mockMethod) {
-        console.log('✅ MOCK MATCHED:', endpoint, 'in', urlString);
-        if (config.delay && config.delay > 100000) {
-          // For infinite delays, never resolve
-          await new Promise(() => {}); 
-        } else if (config.delay) {
+        if (config.delay) {
           await new Promise(resolve => setTimeout(resolve, config.delay));
         }
         
@@ -59,15 +55,11 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
 
 export const withApiMocks = (mockConfig: ApiMockConfig = defaultMocks) => {
   const ApiMockWrapper = (Story: React.ComponentType) => {
+    const cleanup = createFetchMock(mockConfig);
+    
     const MockWrapper = () => {
       useEffect(() => {
-        console.log('Setting up mock for:', Object.keys(mockConfig));
-        const cleanup = createFetchMock(mockConfig);
-        
-        return () => {
-          console.log('Cleaning up mock');
-          cleanup();
-        };
+        return cleanup;
       }, []);
       
       return <Story />;
