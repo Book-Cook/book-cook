@@ -20,7 +20,8 @@
 3. Make your changes
 4. Pull main one more time before committing: `git pull origin main --rebase`
 5. Run yarn build, yarn test, and yarn lint to verify that the CI will succeed.
-6. Commit and push changes
+6. **ALWAYS** run `yarn lint --fix` before committing to auto-fix linting issues
+7. Commit and push changes
 
 ## Code Organization
 

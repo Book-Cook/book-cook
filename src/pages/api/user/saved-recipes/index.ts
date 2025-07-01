@@ -4,6 +4,7 @@ import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
 
 import { getDb } from "src/utils/db";
+
 import { authOptions } from "../../auth/[...nextauth]";
 
 const ALLOWED_METHODS = ["GET", "POST"];

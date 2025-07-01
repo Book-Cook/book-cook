@@ -12,8 +12,8 @@ import {
   useAddToCollection,
   useUpdateRecipe,
 } from "../../clientToServer";
-import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
 import type { UpdateRecipePayload } from "../../clientToServer";
+import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -114,6 +114,7 @@ export const RecipeProvider: React.FC<{
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
         isPublic: recipe.isPublic || false,
+        _id: recipe._id,
       };
       setEditableData(initialData);
     }
@@ -171,6 +172,7 @@ export const RecipeProvider: React.FC<{
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
         isPublic: recipe.isPublic || false,
+        _id: recipe._id,
       };
       setEditableData(initialData);
     }
@@ -187,6 +189,7 @@ export const RecipeProvider: React.FC<{
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
       isPublic: recipe.isPublic || false,
+      _id: recipe._id,
     };
   }, [recipe]);
 

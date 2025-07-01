@@ -11,9 +11,11 @@ import {
   Text,
 } from "@fluentui/react-components";
 import emojiRegex from "emoji-regex";
-import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
 
 import { ChangeDialog } from "./ChangeDialog";
+
+import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
+
 
 // Default emojis for food categories
 const defaultSuggestedEmojis = getDefaultFoodEmojis();

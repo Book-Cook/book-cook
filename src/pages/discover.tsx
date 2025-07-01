@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { 
   Title3, 
   Text, 
@@ -11,6 +10,7 @@ import {
   SearchBox,
 } from "@fluentui/react-components";
 import { Search24Regular, Filter24Regular } from "@fluentui/react-icons";
+import { useQuery } from "@tanstack/react-query";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
@@ -78,14 +78,14 @@ const fetchPublicRecipes = async (params: {
 }): Promise<PublicRecipesResponse> => {
   const searchParams = new URLSearchParams();
   
-  if (params.search) searchParams.append("search", params.search);
+  if (params.search) {searchParams.append("search", params.search);}
   if (params.tags && params.tags.length > 0) {
     params.tags.forEach(tag => searchParams.append("tags", tag));
   }
-  if (params.sortProperty) searchParams.append("sortProperty", params.sortProperty);
-  if (params.sortDirection) searchParams.append("sortDirection", params.sortDirection);
-  if (params.offset) searchParams.append("offset", params.offset.toString());
-  if (params.limit) searchParams.append("limit", params.limit.toString());
+  if (params.sortProperty) {searchParams.append("sortProperty", params.sortProperty);}
+  if (params.sortDirection) {searchParams.append("sortDirection", params.sortDirection);}
+  if (params.offset) {searchParams.append("offset", params.offset.toString());}
+  if (params.limit) {searchParams.append("limit", params.limit.toString());}
 
   const response = await fetch(`/api/recipes/public?${searchParams.toString()}`);
   
@@ -108,7 +108,7 @@ export default function DiscoverPage() {
       search: search || undefined,
       tags: selectedTags.length > 0 ? selectedTags : undefined,
       sortProperty: sortBy,
-      sortDirection: sortDirection,
+      sortDirection,
       offset: 0,
       limit: 20,
     }),

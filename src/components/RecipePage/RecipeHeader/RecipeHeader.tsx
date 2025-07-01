@@ -27,8 +27,8 @@ import {
   fetchRecipeCollections,
 } from "../../../clientToServer";
 import type { Recipe } from "../../../clientToServer";
-import { useRecipe } from "../../../context";
 import { useSaveRecipe } from "../../../clientToServer/post/useSaveRecipe";
+import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
 
@@ -59,7 +59,7 @@ export const RecipeHeader = () => {
     queryKey: ["savedRecipes"],
     queryFn: async () => {
       const response = await fetch("/api/user/saved-recipes");
-      if (!response.ok) throw new Error("Failed to fetch saved recipes");
+      if (!response.ok) {throw new Error("Failed to fetch saved recipes");}
       return response.json();
     },
     enabled: Boolean(session),

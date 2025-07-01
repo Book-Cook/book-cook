@@ -22,8 +22,8 @@ import dynamic from "next/dynamic";
 
 import { useFetchAllTags } from "src/clientToServer";
 import type { RecipeActionsProps } from "./RecipeActions.types";
-import { useToggleRecipeVisibility } from "../../clientToServer/post/useToggleRecipeVisibility";
 
+import { useToggleRecipeVisibility } from "../../clientToServer/post/useToggleRecipeVisibility";
 import { useRecipe } from "../../context";
 
 type DialogType = "title" | "tags" | "emoji" | "isPublic" | null;
@@ -114,22 +114,28 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const handleVisibilitySave = React.useCallback(
     (value: string) => {
       const isPublic = value === "true";
-      if (editableData._id) {
-        toggleVisibility(
-          { recipeId: editableData._id, isPublic },
-          {
-            onSuccess: () => {
-              // Update local state to reflect the change
-              saveChanges({ isPublic });
-              closeDialog();
-            },
-            onError: (error) => {
-              console.error("Failed to update recipe visibility:", error);
-              // Keep dialog open on error so user can retry
-            },
-          }
-        );
+      console.log("Toggling visibility:", { recipeId: editableData._id, isPublic, value });
+      
+      if (!editableData._id) {
+        console.error("No recipe ID found in editableData:", editableData);
+        return;
       }
+
+      toggleVisibility(
+        { recipeId: editableData._id, isPublic },
+        {
+          onSuccess: (data) => {
+            console.log("Visibility toggle success:", data);
+            // Update local state to reflect the change
+            saveChanges({ isPublic });
+            closeDialog();
+          },
+          onError: (error) => {
+            console.error("Failed to update recipe visibility:", error);
+            // Keep dialog open on error so user can retry
+          },
+        }
+      );
     },
     [editableData._id, toggleVisibility, saveChanges, closeDialog]
   );

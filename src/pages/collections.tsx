@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Title3, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { useQuery } from "@tanstack/react-query";
 
 import { fetchRecipeCollections } from "src/clientToServer";
 import { RecipeCard } from "../components/RecipeCard";
@@ -28,7 +28,7 @@ export default function CollectionsPage() {
     queryKey: ["savedRecipes"],
     queryFn: async () => {
       const response = await fetch("/api/user/saved-recipes");
-      if (!response.ok) throw new Error("Failed to fetch saved recipes");
+      if (!response.ok) {throw new Error("Failed to fetch saved recipes");}
       return response.json();
     },
   });

@@ -41,7 +41,7 @@ export function useSaveRecipe() {
       const previousSavedRecipes = queryClient.getQueryData(["savedRecipes"]);
 
       queryClient.setQueryData(["savedRecipes"], (old: unknown) => {
-        if (!old) return old;
+        if (!old) {return old;}
         const recipes = old as Array<{ _id: string }>;
         const isAlreadySaved = recipes.some((recipe) => recipe._id === recipeId);
         
