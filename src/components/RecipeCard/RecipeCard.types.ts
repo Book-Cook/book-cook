@@ -38,4 +38,19 @@ export type RecipeCardProps = {
    * Whether the recipe card is public or not.
    */
   isPublic?: boolean;
+
+  /**
+   * Creator name for public recipes (shows instead of date)
+   */
+  creatorName?: string;
+
+  /**
+   * Number of saves for public recipes
+   */
+  savedCount?: number;
+
+  /**
+   * Whether to show the edit menu (hide for other users' public recipes)
+   */
+  showActions?: boolean;
 };

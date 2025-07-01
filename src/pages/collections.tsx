@@ -16,11 +16,6 @@ const useCollectionStyles = makeStyles({
     paddingBottom: tokens.spacingVerticalS,
     borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
   },
-  creatorInfo: {
-    color: tokens.colorNeutralForeground2,
-    fontSize: tokens.fontSizeBase200,
-    marginTop: tokens.spacingVerticalXS,
-  },
 });
 
 export default function CollectionsPage() {
@@ -135,10 +130,10 @@ export default function CollectionsPage() {
                     imageSrc={recipe?.imageURL}
                     tags={recipe?.tags}
                     isPublic={true}
+                    creatorName={recipe.creatorName}
+                    savedCount={0}
+                    showActions={false}
                   />
-                  <div className={collectionStyles.creatorInfo}>
-                    By {recipe.creatorName || "Unknown"}
-                  </div>
                 </div>
               ))}
             </div>

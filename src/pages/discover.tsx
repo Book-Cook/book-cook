@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   Title3, 
   Text, 
-  Input, 
   Button,
   Dropdown,
   Option,
@@ -66,11 +65,6 @@ const useDiscoverStyles = makeStyles({
     textAlign: "center",
     padding: tokens.spacingVerticalXXL,
     color: tokens.colorNeutralForeground2,
-  },
-  creatorInfo: {
-    color: tokens.colorNeutralForeground2,
-    fontSize: tokens.fontSizeBase200,
-    marginTop: tokens.spacingVerticalXS,
   },
 });
 
@@ -252,10 +246,10 @@ export default function DiscoverPage() {
                   tags={recipe.tags}
                   createdDate={recipe.createdAt}
                   isPublic={true}
+                  creatorName={recipe.creatorName}
+                  savedCount={recipe.savedCount}
+                  showActions={false}
                 />
-                <div className={discoverStyles.creatorInfo}>
-                  By {recipe.creatorName} • {recipe.savedCount || 0} saves
-                </div>
               </div>
             ))}
           </div>
