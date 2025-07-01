@@ -110,9 +110,11 @@ const nextConfig = {
     // Resolve extensions for better tree shaking
     config.resolve.alias = {
       ...config.resolve.alias,
-      // Prevent duplicate React
+      // Prevent duplicate React and ensure jsx-runtime is properly resolved
       'react': require.resolve('react'),
       'react-dom': require.resolve('react-dom'),
+      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
+      'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
     };
 
     // Exclude mocks from production bundle
