@@ -1,56 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { Meta, StoryObj } from "@storybook/nextjs";
 
 import DiscoverPage from "../../pages/discover";
 
 const meta: Meta<typeof DiscoverPage> = {
   title: "Pages/Discover",
   component: DiscoverPage,
-  decorators: [
-    (Story) => {
-      const queryClient = new QueryClient({
-        defaultOptions: {
-          queries: { retry: false },
-          mutations: { retry: false },
-        },
-      });
-      return (
-        <QueryClientProvider client={queryClient}>
-          <div style={{ minHeight: "100vh" }}>
-            <Story />
-          </div>
-        </QueryClientProvider>
-      );
-    },
-  ],
   parameters: {
     layout: "fullscreen",
     nextjs: {
       appDirectory: true,
-      router: {
-        pathname: "/discover",
-        query: {},
-        push: () => Promise.resolve(true),
-        replace: () => Promise.resolve(true),
-        reload: () => {},
-        back: () => {},
-        prefetch: () => Promise.resolve(),
-        beforePopState: () => {},
-        events: {
-          on: () => {},
-          off: () => {},
-          emit: () => {},
-        },
-        isFallback: false,
-        isLocaleDomain: false,
-        isReady: true,
-        defaultLocale: "en",
-        domainLocales: [],
-        isPreview: false,
-        route: "/discover",
-        basePath: "",
-        asPath: "/discover",
-      },
     },
   },
 };
@@ -138,8 +96,5 @@ const mockPublicRecipes = {
 };
 
 export const Default: Story = {
-  parameters: {
-    // Note: This story shows the loading state since we don't have MSW configured
-    // In a real environment, this would load data from the API
-  },
+  name: "Default",
 };
