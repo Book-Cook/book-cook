@@ -14,7 +14,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
-import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
 
 interface PublicRecipe {
   _id: string;
@@ -136,8 +135,7 @@ export default function DiscoverPage() {
   };
 
   return (
-    <RecipeProvider>
-      <div className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
         <div className={styles.header}>
           <div className={styles.titleSection}>
             <Title3 as="h1">Discover Recipes</Title3>
@@ -254,7 +252,6 @@ export default function DiscoverPage() {
             ))}
           </div>
         )}
-      </div>
-    </RecipeProvider>
+    </div>
   );
 }
