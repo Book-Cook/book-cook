@@ -8,9 +8,17 @@
 
 ## Development Workflow
 
+- **CRITICAL**: Always pull from main IMMEDIATELY after creating a branch and before making any changes
 - Always pull from main before committing changes
 - Run tests before committing changes
 - Check for lint/typecheck commands and run them before completing tasks
+
+## Branch Workflow Steps
+1. Create branch from main: `git checkout main && git pull origin main && git checkout -b users/<username>/<feature>`
+2. **IMMEDIATELY** pull main again: `git pull origin main` (to avoid conflicts)
+3. Make your changes
+4. Pull main one more time before committing: `git pull origin main --rebase`
+5. Commit and push changes
 
 ## Code Organization
 
