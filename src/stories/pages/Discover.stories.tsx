@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { http, HttpResponse } from "msw";
 
 import DiscoverPage from "../../pages/discover";
 
@@ -116,103 +115,7 @@ const mockPublicRecipes = {
 
 export const Default: Story = {
   parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", () => {
-          return HttpResponse.json(mockPublicRecipes);
-        }),
-      ],
-    },
-  },
-};
-
-export const EmptyState: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", () => {
-          return HttpResponse.json({
-            recipes: [],
-            totalCount: 0,
-            hasMore: false,
-          });
-        }),
-      ],
-    },
-  },
-};
-
-export const LoadingState: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", async () => {
-          await new Promise(() => {}); // Infinite delay
-        }),
-      ],
-    },
-  },
-};
-
-export const ErrorState: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", () => {
-          return HttpResponse.json(
-            { message: "Server error" },
-            { status: 500 }
-          );
-        }),
-      ],
-    },
-  },
-};
-
-export const SearchResults: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", ({ request }) => {
-          const url = new URL(request.url);
-          const search = url.searchParams.get("search");
-          const filteredRecipes = mockPublicRecipes.recipes.filter((recipe) =>
-            recipe.title.toLowerCase().includes((search ?? "").toLowerCase())
-          );
-          
-          return HttpResponse.json({
-            recipes: filteredRecipes,
-            totalCount: filteredRecipes.length,
-            hasMore: false,
-          });
-        }),
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    // This would simulate a user searching
-    // We could add user interactions here using @storybook/addon-interactions
-  },
-};
-
-export const FilteredByTags: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get("/api/recipes/public", ({ request }) => {
-          const url = new URL(request.url);
-          const tags = url.searchParams.getAll("tags");
-          const filteredRecipes = mockPublicRecipes.recipes.filter((recipe) =>
-            tags.some((tag) => recipe.tags.includes(tag))
-          );
-          
-          return HttpResponse.json({
-            recipes: filteredRecipes,
-            totalCount: filteredRecipes.length,
-            hasMore: false,
-          });
-        }),
-      ],
-    },
+    // Note: This story shows the loading state since we don't have MSW configured
+    // In a real environment, this would load data from the API
   },
 };

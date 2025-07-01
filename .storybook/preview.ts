@@ -1,9 +1,5 @@
 import type { Preview } from "@storybook/nextjs";
-import { initialize, mswLoader } from 'msw-storybook-addon';
 import { withGlobalProviders } from "../src/stories/globalProviders";
-
-// Initialize MSW
-initialize();
 
 export const globalTypes = {
   themeMode: {
@@ -38,7 +34,6 @@ const preview: Preview = {
     },
   },
   decorators: [withGlobalProviders],
-  loaders: [mswLoader],
 };
 
 export default preview;
