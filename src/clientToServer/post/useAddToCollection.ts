@@ -4,8 +4,8 @@ import { fetchJson } from "src/utils";
 
 interface AddToCollectionResponse {
   success: boolean;
+  action: "added" | "removed";
   message?: string;
-  updatedCollection?: { id: string; name: string };
 }
 
 /**

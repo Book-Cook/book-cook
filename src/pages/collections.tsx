@@ -18,37 +18,44 @@ export default function CollectionsPage() {
     <RecipeProvider>
       <h1>Collections</h1>
 
-      <div className={styles.grid}>
-        {recipes?.map((recipe, index) => {
-          return (
-            <div
-              key={recipe._id}
-              className={`${styles.fadeIn} ${styles.cardWrapper}`}
-              style={
-                {
-                  "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
-                } as React.CSSProperties
-              }
-            >
-              <RecipeCard
-                title={recipe?.title}
-                id={recipe?._id}
-                emoji={recipe?.emoji || ""}
-                createdDate={
-                  recipe?.createdAt &&
-                  new Date(recipe?.createdAt).toLocaleDateString(undefined, {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+      {recipes && recipes.length > 0 ? (
+        <div className={styles.grid}>
+          {recipes.map((recipe, index) => {
+            return (
+              <div
+                key={recipe._id}
+                className={`${styles.fadeIn} ${styles.cardWrapper}`}
+                style={
+                  {
+                    "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
+                  } as React.CSSProperties
                 }
-                imageSrc={recipe?.imageURL}
-                tags={recipe?.tags}
-              />
-            </div>
-          );
-        })}
-      </div>
+              >
+                <RecipeCard
+                  title={recipe?.title}
+                  id={recipe?._id}
+                  emoji={recipe?.emoji || ""}
+                  createdDate={
+                    recipe?.createdAt &&
+                    new Date(recipe?.createdAt).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }
+                  imageSrc={recipe?.imageURL}
+                  tags={recipe?.tags}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div style={{ textAlign: "center", padding: "2rem", color: "#666" }}>
+          <p>No recipes in your collection yet.</p>
+          <p>Heart a recipe to add it to your collection!</p>
+        </div>
+      )}
     </RecipeProvider>
   );
 }

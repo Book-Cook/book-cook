@@ -82,8 +82,11 @@ export const RecipeHeader = () => {
     }
   }, [recipe?.createdAt]);
 
-  const handleAddToCollection = () =>
-    recipe?._id && onAddToCollection(recipe._id);
+  const handleAddToCollection = () => {
+    if (recipe?._id) {
+      onAddToCollection(recipe._id);
+    }
+  };
 
   const handleAiConvert = () => {
     if (isConverting || !editableData?.content) {
