@@ -30,17 +30,17 @@ const globalQueryClient = new QueryClient({
 
 export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { theme, setTheme } = useTheme();
+    const { theme, setThemePreference } = useTheme();
     
     // Sync with Storybook theme toggle
     React.useEffect(() => {
       const storybookTheme = context.globals.themeMode;
       if (storybookTheme === 'dark') {
-        setTheme('dark');
+        setThemePreference('dark');
       } else {
-        setTheme('light');
+        setThemePreference('light');
       }
-    }, [context.globals.themeMode, setTheme]);
+    }, [context.globals.themeMode, setThemePreference]);
     
     const fluentProviderStyles = {
       height: "100%",
