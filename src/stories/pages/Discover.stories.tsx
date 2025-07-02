@@ -1,15 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { 
-  withHomepageMocks, 
-  withEmptyMocks, 
-  withErrorMocks, 
-  withLoadingMocks,
-  withApiMocks 
-} from "../mockApi";
-import DiscoverPage from "../../pages/discover";
+import { withApiMocks } from "../mockApi";
+
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
+import DiscoverPage from "../../pages/discover";
 
 const meta: Meta<typeof DiscoverPage> = {
   title: "Pages/Discover",
@@ -28,7 +23,11 @@ export const Default: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -72,7 +71,11 @@ export const EmptyState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -97,7 +100,11 @@ export const LoadingState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -123,7 +130,11 @@ export const ErrorState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (

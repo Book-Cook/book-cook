@@ -8,6 +8,7 @@ import {
   withLoadingMocks,
   withApiMocks 
 } from "../mockApi";
+
 import HomePage from "../../components/HomePage/HomePage";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
@@ -28,7 +29,11 @@ export const Default: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -45,7 +50,11 @@ export const EmptyState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -62,7 +71,11 @@ export const LoadingState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -79,7 +92,11 @@ export const ErrorState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -96,7 +113,11 @@ export const OnlyRecentlyViewed: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -120,7 +141,11 @@ export const OnlyCollections: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (

@@ -3,7 +3,6 @@ import { FluentProvider } from "@fluentui/react-components";
 import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
 import type { StoryFn, StoryContext } from '@storybook/react';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -18,16 +17,6 @@ const mockSession: Session = {
   expires: "2024-12-31",
 };
 
-const globalQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-      staleTime: 0,
-    },
-  },
-});
-
 export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { theme, setThemePreference } = useTheme();
@@ -40,7 +29,7 @@ export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
       } else {
         setThemePreference('light');
       }
-    }, [context.globals.themeMode, setThemePreference]);
+    }, [setThemePreference]);
     
     const fluentProviderStyles = {
       height: "100%",
@@ -69,15 +58,13 @@ export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   return (
     <RendererProvider renderer={createDOMRenderer()}>
       <SSRProvider>
-        <QueryClientProvider client={globalQueryClient}>
-          <SessionProvider session={mockSession}>
-            <ThemeProvider>
-              <ThemeSync>
-                <Story />
-              </ThemeSync>
-            </ThemeProvider>
-          </SessionProvider>
-        </QueryClientProvider>
+        <SessionProvider session={mockSession}>
+          <ThemeProvider>
+            <ThemeSync>
+              <Story />
+            </ThemeSync>
+          </ThemeProvider>
+        </SessionProvider>
       </SSRProvider>
     </RendererProvider>
   );

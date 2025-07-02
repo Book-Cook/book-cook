@@ -8,6 +8,7 @@ import {
   withLoadingMocks,
   withApiMocks 
 } from "../mockApi";
+
 import { RecipeGallery } from "../../components/RecipeGallery/RecipeGallery";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../../mocks/data/recipes";
 
@@ -28,7 +29,11 @@ export const Default: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -45,7 +50,11 @@ export const ManyRecipes: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -76,7 +85,11 @@ export const EmptyState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -93,7 +106,11 @@ export const ErrorState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
@@ -110,7 +127,11 @@ export const LoadingState: Story = {
   render: () => {
     const queryClient = new QueryClient({
       defaultOptions: {
-        queries: { retry: false, staleTime: 0 },
+        queries: { 
+          retry: false, 
+          staleTime: 0,
+          refetchOnWindowFocus: false,
+        },
       },
     });
     return (
