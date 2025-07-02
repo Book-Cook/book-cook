@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { withStoryProviders } from "../decorators/withStoryProviders";
-import { withApiMocks } from "../mockApi";
+import { publicRecipeVariants } from "../decorators/withPublicRecipesMocks";
+import { createStorySet } from "../utils/storyHelpers";
 
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 import DiscoverPage from "../../pages/discover";
 
 const meta: Meta<typeof DiscoverPage> = {
@@ -18,79 +17,28 @@ export default meta;
 
 type Story = StoryObj<typeof DiscoverPage>;
 
-export const Default: Story = {
-  name: "Default",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: [
-          {
-            ...chocolateChipCookies,
-            savedCount: 42,
-            viewCount: 203,
-            creatorName: "Baker Beth",
-          },
-          {
-            ...thaiGreenCurry,
-            savedCount: 31,
-            viewCount: 124,
-            creatorName: "Thai Kitchen",
-          },
-          {
-            ...caesarSalad,
-            savedCount: 18,
-            viewCount: 89,
-            creatorName: "Chef Caesar",
-          },
-        ],
-        totalCount: 3,
-        hasMore: false,
-      },
-    },
-  })],
-};
+// Create story set for Discover page
+const { create } = createStorySet<typeof DiscoverPage>();
 
-export const EmptyState: Story = {
-  name: "Empty State",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: [],
-        totalCount: 0,
-        hasMore: false,
-      },
-    },
-  })],
-};
+// Story definitions - super clean!
+export const Default: Story = create("Default", [publicRecipeVariants.default()]);
 
-export const LoadingState: Story = {
-  name: "Loading State",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
-        totalCount: 3,
-        hasMore: false,
-      },
-      delay: 999999, // Never resolve to show loading state
-    },
-  })],
-};
+export const EmptyState: Story = create("Empty State", [publicRecipeVariants.empty()]);
 
-export const ErrorState: Story = {
-  name: "Error State",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-    '/api/recipes/public': {
-      response: { error: 'Failed to fetch public recipes' },
-      status: 500,
-    },
-  })],
-};
+export const LoadingState: Story = create("Loading State", [publicRecipeVariants.loading()]);
+
+export const ErrorState: Story = create("Error State", [publicRecipeVariants.error()]);
+
+// Advanced examples showing the power of abstraction
+export const ManyRecipes: Story = create("Many Recipes", [
+  publicRecipeVariants.custom(
+    [
+      { title: "Chocolate Chip Cookies", savedCount: 50, viewCount: 200, creatorName: "Baker Beth" },
+      { title: "Thai Green Curry", savedCount: 35, viewCount: 150, creatorName: "Thai Kitchen" },
+      { title: "Caesar Salad", savedCount: 20, viewCount: 100, creatorName: "Chef Caesar" },
+      { title: "Beef Bolognese", savedCount: 45, viewCount: 180, creatorName: "Italian Chef" },
+      { title: "Avocado Toast", savedCount: 30, viewCount: 120, creatorName: "Health Guru" },
+    ],
+    { totalCount: 50, hasMore: true }
+  )
+]);
