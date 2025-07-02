@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { withStoryProviders } from "../decorators/withStoryProviders";
 import { withApiMocks } from "../mockApi";
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
@@ -20,23 +20,9 @@ type Story = StoryObj<typeof DiscoverPage>;
 
 export const Default: Story = {
   name: "Default",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <DiscoverPage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
     '/api/recipes/public': {
       response: {
         recipes: [
@@ -68,23 +54,9 @@ export const Default: Story = {
 
 export const EmptyState: Story = {
   name: "Empty State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <DiscoverPage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
     '/api/recipes/public': {
       response: {
         recipes: [],
@@ -97,23 +69,9 @@ export const EmptyState: Story = {
 
 export const LoadingState: Story = {
   name: "Loading State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <DiscoverPage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
     '/api/recipes/public': {
       response: {
         recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
@@ -127,23 +85,9 @@ export const LoadingState: Story = {
 
 export const ErrorState: Story = {
   name: "Error State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <DiscoverPage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
     '/api/recipes/public': {
       response: { error: 'Failed to fetch public recipes' },
       status: 500,

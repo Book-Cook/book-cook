@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { withStoryProviders } from "../decorators/withStoryProviders";
 import { 
   withHomepageMocks, 
   withEmptyMocks, 
@@ -26,140 +26,50 @@ type Story = StoryObj<typeof HomePage>;
 
 export const Default: Story = {
   name: "Default",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withHomepageMocks],
+  decorators: [withStoryProviders(), withHomepageMocks],
 };
 
 export const EmptyState: Story = {
   name: "Empty State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withEmptyMocks],
+  decorators: [withStoryProviders(), withEmptyMocks],
 };
 
 export const LoadingState: Story = {
   name: "Loading State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withLoadingMocks],
+  decorators: [withStoryProviders(), withLoadingMocks],
 };
 
 export const ErrorState: Story = {
   name: "Error State",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
-      },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withErrorMocks],
+  decorators: [withStoryProviders(), withErrorMocks],
 };
 
 export const OnlyRecentlyViewed: Story = {
   name: "Only Recently Viewed",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
+      '/api/user/collections': {
+        response: [],
       },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
-    '/api/user/collections': {
-      response: [],
-    },
-    '/api/user/recentlyViewed': {
-      response: [thaiGreenCurry, caesarSalad],
-    },
-  })],
+      '/api/user/recentlyViewed': {
+        response: [thaiGreenCurry, caesarSalad],
+      },
+    })
+  ],
 };
 
 export const OnlyCollections: Story = {
   name: "Only Collections",
-  render: () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
-        },
+  decorators: [
+    withStoryProviders(),
+    withApiMocks({
+      '/api/user/collections': {
+        response: [chocolateChipCookies, caesarSalad],
       },
-    });
-    return (
-      <QueryClientProvider client={queryClient}>
-        <HomePage />
-      </QueryClientProvider>
-    );
-  },
-  decorators: [withApiMocks({
-    '/api/user/collections': {
-      response: [chocolateChipCookies, caesarSalad],
-    },
-    '/api/user/recentlyViewed': {
-      response: [],
-    },
-  })],
+      '/api/user/recentlyViewed': {
+        response: [],
+      },
+    })
+  ],
 };
