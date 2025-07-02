@@ -1,16 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { withStoryProviders } from "../decorators/withStoryProviders";
-import { 
-  withHomepageMocks, 
-  withEmptyMocks, 
-  withErrorMocks, 
-  withLoadingMocks,
-  withApiMocks 
-} from "../mockApi";
+import { homepageVariants } from "../decorators/withHomepageMocks";
+import { createStorySet } from "../utils/storyHelpers";
 
 import HomePage from "../../components/HomePage/HomePage";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
 const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
@@ -24,52 +17,18 @@ export default meta;
 
 type Story = StoryObj<typeof HomePage>;
 
-export const Default: Story = {
-  name: "Default",
-  decorators: [withStoryProviders(), withHomepageMocks],
-};
+// Create story set for HomePage
+const { create } = createStorySet<typeof HomePage>();
 
-export const EmptyState: Story = {
-  name: "Empty State",
-  decorators: [withStoryProviders(), withEmptyMocks],
-};
+// Clean story definitions
+export const Default: Story = create("Default", [homepageVariants.default()]);
 
-export const LoadingState: Story = {
-  name: "Loading State",
-  decorators: [withStoryProviders(), withLoadingMocks],
-};
+export const EmptyState: Story = create("Empty State", [homepageVariants.empty()]);
 
-export const ErrorState: Story = {
-  name: "Error State",
-  decorators: [withStoryProviders(), withErrorMocks],
-};
+export const LoadingState: Story = create("Loading State", [homepageVariants.loading()]);
 
-export const OnlyRecentlyViewed: Story = {
-  name: "Only Recently Viewed",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-      '/api/user/collections': {
-        response: [],
-      },
-      '/api/user/recentlyViewed': {
-        response: [thaiGreenCurry, caesarSalad],
-      },
-    })
-  ],
-};
+export const ErrorState: Story = create("Error State", [homepageVariants.error()]);
 
-export const OnlyCollections: Story = {
-  name: "Only Collections",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-      '/api/user/collections': {
-        response: [chocolateChipCookies, caesarSalad],
-      },
-      '/api/user/recentlyViewed': {
-        response: [],
-      },
-    })
-  ],
-};
+export const OnlyRecentlyViewed: Story = create("Only Recently Viewed", [homepageVariants.onlyRecentlyViewed()]);
+
+export const OnlyCollections: Story = create("Only Collections", [homepageVariants.onlyCollections()]);

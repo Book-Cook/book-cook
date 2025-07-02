@@ -1,4 +1,5 @@
 import { withApiMocks } from "../mockApi";
+import { generateManyPublicRecipes } from "./withRecipeMocks";
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
@@ -61,6 +62,16 @@ export const publicRecipeVariants = {
     '/api/recipes/public': {
       response: { error: 'Failed to fetch public recipes' },
       status: 500,
+    },
+  }),
+
+  many: () => withApiMocks({
+    '/api/recipes/public': {
+      response: {
+        recipes: generateManyPublicRecipes(),
+        totalCount: 50,
+        hasMore: true,
+      },
     },
   }),
 

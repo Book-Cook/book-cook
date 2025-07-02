@@ -1,16 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { withStoryProviders } from "../decorators/withStoryProviders";
-import { 
-  withRecipeMocks, 
-  withEmptyMocks, 
-  withErrorMocks, 
-  withLoadingMocks,
-  withApiMocks 
-} from "../mockApi";
+import { recipeVariants } from "../decorators/withRecipeMocks";
+import { createStorySet } from "../utils/storyHelpers";
 
 import { RecipeGallery } from "../../components/RecipeGallery/RecipeGallery";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../../mocks/data/recipes";
 
 const meta: Meta<typeof RecipeGallery> = {
   title: "Pages/RecipeGallery",
@@ -24,44 +17,16 @@ export default meta;
 
 type Story = StoryObj<typeof RecipeGallery>;
 
-export const Default: Story = {
-  name: "Default (All Recipes)",
-  decorators: [withStoryProviders(), withRecipeMocks],
-};
+// Create story set for RecipeGallery
+const { create } = createStorySet<typeof RecipeGallery>();
 
-export const ManyRecipes: Story = {
-  name: "Many Recipes",
-  decorators: [
-    withStoryProviders(),
-    withApiMocks({
-      '/api/recipes': {
-        response: [
-          chocolateChipCookies,
-          thaiGreenCurry,
-          caesarSalad,
-          beefBolognese,
-          avocadoToast,
-          lemonGarlicSalmon,
-          { ...chocolateChipCookies, _id: "recipe_007", title: "Double Chocolate Cookies" },
-          { ...thaiGreenCurry, _id: "recipe_008", title: "Red Thai Curry" },
-          { ...caesarSalad, _id: "recipe_009", title: "Greek Salad" },
-        ],
-      },
-    })
-  ],
-};
+// Clean story definitions
+export const Default: Story = create("Default (All Recipes)", [recipeVariants.default()]);
 
-export const EmptyState: Story = {
-  name: "Empty State",
-  decorators: [withStoryProviders(), withEmptyMocks],
-};
+export const ManyRecipes: Story = create("Many Recipes", [recipeVariants.many()]);
 
-export const ErrorState: Story = {
-  name: "Error State",
-  decorators: [withStoryProviders(), withErrorMocks],
-};
+export const EmptyState: Story = create("Empty State", [recipeVariants.empty()]);
 
-export const LoadingState: Story = {
-  name: "Loading State",
-  decorators: [withStoryProviders(), withLoadingMocks],
-};
+export const ErrorState: Story = create("Error State", [recipeVariants.error()]);
+
+export const LoadingState: Story = create("Loading State", [recipeVariants.loading()]);
