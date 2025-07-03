@@ -88,6 +88,7 @@ export default function CollectionsPage() {
                     }
                     imageSrc={recipe?.imageURL}
                     tags={recipe?.tags}
+                    isPublic={recipe?.isPublic}
                   />
                 </div>
               ))}
