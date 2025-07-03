@@ -165,7 +165,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           Change Emoji
         </MenuItem>
         <MenuItem icon={<PeopleTeamRegular />} onClick={openDialog("isPublic")}>
-          Share
+          Visibility
         </MenuItem>
         <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
