@@ -1,4 +1,4 @@
-import type { Db } from "mongodb";
+import type { Db, Document } from "mongodb";
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
@@ -134,7 +134,7 @@ const handlePostRequest = async (
       // Remove from saved recipes
       await db.collection("savedRecipes").updateOne(
         { userId: session.user.id },
-        { $pull: { savedRecipes: recipeId } } as any
+        { $pull: { savedRecipes: recipeId } } as Document
       );
 
       // Decrement saved count on recipe
