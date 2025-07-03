@@ -143,8 +143,8 @@ export const RecipeProvider: React.FC<{
 
   const onAddToCollection = (recipeId: string) => {
     addToCollection(recipeId, {
-      onSuccess: (data) => {
-        console.log(`Recipe ${data.action} collection successfully`);
+      onSuccess: (_data) => {
+        // Recipe successfully added/removed from collection
       },
       onError: (error) => {
         console.error("Failed to update collection:", error);
@@ -154,8 +154,8 @@ export const RecipeProvider: React.FC<{
 
   const onSaveRecipe = (recipeId: string) => {
     saveRecipe(recipeId, {
-      onSuccess: (data) => {
-        console.log(`Recipe ${data.action} successfully`);
+      onSuccess: (_data) => {
+        // Recipe saved/unsaved successfully
       },
       onError: (error) => {
         console.error("Failed to save recipe:", error);

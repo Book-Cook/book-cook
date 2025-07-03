@@ -16,7 +16,6 @@ import { ChangeDialog } from "./ChangeDialog";
 
 import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
 
-
 // Default emojis for food categories
 const defaultSuggestedEmojis = getDefaultFoodEmojis();
 const DEFAULT_EMOJI = "🍽️";

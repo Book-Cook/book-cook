@@ -1,4 +1,3 @@
-import { baseRecipes } from "./withRecipeMocks";
 import { withApiMocks } from "../mockApi";
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";

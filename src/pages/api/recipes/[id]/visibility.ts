@@ -41,7 +41,7 @@ const handlePatchRequest = async (
     }
 
     // Prepare update data
-    const updateData: any = { isPublic };
+    const updateData: { isPublic: boolean; publishedAt?: Date; $unset?: { publishedAt: string } } = { isPublic };
     
     // Set publishedAt when making public for the first time
     if (isPublic && !recipe.publishedAt) {
