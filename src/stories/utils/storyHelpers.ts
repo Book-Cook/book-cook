@@ -12,7 +12,7 @@ interface CreateStoryOptions {
 export const createStory = <T extends React.ComponentType>({ 
   name, 
   decorators 
-}: CreateStoryOptions): StoryObj<T> => ({
+}: CreateStoryOptions): Pick<StoryObj<T>, 'name' | 'decorators'> => ({
   name,
   decorators: [withStoryProviders(), ...decorators] as StoryObj<T>['decorators'],
 });
