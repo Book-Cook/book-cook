@@ -117,7 +117,7 @@ export default function DiscoverPage() {
   const styles = useStyles();
   const discoverStyles = useDiscoverStyles();
 
-  const recipes = recipesData?.recipes || [];
+  const recipes = recipesData?.recipes ?? [];
 
   // Common tags for filtering (could be fetched from API in the future)
   const availableTags = [

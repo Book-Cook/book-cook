@@ -3,6 +3,7 @@ import { Title3, Text, makeStyles, tokens } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchRecipeCollections } from "src/clientToServer";
+import type { Recipe } from "src/clientToServer";
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
 import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
@@ -24,7 +25,7 @@ export default function CollectionsPage() {
     queryFn: () => fetchRecipeCollections(),
   });
 
-  const { data: savedRecipes } = useQuery<any[]>({
+  const { data: savedRecipes } = useQuery<Recipe[]>({
     queryKey: ["savedRecipes"],
     queryFn: async () => {
       const response = await fetch("/api/user/saved-recipes");
