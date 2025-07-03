@@ -196,7 +196,7 @@ describe("RecipeCard", () => {
     expect(screen.queryByRole("button", { name: /more options/i })).not.toBeInTheDocument();
   });
 
-  it("navigates to recipe page when clicked", async () => {
+  it("navigates to recipe page when clicked", () => {
     render(
       <RecipeWrapper>
         <RecipeCard {...defaultProps} />

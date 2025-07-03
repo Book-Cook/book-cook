@@ -52,7 +52,7 @@ describe("ChangeSharedWithDialog", () => {
     expect(switchElement).not.toBeChecked();
   });
 
-  it("calls onSave with correct value when save is clicked", async () => {
+  it("calls onSave with correct value when save is clicked", () => {
     const onSave = jest.fn();
     render(<ChangeSharedWithDialog {...defaultProps} onSave={onSave} isPublic={false} />);
     
@@ -67,7 +67,7 @@ describe("ChangeSharedWithDialog", () => {
     expect(onSave).toHaveBeenCalledWith("true");
   });
 
-  it("calls onSave with false when switch is toggled off", async () => {
+  it("calls onSave with false when switch is toggled off", () => {
     const onSave = jest.fn();
     render(<ChangeSharedWithDialog {...defaultProps} onSave={onSave} isPublic={true} />);
     
