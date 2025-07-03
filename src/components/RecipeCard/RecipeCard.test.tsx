@@ -19,9 +19,16 @@ const mockPush = jest.fn();
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => (
-    <img alt={alt} {...props} />
-  ),
+  default: ({ alt, src, width, height, fill, ...props }: { alt: string; src?: string; width?: number; height?: number; fill?: boolean; [key: string]: unknown }) => {
+    const filteredProps = { ...props };
+    delete filteredProps.blurDataURL;
+    delete filteredProps.placeholder;
+    delete filteredProps.quality;
+    delete filteredProps.loading;
+    delete filteredProps.sizes;
+    delete filteredProps.draggable;
+    return <img alt={alt} src={src} width={width} height={height} {...(fill ? {} : filteredProps)} />;
+  },
 }));
 
 // Mock RecipeProvider context
