@@ -17,8 +17,8 @@ describe("ChangeSharedWithDialog", () => {
   it("renders with correct initial state", () => {
     render(<ChangeSharedWithDialog {...defaultProps} />);
     
-    expect(screen.getByText("Toggle Recipe Visibility")).toBeInTheDocument();
-    expect(screen.getByLabelText("Set is public")).toBeInTheDocument();
+    expect(screen.getByText("Make Recipe Public")).toBeInTheDocument();
+    expect(screen.getByLabelText("Private - Only you can view this recipe")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
@@ -33,6 +33,8 @@ describe("ChangeSharedWithDialog", () => {
   it("shows switch as checked when isPublic is true", () => {
     render(<ChangeSharedWithDialog {...defaultProps} isPublic={true} />);
     
+    expect(screen.getByText("Make Recipe Private")).toBeInTheDocument();
+    expect(screen.getByLabelText("Public - Anyone can view this recipe")).toBeInTheDocument();
     const switchElement = screen.getByRole("switch");
     expect(switchElement).toBeChecked();
   });

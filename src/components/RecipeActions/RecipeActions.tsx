@@ -52,9 +52,16 @@ const ChangeSharedWithDialog = dynamic(
 );
 
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
-  const { _id, title, tags, emoji, imageURL, isPublic } = props;
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
+  
+  // Use props if provided, otherwise fall back to editableData from context
+  const _id = props._id ?? editableData?._id;
+  const title = props.title ?? editableData?.title;
+  const tags = props.tags ?? editableData?.tags;
+  const emoji = props.emoji ?? editableData?.emoji;
+  const imageURL = props.imageURL ?? editableData?.imageURL;
+  const isPublic = props.isPublic ?? editableData?.isPublic;
   const { availableTags } = useFetchAllTags();
   const { mutate: toggleVisibility } = useToggleRecipeVisibility();
 
@@ -158,7 +165,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           Change Emoji
         </MenuItem>
         <MenuItem icon={<PeopleTeamRegular />} onClick={openDialog("isPublic")}>
-          Share
+          {isPublic ? "Make Private" : "Make Public"}
         </MenuItem>
         <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
           Add Tags
@@ -169,7 +176,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuItem>
       </MenuList>
     ),
-    [openDialog, handleDeleteClick]
+    [openDialog, handleDeleteClick, isPublic]
   );
 
   return (
@@ -216,7 +223,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       {activeDialog === "isPublic" && (
         <ChangeSharedWithDialog
           isOpen={activeDialog === "isPublic"}
-          isPublic={editableData.isPublic ?? false}
+          isPublic={isPublic ?? false}
           onSave={handleVisibilitySave}
           onClose={closeDialog}
         />

@@ -76,7 +76,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
     <ChangeDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Toggle Recipe Visibility"
+      title={isPublic ? "Make Recipe Private" : "Make Recipe Public"}
       actions={
         <>
           <Button
@@ -101,7 +101,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
         onChange={() => {
           setNewIsPublic(!newIsPublic);
         }}
-        label={"Set is public"}
+        label={newIsPublic ? "Public - Anyone can view this recipe" : "Private - Only you can view this recipe"}
       />
     </ChangeDialog>
   );
