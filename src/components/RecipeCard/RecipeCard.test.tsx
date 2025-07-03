@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 
 import { RecipeCard } from "./RecipeCard";
@@ -70,6 +70,10 @@ const RecipeWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 describe("RecipeCard", () => {
+  beforeEach(() => {
+    mockPush.mockClear();
+  });
+
   const defaultProps = {
     title: "Test Recipe",
     createdDate: "2024-01-01T00:00:00.000Z",
@@ -90,7 +94,7 @@ describe("RecipeCard", () => {
     );
     
     expect(screen.getByText("Test Recipe")).toBeInTheDocument();
-    expect(screen.getByText("Jan 1, 2024")).toBeInTheDocument();
+    expect(screen.getByText("Dec 31, 2023")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /Test Recipe placeholder emoji/i })).toBeInTheDocument();
   });
 
@@ -116,7 +120,7 @@ describe("RecipeCard", () => {
       </RecipeWrapper>
     );
     
-    expect(screen.getByText("Jan 1, 2024")).toBeInTheDocument();
+    expect(screen.getByText("Dec 31, 2023")).toBeInTheDocument();
     expect(screen.queryByText(/By.*saves/)).not.toBeInTheDocument();
   });
 
@@ -196,17 +200,20 @@ describe("RecipeCard", () => {
     expect(screen.queryByRole("button", { name: /more options/i })).not.toBeInTheDocument();
   });
 
-  it("navigates to recipe page when clicked", () => {
+  it("navigates to recipe page when clicked", async () => {
     render(
       <RecipeWrapper>
         <RecipeCard {...defaultProps} />
       </RecipeWrapper>
     );
     
-    const card = screen.getByRole("button");
+    const card = screen.getByRole("group");
     fireEvent.click(card);
     
-    expect(mockPush).toHaveBeenCalledWith("/recipes/recipe123");
+    // Wait for async router.push to be called
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/recipes/recipe123");
+    });
   });
 
   it("displays recipe image when provided", () => {

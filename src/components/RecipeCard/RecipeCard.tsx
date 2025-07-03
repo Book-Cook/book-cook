@@ -146,10 +146,10 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
                   content={
                     <div>
                       {tags.slice(3).map((tag, i, arr) => (
-                        <>
+                        <span key={tag}>
                           {tag}
                           {i < arr.length - 1 ? "," : ""}
-                        </>
+                        </span>
                       ))}
                     </div>
                   }

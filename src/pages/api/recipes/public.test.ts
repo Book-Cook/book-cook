@@ -1,10 +1,22 @@
 import { createMocks } from "node-mocks-http";
 
-import { getDb } from "src/utils/db";
 import handler from "./public";
 
-// Mock the database
-jest.mock("src/utils/db");
+// Mock the database module completely
+jest.mock("src/utils/db", () => ({
+  getDb: jest.fn(),
+}));
+
+// Mock MongoDB ObjectId
+jest.mock("mongodb", () => ({
+  ObjectId: jest.fn().mockImplementation((id) => ({
+    toString: () => id || "507f1f77bcf86cd799439011",
+    toHexString: () => id || "507f1f77bcf86cd799439011",
+    equals: jest.fn((other) => id === other.toString()),
+  })),
+}));
+
+import { getDb } from "src/utils/db";
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
 
 describe("/api/recipes/public", () => {
@@ -22,7 +34,7 @@ describe("/api/recipes/public", () => {
               title: "Test Recipe",
               owner: "user1",
               tags: ["test"],
-              createdAt: new Date("2024-01-01"),
+              createdAt: "2024-01-01T00:00:00.000Z",
               emoji: "🍕",
               imageURL: "",
               savedCount: 5,
@@ -52,7 +64,7 @@ describe("/api/recipes/public", () => {
           title: "Test Recipe",
           owner: "user1",
           tags: ["test"],
-          createdAt: new Date("2024-01-01"),
+          createdAt: "2024-01-01T00:00:00.000Z",
           emoji: "🍕",
           imageURL: "",
           savedCount: 5,

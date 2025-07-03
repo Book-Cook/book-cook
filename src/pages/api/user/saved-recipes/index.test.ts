@@ -1,12 +1,33 @@
-import { getServerSession } from "next-auth";
 import { createMocks } from "node-mocks-http";
 
-import { getDb } from "src/utils/db";
 import handler from "./index";
 
-// Mock dependencies
-jest.mock("next-auth");
-jest.mock("src/utils/db");
+// Mock the database module completely
+jest.mock("src/utils/db", () => ({
+  getDb: jest.fn(),
+}));
+
+// Mock MongoDB ObjectId
+jest.mock("mongodb", () => ({
+  ObjectId: jest.fn().mockImplementation((id) => ({
+    toString: () => id || "507f1f77bcf86cd799439011",
+    toHexString: () => id || "507f1f77bcf86cd799439011",
+    equals: jest.fn((other) => id === other.toString()),
+  })),
+}));
+
+// Mock next-auth completely
+jest.mock("next-auth", () => ({
+  getServerSession: jest.fn(),
+}));
+
+// Mock the auth options
+jest.mock("../../auth/[...nextauth]", () => ({
+  authOptions: {},
+}));
+
+import { getServerSession } from "next-auth";
+import { getDb } from "src/utils/db";
 
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
