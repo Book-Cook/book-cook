@@ -1,5 +1,7 @@
+import { getServerSession } from "next-auth";
 import { createMocks } from "node-mocks-http";
 
+import { getDb } from "src/utils/db";
 import handler from "./index";
 
 // Mock the database module completely
@@ -10,8 +12,8 @@ jest.mock("src/utils/db", () => ({
 // Mock MongoDB ObjectId
 jest.mock("mongodb", () => ({
   ObjectId: jest.fn().mockImplementation((id) => ({
-    toString: () => id || "507f1f77bcf86cd799439011",
-    toHexString: () => id || "507f1f77bcf86cd799439011",
+    toString: () => id ?? "507f1f77bcf86cd799439011",
+    toHexString: () => id ?? "507f1f77bcf86cd799439011",
     equals: jest.fn((other) => id === other.toString()),
   })),
 }));
@@ -25,9 +27,6 @@ jest.mock("next-auth", () => ({
 jest.mock("../../auth/[...nextauth]", () => ({
   authOptions: {},
 }));
-
-import { getServerSession } from "next-auth";
-import { getDb } from "src/utils/db";
 
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
@@ -43,7 +42,7 @@ describe("/api/user/saved-recipes", () => {
 
   describe("GET", () => {
     it("should return saved recipes for authenticated user", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
       
       const mockDb = {
         collection: jest.fn().mockReturnValue({
@@ -63,7 +62,7 @@ describe("/api/user/saved-recipes", () => {
           }),
         }),
       };
-      mockGetDb.mockResolvedValue(mockDb as any);
+      mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
       const { req, res } = createMocks({ method: "GET" });
       await handler(req, res);
@@ -86,7 +85,7 @@ describe("/api/user/saved-recipes", () => {
 
   describe("POST", () => {
     it("should save a public recipe", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
       
       const mockRecipe = {
         _id: "recipe1",
@@ -103,7 +102,7 @@ describe("/api/user/saved-recipes", () => {
           updateOne: jest.fn().mockResolvedValue({ acknowledged: true }),
         }),
       };
-      mockGetDb.mockResolvedValue(mockDb as any);
+      mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
       const { req, res } = createMocks({
         method: "POST",
@@ -119,7 +118,7 @@ describe("/api/user/saved-recipes", () => {
     });
 
     it("should unsave an already saved recipe", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
       
       const mockRecipe = {
         _id: "recipe1",
@@ -141,7 +140,7 @@ describe("/api/user/saved-recipes", () => {
           updateOne: jest.fn().mockResolvedValue({ acknowledged: true }),
         }),
       };
-      mockGetDb.mockResolvedValue(mockDb as any);
+      mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
       const { req, res } = createMocks({
         method: "POST",
@@ -157,7 +156,7 @@ describe("/api/user/saved-recipes", () => {
     });
 
     it("should not allow saving your own recipe", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
       
       const mockRecipe = {
         _id: "recipe1",
@@ -171,7 +170,7 @@ describe("/api/user/saved-recipes", () => {
           findOne: jest.fn().mockResolvedValue(mockRecipe),
         }),
       };
-      mockGetDb.mockResolvedValue(mockDb as any);
+      mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
       const { req, res } = createMocks({
         method: "POST",
@@ -186,14 +185,14 @@ describe("/api/user/saved-recipes", () => {
     });
 
     it("should not allow saving private recipes", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
       
       const mockDb = {
         collection: jest.fn().mockReturnValue({
           findOne: jest.fn().mockResolvedValue(null), // Recipe not found (not public)
         }),
       };
-      mockGetDb.mockResolvedValue(mockDb as any);
+      mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
       const { req, res } = createMocks({
         method: "POST",
@@ -208,7 +207,7 @@ describe("/api/user/saved-recipes", () => {
     });
 
     it("should require recipeId", async () => {
-      mockGetServerSession.mockResolvedValue(mockSession as any);
+      mockGetServerSession.mockResolvedValue(mockSession);
 
       const { req, res } = createMocks({
         method: "POST",

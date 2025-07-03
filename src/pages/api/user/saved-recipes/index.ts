@@ -1,4 +1,5 @@
 import type { Db } from "mongodb";
+import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
@@ -105,7 +106,7 @@ const handlePostRequest = async (
 
     // Verify the recipe exists and is public
     const recipe = await db.collection("recipes").findOne({
-      _id: recipeId as any,
+      _id: new ObjectId(recipeId),
       isPublic: true,
     });
 
@@ -133,12 +134,12 @@ const handlePostRequest = async (
       // Remove from saved recipes
       await db.collection("savedRecipes").updateOne(
         { userId: session.user.id },
-        { $pull: { savedRecipes: recipeId as any } }
+        { $pull: { savedRecipes: new ObjectId(recipeId) } }
       );
 
       // Decrement saved count on recipe
       await db.collection("recipes").updateOne(
-        { _id: recipeId as any },
+        { _id: new ObjectId(recipeId) },
         { $inc: { savedCount: -1 } }
       );
 
@@ -159,7 +160,7 @@ const handlePostRequest = async (
 
       // Increment saved count on recipe
       await db.collection("recipes").updateOne(
-        { _id: recipeId as any },
+        { _id: new ObjectId(recipeId) },
         { $inc: { savedCount: 1 } }
       );
 

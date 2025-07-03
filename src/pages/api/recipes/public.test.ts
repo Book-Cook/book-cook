@@ -1,7 +1,5 @@
 import { createMocks } from "node-mocks-http";
 
-import handler from "./public";
-
 // Mock the database module completely
 jest.mock("src/utils/db", () => ({
   getDb: jest.fn(),
@@ -10,13 +8,15 @@ jest.mock("src/utils/db", () => ({
 // Mock MongoDB ObjectId
 jest.mock("mongodb", () => ({
   ObjectId: jest.fn().mockImplementation((id) => ({
-    toString: () => id || "507f1f77bcf86cd799439011",
-    toHexString: () => id || "507f1f77bcf86cd799439011",
+    toString: () => id ?? "507f1f77bcf86cd799439011",
+    toHexString: () => id ?? "507f1f77bcf86cd799439011",
     equals: jest.fn((other) => id === other.toString()),
   })),
 }));
 
 import { getDb } from "src/utils/db";
+import handler from "./public";
+
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
 
 describe("/api/recipes/public", () => {
@@ -46,7 +46,7 @@ describe("/api/recipes/public", () => {
         countDocuments: jest.fn().mockResolvedValue(1),
       }),
     };
-    mockGetDb.mockResolvedValue(mockDb as any);
+    mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
     const { req, res } = createMocks({
       method: "GET",
@@ -86,7 +86,7 @@ describe("/api/recipes/public", () => {
         countDocuments: jest.fn().mockResolvedValue(0),
       }),
     };
-    mockGetDb.mockResolvedValue(mockDb as any);
+    mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
     const { req, res } = createMocks({
       method: "GET",
@@ -108,7 +108,7 @@ describe("/api/recipes/public", () => {
     const mockDb = {
       collection: jest.fn(),
     };
-    mockGetDb.mockResolvedValue(mockDb as any);
+    mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
     const { req, res } = createMocks({
       method: "GET",
@@ -129,7 +129,7 @@ describe("/api/recipes/public", () => {
     const mockDb = {
       collection: jest.fn(),
     };
-    mockGetDb.mockResolvedValue(mockDb as any);
+    mockGetDb.mockResolvedValue(mockDb as Parameters<typeof mockGetDb>[0]);
 
     const { req, res } = createMocks({
       method: "GET",
