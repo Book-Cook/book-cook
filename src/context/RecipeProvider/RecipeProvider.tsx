@@ -188,7 +188,7 @@ export const RecipeProvider: React.FC<{
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
-      isPublic: recipe.isPublic || false,
+      isPublic: recipe.isPublic ?? false,
       _id: recipe._id,
     };
   }, [recipe]);
