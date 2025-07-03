@@ -1,5 +1,6 @@
-import { withApiMocks } from "../mockApi";
 import { baseRecipes } from "./withRecipeMocks";
+import { withApiMocks } from "../mockApi";
+
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
 // Homepage-specific mock variants

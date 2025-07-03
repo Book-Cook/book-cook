@@ -1,4 +1,5 @@
 import { withApiMocks } from "../mockApi";
+
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../../mocks/data/recipes";
 
 // Base recipe collection
