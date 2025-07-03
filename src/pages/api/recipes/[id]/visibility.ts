@@ -1,4 +1,5 @@
-import type { Db, ObjectId } from "mongodb";
+import type { Db } from "mongodb";
+import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
@@ -29,7 +30,7 @@ const handlePatchRequest = async (
 
     // Find the recipe and verify ownership
     const recipe = await db.collection("recipes").findOne({
-      _id: recipeId as any,
+      _id: new ObjectId(recipeId),
       owner: session.user.id,
     });
 
@@ -53,7 +54,7 @@ const handlePatchRequest = async (
     }
 
     const result = await db.collection("recipes").updateOne(
-      { _id: recipeId as any, owner: session.user.id },
+      { _id: new ObjectId(recipeId), owner: session.user.id },
       updateData.$unset ? updateData : { $set: updateData }
     );
 
@@ -101,6 +102,10 @@ export default async function handler(
     
     if (!id || typeof id !== "string") {
       return res.status(400).json({ message: "Recipe ID is required." });
+    }
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid recipe ID format." });
     }
 
     const db = await getDb();
