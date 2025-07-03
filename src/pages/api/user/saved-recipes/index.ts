@@ -134,7 +134,7 @@ const handlePostRequest = async (
       // Remove from saved recipes
       await db.collection("savedRecipes").updateOne(
         { userId: session.user.id },
-        { $pull: { savedRecipes: new ObjectId(recipeId) } }
+        { $pull: { savedRecipes: recipeId } } as any
       );
 
       // Decrement saved count on recipe

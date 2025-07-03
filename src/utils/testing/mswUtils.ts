@@ -42,7 +42,7 @@ export const getMockDataState = getMockState;
 export const mockApiResponse = (
   method: "get" | "post" | "put" | "delete",
   path: string,
-  response: any,
+  response: Record<string, unknown>,
   status: number = 200
 ) => {
   server.use(
@@ -83,7 +83,7 @@ export const mockApiWithDelay = (
   method: "get" | "post" | "put" | "delete",
   path: string,
   delay: number,
-  response: any = { success: true }
+  response: Record<string, unknown> = { success: true }
 ) => {
   server.use(
     http[method](path, async () => {
