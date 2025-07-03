@@ -63,7 +63,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const imageURL = props.imageURL ?? editableData?.imageURL;
   const isPublic = props.isPublic ?? editableData?.isPublic;
   const { availableTags } = useFetchAllTags();
-  const { mutate: toggleVisibility } = useToggleRecipeVisibility();
+  const { mutate: toggleVisibility, isPending: isTogglingVisibility } = useToggleRecipeVisibility();
 
   const [activeDialog, setActiveDialog] = React.useState<DialogType>(null);
 
@@ -124,6 +124,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       
       if (!editableData._id) {
         console.error("No recipe ID found in editableData:", editableData);
+        alert("Unable to update recipe visibility: Recipe ID not found. Please refresh the page and try again.");
         return;
       }
 
@@ -138,6 +139,17 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           onError: (error) => {
             console.error("Failed to update recipe visibility:", error);
             // Keep dialog open on error so user can retry
+            let errorMessage = "Failed to update recipe visibility. Please check your internet connection and try again.";
+            
+            if (error instanceof Error) {
+              if (error.message.includes("not found") || error.message.includes("permission")) {
+                errorMessage = "You don't have permission to modify this recipe, or it no longer exists.";
+              } else if (error.message.includes("network") || error.message.includes("fetch")) {
+                errorMessage = "Network error. Please check your internet connection and try again.";
+              }
+            }
+            
+            alert(errorMessage);
           },
         }
       );
@@ -224,6 +236,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           isPublic={isPublic ?? false}
           onSave={handleVisibilitySave}
           onClose={closeDialog}
+          isLoading={isTogglingVisibility}
         />
       )}
     </>

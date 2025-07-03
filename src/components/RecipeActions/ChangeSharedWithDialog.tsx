@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, makeStyles, Switch, tokens } from "@fluentui/react-components";
+import { Button, makeStyles, Switch, tokens, Spinner } from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
 
@@ -48,6 +48,10 @@ export type ChangeTitleDialogProps = {
    * Callback function to handle closing the dialog.
    */
   onClose: () => void;
+  /**
+   * Whether the save operation is in progress.
+   */
+  isLoading?: boolean;
 };
 
 const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
@@ -55,6 +59,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   isPublic,
   onSave,
   onClose,
+  isLoading = false,
 }) => {
   const styles = useStyles();
   const [newIsPublic, setNewIsPublic] = React.useState(isPublic);
@@ -90,8 +95,10 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
             appearance="primary"
             onClick={handleSaveClick}
             className={styles.primaryButton}
+            disabled={isLoading}
+            icon={isLoading ? <Spinner size="tiny" /> : undefined}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         </>
       }
@@ -102,6 +109,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
           setNewIsPublic(!newIsPublic);
         }}
         label={newIsPublic ? "Public - Anyone can view this recipe" : "Private - Only you can view this recipe"}
+        disabled={isLoading}
       />
     </ChangeDialog>
   );
