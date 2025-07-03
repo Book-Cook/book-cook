@@ -19,7 +19,7 @@ const mockPush = jest.fn();
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ alt, ...props }: any) => (
+  default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => (
     <img alt={alt} {...props} />
   ),
 }));

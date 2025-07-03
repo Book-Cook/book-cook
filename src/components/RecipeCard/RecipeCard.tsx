@@ -108,7 +108,7 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
                   className={styles.description}
                   style={{ color: tokens.colorNeutralForeground3 }}
                 >
-                  By {creatorName} • {savedCount || 0} saves
+                  By {creatorName} • {savedCount ?? 0} saves
                 </Text>
               ) : formattedDate ? (
                 <Text

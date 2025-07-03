@@ -100,7 +100,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
     async (id: string) => {
       // Disable navigation in Storybook to prevent DOM focus issues
       if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '6006') {
-        console.log('Storybook: Would navigate to', `/recipes/${id}`);
+        // Storybook: Would navigate to /recipes/${id}
         return;
       }
       await router.push(`/recipes/${id}`);
