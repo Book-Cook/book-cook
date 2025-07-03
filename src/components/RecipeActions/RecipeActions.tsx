@@ -121,7 +121,6 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const handleVisibilitySave = React.useCallback(
     (value: string) => {
       const isPublic = value === "true";
-      console.log("Toggling visibility:", { recipeId: editableData._id, isPublic, value });
       
       if (!editableData._id) {
         console.error("No recipe ID found in editableData:", editableData);
@@ -131,8 +130,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       toggleVisibility(
         { recipeId: editableData._id, isPublic },
         {
-          onSuccess: (data) => {
-            console.log("Visibility toggle success:", data);
+          onSuccess: () => {
             // Update local state to reflect the change
             saveChanges({ isPublic });
             closeDialog();
@@ -144,7 +142,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         }
       );
     },
-    [editableData._id, toggleVisibility, saveChanges, closeDialog]
+    [editableData, toggleVisibility, saveChanges, closeDialog]
   );
 
   const handleDeleteClick = React.useCallback(
@@ -176,7 +174,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
         </MenuItem>
       </MenuList>
     ),
-    [openDialog, handleDeleteClick, isPublic]
+    [openDialog, handleDeleteClick]
   );
 
   return (
