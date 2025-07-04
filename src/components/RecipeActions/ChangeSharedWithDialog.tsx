@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, makeStyles, Switch, tokens } from "@fluentui/react-components";
+import { Button, makeStyles, Switch, tokens, Spinner } from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
 
@@ -48,6 +48,10 @@ export type ChangeTitleDialogProps = {
    * Callback function to handle closing the dialog.
    */
   onClose: () => void;
+  /**
+   * Whether the save operation is in progress.
+   */
+  isLoading?: boolean;
 };
 
 const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
@@ -55,14 +59,18 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   isPublic,
   onSave,
   onClose,
+  isLoading = false,
 }) => {
   const styles = useStyles();
   const [newIsPublic, setNewIsPublic] = React.useState(isPublic);
 
+  // Reset state when dialog opens or isPublic prop changes
+  React.useEffect(() => {
+    setNewIsPublic(isPublic);
+  }, [isPublic, isOpen]);
+
   const handleSaveClick = () => {
-    if (newIsPublic) {
-      onSave(newIsPublic.toString());
-    }
+    onSave(newIsPublic.toString());
   };
 
   const handleCancelClick = () => {
@@ -73,7 +81,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
     <ChangeDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Toggle Recipe Visibility"
+      title={isPublic ? "Make Recipe Private" : "Make Recipe Public"}
       actions={
         <>
           <Button
@@ -87,8 +95,10 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
             appearance="primary"
             onClick={handleSaveClick}
             className={styles.primaryButton}
+            disabled={isLoading}
+            icon={isLoading ? <Spinner size="tiny" /> : undefined}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         </>
       }
@@ -98,7 +108,8 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
         onChange={() => {
           setNewIsPublic(!newIsPublic);
         }}
-        label={"Set is public"}
+        label={newIsPublic ? "Public - Anyone can view this recipe" : "Private - Only you can view this recipe"}
+        disabled={isLoading}
       />
     </ChangeDialog>
   );

@@ -41,6 +41,7 @@ export const RecipeHeader = () => {
     cancelEditing,
     hasEdits,
     onAddToCollection,
+    onSaveRecipe,
   } = useRecipe();
 
   const toasterId = useId("toaster");
@@ -53,12 +54,38 @@ export const RecipeHeader = () => {
     enabled: Boolean(session),
   });
 
+  const { data: savedRecipes } = useQuery<Recipe[]>({
+    queryKey: ["savedRecipes"],
+    queryFn: async () => {
+      const response = await fetch("/api/user/saved-recipes");
+      if (!response.ok) {throw new Error("Failed to fetch saved recipes");}
+      return response.json();
+    },
+    enabled: Boolean(session),
+  });
+
   const isLiked = useMemo(() => {
     if (!collections || !recipe?._id) {
       return false;
     }
     return collections.some((r) => r._id === recipe._id);
   }, [collections, recipe?._id]);
+
+  const isPublicRecipeFromOtherUser = useMemo(() => {
+    return (
+      recipe?.isPublic &&
+      recipe?.owner &&
+      session?.user?.id &&
+      recipe.owner !== session.user.id
+    );
+  }, [recipe?.isPublic, recipe?.owner, session?.user?.id]);
+
+  const isSaved = useMemo(() => {
+    if (!savedRecipes || !recipe?._id) {
+      return false;
+    }
+    return savedRecipes.some((r) => r._id === recipe._id);
+  }, [savedRecipes, recipe?._id]);
 
   const {
     mutate: convertRecipeContent,
@@ -85,6 +112,12 @@ export const RecipeHeader = () => {
   const handleAddToCollection = () => {
     if (recipe?._id) {
       onAddToCollection(recipe._id);
+    }
+  };
+
+  const handleSaveRecipe = () => {
+    if (recipe?._id) {
+      onSaveRecipe(recipe._id);
     }
   };
 
@@ -148,16 +181,29 @@ export const RecipeHeader = () => {
                 disabled={isConverting || !editableData?.content}
               />
             </Tooltip>
-            <Tooltip content="Add to Collection" relationship="label">
-              <Button
-                aria-label="Add to Collection"
-                appearance="transparent"
-                icon={isLiked ? <Heart20Filled /> : <Heart20Regular />}
-                shape="circular"
-                onClick={handleAddToCollection}
-                className={styles.favoriteButton}
-              />
-            </Tooltip>
+            {isPublicRecipeFromOtherUser ? (
+              <Tooltip content="Save to My Cookbook" relationship="label">
+                <Button
+                  aria-label="Save to My Cookbook"
+                  appearance="transparent"
+                  icon={isSaved ? <Heart20Filled /> : <Heart20Regular />}
+                  shape="circular"
+                  onClick={handleSaveRecipe}
+                  className={styles.favoriteButton}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip content="Add to Collection" relationship="label">
+                <Button
+                  aria-label="Add to Collection"
+                  appearance="transparent"
+                  icon={isLiked ? <Heart20Filled /> : <Heart20Regular />}
+                  shape="circular"
+                  onClick={handleAddToCollection}
+                  className={styles.favoriteButton}
+                />
+              </Tooltip>
+            )}
             <RecipeActions />
           </div>
         </div>

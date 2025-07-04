@@ -12,6 +12,7 @@
 - Always pull from main before committing changes
 - Run tests before committing changes
 - Check for lint/typecheck commands and run them before completing tasks
+- **REQUIREMENT**: All PRs must have 0 lint warnings - fix ALL lint issues in files you create/modify
 
 ## Branch Workflow Steps
 
@@ -20,7 +21,9 @@
 3. Make your changes
 4. Pull main one more time before committing: `git pull origin main --rebase`
 5. Run yarn build, yarn test, and yarn lint to verify that the CI will succeed.
-6. Commit and push changes
+6. **ALWAYS** run `yarn lint --fix` before committing to auto-fix linting issues
+7. **CRITICAL**: Ensure 0 lint warnings in all files you created/modified before final commit
+8. Commit and push changes
 
 ## Code Organization
 

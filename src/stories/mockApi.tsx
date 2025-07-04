@@ -113,14 +113,14 @@ export const withErrorMocks = withApiMocks({
 export const withLoadingMocks = withApiMocks({
   '/api/recipes': {
     response: [chocolateChipCookies, thaiGreenCurry, caesarSalad],
-    delay: 2000,
+    delay: 999999, // Never resolve to show loading state
   },
   '/api/user/collections': {
     response: [chocolateChipCookies, thaiGreenCurry],
-    delay: 2000,
+    delay: 999999, // Never resolve to show loading state
   },
   '/api/user/recentlyViewed': {
     response: [caesarSalad, chocolateChipCookies],
-    delay: 2000,
+    delay: 999999, // Never resolve to show loading state
   },
 });

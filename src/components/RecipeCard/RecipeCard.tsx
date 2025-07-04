@@ -8,8 +8,19 @@ import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
 
 const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
-  const { title, createdDate, imageSrc, tags, id, emoji, isMinimal, isPublic } =
-    props;
+  const { 
+    title, 
+    createdDate, 
+    imageSrc, 
+    tags, 
+    id, 
+    emoji, 
+    isMinimal, 
+    isPublic, 
+    creatorName, 
+    savedCount, 
+    showActions = true 
+  } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const styles = useRecipeCardStyles();
@@ -91,7 +102,15 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
                   {title}
                 </Text>
               </Tooltip>
-              {formattedDate && (
+              {creatorName ? (
+                <Text
+                  size={200}
+                  className={styles.description}
+                  style={{ color: tokens.colorNeutralForeground3 }}
+                >
+                  By {creatorName} • {savedCount ?? 0} saves
+                </Text>
+              ) : formattedDate ? (
                 <Text
                   size={200}
                   className={styles.description}
@@ -99,10 +118,10 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
                 >
                   {formattedDate}
                 </Text>
-              )}
+              ) : null}
             </div>
 
-            {!isMinimal && (
+            {!isMinimal && showActions && (
               <div className={styles.headerAction}>
                 <RecipeActions
                   title={title}
@@ -127,10 +146,10 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
                   content={
                     <div>
                       {tags.slice(3).map((tag, i, arr) => (
-                        <>
+                        <span key={tag}>
                           {tag}
                           {i < arr.length - 1 ? "," : ""}
-                        </>
+                        </span>
                       ))}
                     </div>
                   }
@@ -158,6 +177,9 @@ export const RecipeCard = React.memo(RecipeCardComponent, (prevProps, nextProps)
     prevProps.imageSrc === nextProps.imageSrc &&
     prevProps.isPublic === nextProps.isPublic &&
     prevProps.isMinimal === nextProps.isMinimal &&
+    prevProps.creatorName === nextProps.creatorName &&
+    prevProps.savedCount === nextProps.savedCount &&
+    prevProps.showActions === nextProps.showActions &&
     JSON.stringify(prevProps.tags) === JSON.stringify(nextProps.tags)
   );
 });

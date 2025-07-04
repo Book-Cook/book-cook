@@ -25,7 +25,7 @@ const customJestConfig = {
   setupFiles: ["<rootDir>/jest.polyfills.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: [
-    "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi)/)",
+    "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http)/)",
   ],
   moduleDirectories: ["node_modules", "<rootDir>/"],
 };

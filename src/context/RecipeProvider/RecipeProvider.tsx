@@ -13,6 +13,7 @@ import {
   useUpdateRecipe,
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
+import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -41,6 +42,7 @@ export const RecipeProvider: React.FC<{
 
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
+  const { mutate: saveRecipe } = useSaveRecipe();
   const { mutate: updateRecipe } = useUpdateRecipe(
     recipeId ?? editableData._id
   );
@@ -111,7 +113,8 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic || false,
+        isPublic: recipe.isPublic ?? false,
+        _id: recipe._id,
       };
       setEditableData(initialData);
     }
@@ -140,11 +143,22 @@ export const RecipeProvider: React.FC<{
 
   const onAddToCollection = (recipeId: string) => {
     addToCollection(recipeId, {
-      onSuccess: (data) => {
-        console.log(`Recipe ${data.action} collection successfully`);
+      onSuccess: (_data) => {
+        // Recipe successfully added/removed from collection
       },
       onError: (error) => {
         console.error("Failed to update collection:", error);
+      },
+    });
+  };
+
+  const onSaveRecipe = (recipeId: string) => {
+    saveRecipe(recipeId, {
+      onSuccess: (_data) => {
+        // Recipe saved/unsaved successfully
+      },
+      onError: (error) => {
+        console.error("Failed to save recipe:", error);
       },
     });
   };
@@ -157,7 +171,8 @@ export const RecipeProvider: React.FC<{
         tags: recipe.tags || [],
         imageURL: recipe.imageURL || "",
         emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic || false,
+        isPublic: recipe.isPublic ?? false,
+        _id: recipe._id,
       };
       setEditableData(initialData);
     }
@@ -173,7 +188,8 @@ export const RecipeProvider: React.FC<{
       tags: recipe.tags || [],
       imageURL: recipe.imageURL || "",
       emoji: recipe.emoji || "",
-      isPublic: recipe.isPublic || false,
+      isPublic: recipe.isPublic ?? false,
+      _id: recipe._id,
     };
   }, [recipe]);
 
@@ -205,6 +221,7 @@ export const RecipeProvider: React.FC<{
     cancelEditing,
     deleteRecipe,
     onAddToCollection,
+    onSaveRecipe,
     hasEdits,
   };
 

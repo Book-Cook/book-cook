@@ -1,11 +1,10 @@
 import React from 'react';
-import type { Session } from "next-auth";
-import type { StoryFn, StoryContext } from '@storybook/react';
 import { FluentProvider } from "@fluentui/react-components";
 import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
+import type { StoryFn, StoryContext } from '@storybook/react';
+import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 
@@ -18,19 +17,19 @@ const mockSession: Session = {
   expires: "2024-12-31",
 };
 
-const globalQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-      staleTime: 0,
-    },
-  },
-});
-
-export const withGlobalProviders = (Story: StoryFn, _context: StoryContext) => {
+export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {
   const ThemeSync: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { theme } = useTheme();
+    const { theme, setThemePreference } = useTheme();
+    
+    // Sync with Storybook theme toggle
+    React.useEffect(() => {
+      const storybookTheme = context.globals.themeMode;
+      if (storybookTheme === 'dark') {
+        setThemePreference('dark');
+      } else {
+        setThemePreference('light');
+      }
+    }, [setThemePreference]);
     
     const fluentProviderStyles = {
       height: "100%",
@@ -59,15 +58,13 @@ export const withGlobalProviders = (Story: StoryFn, _context: StoryContext) => {
   return (
     <RendererProvider renderer={createDOMRenderer()}>
       <SSRProvider>
-        <QueryClientProvider client={globalQueryClient}>
-          <SessionProvider session={mockSession}>
-            <ThemeProvider>
-              <ThemeSync>
-                <Story />
-              </ThemeSync>
-            </ThemeProvider>
-          </SessionProvider>
-        </QueryClientProvider>
+        <SessionProvider session={mockSession}>
+          <ThemeProvider>
+            <ThemeSync>
+              <Story />
+            </ThemeSync>
+          </ThemeProvider>
+        </SessionProvider>
       </SSRProvider>
     </RendererProvider>
   );

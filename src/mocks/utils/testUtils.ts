@@ -34,7 +34,7 @@ export class TestUtils {
   static mockResponse(
     method: "get" | "post" | "put" | "delete",
     path: string,
-    response: any
+    response: Record<string, unknown>
   ) {
     server.use(
       http[method](path, () => HttpResponse.json(response))
@@ -62,7 +62,7 @@ export class TestUtils {
     method: "get" | "post" | "put" | "delete",
     path: string,
     delay: number,
-    response: any = {}
+    response: Record<string, unknown> = {}
   ) {
     server.use(
       http[method](path, async () => {
