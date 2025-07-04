@@ -101,7 +101,7 @@ describe("RecipeCard", () => {
     );
     
     expect(screen.getByText("Test Recipe")).toBeInTheDocument();
-    expect(screen.getByText("Dec 31, 2023")).toBeInTheDocument();
+    expect(screen.getByText(/Dec 31, 2023|Jan 1, 2024/)).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /Test Recipe placeholder emoji/i })).toBeInTheDocument();
   });
 
@@ -127,7 +127,8 @@ describe("RecipeCard", () => {
       </RecipeWrapper>
     );
     
-    expect(screen.getByText("Dec 31, 2023")).toBeInTheDocument();
+    // Use a flexible matcher that works across timezones
+    expect(screen.getByText(/Dec 31, 2023|Jan 1, 2024/)).toBeInTheDocument();
     expect(screen.queryByText(/By.*saves/)).not.toBeInTheDocument();
   });
 
