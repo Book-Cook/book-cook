@@ -7089,10 +7089,10 @@ better-opn@^3.0.2:
   dependencies:
     open "^8.0.4"
 
-better-sqlite3@12.1.1:
-  version "12.1.1"
-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.1.1.tgz#a317fb6586fe3739b49629e6134103e3dbb73cce"
-  integrity sha512-xjl/TjWLy/6yLa5wkbQSjTgIgSiaEJy3XzjF5TAdiWaAsu/v0OCkYOc6tos+PkM/k4qURN2pFKTsbcG3gk29Uw==
+better-sqlite3@12.2.0:
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.2.0.tgz#de7c3466074f2d1a5d260f510647e822e42684d2"
+  integrity sha512-eGbYq2CT+tos1fBwLQ/tkBt9J5M3JEHjku4hbvQUePCckkvVf14xWj+1m7dGoK81M/fOjFT7yM9UMeKT/+vFLQ==
   dependencies:
     bindings "^1.5.0"
     prebuild-install "^7.1.1"
@@ -13630,9 +13630,9 @@ renderkid@^3.0.0:
     strip-ansi "^6.0.1"
 
 renovate@^41.0.0:
-  version "41.21.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.21.1.tgz#d40301b86e5666e3ef98f85a63e5f0d22be27af6"
-  integrity sha512-oBX76Zq3CMP66XNbi3M/3yBkUraCApRdAWKFeHMbtGeD08t34ntjRUwdN39/maHsESTUTt+pGGwOW+wJy85rcA==
+  version "41.21.3"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.21.3.tgz#495a8a2ea3889f156c7bc8b5262b369e2a968ace"
+  integrity sha512-J0eghboMDcEYACtKAchTUzeOvBxCyNhHrKAOp4qijCK3McqfqPNDUZlne8PLqHei/AoBSrvs5lupn8ByLRRzHA==
   dependencies:
     "@aws-sdk/client-codecommit" "3.840.0"
     "@aws-sdk/client-ec2" "3.840.0"
@@ -13751,7 +13751,7 @@ renovate@^41.0.0:
     yaml "2.8.0"
     zod "3.25.67"
   optionalDependencies:
-    better-sqlite3 "12.1.1"
+    better-sqlite3 "12.2.0"
     openpgp "6.1.1"
     re2 "1.22.1"
 
