@@ -7543,7 +7543,12 @@ chrome-trace-event@^1.0.2:
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.4.tgz#05bffd7ff928465093314708c93bdfa9bd1f0f5b"
   integrity sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==
 
-ci-info@^4.0.0, ci-info@^4.2.0:
+ci-info@^4.0.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-4.3.0.tgz#c39b1013f8fdbd28cd78e62318357d02da160cd7"
+  integrity sha512-l+2bNRMiQgcfILUi33labAZYIWlH1kWDp+ecNo5iisRKrbm0xcRyCww71/YU0Fkw0mAFpz9bJayXPjey6vkmaQ==
+
+ci-info@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-4.2.0.tgz#cbd21386152ebfe1d56f280a3b5feccbd96764c7"
   integrity sha512-cYY9mypksY8NRqgDB1XD1RiJL338v/551niynFTGkZOO2LHuB2OmOYxDIe/ttN9AHwrqdum1360G3ald0W9kCg==
@@ -13630,9 +13635,9 @@ renderkid@^3.0.0:
     strip-ansi "^6.0.1"
 
 renovate@^41.0.0:
-  version "41.21.3"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.21.3.tgz#495a8a2ea3889f156c7bc8b5262b369e2a968ace"
-  integrity sha512-J0eghboMDcEYACtKAchTUzeOvBxCyNhHrKAOp4qijCK3McqfqPNDUZlne8PLqHei/AoBSrvs5lupn8ByLRRzHA==
+  version "41.23.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.23.0.tgz#5fe7e1e5f6d6d38c91ef75d8700ba373e9d4e72e"
+  integrity sha512-KhHkeYxhvIRf1m7uwVuM/8cY+rDo32+iiMrUYQttEpIkBk94Ty5IA6uUPmTCmu1aQv8apDZ9MaIhlmzz/dEHfw==
   dependencies:
     "@aws-sdk/client-codecommit" "3.840.0"
     "@aws-sdk/client-ec2" "3.840.0"
