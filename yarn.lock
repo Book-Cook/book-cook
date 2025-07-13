@@ -13649,9 +13649,9 @@ renderkid@^3.0.0:
     strip-ansi "^6.0.1"
 
 renovate@^41.0.0:
-  version "41.31.1"
-  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.31.1.tgz#67ecac9060540080b467b54bcaf37932e6e0b88a"
-  integrity sha512-jPVVTFL+6D1TOQM0mLwRco2B9HjaicbLR0chOTIllf4k/BlnbvJr9gGz4SjZs3Flga9e9/aLur+pEiaJhj/KWA==
+  version "41.32.0"
+  resolved "https://registry.yarnpkg.com/renovate/-/renovate-41.32.0.tgz#1a478b5cec8bb870aafd753e71db7f6e0f19ac43"
+  integrity sha512-GDUSFwJKeSWOL05bVEaGsghMq6ICcYkcWvcD0P3UfxgR0GhKYJaJP/TzxnoGvHXcTy3staq/TyHjmKvsyVUyzw==
   dependencies:
     "@aws-sdk/client-codecommit" "3.840.0"
     "@aws-sdk/client-ec2" "3.840.0"
