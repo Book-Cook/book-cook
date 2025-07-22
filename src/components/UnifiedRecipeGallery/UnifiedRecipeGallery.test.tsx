@@ -19,9 +19,6 @@ jest.mock("next/router", () => ({
 jest.mock("../RecipeGallery/RecipeGallery", () => ({
   RecipeGallery: () => <div data-testid="personal-recipes">Personal Recipes</div>,
 }));
-jest.mock("../PublicRecipeGallery/PublicRecipeGallery", () => ({
-  PublicRecipeGallery: () => <div data-testid="community-recipes">Community Recipes</div>,
-}));
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>;
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
