@@ -13,12 +13,12 @@ import { RecipeProvider } from "../../context";
 const TAB_CONFIGS: TabConfig[] = [
   {
     value: "my-recipes",
-    label: "Your Recipes",
+    label: "My Recipes",
     ariaLabel: "View your personal recipes",
   },
   {
     value: "community", 
-    label: "Browse All",
+    label: "Community",
     ariaLabel: "Browse all public recipes",
   },
 ];
@@ -112,25 +112,17 @@ export const UnifiedRecipeGallery: React.FC<UnifiedRecipeGalleryProps> = ({
         <div className={styles.tabContent}>
           <div
             role="tabpanel" 
-            aria-labelledby={`tab-${selectedTab}`}
+            aria-labelledby="tab-my-recipes"
             className={styles.tabPanel}
-            style={{ 
-              display: selectedTab === "my-recipes" ? "block" : "none",
-              opacity: selectedTab === "my-recipes" ? 1 : 0,
-              transition: "opacity 150ms ease-in-out"
-            }}
+            style={{ display: selectedTab === "my-recipes" ? "block" : "none" }}
           >
             <MyRecipesTab />
           </div>
           <div
             role="tabpanel"
-            aria-labelledby={`tab-${selectedTab}`} 
+            aria-labelledby="tab-community" 
             className={styles.tabPanel}
-            style={{ 
-              display: selectedTab === "community" ? "block" : "none",
-              opacity: selectedTab === "community" ? 1 : 0,
-              transition: "opacity 150ms ease-in-out"
-            }}
+            style={{ display: selectedTab === "community" ? "block" : "none" }}
           >
             <CommunityTab />
           </div>

@@ -4,7 +4,6 @@ export const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    minHeight: "100%",
     width: "100%",
   },
   tabContainer: {
@@ -13,9 +12,9 @@ export const useStyles = makeStyles({
     marginBottom: tokens.spacingVerticalM,
   },
   tabList: {
-    maxWidth: "1200px",
+    maxWidth: "1400px",
     margin: "0 auto",
-    padding: `0 ${tokens.spacingHorizontalL}`,
+    padding: `0 20px`,
     display: "flex",
     gap: tokens.spacingHorizontalM,
   },
@@ -28,13 +27,14 @@ export const useStyles = makeStyles({
     color: tokens.colorNeutralForeground2,
     cursor: "pointer",
     position: "relative",
-    transition: "color 100ms ease-in-out",
+    transition: "none",
     borderRadius: "0",
     minHeight: "44px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "120px", // Fixed width to prevent layout shifts
+    minWidth: "120px",
+    borderBottom: "2px solid transparent",
     
     "&:hover": {
       color: tokens.colorNeutralForeground1,
@@ -44,34 +44,14 @@ export const useStyles = makeStyles({
       outline: `2px solid ${tokens.colorBrandBackground}`,
       outlineOffset: "2px",
     },
-    
-    // Always have the underline element, but make it transparent when inactive
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      bottom: "-1px",
-      left: "0",
-      right: "0",
-      height: "2px",
-      backgroundColor: "transparent",
-      transition: "background-color 150ms ease-in-out",
-    },
   },
   tabActive: {
-    color: tokens.colorBrandForeground1,
-    fontWeight: tokens.fontWeightSemibold,
-    backgroundColor: tokens.colorBrandBackground2,
-    borderRadius: `${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium} 0 0`,
-    
-    "&::after": {
-      backgroundColor: tokens.colorBrandBackground,
-      height: "4px", // Even thicker underline
-      borderRadius: "2px 2px 0 0",
-    },
+    color: `${tokens.colorBrandForeground1} !important`,
+    fontWeight: `${tokens.fontWeightSemibold} !important`,
+    borderBottom: `2px solid ${tokens.colorBrandForeground1} !important`,
     
     "&:hover": {
-      color: tokens.colorBrandForeground1,
-      backgroundColor: tokens.colorBrandBackground2,
+      color: `${tokens.colorBrandForeground1} !important`,
     },
   },
   tabContent: {

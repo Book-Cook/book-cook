@@ -131,7 +131,7 @@ export const CommunityTab = () => {
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <div className={styles.titleSection}>
-          <Title3 as="h1">Browse All Recipes</Title3>
+          <Title3 as="h1">Community Recipes</Title3>
           <Text
             size={200}
             weight="medium"
