@@ -66,7 +66,7 @@ export const Toolbar = () => {
           {session?.user && (
             <>
               <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
-              {path !== "/recipes" && (
+              {router.pathname !== "/recipes" && (
                 <div className={styles.searchBarWrapper}>
                   <SearchBar />
                 </div>

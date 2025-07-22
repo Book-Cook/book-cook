@@ -6,12 +6,11 @@ import type {
 } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
-import { FallbackScreen } from "../FallbackScreens/FallbackScreen";
-import { RecipeCard } from "../RecipeCard";
 import { useStyles } from "../RecipeGallery/RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
 import { SearchBar } from "../Toolbar/SearchBar";
-
+import { RecipeCard } from "../RecipeCard";
+import { FallbackScreen } from "../FallbackScreens/FallbackScreen";
 import { useSearchBox } from "../../context";
 
 interface PublicRecipe {
@@ -68,7 +67,7 @@ const availableTags = [
   "quick", "easy", "comfort-food", "italian", "mexican", "asian"
 ];
 
-export const PublicRecipeGallery = () => {
+export const CommunityTab = () => {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
@@ -132,7 +131,7 @@ export const PublicRecipeGallery = () => {
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <div className={styles.titleSection}>
-          <Title3 as="h1">Discover Recipes</Title3>
+          <Title3 as="h1">Browse All Recipes</Title3>
           <Text
             size={200}
             weight="medium"

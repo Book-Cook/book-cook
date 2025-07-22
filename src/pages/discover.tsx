@@ -1,11 +1,13 @@
-import { Spinner } from "@fluentui/react-components";
-import dynamic from "next/dynamic";
-
-const PublicRecipeGallery = dynamic(() => import("src/components/PublicRecipeGallery/PublicRecipeGallery").then(mod => ({ default: mod.PublicRecipeGallery })), {
-  loading: () => <Spinner label="Loading recipes..." />,
-  ssr: true
-});
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function DiscoverPage() {
-  return <PublicRecipeGallery />;
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to unified recipes page with community tab
+    void router.replace("/recipes?tab=community");
+  }, [router]);
+
+  return null; // Component will redirect before rendering
 }

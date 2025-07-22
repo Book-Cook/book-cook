@@ -5,3 +5,4 @@ export * from "./RecipeCard";
 export * from "./TagPicker";
 export * from "./Animation";
 export * from "./PublicRecipeGallery";
+export * from "./UnifiedRecipeGallery";
