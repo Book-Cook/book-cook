@@ -7,11 +7,12 @@ import type {
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import { FallbackScreen } from "../FallbackScreens/FallbackScreen";
+import { RecipeCard } from "../RecipeCard";
 import { useStyles } from "../RecipeGallery/RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
 import { SearchBar } from "../Toolbar/SearchBar";
-import { RecipeCard } from "../RecipeCard";
-import { FallbackScreen } from "../FallbackScreens/FallbackScreen";
+
 import { useSearchBox } from "../../context";
 
 export const MyRecipesTab = () => {

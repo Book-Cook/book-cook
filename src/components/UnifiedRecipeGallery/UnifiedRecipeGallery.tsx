@@ -2,11 +2,11 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
+import { CommunityTab } from "./CommunityTab";
+import { MyRecipesTab } from "./MyRecipesTab";
 import { useStyles } from "./UnifiedRecipeGallery.styles";
 import type { UnifiedRecipeGalleryProps, TabValue, TabConfig } from "./UnifiedRecipeGallery.types";
 import { Unauthorized } from "../FallbackScreens/Unathorized";
-import { MyRecipesTab } from "./MyRecipesTab";
-import { CommunityTab } from "./CommunityTab";
 
 import { RecipeProvider } from "../../context";
 
@@ -115,6 +115,7 @@ export const UnifiedRecipeGallery: React.FC<UnifiedRecipeGalleryProps> = ({
             aria-labelledby="tab-my-recipes"
             className={styles.tabPanel}
             style={{ display: selectedTab === "my-recipes" ? "block" : "none" }}
+            data-testid="personal-recipes"
           >
             <MyRecipesTab />
           </div>
@@ -123,6 +124,7 @@ export const UnifiedRecipeGallery: React.FC<UnifiedRecipeGalleryProps> = ({
             aria-labelledby="tab-community" 
             className={styles.tabPanel}
             style={{ display: selectedTab === "community" ? "block" : "none" }}
+            data-testid="community-recipes"
           >
             <CommunityTab />
           </div>

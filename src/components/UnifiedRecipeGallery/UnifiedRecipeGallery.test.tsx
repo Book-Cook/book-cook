@@ -73,7 +73,7 @@ describe("UnifiedRecipeGallery", () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
     expect(screen.getByRole("tab", { name: "View your personal recipes" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Browse community recipes" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Browse all public recipes" })).toBeInTheDocument();
     expect(screen.getByText("My Recipes")).toBeInTheDocument();
     expect(screen.getByText("Community")).toBeInTheDocument();
   });
@@ -82,7 +82,7 @@ describe("UnifiedRecipeGallery", () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
     const myRecipesTab = screen.getByRole("tab", { name: "View your personal recipes" });
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
 
     expect(myRecipesTab).toHaveAttribute("aria-selected", "true");
     expect(communityTab).toHaveAttribute("aria-selected", "false");
@@ -92,7 +92,7 @@ describe("UnifiedRecipeGallery", () => {
   it("switches to Community tab when clicked", () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
     fireEvent.click(communityTab);
 
     expect(communityTab).toHaveAttribute("aria-selected", "true");
@@ -102,7 +102,7 @@ describe("UnifiedRecipeGallery", () => {
   it("handles keyboard navigation correctly", () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
     
     // Test Enter key
     fireEvent.keyDown(communityTab, { key: "Enter" });
@@ -125,7 +125,7 @@ describe("UnifiedRecipeGallery", () => {
 
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
     expect(communityTab).toHaveAttribute("aria-selected", "true");
     expect(screen.getByTestId("community-recipes")).toBeInTheDocument();
   });
@@ -133,7 +133,7 @@ describe("UnifiedRecipeGallery", () => {
   it("updates URL when tab changes", async () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
     fireEvent.click(communityTab);
 
     await waitFor(() => {
@@ -179,7 +179,7 @@ describe("UnifiedRecipeGallery", () => {
       wrapper: createTestWrapper() 
     });
 
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
     fireEvent.click(communityTab);
 
     expect(mockOnTabChange).toHaveBeenCalledWith("community");
@@ -210,7 +210,7 @@ describe("UnifiedRecipeGallery", () => {
     render(<UnifiedRecipeGallery />, { wrapper: createTestWrapper() });
 
     const myRecipesTab = screen.getByRole("tab", { name: "View your personal recipes" });
-    const communityTab = screen.getByRole("tab", { name: "Browse community recipes" });
+    const communityTab = screen.getByRole("tab", { name: "Browse all public recipes" });
 
     expect(myRecipesTab).toHaveAttribute("tabIndex", "0");
     expect(communityTab).toHaveAttribute("tabIndex", "-1");
