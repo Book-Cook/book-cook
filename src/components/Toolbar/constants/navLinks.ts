@@ -5,8 +5,7 @@ export const navLinks = [
   { url: "/", label: "Home" },
   { url: "/recipes", label: "Recipes" },
   { url: "/collections", label: "Collections" },
-  { url: "/discover", label: "Discover" },
   // { url: "/pantry", label: "Pantry" },
-  // { url: "/explore", label: "Explore" },
+  // { url: "/meal-plans", label: "Meal Plans" },
   // { url: "/shopping-list", label: "Shopping List" },
 ];

@@ -14,9 +14,13 @@ export type SearchBarProps = {
    * Optional callback fired when the user submits a search.
    */
   onSearch?: () => void;
+  /**
+   * Optional target page to navigate to on Enter. Defaults to "/recipes".
+   */
+  targetPage?: string;
 };
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
+export const SearchBar = ({ onSearch, targetPage = "/recipes" }: SearchBarProps) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
   const [inputValue, setInputValue] = React.useState(searchBoxValue);
@@ -48,9 +52,9 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
       // debounced update has not fired yet.
       onSearchBoxValueChange(inputValue);
 
-      if (path !== "/recipes") {
-        // User is not on the home page, reroute
-        await router.push(`/recipes`);
+      if (path !== targetPage) {
+        // User is not on the target page, reroute
+        await router.push(targetPage);
       }
 
       onSearch?.();

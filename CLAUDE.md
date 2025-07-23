@@ -25,11 +25,16 @@
 7. **CRITICAL**: Ensure 0 lint warnings in all files you created/modified before final commit
 8. Commit and push changes
 
-## Code Organization
+## Code Organization & Component Abstraction
 
+- **CRITICAL**: Always abstract UI logic into reusable components to minimize code duplication
+- Create standardized components for common patterns (search, filtering, galleries, forms)
+- Pages should be thin wrappers that use abstracted components (see recipes.tsx vs discover.tsx examples)
 - Abstract code into individual functions, each in their own file when possible
 - Write unit tests for each function
 - Each function should have a corresponding test file
+- Before creating inline UI logic, check if similar functionality exists and can be abstracted
+- Maintain consistent UI patterns across the application by using shared components
 
 ## Project Commands
 
