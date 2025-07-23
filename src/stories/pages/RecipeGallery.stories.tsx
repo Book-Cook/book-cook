@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
+import { publicRecipeVariants } from "../decorators/withPublicRecipesMocks";
 import { recipeVariants } from "../decorators/withRecipeMocks";
 import { createStorySet } from "../utils/storyHelpers";
 
-import { RecipeGallery } from "../../components/RecipeGallery/RecipeGallery";
+import { UnifiedRecipeGallery } from "../../components/UnifiedRecipeGallery/UnifiedRecipeGallery";
 
-const meta: Meta<typeof RecipeGallery> = {
-  title: "Pages/RecipeGallery",
-  component: RecipeGallery,
+const meta: Meta<typeof UnifiedRecipeGallery> = {
+  title: "Pages/Recipes",
+  component: UnifiedRecipeGallery,
   parameters: {
     layout: "fullscreen",
   },
@@ -15,18 +16,54 @@ const meta: Meta<typeof RecipeGallery> = {
 
 export default meta;
 
-type Story = StoryObj<typeof RecipeGallery>;
+type Story = StoryObj<typeof UnifiedRecipeGallery>;
 
-// Create story set for RecipeGallery
-const { create } = createStorySet<typeof RecipeGallery>();
+// Create story set for UnifiedRecipeGallery
+const { create } = createStorySet<typeof UnifiedRecipeGallery>();
 
-// Clean story definitions
-export const Default: Story = create("Default (All Recipes)", [recipeVariants.default()]);
+// Stories for My Recipes Tab (default)
+export const MyRecipesDefault: Story = create("My Recipes - Default", [recipeVariants.default()]);
 
-export const ManyRecipes: Story = create("Many Recipes", [recipeVariants.many()]);
+export const MyRecipesManyRecipes: Story = create("My Recipes - Many Recipes", [recipeVariants.many()]);
 
-export const EmptyState: Story = create("Empty State", [recipeVariants.empty()]);
+export const MyRecipesEmptyState: Story = create("My Recipes - Empty State", [recipeVariants.empty()]);
 
-export const ErrorState: Story = create("Error State", [recipeVariants.error()]);
+export const MyRecipesErrorState: Story = create("My Recipes - Error State", [recipeVariants.error()]);
 
-export const LoadingState: Story = create("Loading State", [recipeVariants.loading()]);
+export const MyRecipesLoadingState: Story = create("My Recipes - Loading State", [recipeVariants.loading()]);
+
+// Stories for Community Tab
+export const CommunityDefault: Story = {
+  ...create("Community - Default", [publicRecipeVariants.default()]),
+  args: {
+    initialTab: "community"
+  }
+};
+
+export const CommunityManyRecipes: Story = {
+  ...create("Community - Many Recipes", [publicRecipeVariants.many()]),
+  args: {
+    initialTab: "community"
+  }
+};
+
+export const CommunityEmptyState: Story = {
+  ...create("Community - Empty State", [publicRecipeVariants.empty()]),
+  args: {
+    initialTab: "community"
+  }
+};
+
+export const CommunityErrorState: Story = {
+  ...create("Community - Error State", [publicRecipeVariants.error()]),
+  args: {
+    initialTab: "community"
+  }
+};
+
+export const CommunityLoadingState: Story = {
+  ...create("Community - Loading State", [publicRecipeVariants.loading()]),
+  args: {
+    initialTab: "community"
+  }
+};
