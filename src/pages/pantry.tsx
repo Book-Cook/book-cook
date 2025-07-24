@@ -23,8 +23,12 @@ import {
   Text,
   makeStyles,
   tokens,
+  Checkbox,
 } from "@fluentui/react-components";
 import { AddRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
+import { useSuggestMeals } from "../clientToServer";
+import type { Recipe } from "../clientToServer";
+import Link from "next/link";
 
 // Simple type to track pantry items
 interface PantryItem {
@@ -37,14 +41,20 @@ interface PantryItem {
 }
 
 const useStyles = makeStyles({
-  container: { maxWidth: "1200px", margin: "0 auto", padding: "20px 16px" },
+  container: {
+    maxWidth: "800px",
+    margin: "40px auto",
+    padding: "0 16px",
+  },
   formRow: { display: "flex", gap: tokens.spacingHorizontalM },
+  headerActions: { display: "flex", gap: tokens.spacingHorizontalM },
   expiredText: {
     textDecoration: "line-through",
     color: tokens.colorNeutralForeground3,
   },
   expiringText: { color: tokens.colorPaletteRedForeground1 },
   emptyState: { textAlign: "center", padding: "40px 0" },
+  actionCell: { display: "flex", gap: tokens.spacingHorizontalXS },
 });
 
 export default function PantryPage() {
@@ -66,6 +76,10 @@ export default function PantryPage() {
     expirationDate: "",
     dateAdded: "",
   });
+  const { mutate: suggestMeals, isPending: isSuggesting } = useSuggestMeals();
+  const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
+  const [suggestedRecipes, setSuggestedRecipes] = React.useState<Recipe[]>([]);
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
 
   // Save to localStorage when items change
   React.useEffect(() => {
@@ -123,7 +137,44 @@ export default function PantryPage() {
   const handleDeleteItem = (id: string) => {
     if (confirm("Are you sure you want to remove this item?")) {
       setPantryItems((prev) => prev.filter((item) => item.id !== id));
+      setSelectedIds((prev) => prev.filter((selected) => selected !== id));
     }
+  };
+
+  const toggleSelectItem = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(pantryItems.map((i) => i.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSuggestMeals = () => {
+    const itemsToUse =
+      selectedIds.length > 0
+        ? pantryItems.filter((i) => selectedIds.includes(i.id))
+        : pantryItems;
+    if (!itemsToUse.length || isSuggesting) {
+      return;
+    }
+    suggestMeals(
+      { ingredients: itemsToUse.map((i) => i.name) },
+      {
+        onSuccess: (data) => {
+          setSuggestedRecipes(data.recipes);
+          setSuggestionsOpen(true);
+        },
+        onError: () => {
+          alert("Failed to fetch suggestions.");
+        },
+      }
+    );
   };
 
   // Check expiration status
@@ -175,13 +226,22 @@ export default function PantryPage() {
           <Subtitle1>Track your ingredients and expiration dates</Subtitle1>
         }
         action={
-          <Button
-            appearance="primary"
-            icon={<AddRegular />}
-            onClick={handleOpenAddDialog}
-          >
-            Add Ingredient
-          </Button>
+          <div className={styles.headerActions}>
+            <Button
+              appearance="primary"
+              icon={<AddRegular />}
+              onClick={handleOpenAddDialog}
+            >
+              Add Ingredient
+            </Button>
+            <Button
+              appearance="secondary"
+              onClick={handleSuggestMeals}
+              disabled={isSuggesting || pantryItems.length === 0}
+            >
+              Suggest Recipes
+            </Button>
+          </div>
         }
       />
 
@@ -190,6 +250,17 @@ export default function PantryPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHeaderCell>
+                  <Checkbox
+                    checked={selectedIds.length === pantryItems.length}
+                    indeterminate={
+                      selectedIds.length > 0 &&
+                      selectedIds.length < pantryItems.length
+                    }
+                    onChange={(_, data) => toggleSelectAll(data.checked)}
+                    aria-label="Select all"
+                  />
+                </TableHeaderCell>
                 <TableHeaderCell>Ingredient</TableHeaderCell>
                 <TableHeaderCell>Quantity</TableHeaderCell>
                 <TableHeaderCell>Expiration</TableHeaderCell>
@@ -205,6 +276,13 @@ export default function PantryPage() {
 
                 return (
                   <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => toggleSelectItem(item.id)}
+                        aria-label={`Select ${item.name}`}
+                      />
+                    </TableCell>
                     <TableCell>
                       <Text
                         className={
@@ -241,7 +319,7 @@ export default function PantryPage() {
                     </TableCell>
                     <TableCell>{item.expirationDate || "Not set"}</TableCell>
                     <TableCell>{item.dateAdded}</TableCell>
-                    <TableCell>
+                    <TableCell className={styles.actionCell}>
                       <Button
                         icon={<EditRegular />}
                         appearance="subtle"
@@ -341,6 +419,34 @@ export default function PantryPage() {
               </DialogActions>
             </DialogBody>
           </form>
+        </DialogSurface>
+      </Dialog>
+      <Dialog
+        open={suggestionsOpen}
+        onOpenChange={(e, data) => setSuggestionsOpen(data.open)}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>Recipe Suggestions</DialogTitle>
+            <DialogContent>
+              {suggestedRecipes.length > 0 ? (
+                <ul style={{ paddingLeft: "20px" }}>
+                  {suggestedRecipes.map((r) => (
+                    <li key={r._id}>
+                      <Link href={`/recipes/${r._id}`}>{r.title}</Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Text>No matching recipes found.</Text>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setSuggestionsOpen(false)} appearance="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </DialogBody>
         </DialogSurface>
       </Dialog>
     </div>
