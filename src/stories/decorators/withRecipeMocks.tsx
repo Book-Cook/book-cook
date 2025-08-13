@@ -84,25 +84,41 @@ export const generateManyPublicRecipes = () => [
 export const recipeVariants = {
   default: () => withApiMocks({
     '/api/recipes': {
-      response: baseRecipes,
+      response: {
+        recipes: baseRecipes,
+        totalCount: baseRecipes.length,
+        hasMore: false,
+      },
     },
   }),
 
   many: () => withApiMocks({
     '/api/recipes': {
-      response: generateManyRecipes(),
+      response: {
+        recipes: generateManyRecipes(),
+        totalCount: generateManyRecipes().length,
+        hasMore: false,
+      },
     },
   }),
 
   empty: () => withApiMocks({
     '/api/recipes': {
-      response: [],
+      response: {
+        recipes: [],
+        totalCount: 0,
+        hasMore: false,
+      },
     },
   }),
 
   loading: () => withApiMocks({
     '/api/recipes': {
-      response: baseRecipes,
+      response: {
+        recipes: baseRecipes,
+        totalCount: baseRecipes.length,
+        hasMore: false,
+      },
       delay: 999999,
     },
   }),
@@ -116,7 +132,11 @@ export const recipeVariants = {
 
   custom: (recipes: unknown[]) => withApiMocks({
     '/api/recipes': {
-      response: recipes,
+      response: {
+        recipes,
+        totalCount: recipes.length,
+        hasMore: false,
+      },
     },
   }),
 } as const;
