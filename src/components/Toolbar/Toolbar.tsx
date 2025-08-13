@@ -26,6 +26,7 @@ const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
 export const Toolbar = () => {
   const styles = useToolbarStyles();
   const router = useRouter();
+  const path = router.asPath;
 
   const { data: session } = useSession();
   const isMobile = useMediaQuery("(max-width: 900px)");
@@ -65,7 +66,7 @@ export const Toolbar = () => {
           {session?.user && (
             <>
               <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
-              {router.pathname !== "/recipes" && (
+              {path !== "/recipes" && (
                 <div className={styles.searchBarWrapper}>
                   <SearchBar />
                 </div>
