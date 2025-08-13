@@ -59,8 +59,10 @@ const useStyles = makeStyles({
     },
   },
   pageButtonActive: {
-    color: tokens.colorBrandForeground1,
-    fontWeight: tokens.fontWeightSemibold,
+    color: `${tokens.colorBrandForeground1} !important`,
+    fontWeight: `${tokens.fontWeightSemibold} !important`,
+    backgroundColor: `${tokens.colorBrandBackgroundSelected} !important`,
+    position: 'relative',
     '&::after': {
       content: '""',
       position: 'absolute',
@@ -68,13 +70,18 @@ const useStyles = makeStyles({
       left: '50%',
       transform: 'translateX(-50%)',
       width: '20px',
-      height: '3px',
+      height: '4px',
       backgroundColor: tokens.colorBrandBackground,
-      borderRadius: '2px',
+      borderRadius: '3px',
+      zIndex: 1,
     },
     '&:hover': {
-      backgroundColor: 'transparent',
-      color: tokens.colorBrandForeground1,
+      backgroundColor: `${tokens.colorBrandBackgroundSelected} !important`,
+      color: `${tokens.colorBrandForeground1} !important`,
+    },
+    '&:active': {
+      backgroundColor: `${tokens.colorBrandBackgroundSelected} !important`,
+      color: `${tokens.colorBrandForeground1} !important`,
     },
   },
   ellipsis: {
@@ -164,14 +171,35 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
             );
           }
           
+          const isActive = Number(page) === Number(currentPage);
           return (
             <Button
               key={page}
               appearance="transparent"
-              className={`${styles.pageButton} ${page === currentPage ? styles.pageButtonActive : ''}`}
+              className={styles.pageButton}
+              style={{
+                color: isActive ? tokens.colorBrandForeground1 : undefined,
+                fontWeight: isActive ? tokens.fontWeightSemibold : undefined,
+                fontSize: tokens.fontSizeBase300,
+                position: 'relative',
+              }}
               onClick={() => onPageChange(page as number)}
             >
               {page}
+              {isActive && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '20px',
+                    height: '3px',
+                    backgroundColor: tokens.colorBrandBackground,
+                    borderRadius: '2px',
+                  }}
+                />
+              )}
             </Button>
           );
         })}
