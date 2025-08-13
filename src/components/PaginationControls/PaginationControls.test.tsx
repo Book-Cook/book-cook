@@ -6,10 +6,7 @@ describe('PaginationControls', () => {
   const defaultProps = {
     currentPage: 1,
     totalPages: 5,
-    pageSize: 20,
-    totalItems: 100,
     onPageChange: jest.fn(),
-    onPageSizeChange: jest.fn(),
   };
 
   beforeEach(() => {
@@ -22,28 +19,30 @@ describe('PaginationControls', () => {
     expect(screen.getByText('1')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('Showing 1-20 of 100 items')).toBeInTheDocument();
   });
 
-  it('highlights current page', () => {
+  it('highlights current page with brand styling', () => {
     render(<PaginationControls {...defaultProps} currentPage={2} />);
     
     const currentPageButton = screen.getByRole('button', { name: '2' });
-    expect(currentPageButton).toHaveAttribute('aria-pressed', 'true');
+    expect(currentPageButton).toBeInTheDocument();
+    // Check for brand color styling
+    expect(currentPageButton).toHaveStyle({
+      color: 'var(--colorBrandForeground1)',
+      fontWeight: 'var(--fontWeightSemibold)'
+    });
   });
 
-  it('disables first/prev buttons on first page', () => {
+  it('disables previous button on first page', () => {
     render(<PaginationControls {...defaultProps} currentPage={1} />);
     
-    expect(screen.getByTitle('First page')).toBeDisabled();
     expect(screen.getByTitle('Previous page')).toBeDisabled();
   });
 
-  it('disables next/last buttons on last page', () => {
+  it('disables next button on last page', () => {
     render(<PaginationControls {...defaultProps} currentPage={5} totalPages={5} />);
     
     expect(screen.getByTitle('Next page')).toBeDisabled();
-    expect(screen.getByTitle('Last page')).toBeDisabled();
   });
 
   it('calls onPageChange when page button is clicked', () => {
@@ -61,12 +60,6 @@ describe('PaginationControls', () => {
     
     fireEvent.click(screen.getByTitle('Next page'));
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(4);
-    
-    fireEvent.click(screen.getByTitle('First page'));
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(1);
-    
-    fireEvent.click(screen.getByTitle('Last page'));
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(5);
   });
 
   it('shows ellipsis for large page ranges', () => {
@@ -76,70 +69,18 @@ describe('PaginationControls', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
-  it('handles page size changes', () => {
-    render(<PaginationControls {...defaultProps} />);
+  it('shows active page indicator element', () => {
+    render(<PaginationControls {...defaultProps} currentPage={2} />);
     
-    const dropdown = screen.getByRole('combobox');
-    fireEvent.click(dropdown);
-    
-    // Find the 50 option by its value rather than accessible name
-    const options = screen.getAllByRole('option');
-    const option50 = options.find(option => option.getAttribute('data-value') === '50' || option.textContent === '50');
-    
-    if (option50) {
-      fireEvent.click(option50);
-      expect(defaultProps.onPageSizeChange).toHaveBeenCalledWith(50);
-    } else {
-      // Skip this test if we can't find the option
-      expect(true).toBe(true);
-    }
-  });
-
-  it('handles go to page input', () => {
-    render(<PaginationControls {...defaultProps} />);
-    
-    const input = screen.getByPlaceholderText('Page');
-    const goButton = screen.getByRole('button', { name: 'Go' });
-    
-    fireEvent.change(input, { target: { value: '3' } });
-    fireEvent.click(goButton);
-    
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(3);
-  });
-
-  it('handles go to page with Enter key', () => {
-    render(<PaginationControls {...defaultProps} />);
-    
-    const input = screen.getByPlaceholderText('Page');
-    
-    fireEvent.change(input, { target: { value: '4' } });
-    fireEvent.keyDown(input, { key: 'Enter' });
-    
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(4);
-  });
-
-  it('ignores invalid page numbers', () => {
-    render(<PaginationControls {...defaultProps} />);
-    
-    const input = screen.getByPlaceholderText('Page');
-    const goButton = screen.getByRole('button', { name: 'Go' });
-    
-    fireEvent.change(input, { target: { value: '10' } }); // Beyond total pages
-    fireEvent.click(goButton);
-    
-    expect(defaultProps.onPageChange).not.toHaveBeenCalled();
-  });
-
-  it('shows correct item range for different pages', () => {
-    render(<PaginationControls {...defaultProps} currentPage={2} pageSize={20} totalItems={45} />);
-    
-    expect(screen.getByText('Showing 21-40 of 45 items')).toBeInTheDocument();
-  });
-
-  it('handles last page with fewer items', () => {
-    render(<PaginationControls {...defaultProps} currentPage={3} pageSize={20} totalItems={45} totalPages={3} />);
-    
-    expect(screen.getByText('Showing 41-45 of 45 items')).toBeInTheDocument();
+    const currentPageButton = screen.getByRole('button', { name: '2' });
+    // Check that the underline indicator div exists
+    const indicator = currentPageButton.querySelector('div');
+    expect(indicator).toBeInTheDocument();
+    expect(indicator).toHaveStyle({
+      position: 'absolute',
+      backgroundColor: 'var(--colorBrandBackground)',
+      borderRadius: '2px'
+    });
   });
 
   it('does not render when totalPages is 1', () => {

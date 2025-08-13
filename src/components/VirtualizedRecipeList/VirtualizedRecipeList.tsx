@@ -77,7 +77,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
   isLoading = false,
   error = null,
   onPageChange,
-  onPageSizeChange,
+  onPageSizeChange: _onPageSizeChange,
   emptyStateMessage = 'No recipes found.',
   loadingMessage = 'Loading recipes...',
 }) => {
@@ -152,10 +152,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
         <PaginationControls
           currentPage={currentPage}
           totalPages={totalPages}
-          pageSize={pageSize}
-          totalItems={totalCount}
           onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
         />
       )}
     </div>

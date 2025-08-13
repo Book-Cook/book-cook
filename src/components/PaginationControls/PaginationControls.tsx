@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Button,
-  Text,
   makeStyles,
   tokens,
 } from '@fluentui/react-components';
@@ -13,11 +12,7 @@ import {
 export interface PaginationControlsProps {
   currentPage: number;
   totalPages: number;
-  pageSize: number;
-  totalItems: number;
   onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-  pageSizeOptions?: number[];
 }
 
 const useStyles = makeStyles({
@@ -94,28 +89,9 @@ const useStyles = makeStyles({
 export const PaginationControls: React.FC<PaginationControlsProps> = ({
   currentPage,
   totalPages,
-  pageSize,
-  totalItems,
   onPageChange,
-  onPageSizeChange,
-  pageSizeOptions = [10, 20, 50],
 }) => {
   const styles = useStyles();
-  const [goToPage, setGoToPage] = React.useState('');
-
-  const handleGoToPage = () => {
-    const page = parseInt(goToPage, 10);
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
-      setGoToPage('');
-    }
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleGoToPage();
-    }
-  };
 
   const getVisiblePageNumbers = () => {
     const delta = 2;
@@ -146,9 +122,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   if (totalPages <= 1) {
     return null;
   }
-
-  const startItem = (currentPage - 1) * pageSize + 1;
-  const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
     <div className={styles.container}>

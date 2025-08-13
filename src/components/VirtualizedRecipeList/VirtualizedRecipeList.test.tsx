@@ -188,7 +188,6 @@ describe('VirtualizedRecipeList', () => {
     );
 
     // Should show pagination controls for 3 pages (50 items / 20 per page)
-    expect(screen.getByText('Showing 1-20 of 50 items')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '3' })).toBeInTheDocument();
