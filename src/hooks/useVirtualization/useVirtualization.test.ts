@@ -13,35 +13,32 @@ describe('useVirtualization', () => {
   it('calculates initial visible range correctly', () => {
     const { result } = renderHook(() => useVirtualization(defaultOptions));
 
-    expect(result.current.startIndex).toBe(0);
-    expect(result.current.endIndex).toBe(11); // Math.min(99, 0 + 5 + 3*2) = 11
-    expect(result.current.visibleItems).toBe(5); // 500 / 100
+    expect(result.current.visibleRange.start).toBe(0);
+    expect(result.current.visibleRange.end).toBe(8); // ceil(500/100) + 3 overscan
     expect(result.current.totalHeight).toBe(10000); // 100 * 100
     expect(result.current.offsetY).toBe(0);
-    expect(result.current.scrollTop).toBe(0);
   });
 
   it('updates visible range when scrolled', () => {
     const { result } = renderHook(() => useVirtualization(defaultOptions));
 
     act(() => {
-      result.current.handleScroll(1000); // Scroll down
+      result.current.onScroll(1000); // Scroll down
     });
 
-    expect(result.current.startIndex).toBe(7); // Math.max(0, Math.floor(1000/100) - 3)
-    expect(result.current.endIndex).toBe(18); // startIndex + visibleItems + overscan * 2
+    expect(result.current.visibleRange.start).toBe(7); // floor(1000/100) - 3 overscan
+    expect(result.current.visibleRange.end).toBe(18); // ceil((1000+500)/100) + 3 overscan
     expect(result.current.offsetY).toBe(700); // 7 * 100
-    expect(result.current.scrollTop).toBe(1000);
   });
 
   it('clamps start index to 0', () => {
     const { result } = renderHook(() => useVirtualization(defaultOptions));
 
     act(() => {
-      result.current.handleScroll(-100); // Negative scroll
+      result.current.onScroll(-100); // Negative scroll
     });
 
-    expect(result.current.startIndex).toBe(0);
+    expect(result.current.visibleRange.start).toBe(0);
     expect(result.current.offsetY).toBe(0);
   });
 
@@ -52,10 +49,10 @@ describe('useVirtualization', () => {
     }));
 
     act(() => {
-      result.current.handleScroll(500);
+      result.current.onScroll(500);
     });
 
-    expect(result.current.endIndex).toBe(9); // Clamped to totalItems - 1
+    expect(result.current.visibleRange.end).toBe(9); // Clamped to totalItems - 1
   });
 
   it('handles different item heights', () => {
@@ -64,15 +61,14 @@ describe('useVirtualization', () => {
       itemHeight: 200,
     }));
 
-    expect(result.current.visibleItems).toBe(3); // Math.ceil(500 / 200)
     expect(result.current.totalHeight).toBe(20000); // 100 * 200
 
     act(() => {
-      result.current.handleScroll(400);
+      result.current.onScroll(400);
     });
 
-    expect(result.current.startIndex).toBe(0); // Math.max(0, Math.floor(400/200) - 3)
-    expect(result.current.endIndex).toBe(9); // Math.min(99, 0 + 3 + 3*2) = 9
+    expect(result.current.visibleRange.start).toBe(0); // floor(400/200) - 3 = -1, clamped to 0
+    expect(result.current.visibleRange.end).toBe(8); // ceil((400+500)/200) + 3
   });
 
   it('handles different container heights', () => {
@@ -81,7 +77,7 @@ describe('useVirtualization', () => {
       containerHeight: 300,
     }));
 
-    expect(result.current.visibleItems).toBe(3); // Math.ceil(300 / 100)
+    expect(result.current.visibleRange.end).toBe(6); // ceil(300/100) + 3
   });
 
   it('handles custom overscan values', () => {
@@ -90,15 +86,15 @@ describe('useVirtualization', () => {
       overscan: 1,
     }));
 
-    expect(result.current.startIndex).toBe(0);
-    expect(result.current.endIndex).toBe(7); // Math.min(99, 0 + 5 + 1*2) = 7
+    expect(result.current.visibleRange.start).toBe(0);
+    expect(result.current.visibleRange.end).toBe(6); // ceil(500/100) + 1
 
     act(() => {
-      result.current.handleScroll(500);
+      result.current.onScroll(500);
     });
 
-    expect(result.current.startIndex).toBe(4); // Math.max(0, Math.floor(500/100) - 1)
-    expect(result.current.endIndex).toBe(11); // 4 + 5 + 1*2
+    expect(result.current.visibleRange.start).toBe(4); // floor(500/100) - 1
+    expect(result.current.visibleRange.end).toBe(11); // ceil((500+500)/100) + 1
   });
 
   it('handles zero overscan', () => {
@@ -107,15 +103,15 @@ describe('useVirtualization', () => {
       overscan: 0,
     }));
 
-    expect(result.current.startIndex).toBe(0);
-    expect(result.current.endIndex).toBe(5); // Math.min(99, 0 + 5 + 0*2) = 5
+    expect(result.current.visibleRange.start).toBe(0);
+    expect(result.current.visibleRange.end).toBe(5); // ceil(500/100)
 
     act(() => {
-      result.current.handleScroll(500);
+      result.current.onScroll(500);
     });
 
-    expect(result.current.startIndex).toBe(5); // Math.max(0, Math.floor(500/100) - 0)
-    expect(result.current.endIndex).toBe(10); // Math.min(99, 5 + 5 + 0*2) = 10
+    expect(result.current.visibleRange.start).toBe(5); // floor(500/100)
+    expect(result.current.visibleRange.end).toBe(10); // ceil((500+500)/100)
   });
 
   it('handles empty list', () => {
@@ -124,8 +120,8 @@ describe('useVirtualization', () => {
       totalItems: 0,
     }));
 
-    expect(result.current.startIndex).toBe(0);
-    expect(result.current.endIndex).toBe(-1); // Math.min(0 - 1, ...)
+    expect(result.current.visibleRange.start).toBe(0);
+    expect(result.current.visibleRange.end).toBe(-1); // min(0-1, ...)
     expect(result.current.totalHeight).toBe(0);
     expect(result.current.offsetY).toBe(0);
   });
@@ -136,8 +132,8 @@ describe('useVirtualization', () => {
       totalItems: 1,
     }));
 
-    expect(result.current.startIndex).toBe(0);
-    expect(result.current.endIndex).toBe(0);
+    expect(result.current.visibleRange.start).toBe(0);
+    expect(result.current.visibleRange.end).toBe(0);
     expect(result.current.totalHeight).toBe(100);
   });
 
@@ -145,18 +141,16 @@ describe('useVirtualization', () => {
     const { result } = renderHook(() => useVirtualization(defaultOptions));
 
     act(() => {
-      result.current.handleScroll(750);
+      result.current.onScroll(750);
     });
 
-    const firstScrollTop = result.current.scrollTop;
-    const firstStartIndex = result.current.startIndex;
+    const firstStart = result.current.visibleRange.start;
 
     act(() => {
-      result.current.handleScroll(750); // Same scroll position
+      result.current.onScroll(750); // Same scroll position
     });
 
-    expect(result.current.scrollTop).toBe(firstScrollTop);
-    expect(result.current.startIndex).toBe(firstStartIndex);
+    expect(result.current.visibleRange.start).toBe(firstStart);
   });
 
   it('recalculates when options change', () => {
