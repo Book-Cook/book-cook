@@ -8,12 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
 import { SearchBar } from "../Toolbar/SearchBar";
+import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
 
-import { RecipeCard, FallbackScreen, Unauthorized } from "..";
+import { Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
 
 export const RecipeGallery = () => {
@@ -24,42 +25,46 @@ export const RecipeGallery = () => {
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [availableTags, setAvailableTags] = React.useState<string[]>([]);
-  const [showLoadingIndicator, setShowLoadingIndicator] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(20);
 
   const {
-    data: recipes,
+    data: recipesResponse,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags],
-    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption, selectedTags),
+    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage, pageSize],
+    queryFn: () => fetchRecipesPaginated({
+      searchBoxValue,
+      orderBy: sortOption,
+      selectedTags,
+      offset: (currentPage - 1) * pageSize,
+      limit: pageSize,
+    }),
+    placeholderData: (previousData) => previousData,
   });
+
+  const recipes = recipesResponse?.recipes ?? [];
+  const totalCount = recipesResponse?.totalCount ?? 0;
+  
 
   const router = useRouter();
 
-  // Extract unique tags from recipes
+  // Extract unique tags from recipes  
   React.useEffect(() => {
     if (recipes?.length) {
       const uniqueTags = Array.from(
-        new Set(recipes.flatMap((recipe) => recipe.tags || []))
+        new Set(recipes.flatMap((recipe) => recipe.tags ?? []))
       );
       setAvailableTags(uniqueTags);
     }
-  }, [recipes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipes?.length]);
 
+  // Reset to page 1 when search/filter changes
   React.useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (isLoading) {
-      timer = setTimeout(() => {
-        setShowLoadingIndicator(true);
-      }, 300);
-    } else {
-      setShowLoadingIndicator(false);
-    }
-
-    return () => clearTimeout(timer);
-  }, [isLoading]);
+    setCurrentPage(1);
+  }, [searchBoxValue, sortOption, selectedTags]);
 
   React.useEffect(() => {
     const { tag } = router.query;
@@ -80,6 +85,15 @@ export const RecipeGallery = () => {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
+
   if (!session) {
     return <Unauthorized />;
   }
@@ -95,7 +109,7 @@ export const RecipeGallery = () => {
               weight="medium"
               style={{ color: "var(--colorNeutralForeground2)" }}
             >
-              {recipes?.length} recipes{" "}
+              {totalCount} recipes{" "}
               {searchBoxValue
                 ? `matching "${searchBoxValue}"`
                 : "in your collection"}
@@ -126,47 +140,19 @@ export const RecipeGallery = () => {
             />
           </div>
         </div>
-        <FallbackScreen
-          isLoading={showLoadingIndicator}
-          isError={Boolean(error)}
-          dataLength={recipes?.length}
-        >
-          <div className={styles.grid}>
-            {recipes?.map((recipe, index) => {
-              return (
-                <div
-                  key={recipe._id}
-                  className={`${styles.fadeIn} ${styles.cardWrapper}`}
-                  style={
-                    {
-                      "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
-                    } as React.CSSProperties
-                  }
-                >
-                  <RecipeCard
-                    title={recipe?.title}
-                    id={recipe?._id}
-                    emoji={recipe?.emoji || ""}
-                    createdDate={
-                      recipe?.createdAt &&
-                      new Date(recipe?.createdAt).toLocaleDateString(
-                        undefined,
-                        {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        }
-                      )
-                    }
-                    imageSrc={recipe?.imageURL}
-                    tags={recipe?.tags}
-                    isPublic={recipe?.isPublic}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </FallbackScreen>
+        
+        <VirtualizedRecipeList
+          recipes={recipes}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          isLoading={isLoading}
+          error={error as Error}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          emptyStateMessage="No recipes found in your collection."
+          loadingMessage="Loading your recipes..."
+        />
       </div>
     </RecipeProvider>
   );

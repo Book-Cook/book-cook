@@ -39,6 +39,8 @@ const handleGetRequest = async (
       sortProperty = "createdAt",
       sortDirection = "desc",
       tags,
+      limit = "20",
+      offset = "0",
     } = req.query;
 
     // 1. Validate query parameters
@@ -49,6 +51,13 @@ const handleGetRequest = async (
       !VALID_SORT_DIRECTIONS.includes(sortDirection)
     ) {
       return res.status(400).json({ message: "Invalid sorting parameters." });
+    }
+
+    const limitNum = parseInt(limit as string, 10);
+    const offsetNum = parseInt(offset as string, 10);
+
+    if (isNaN(limitNum) || isNaN(offsetNum) || limitNum < 1 || limitNum > 100) {
+      return res.status(400).json({ message: "Invalid pagination parameters." });
     }
 
     // 2. Define visibility conditions
@@ -101,11 +110,22 @@ const handleGetRequest = async (
       .collection<RecipeDocument>("recipes")
       .find(query, { projection })
       .sort({ [sortProperty]: direction })
+      .skip(offsetNum)
+      .limit(limitNum)
       .toArray();
+
+    // Get total count for pagination
+    const totalCount = await db
+      .collection<RecipeDocument>("recipes")
+      .countDocuments(query);
 
     // Add caching headers for better performance
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
-    res.status(200).json(recipes);
+    res.status(200).json({
+      recipes,
+      totalCount,
+      hasMore: offsetNum + limitNum < totalCount,
+    });
   } catch (error) {
     console.error("Failed to fetch recipes:", error);
     res.status(500).json({ message: "Internal Server Error" });
