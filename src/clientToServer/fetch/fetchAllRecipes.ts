@@ -10,11 +10,40 @@ const sortOptions = {
   descTitle: { property: "title", direction: "desc" },
 };
 
+export interface RecipesResponse {
+  recipes: Recipe[];
+  totalCount: number;
+  hasMore: boolean;
+}
+
+export interface FetchRecipesParams {
+  searchBoxValue: string;
+  orderBy: string;
+  selectedTags: string[];
+  offset?: number;
+  limit?: number;
+}
+
 export const fetchAllRecipes = async (
   searchBoxValue: string,
   orderBy: string,
   selectedTags: string[]
 ): Promise<Recipe[]> => {
+  const response = await fetchRecipesPaginated({
+    searchBoxValue,
+    orderBy,
+    selectedTags,
+  });
+  return response.recipes;
+};
+
+export const fetchRecipesPaginated = async ({
+  searchBoxValue,
+  orderBy,
+  selectedTags,
+  offset = 0,
+  limit = 20,
+}: FetchRecipesParams): Promise<RecipesResponse> => {
   const sanitized = DOMPurify.sanitize(searchBoxValue);
 
   const sortConfig =
@@ -30,6 +59,8 @@ export const fetchAllRecipes = async (
       .join("&");
     url += `&${tagsParam}`;
   }
+
+  url += `&offset=${offset}&limit=${limit}`;
 
   return fetchJson(url);
 };
