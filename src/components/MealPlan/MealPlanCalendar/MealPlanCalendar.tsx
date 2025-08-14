@@ -320,8 +320,8 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 
         addMealMutation.mutate(payload);
       } 
-      // If it's a week view drop zone without specific time, show time picker
-      else if (dropTarget.type === "week-day" || view === "week") {
+      // If it's a month view day, week view drop zone, or general day drop - show time picker
+      else if (dropTarget.type === "month-day" || dropTarget.type === "week-day" || view === "week" || view === "month") {
         setPendingMeal({ recipe, date: dropTarget.date });
         setShowTimePicker(true);
       }
@@ -358,14 +358,6 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 
   // Render current view
   const renderView = () => {
-    const baseMealRemove = async (date: string, mealType: string) => {
-      await fetch(`/api/meal-plans/${date}/${mealType}`, {
-        method: "DELETE",
-      });
-      // Invalidate all meal plan queries to ensure consistency across views
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    };
-
     const timeMealRemove = async (date: string, time: string, mealIndex: number): Promise<void> => {
       return new Promise<void>((resolve) => {
         removeMealMutation.mutate({ date, time, mealIndex });
@@ -382,7 +374,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     const monthProps = {
       currentDate,
       mealPlans: mealPlansData?.mealPlans ?? [],
-      onMealRemove: baseMealRemove,
+      onMealRemove: timeMealRemove,
     };
 
     switch (view) {

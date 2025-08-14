@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Text, makeStyles, tokens } from "@fluentui/react-components";
-
+import { Text, Button, makeStyles, tokens } from "@fluentui/react-components";
+import { Dismiss12Regular } from "@fluentui/react-icons";
+import { useDroppable } from "@dnd-kit/core";
+import { useRouter } from "next/router";
 
 import type { MealPlanWithRecipes, MealType } from "../../../clientToServer/types";
 
@@ -8,88 +10,175 @@ const useStyles = makeStyles({
   container: {
     display: "grid",
     gridTemplateColumns: "repeat(7, 1fr)",
-    gap: tokens.spacingHorizontalS,
+    gridTemplateRows: "24px repeat(6, 1fr)",
     height: "100%",
+    backgroundColor: tokens.colorNeutralBackground1,
+    overflow: "hidden",
   },
   dayOfWeekHeader: {
-    padding: tokens.spacingVerticalS,
-    textAlign: "center",
-    backgroundColor: tokens.colorNeutralBackground3,
+    padding: `2px ${tokens.spacingHorizontalXS}`,
+    textAlign: "left",
+    backgroundColor: tokens.colorNeutralBackground2,
     fontWeight: tokens.fontWeightSemibold,
-    fontSize: tokens.fontSizeBase200,
+    fontSize: tokens.fontSizeBase100,
     color: tokens.colorNeutralForeground2,
+    borderRight: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
+    height: "24px",
+    display: "flex",
+    alignItems: "center",
+    "&:last-child": {
+      borderRight: "none",
+    },
   },
   dayCell: {
     display: "flex",
     flexDirection: "column",
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRight: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
     backgroundColor: tokens.colorNeutralBackground1,
-    minHeight: "150px",
     position: "relative",
+    overflowY: "hidden",
+    "&:nth-child(7n)": {
+      borderRight: "none",
+    },
   },
   dayHeader: {
-    padding: tokens.spacingVerticalXS,
-    textAlign: "center",
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-    backgroundColor: tokens.colorNeutralBackground2,
+    padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalXS}`,
+    textAlign: "left",
+    backgroundColor: "transparent",
   },
   dayNumber: {
     fontSize: tokens.fontSizeBase200,
     fontWeight: tokens.fontWeightSemibold,
   },
   isToday: {
+    // Remove background color, let the circular indicator be the only visual cue
+  },
+  isTodayNumber: {
     backgroundColor: tokens.colorBrandBackground,
     color: tokens.colorNeutralForegroundOnBrand,
+    borderRadius: "50%",
+    width: "24px",
+    height: "24px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+  },
+  isTodayText: {
+    color: tokens.colorBrandForeground1,
+    fontWeight: tokens.fontWeightBold,
   },
   otherMonth: {
     opacity: 0.4,
   },
+  pastDay: {
+    opacity: 0.5,
+    backgroundColor: tokens.colorNeutralBackground2,
+  },
+  pastDayHeader: {
+    backgroundColor: "transparent",
+  },
+  isDraggingOver: {
+    backgroundColor: tokens.colorBrandBackground2,
+    borderRightColor: tokens.colorBrandStroke1,
+    borderBottomColor: tokens.colorBrandStroke1,
+    borderRightWidth: "2px",
+    borderBottomWidth: "2px",
+  },
   mealIndicators: {
     flex: 1,
-    padding: "4px",
+    padding: "2px",
     display: "flex",
     flexDirection: "column",
-    gap: "2px",
-    overflow: "auto",
+    gap: "1px",
+    overflow: "hidden",
+    minHeight: 0,
+    maxHeight: "calc(120px - 24px)", // dayCell height minus dayHeader height
   },
   mealIndicator: {
-    padding: "2px 4px",
-    borderRadius: "4px",
-    fontSize: "10px",
+    padding: "1px 4px 1px 2px",
+    borderRadius: "2px",
+    fontSize: "9px",
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: "2px",
-    minHeight: "16px",
+    height: "14px",
+    maxHeight: "14px",
+    minHeight: "14px",
+    cursor: "pointer",
+    position: "relative",
+    backgroundColor: "transparent",
+    flexShrink: 0,
+    "&:hover": {
+      transform: "scale(1.02)",
+      "& .meal-remove-button": {
+        opacity: 1,
+      },
+    },
   },
-  breakfast: {
-    backgroundColor: tokens.colorPaletteYellowBackground2,
+  mealContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "2px",
+    overflow: "hidden",
+    flex: 1,
+    paddingLeft: "2px",
   },
-  lunch: {
-    backgroundColor: tokens.colorPaletteGreenBackground2,
+  mealEmoji: {
+    fontSize: "8px",
+    flexShrink: 0,
   },
-  dinner: {
-    backgroundColor: tokens.colorPaletteBlueBackground2,
+  mealTitle: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    flex: 1,
+    minWidth: 0,
   },
-  snack: {
-    backgroundColor: tokens.colorPalettePurpleBackground2,
+  removeButton: {
+    minWidth: "12px",
+    width: "12px",
+    height: "12px",
+    padding: "0",
+    opacity: 0.6,
+    transition: "opacity 0.2s ease",
+    flexShrink: 0,
+    backgroundColor: "transparent",
+    borderRadius: "2px",
+    border: "none",
+    color: tokens.colorNeutralForeground3,
+    "&:hover": {
+      opacity: 1,
+      backgroundColor: tokens.colorNeutralBackground2,
+      color: tokens.colorNeutralForeground1,
+    },
   },
+  breakfast: {},
+  lunch: {},
+  dinner: {},
+  snack: {},
 });
 
 interface MonthViewProps {
   currentDate: Date;
   mealPlans: MealPlanWithRecipes[];
-  onMealRemove: (date: string, mealType: string) => Promise<void>;
+  onMealRemove: (date: string, time: string, mealIndex: number) => Promise<void>;
 }
 
 export const MonthView: React.FC<MonthViewProps> = ({
   currentDate,
   mealPlans,
-  onMealRemove: _onMealRemove,
+  onMealRemove,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
   
   // Get all days in the month calendar view (including previous/next month days)
   const getCalendarDays = () => {
@@ -131,6 +220,52 @@ export const MonthView: React.FC<MonthViewProps> = ({
     const dateStr = date.toISOString().split("T")[0];
     return mealPlans.find(p => p.date === dateStr);
   };
+
+  const handleMealClick = (recipeId: string, event: React.MouseEvent) => {
+    // Don't navigate if clicking the remove button
+    if ((event.target as HTMLElement).closest('.meal-remove-button')) {
+      event.stopPropagation();
+      return;
+    }
+    void router.push(`/recipes/${recipeId}`);
+  };
+
+  const handleRemoveClick = (date: string, time: string, mealIndex: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    void onMealRemove(date, time, mealIndex);
+  };
+
+  // Create a droppable day cell component
+  const DroppableDayCell: React.FC<{
+    date: Date;
+    isToday: boolean;
+    isCurrentMonth: boolean;
+    isPast: boolean;
+    mealPlan: MealPlanWithRecipes | undefined;
+    children: React.ReactNode;
+  }> = ({ date, isToday, isCurrentMonth, isPast, mealPlan: _mealPlan, children }) => {
+    const dateStr = date.toISOString().split("T")[0];
+    
+    const { isOver, setNodeRef } = useDroppable({
+      id: `month-day-${dateStr}`,
+      data: {
+        date: dateStr,
+        type: "month-day",
+      },
+    });
+
+    const cellClass = `${styles.dayCell} ${
+      !isCurrentMonth ? styles.otherMonth : ""
+    } ${isPast ? styles.pastDay : ""} ${isToday ? styles.isToday : ""} ${
+      isOver ? styles.isDraggingOver : ""
+    }`;
+
+    return (
+      <div ref={setNodeRef} className={cellClass}>
+        {children}
+      </div>
+    );
+  };
   
   return (
     <div className={styles.container}>
@@ -148,48 +283,64 @@ export const MonthView: React.FC<MonthViewProps> = ({
         const isCurrentMonth = date.getMonth() === currentMonth;
         const mealPlan = getMealPlan(date);
         
-        const cellClass = `${styles.dayCell} ${
-          !isCurrentMonth ? styles.otherMonth : ""
-        }`;
+        // Check if this day has passed
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const dayDate = new Date(date);
+        dayDate.setHours(0, 0, 0, 0);
+        const isPast = dayDate < now && !isToday;
         
-        const headerClass = `${styles.dayHeader} ${
-          isToday ? styles.isToday : ""
-        }`;
+        const headerClass = `${styles.dayHeader} ${isPast ? styles.pastDayHeader : ""}`;
         
         return (
-          <div key={dateStr} className={cellClass}>
+          <DroppableDayCell
+            key={dateStr}
+            date={date}
+            isToday={isToday}
+            isCurrentMonth={isCurrentMonth}
+            isPast={isPast}
+            mealPlan={mealPlan}
+          >
             <div className={headerClass}>
-              <Text className={styles.dayNumber}>
-                {date.getDate()}
-              </Text>
+              {isToday ? (
+                <div className={styles.isTodayNumber}>
+                  {date.getDate()}
+                </div>
+              ) : (
+                <Text className={`${styles.dayNumber} ${isToday ? styles.isTodayText : ""}`}>
+                  {date.getDate()}
+                </Text>
+              )}
             </div>
             
             <div className={styles.mealIndicators}>
               {/* Show time-based meals if available */}
               {mealPlan?.meals?.timeSlots && Array.isArray(mealPlan.meals.timeSlots) ? (
-                mealPlan.meals.timeSlots.slice(0, 4).map((slot, index) => {
-                  if (!slot.meals || slot.meals.length === 0) {return null;}
-                  const firstMeal = slot.meals[0];
+                mealPlan.meals.timeSlots.flatMap((slot, slotIndex) => {
+                  if (!slot.meals || slot.meals.length === 0) {return [];}
                   
-                  // Map time slots to color styles
-                  const getColorStyle = (time: string) => {
-                    const hour = parseInt(time.split(':')[0]);
-                    if (hour < 10) {return styles.breakfast;}
-                    if (hour < 14) {return styles.lunch;}
-                    if (hour < 17) {return styles.snack;}
-                    return styles.dinner;
-                  };
                   
-                  return (
+                  // Show each meal in the time slot
+                  return slot.meals.map((meal, mealIndex) => (
                     <div
-                      key={`${slot.time}-${index}`}
-                      className={`${styles.mealIndicator} ${getColorStyle(slot.time)}`}
-                      title={`${slot.time}: ${(firstMeal.recipe?.title as string) ?? "Recipe"}`}
+                      key={`${slot.time}-${slotIndex}-${mealIndex}`}
+                      className={styles.mealIndicator}
+                      title={`${slot.time}: ${(meal.recipe?.title as string) ?? "Recipe"} - Click to view`}
+                      onClick={(e) => handleMealClick(meal.recipeId, e)}
                     >
-                      <span>{(firstMeal.recipe?.emoji as string) ?? "🍽️"}</span>
-                      <span>{(firstMeal.recipe?.title as string) ?? "Meal"}</span>
+                      <div className={styles.mealContent}>
+                        <span className={styles.mealEmoji}>{(meal.recipe?.emoji as string) ?? "🍽️"}</span>
+                        <span className={styles.mealTitle}>{(meal.recipe?.title as string) ?? "Meal"}</span>
+                      </div>
+                      <Button
+                        appearance="subtle"
+                        className={`${styles.removeButton} meal-remove-button`}
+                        icon={<Dismiss12Regular />}
+                        onClick={(e) => handleRemoveClick(dateStr, slot.time, mealIndex, e)}
+                        title="Remove meal"
+                      />
                     </div>
-                  );
+                  ));
                 })
               ) : (
                 /* Fall back to legacy meal types */
@@ -197,20 +348,38 @@ export const MonthView: React.FC<MonthViewProps> = ({
                   const meal = mealPlan?.meals?.[mealType as MealType];
                   if (!meal) {return null;}
                   
+                  // Map legacy meal types to default times for removal
+                  const legacyTimeMap: Record<string, string> = {
+                    breakfast: '08:00',
+                    lunch: '12:30',
+                    dinner: '18:30',
+                    snack: '15:00',
+                  };
+                  
                   return (
                     <div
                       key={mealType}
-                      className={`${styles.mealIndicator} ${styles[mealType as keyof typeof styles]}`}
-                      title={`${mealType}: ${(meal.recipe?.title as string) ?? "Recipe"}`}
+                      className={styles.mealIndicator}
+                      title={`${mealType}: ${(meal.recipe?.title as string) ?? "Recipe"} - Click to view`}
+                      onClick={(e) => handleMealClick(meal.recipeId, e)}
                     >
-                      <span>{(meal.recipe?.emoji as string) ?? "🍽️"}</span>
-                      <span>{(meal.recipe?.title as string) ?? mealType}</span>
+                      <div className={styles.mealContent}>
+                        <span className={styles.mealEmoji}>{(meal.recipe?.emoji as string) ?? "🍽️"}</span>
+                        <span className={styles.mealTitle}>{(meal.recipe?.title as string) ?? mealType}</span>
+                      </div>
+                      <Button
+                        appearance="subtle"
+                        className={`${styles.removeButton} meal-remove-button`}
+                        icon={<Dismiss12Regular />}
+                        onClick={(e) => handleRemoveClick(dateStr, legacyTimeMap[mealType], 0, e)}
+                        title="Remove meal"
+                      />
                     </div>
                   );
                 })
               )}
             </div>
-          </div>
+          </DroppableDayCell>
         );
       })}
     </div>

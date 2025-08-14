@@ -40,8 +40,7 @@ export const useStyles = makeStyles({
     marginLeft: tokens.spacingHorizontalL,
   },
   calendarContent: {
-    flex: 1,
-    overflow: "auto",
-    padding: tokens.spacingVerticalL,
+    height: "calc(100vh - 120px)",
+    overflow: "hidden",
   },
 });

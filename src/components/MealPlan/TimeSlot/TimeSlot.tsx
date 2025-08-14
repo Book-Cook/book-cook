@@ -2,6 +2,7 @@ import * as React from "react";
 import { Text, Button, makeStyles, tokens } from "@fluentui/react-components";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useDroppable } from "@dnd-kit/core";
+import { useRouter } from "next/router";
 
 import type { MealItem } from "../../../clientToServer/types";
 import { formatTimeForDisplay } from "../../../utils/timeSlots";
@@ -66,6 +67,12 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground2,
     borderRadius: tokens.borderRadiusSmall,
     position: "relative",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      backgroundColor: tokens.colorNeutralBackground2Hover,
+      transform: "translateY(-1px)",
+    },
   },
   emoji: {
     fontSize: "18px",
@@ -116,6 +123,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
   showTimeLabel = true,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
   
   const { isOver, setNodeRef } = useDroppable({
     id: `${date}-${time}`,
@@ -127,6 +135,20 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
   });
 
   const containerClass = `${styles.container} ${isOver ? styles.isDraggingOver : ""}`;
+
+  const handleMealClick = (recipeId: string, event: React.MouseEvent) => {
+    // Don't navigate if clicking the remove button
+    if ((event.target as HTMLElement).closest('button')) {
+      event.stopPropagation();
+      return;
+    }
+    void router.push(`/recipes/${recipeId}`);
+  };
+
+  const handleRemoveClick = (index: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    onRemoveMeal(index);
+  };
 
   return (
     <div ref={setNodeRef} className={containerClass}>
@@ -145,7 +167,12 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
           {meals.map((meal, index) => {
             const recipe = meal.recipe;
             return (
-              <div key={`${meal.recipeId}-${index}`} className={styles.mealItem}>
+              <div 
+                key={`${meal.recipeId}-${index}`} 
+                className={styles.mealItem}
+                onClick={(e) => handleMealClick(meal.recipeId, e)}
+                title={`Click to view ${(recipe?.title as string) ?? "recipe"}`}
+              >
                 <span className={styles.emoji}>
                   {(recipe?.emoji as string) || "🍽️"}
                 </span>
@@ -163,7 +190,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
                   appearance="subtle"
                   className={styles.removeButton}
                   icon={<Dismiss12Regular />}
-                  onClick={() => onRemoveMeal(index)}
+                  onClick={(e) => handleRemoveClick(index, e)}
                   title="Remove meal"
                 />
               </div>

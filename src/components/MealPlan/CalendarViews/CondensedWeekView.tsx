@@ -118,6 +118,12 @@ const useStyles = makeStyles({
       color: tokens.colorBrandForeground1,
     },
   },
+  pastDay: {
+    opacity: 0.5,
+  },
+  pastDayHeader: {
+    backgroundColor: tokens.colorNeutralBackground3,
+  },
 });
 
 interface CondensedWeekViewProps {
@@ -209,9 +215,16 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
         const dateStr = date.toISOString().split("T")[0];
         const scheduledMeals = getScheduledMeals(date);
         
+        // Check if this day has passed
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const dayDate = new Date(date);
+        dayDate.setHours(0, 0, 0, 0);
+        const isPast = dayDate < now;
+        
         return (
-          <div key={date.toISOString()} className={styles.dayColumn}>
-            <div className={styles.dayHeader}>
+          <div key={date.toISOString()} className={`${styles.dayColumn} ${isPast ? styles.pastDay : ''}`}>
+            <div className={`${styles.dayHeader} ${isPast ? styles.pastDayHeader : ''}`}>
               <Text className={`${styles.dayName} ${isToday ? styles.isToday : ""}`}>
                 {dayNames[index]}
               </Text>

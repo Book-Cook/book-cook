@@ -44,6 +44,12 @@ const useStyles = makeStyles({
   timeSlotContainer: {
     marginBottom: tokens.spacingVerticalS,
   },
+  pastTime: {
+    opacity: 0.5,
+  },
+  pastTimeLabel: {
+    color: tokens.colorNeutralForeground3,
+  },
 });
 
 interface HourlyDayViewProps {
@@ -129,12 +135,19 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
         {timeSlots.map(time => {
           const meals = allMeals.get(time) ?? [];
           
+          // Check if this time has passed
+          const now = new Date();
+          const [hours, minutes] = time.split(':').map(Number);
+          const timeDate = new Date(currentDate);
+          timeDate.setHours(hours, minutes, 0, 0);
+          const isPast = timeDate < now;
+          
           return (
             <React.Fragment key={time}>
-              <div className={styles.timeLabel}>
+              <div className={`${styles.timeLabel} ${isPast ? styles.pastTimeLabel : ''}`}>
                 {time}
               </div>
-              <div className={styles.timeSlotContainer}>
+              <div className={`${styles.timeSlotContainer} ${isPast ? styles.pastTime : ''}`}>
                 <TimeSlot
                   date={dateStr}
                   time={time}
