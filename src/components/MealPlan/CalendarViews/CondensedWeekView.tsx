@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalM,
     padding: tokens.spacingVerticalM,
     height: "100%",
-    overflow: "auto",
+    overflow: "hidden",
   },
   weekHeader: {
     display: "contents", // This makes the header items flow into the main grid

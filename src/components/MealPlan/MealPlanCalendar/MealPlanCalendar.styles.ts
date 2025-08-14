@@ -54,14 +54,16 @@ export const useStyles = makeStyles({
       display: "none",
     },
   },
-  mobileToggle: {
-    position: "absolute",
-    top: "80px",
-    left: "16px",
+  mobileFloatingButton: {
+    position: "fixed",
+    bottom: "24px",
+    right: "24px",
     zIndex: 20,
     display: "none",
+    boxShadow: tokens.shadow16,
+    borderRadius: tokens.borderRadiusLarge,
     "@media (max-width: 768px)": {
-      display: "block",
+      display: "flex",
     },
   },
   overlay: {
@@ -144,5 +146,6 @@ export const useStyles = makeStyles({
   calendarContent: {
     height: "calc(100vh - 120px)",
     overflow: "hidden",
+    position: "relative",
   },
 });

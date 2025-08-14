@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     height: "100%",
-    overflow: "auto",
+    overflow: "hidden",
   },
   header: {
     padding: tokens.spacingVerticalM,

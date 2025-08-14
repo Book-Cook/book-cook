@@ -10,12 +10,7 @@ import type { DragEndEvent} from "@dnd-kit/core";
 import { 
   DndContext, 
   DragOverlay, 
-  pointerWithin,
-  useSensor,
-  useSensors,
-  PointerSensor,
-  MouseSensor,
-  TouchSensor
+  pointerWithin
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -44,7 +39,14 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   } | null>(null);
   
   // Sidebar state and resizing
-  const [sidebarWidth, setSidebarWidth] = React.useState(300);
+  const [sidebarWidth, setSidebarWidth] = React.useState(() => {
+    // Load saved width from localStorage
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mealPlanSidebarWidth');
+      return saved ? parseInt(saved, 10) : 300;
+    }
+    return 300;
+  });
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [isResizing, setIsResizing] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
@@ -90,6 +92,10 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 
     const handleMouseUp = () => {
       setIsResizing(false);
+      // Save sidebar width to localStorage when resizing is done
+      if (typeof window !== 'undefined' && !isMobile) {
+        localStorage.setItem('mealPlanSidebarWidth', sidebarWidth.toString());
+      }
     };
 
     if (isResizing) {
@@ -103,7 +109,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.userSelect = '';
     };
-  }, [isResizing]);
+  }, [isResizing, sidebarWidth, isMobile]);
 
   // Calculate date range based on view
   const getDateRange = () => {
@@ -397,6 +403,8 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       else if (dropTarget.type === "month-day" || dropTarget.type === "week-day" || view === "week" || view === "month") {
         setPendingMeal({ recipe, date: dropTarget.date });
         setShowTimePicker(true);
+        // Close sidebar when showing time picker
+        setSidebarOpen(false);
       }
       // Legacy meal type support
       else if (dropTarget.mealType) {
@@ -426,6 +434,10 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 
       addMealMutation.mutate(payload);
       setPendingMeal(null);
+      // Re-open sidebar after time selection on mobile
+      if (isMobile) {
+        setTimeout(() => setSidebarOpen(true), 300);
+      }
     }
   };
 
@@ -469,14 +481,16 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       collisionDetection={pointerWithin}
     >
       <div className={styles.container}>
-        {/* Mobile toggle button */}
+        {/* Mobile floating button */}
         <Button
-          appearance="subtle"
+          appearance="primary"
           icon={<PanelLeft24Regular />}
-          className={styles.mobileToggle}
+          className={styles.mobileFloatingButton}
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          title="Toggle recipe search"
-        />
+          style={{ display: (draggedRecipe || showTimePicker) ? 'none' : undefined }}
+        >
+          Add
+        </Button>
         
         {/* Mobile overlay */}
         {sidebarOpen && !draggedRecipe && (
