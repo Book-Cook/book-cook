@@ -316,7 +316,10 @@ export const MonthView: React.FC<MonthViewProps> = ({
             <div className={styles.mealIndicators}>
               {/* Show time-based meals if available */}
               {mealPlan?.meals?.timeSlots && Array.isArray(mealPlan.meals.timeSlots) ? (
-                mealPlan.meals.timeSlots.flatMap((slot, slotIndex) => {
+                // Sort time slots by time first, then flatten
+                mealPlan.meals.timeSlots
+                  .sort((a, b) => a.time.localeCompare(b.time))
+                  .flatMap((slot, slotIndex) => {
                   if (!slot.meals || slot.meals.length === 0) {return [];}
                   
                   

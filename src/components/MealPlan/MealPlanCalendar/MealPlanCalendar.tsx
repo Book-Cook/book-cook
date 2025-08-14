@@ -398,27 +398,29 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         
         <div className={styles.main}>
           <div className={styles.viewControls}>
-            <Button
-              appearance={view === "day" ? "primary" : "subtle"}
-              className={styles.viewButton}
-              onClick={() => setView("day")}
-            >
-              Day
-            </Button>
-            <Button
-              appearance={view === "week" ? "primary" : "subtle"}
-              className={styles.viewButton}
-              onClick={() => setView("week")}
-            >
-              Week
-            </Button>
-            <Button
-              appearance={view === "month" ? "primary" : "subtle"}
-              className={styles.viewButton}
-              onClick={() => setView("month")}
-            >
-              Month
-            </Button>
+            <div className={styles.viewButtons}>
+              <Button
+                appearance={view === "day" ? "primary" : "subtle"}
+                className={styles.viewButton}
+                onClick={() => setView("day")}
+              >
+                Day
+              </Button>
+              <Button
+                appearance={view === "week" ? "primary" : "subtle"}
+                className={styles.viewButton}
+                onClick={() => setView("week")}
+              >
+                Week
+              </Button>
+              <Button
+                appearance={view === "month" ? "primary" : "subtle"}
+                className={styles.viewButton}
+                onClick={() => setView("month")}
+              >
+                Month
+              </Button>
+            </div>
             
             <Text className={styles.dateDisplay}>
               {formatDateDisplay()}
