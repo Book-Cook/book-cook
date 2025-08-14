@@ -8,6 +8,14 @@ export interface ApiMockConfig {
     response: unknown;
     status?: number;
     delay?: number;
+    handler?: (req: any) => unknown;
+  } | {
+    [method: string]: {
+      response: unknown;
+      status?: number;
+      delay?: number;
+      handler?: (req: any) => unknown;
+    };
   };
 }
 
@@ -31,17 +39,38 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
     const method = options?.method?.toUpperCase() ?? 'GET';
     
     for (const [endpoint, config] of Object.entries(mockConfig)) {
-      const mockMethod = config.method?.toUpperCase() ?? 'GET';
-      
-      if (urlString.includes(endpoint) && method === mockMethod) {
-        if (config.delay) {
-          await new Promise(resolve => setTimeout(resolve, config.delay));
+      if (urlString.includes(endpoint)) {
+        let mockConfig: any = null;
+        
+        // Check if this is a method-specific configuration
+        if ('method' in config || 'response' in config) {
+          // Legacy format: single config with optional method
+          const legacyConfig = config as { method?: string; response: unknown; status?: number; delay?: number; handler?: (req: any) => unknown; };
+          const mockMethod = legacyConfig.method?.toUpperCase() ?? 'GET';
+          if (method === mockMethod) {
+            mockConfig = legacyConfig;
+          }
+        } else {
+          // New format: method-specific configs
+          const methodConfigs = config as { [method: string]: { response: unknown; status?: number; delay?: number; handler?: (req: any) => unknown; } };
+          mockConfig = methodConfigs[method];
         }
         
-        return new Response(JSON.stringify(config.response), {
-          status: config.status ?? 200,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        if (mockConfig) {
+          if (mockConfig.delay) {
+            await new Promise(resolve => setTimeout(resolve, mockConfig.delay));
+          }
+          
+          // Use handler if available, otherwise use response
+          const responseData = mockConfig.handler 
+            ? mockConfig.handler({ body: options?.body, headers: options?.headers, method })
+            : mockConfig.response;
+          
+          return new Response(JSON.stringify(responseData), {
+            status: mockConfig.status ?? 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
       }
     }
     
