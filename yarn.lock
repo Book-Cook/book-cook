@@ -15,13 +15,13 @@
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.3"
 
-"@ai-sdk/google@^1.2.8":
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/google/-/google-1.2.22.tgz#9993e4781c9a773cd17d47490b9efdc90895abd2"
-  integrity sha512-Ppxu3DIieF1G9pyQ5O1Z646GYR0gkC57YdBqXJ82qvCdhEhZHu0TWhmnOoeIWe2olSbuDeoOY+MfJrW8dzS3Hw==
+"@ai-sdk/google@^2.0.0":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/google/-/google-2.0.6.tgz#8d1c2fb1cc358efcc22191f4bc442c8997fdaed7"
+  integrity sha512-8acuseWJI+RRH99JDWM/n7IJRuuGNa4YzLXB/leqE/ZByHyIiVWGADjJi/vfnJnmdM5fQnezJ6SRTF6feI5rSQ==
   dependencies:
-    "@ai-sdk/provider" "1.1.3"
-    "@ai-sdk/provider-utils" "2.2.8"
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.3"
 
 "@ai-sdk/openai@^1.3.7":
   version "1.3.23"
