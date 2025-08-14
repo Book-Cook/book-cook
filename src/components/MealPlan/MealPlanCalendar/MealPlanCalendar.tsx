@@ -4,9 +4,20 @@ import {
   ChevronLeft24Regular,
   ChevronRight24Regular,
   CalendarToday24Regular,
+  PanelLeft24Regular,
 } from "@fluentui/react-icons";
 import type { DragEndEvent} from "@dnd-kit/core";
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+import { 
+  DndContext, 
+  DragOverlay, 
+  pointerWithin,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  MouseSensor,
+  TouchSensor
+} from "@dnd-kit/core";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useStyles } from "./MealPlanCalendar.styles";
@@ -31,6 +42,68 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     recipe: DraggedRecipe;
     date: string;
   } | null>(null);
+  
+  // Sidebar state and resizing
+  const [sidebarWidth, setSidebarWidth] = React.useState(300);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [isResizing, setIsResizing] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  // Handle sidebar resizing
+  const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  }, []);
+
+  // Handle media query changes
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      const wasMovingToDesktop = isMobile && !e.matches;
+      setIsMobile(e.matches);
+      
+      // Close sidebar when moving from mobile to desktop to avoid animation
+      if (wasMovingToDesktop && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Set initial state
+    setIsMobile(mediaQuery.matches);
+    
+    // Listen for changes
+    mediaQuery.addEventListener('change', handleMediaChange);
+    
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    };
+  }, [isMobile, sidebarOpen]);
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      
+      const newWidth = Math.max(200, Math.min(500, e.clientX));
+      setSidebarWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   // Calculate date range based on view
   const getDateRange = () => {
@@ -390,10 +463,39 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   };
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext 
+      onDragStart={handleDragStart} 
+      onDragEnd={handleDragEnd}
+      collisionDetection={pointerWithin}
+    >
       <div className={styles.container}>
-        <div className={styles.sidebar}>
+        {/* Mobile toggle button */}
+        <Button
+          appearance="subtle"
+          icon={<PanelLeft24Regular />}
+          className={styles.mobileToggle}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          title="Toggle recipe search"
+        />
+        
+        {/* Mobile overlay */}
+        {sidebarOpen && !draggedRecipe && (
+          <div 
+            className={styles.overlay} 
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        
+        <div 
+          className={`${styles.sidebar} ${sidebarOpen && !draggedRecipe ? styles.sidebarOpen : ''} ${draggedRecipe ? styles.sidebarNoTransition : ''}`}
+          style={{ width: `${sidebarWidth}px` }}
+        >
           <MealPlanSidebar />
+          {/* Resizer handle */}
+          <div 
+            className={styles.sidebarResizer}
+            onMouseDown={handleMouseDown}
+          />
         </div>
         
         <div className={styles.main}>
@@ -455,7 +557,13 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         </div>
       </div>
       
-      <DragOverlay>
+      <DragOverlay
+        dropAnimation={null}
+        modifiers={[snapCenterToCursor]}
+        style={{
+          cursor: 'grabbing',
+        }}
+      >
         {draggedRecipe && (
           <RecipeDragCard
             id={draggedRecipe.id}

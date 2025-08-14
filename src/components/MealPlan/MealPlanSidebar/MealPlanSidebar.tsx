@@ -13,8 +13,11 @@ const useStyles = makeStyles({
     height: "100%",
   },
   header: {
-    padding: tokens.spacingVerticalM,
+    padding: tokens.spacingVerticalS,
     borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
+    "@media (max-width: 768px)": {
+      padding: tokens.spacingVerticalXS,
+    },
   },
   searchBox: {
     width: "100%",

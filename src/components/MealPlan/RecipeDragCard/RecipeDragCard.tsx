@@ -59,6 +59,7 @@ const useStyles = makeStyles({
   overlay: {
     transform: "rotate(5deg)",
     boxShadow: tokens.shadow16,
+    cursor: "grabbing",
   },
 });
 
