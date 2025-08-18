@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    height: "100vh",
+    height: "calc(100vh - 60px)", // Subtract toolbar height
     backgroundColor: tokens.colorNeutralBackground2,
   },
   content: {

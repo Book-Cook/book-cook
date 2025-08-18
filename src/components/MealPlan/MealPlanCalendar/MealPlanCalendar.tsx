@@ -1,11 +1,6 @@
 import * as React from "react";
-import { Button, Text } from "@fluentui/react-components";
-import {
-  ChevronLeft24Regular,
-  ChevronRight24Regular,
-  CalendarToday24Regular,
-  PanelLeft24Regular,
-} from "@fluentui/react-icons";
+import { Button } from "@fluentui/react-components";
+import { PanelLeft24Regular } from "@fluentui/react-icons";
 import type { DragEndEvent} from "@dnd-kit/core";
 import { 
   DndContext, 
@@ -13,13 +8,16 @@ import {
   pointerWithin
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { useStyles } from "./MealPlanCalendar.styles";
 import type { MealPlanCalendarProps, CalendarView, DraggedRecipe } from "./MealPlanCalendar.types";
+import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import { CondensedWeekView } from "../CalendarViews/CondensedWeekView";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
+import { useMealPlanMutations } from "../hooks/useMealPlanMutations";
+import { useSidebarResize } from "../hooks/useSidebarResize";
 import { MealPlanSidebar } from "../MealPlanSidebar/MealPlanSidebar";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 import { TimePicker } from "../TimePicker/TimePicker";
@@ -28,7 +26,6 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   initialView = "week" 
 }) => {
   const styles = useStyles();
-  const queryClient = useQueryClient();
   const [view, setView] = React.useState<CalendarView>(initialView);
   const [currentDate, setCurrentDate] = React.useState(new Date());
   const [draggedRecipe, setDraggedRecipe] = React.useState<DraggedRecipe | null>(null);
@@ -39,77 +36,25 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   } | null>(null);
   
   // Sidebar state and resizing
-  const [sidebarWidth, setSidebarWidth] = React.useState(() => {
-    // Load saved width from localStorage
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('mealPlanSidebarWidth');
-      return saved ? parseInt(saved, 10) : 300;
-    }
-    return 300;
-  });
+  const { sidebarWidth, isMobile, handleMouseDown } = useSidebarResize();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
-  const [isResizing, setIsResizing] = React.useState(false);
-  const [isMobile, setIsMobile] = React.useState(false);
 
-  // Handle sidebar resizing
-  const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-  }, []);
-
-  // Handle media query changes
+  // Close sidebar when switching from mobile to desktop
   React.useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     
     const handleMediaChange = (e: MediaQueryListEvent) => {
       const wasMovingToDesktop = isMobile && !e.matches;
-      setIsMobile(e.matches);
-      
-      // Close sidebar when moving from mobile to desktop to avoid animation
       if (wasMovingToDesktop && sidebarOpen) {
         setSidebarOpen(false);
       }
     };
 
-    // Set initial state
-    setIsMobile(mediaQuery.matches);
-    
-    // Listen for changes
     mediaQuery.addEventListener('change', handleMediaChange);
-    
     return () => {
       mediaQuery.removeEventListener('change', handleMediaChange);
     };
   }, [isMobile, sidebarOpen]);
-
-  React.useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing) return;
-      
-      const newWidth = Math.max(200, Math.min(500, e.clientX));
-      setSidebarWidth(newWidth);
-    };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-      // Save sidebar width to localStorage when resizing is done
-      if (typeof window !== 'undefined' && !isMobile) {
-        localStorage.setItem('mealPlanSidebarWidth', sidebarWidth.toString());
-      }
-    };
-
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.body.style.userSelect = 'none';
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.userSelect = '';
-    };
-  }, [isResizing, sidebarWidth, isMobile]);
 
   // Calculate date range based on view
   const getDateRange = () => {
@@ -140,7 +85,6 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   };
 
   // Fetch meal plans for current date range
-  // Using date range as key instead of view so data is shared across views
   const dateRange = getDateRange();
   const { data: mealPlansData } = useQuery({
     queryKey: ["mealPlans", dateRange.startDate, dateRange.endDate],
@@ -153,163 +97,11 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     },
   });
 
-  // Add meal mutation with optimistic updates
-  const addMealMutation = useMutation({
-    mutationFn: async (payload: Record<string, unknown>) => {
-      const response = await fetch("/api/meal-plans", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {throw new Error("Failed to add meal");}
-      return response.json();
-    },
-    onMutate: async (newMeal) => {
-      // Cancel any outgoing refetches for all meal plan queries
-      await queryClient.cancelQueries({ queryKey: ["mealPlans"] });
-
-      // Snapshot the previous value
-      const previousData = queryClient.getQueryData(["mealPlans", dateRange.startDate, dateRange.endDate]);
-
-      // Optimistically update the cache for this date range
-      queryClient.setQueryData(["mealPlans", dateRange.startDate, dateRange.endDate], (old: any) => {
-        if (!old) {return old;}
-        
-        const mealPlans = [...(old.mealPlans || [])];
-        const date = newMeal.date as string;
-        const time = newMeal.time as string;
-        const recipeId = newMeal.recipeId as string;
-        
-        // Find existing meal plan for the date
-        const existingPlanIndex = mealPlans.findIndex((plan: any) => plan.date === date);
-        
-        const newMealItem = {
-          recipeId,
-          servings: newMeal.servings || 1,
-          time,
-          duration: newMeal.duration || 60,
-        };
-        
-        if (existingPlanIndex >= 0) {
-          const plan = { ...mealPlans[existingPlanIndex] };
-          
-          // Initialize timeSlots if not exists
-          if (!plan.meals.timeSlots) {
-            plan.meals.timeSlots = [];
-          } else {
-            plan.meals.timeSlots = [...plan.meals.timeSlots];
-          }
-          
-          // Find existing time slot or create new one
-          const existingSlotIndex = plan.meals.timeSlots.findIndex((slot: any) => slot.time === time);
-          
-          if (existingSlotIndex >= 0) {
-            const slot = { ...plan.meals.timeSlots[existingSlotIndex] };
-            slot.meals = [...slot.meals, newMealItem];
-            plan.meals.timeSlots[existingSlotIndex] = slot;
-          } else {
-            plan.meals.timeSlots.push({
-              time,
-              meals: [newMealItem]
-            });
-          }
-          
-          mealPlans[existingPlanIndex] = plan;
-        } else {
-          // Create new meal plan
-          const newPlan = {
-            _id: `temp_${Date.now()}`,
-            userId: "temp",
-            date,
-            meals: {
-              timeSlots: [{
-                time,
-                meals: [newMealItem]
-              }]
-            },
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
-          mealPlans.push(newPlan);
-        }
-        
-        return { ...old, mealPlans };
-      });
-
-      return { previousData };
-    },
-    onError: (err, newMeal, context) => {
-      // Revert the optimistic update on error
-      if (context?.previousData) {
-        queryClient.setQueryData(["mealPlans", dateRange.startDate, dateRange.endDate], context.previousData);
-      }
-    },
-    onSettled: () => {
-      // Invalidate all meal plan queries to ensure consistency across views
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
-  });
-
-  // Remove meal mutation with optimistic updates
-  const removeMealMutation = useMutation({
-    mutationFn: async ({ date, time, mealIndex }: { date: string; time: string; mealIndex: number }) => {
-      const response = await fetch(`/api/meal-plans/${date}/${time}/${mealIndex}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {throw new Error("Failed to remove meal");}
-      return response.json();
-    },
-    onMutate: async ({ date, time, mealIndex }) => {
-      await queryClient.cancelQueries({ queryKey: ["mealPlans"] });
-      
-      const previousData = queryClient.getQueryData(["mealPlans", dateRange.startDate, dateRange.endDate]);
-      
-      queryClient.setQueryData(["mealPlans", dateRange.startDate, dateRange.endDate], (old: any) => {
-        if (!old) {return old;}
-        
-        const mealPlans = [...(old.mealPlans || [])];
-        const planIndex = mealPlans.findIndex((plan: any) => plan.date === date);
-        
-        if (planIndex >= 0) {
-          const plan = { ...mealPlans[planIndex] };
-          if (plan.meals.timeSlots) {
-            plan.meals.timeSlots = [...plan.meals.timeSlots];
-            const slotIndex = plan.meals.timeSlots.findIndex((slot: any) => slot.time === time);
-            
-            if (slotIndex >= 0) {
-              const slot = { ...plan.meals.timeSlots[slotIndex] };
-              slot.meals = [...slot.meals];
-              slot.meals.splice(mealIndex, 1);
-              
-              if (slot.meals.length === 0) {
-                plan.meals.timeSlots.splice(slotIndex, 1);
-              } else {
-                plan.meals.timeSlots[slotIndex] = slot;
-              }
-              
-              mealPlans[planIndex] = plan;
-            }
-          }
-        }
-        
-        return { ...old, mealPlans };
-      });
-      
-      return { previousData };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(["mealPlans", dateRange.startDate, dateRange.endDate], context.previousData);
-      }
-    },
-    onSettled: () => {
-      // Invalidate all meal plan queries to ensure consistency across views
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
-  });
+  // Use meal plan mutations
+  const { addMealMutation, removeMealMutation } = useMealPlanMutations({ dateRange });
 
   // Navigation handlers
-  const handlePrevious = () => {
+  const handlePrevious = React.useCallback(() => {
     const newDate = new Date(currentDate);
     if (view === "day") {
       newDate.setDate(newDate.getDate() - 1);
@@ -319,9 +111,9 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       newDate.setMonth(newDate.getMonth() - 1);
     }
     setCurrentDate(newDate);
-  };
+  }, [currentDate, view]);
 
-  const handleNext = () => {
+  const handleNext = React.useCallback(() => {
     const newDate = new Date(currentDate);
     if (view === "day") {
       newDate.setDate(newDate.getDate() + 1);
@@ -331,51 +123,21 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       newDate.setMonth(newDate.getMonth() + 1);
     }
     setCurrentDate(newDate);
-  };
+  }, [currentDate, view]);
 
-  const handleToday = () => {
+  const handleToday = React.useCallback(() => {
     setCurrentDate(new Date());
-  };
-
-  // Format date display
-  const formatDateDisplay = () => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-    };
-
-    if (view === "day") {
-      options.day = "numeric";
-      options.weekday = "long";
-    } else if (view === "week") {
-      const start = new Date(currentDate);
-      const day = start.getDay();
-      start.setDate(start.getDate() - day);
-      const end = new Date(start);
-      end.setDate(end.getDate() + 6);
-      
-      return `${start.toLocaleDateString("en-US", { 
-        month: "short", 
-        day: "numeric" 
-      })} - ${end.toLocaleDateString("en-US", { 
-        month: "short", 
-        day: "numeric",
-        year: "numeric"
-      })}`;
-    }
-
-    return currentDate.toLocaleDateString("en-US", options);
-  };
+  }, []);
 
   // Drag and drop handlers
-  const handleDragStart = (event: { active: { data: { current?: { recipe?: DraggedRecipe } } } }) => {
+  const handleDragStart = React.useCallback((event: { active: { data: { current?: { recipe?: DraggedRecipe } } } }) => {
     const recipe = event.active.data.current?.recipe;
     if (recipe) {
       setDraggedRecipe(recipe);
     }
-  };
+  }, []);
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = React.useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     
     if (!over) {
@@ -420,9 +182,9 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     }
 
     setDraggedRecipe(null);
-  };
+  }, [addMealMutation, setSidebarOpen, view]);
 
-  const handleTimeSelect = (time: string) => {
+  const handleTimeSelect = React.useCallback((time: string) => {
     if (pendingMeal) {
       const payload: Record<string, unknown> = {
         date: pendingMeal.date,
@@ -439,10 +201,10 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         setTimeout(() => setSidebarOpen(true), 300);
       }
     }
-  };
+  }, [pendingMeal, addMealMutation, isMobile]);
 
   // Render current view
-  const renderView = () => {
+  const renderView = React.useCallback(() => {
     const timeMealRemove = async (date: string, time: string, mealIndex: number): Promise<void> => {
       return new Promise<void>((resolve) => {
         removeMealMutation.mutate({ date, time, mealIndex });
@@ -472,7 +234,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       default:
         return <CondensedWeekView {...dayWeekProps} />;
     }
-  };
+  }, [view, currentDate, mealPlansData?.mealPlans, removeMealMutation]);
 
   return (
     <DndContext 
@@ -513,57 +275,14 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         </div>
         
         <div className={styles.main}>
-          <div className={styles.viewControls}>
-            <div className={styles.viewButtons}>
-              <Button
-                appearance={view === "day" ? "primary" : "subtle"}
-                className={styles.viewButton}
-                onClick={() => setView("day")}
-              >
-                Day
-              </Button>
-              <Button
-                appearance={view === "week" ? "primary" : "subtle"}
-                className={styles.viewButton}
-                onClick={() => setView("week")}
-              >
-                Week
-              </Button>
-              <Button
-                appearance={view === "month" ? "primary" : "subtle"}
-                className={styles.viewButton}
-                onClick={() => setView("month")}
-              >
-                Month
-              </Button>
-            </div>
-            
-            <Text className={styles.dateDisplay}>
-              {formatDateDisplay()}
-            </Text>
-            
-            <div className={styles.navigationButtons}>
-              <Button
-                appearance="subtle"
-                icon={<ChevronLeft24Regular />}
-                onClick={handlePrevious}
-                title="Previous"
-              />
-              <Button
-                appearance="subtle"
-                icon={<CalendarToday24Regular />}
-                onClick={handleToday}
-              >
-                Today
-              </Button>
-              <Button
-                appearance="subtle"
-                icon={<ChevronRight24Regular />}
-                onClick={handleNext}
-                title="Next"
-              />
-            </div>
-          </div>
+          <CalendarToolbar
+            view={view}
+            currentDate={currentDate}
+            onViewChange={setView}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+            onToday={handleToday}
+          />
           
           <div className={styles.calendarContent}>
             {renderView()}

@@ -15,6 +15,9 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: tokens.spacingHorizontalS,
     transition: "all 0.2s ease",
+    width: "100%",
+    minWidth: 0,
+    boxSizing: "border-box",
     "&:hover": {
       backgroundColor: tokens.colorNeutralBackground1Hover,
       borderTopColor: tokens.colorNeutralStroke1Hover,
@@ -80,18 +83,17 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
 }) => {
   const styles = useStyles();
   
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, isDragging: isActiveDrag } = useDraggable({
     id: `recipe-${id}`,
     data: {
       recipe: { id, title, emoji, tags },
     },
   });
 
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
+  // Don't apply transform to the original element when using DragOverlay
+  // This prevents the sidebar from scrolling during drag
+  // Only apply opacity when actively dragging
+  const style = isActiveDrag ? { opacity: 0.5 } : undefined;
 
   const containerClass = `${styles.container} ${
     isDragging ? `${styles.isDragging} ${styles.overlay}` : ""

@@ -17,6 +17,10 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     height: "100%",
+    overflowX: "hidden",
+    width: "100%",
+    scrollBehavior: "auto",
+    scrollSnapType: "none",
   },
   header: {
     padding: tokens.spacingVerticalS,
@@ -30,13 +34,20 @@ const useStyles = makeStyles({
   },
   content: {
     flex: 1,
-    overflow: "auto",
+    overflow: "hidden auto", // This is more specific than separate properties
     padding: tokens.spacingVerticalS,
+    maxWidth: "100%",
+    minWidth: 0,
+    position: "relative",
+    contain: "layout style", // Prevents layout from affecting parent
   },
   recipeList: {
     display: "flex",
     flexDirection: "column",
     gap: tokens.spacingVerticalS,
+    width: "100%",
+    minWidth: 0,
+    overflowX: "hidden",
   },
   loadingState: {
     display: "flex",

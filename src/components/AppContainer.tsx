@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
-import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/router";
+import { SessionProvider } from "next-auth/react";
 
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 

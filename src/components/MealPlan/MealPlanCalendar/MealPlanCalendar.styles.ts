@@ -5,6 +5,7 @@ export const useStyles = makeStyles({
     display: "flex",
     height: "100%",
     position: "relative",
+    overflowX: "hidden",
   },
   sidebar: {
     width: "300px",
@@ -16,17 +17,19 @@ export const useStyles = makeStyles({
     zIndex: 10,
     borderTop: "none",
     borderBottom: "none",
+    overflowX: "hidden",
     "@media (max-width: 768px)": {
-      position: "absolute",
+      position: "fixed",
       left: "0",
-      top: "0",
-      height: "100%",
+      top: "60px", // Account for toolbar height
+      height: "calc(100vh - 60px)", // Subtract toolbar height from viewport
       width: "280px",
       boxShadow: tokens.shadow16,
       transform: "translateX(-100%)",
       transition: "transform 0.3s ease",
       borderTop: "none",
       zIndex: 15,
+      overflowX: "hidden",
     },
   },
   sidebarNoTransition: {
@@ -86,65 +89,8 @@ export const useStyles = makeStyles({
     overflow: "hidden",
     borderLeft: "none",
   },
-  viewControls: {
-    display: "flex",
-    alignItems: "center",
-    gap: tokens.spacingHorizontalS,
-    padding: tokens.spacingVerticalS,
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    "@media (max-width: 768px)": {
-      gap: tokens.spacingHorizontalXS,
-      padding: tokens.spacingVerticalXS,
-      justifyContent: "flex-start",
-    },
-  },
-  viewButtons: {
-    display: "flex",
-    gap: tokens.spacingHorizontalS,
-    flexShrink: 0,
-    "@media (max-width: 768px)": {
-      gap: tokens.spacingHorizontalXS,
-    },
-  },
-  viewButton: {
-    minWidth: "60px",
-    "@media (max-width: 768px)": {
-      minWidth: "50px",
-      fontSize: tokens.fontSizeBase200,
-      padding: "4px 8px",
-    },
-  },
-  navigationButtons: {
-    display: "flex",
-    gap: tokens.spacingHorizontalXS,
-    flexShrink: 0,
-    "@media (max-width: 768px)": {
-      marginLeft: "auto",
-    },
-  },
-  dateDisplay: {
-    fontWeight: tokens.fontWeightSemibold,
-    fontSize: tokens.fontSizeBase400,
-    flex: 1,
-    textAlign: "center",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-    "@media (max-width: 768px)": {
-      fontSize: tokens.fontSizeBase300,
-      flex: "none",
-      textAlign: "left",
-      minWidth: 0,
-      order: 3,
-      width: "100%",
-      marginTop: tokens.spacingVerticalXS,
-    },
-  },
   calendarContent: {
-    height: "calc(100vh - 120px)",
+    flex: 1,
     overflow: "hidden",
     position: "relative",
   },
