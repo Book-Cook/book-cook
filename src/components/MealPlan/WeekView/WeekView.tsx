@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     gridTemplateColumns: `${TIME_COLUMN_WIDTH}px repeat(7, 1fr)`,
     backgroundColor: tokens.colorNeutralBackground2,
     ...shorthands.borderBottom("1px", "solid", tokens.colorNeutralStroke1),
-    minHeight: "40px",
+    height: "24px",
     "@media (max-width: 768px)": {
       gridTemplateColumns: `60px repeat(7, 1fr)`,
     },
@@ -38,32 +38,27 @@ const useStyles = makeStyles({
   
   headerDay: {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    ...shorthands.padding(tokens.spacingVerticalS),
+    ...shorthands.padding(`2px ${tokens.spacingHorizontalXS}`),
     ...shorthands.borderRight("1px", "solid", tokens.colorNeutralStroke1),
+    height: "24px",
     "&:last-child": {
       borderRightWidth: 0,
     },
   },
   
-  dayLabel: {
-    fontSize: tokens.fontSizeBase200,
+  dayText: {
+    fontSize: tokens.fontSizeBase100,
     fontWeight: tokens.fontWeightSemibold,
     color: tokens.colorNeutralForeground2,
-  },
-  
-  dayNumber: {
-    fontSize: tokens.fontSizeBase100,
-    color: tokens.colorNeutralForeground3,
   },
   
   todayHeader: {
     backgroundColor: tokens.colorBrandBackground2,
   },
   
-  todayLabel: {
+  todayText: {
     color: tokens.colorBrandForeground1,
     fontWeight: tokens.fontWeightBold,
   },
@@ -96,7 +91,6 @@ const useStyles = makeStyles({
   
   timeSlot: {
     height: `${HOUR_HEIGHT}px`,
-    ...shorthands.borderBottom("1px", "solid", tokens.colorNeutralStroke2),
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "flex-end",
@@ -254,11 +248,8 @@ export const WeekView: React.FC<WeekViewProps> = ({
               key={date.toISOString()}
               className={`${styles.headerDay} ${isToday ? styles.todayHeader : ''}`}
             >
-              <Text className={`${styles.dayLabel} ${isToday ? styles.todayLabel : ''}`}>
-                {DAY_NAMES[index]}
-              </Text>
-              <Text className={`${styles.dayNumber} ${isToday ? styles.todayLabel : ''}`}>
-                {date.getDate()}
+              <Text className={`${styles.dayText} ${isToday ? styles.todayText : ''}`}>
+                {DAY_NAMES[index]} {date.getDate()}
               </Text>
             </div>
           );

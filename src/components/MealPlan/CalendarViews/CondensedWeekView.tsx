@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, makeStyles, tokens } from "@fluentui/react-components";
+import { Text, makeStyles, tokens, shorthands } from "@fluentui/react-components";
 import { useDroppable } from "@dnd-kit/core";
 
 import { TimeSlot } from "../TimeSlot/TimeSlot";
@@ -110,10 +110,7 @@ const useStyles = makeStyles({
     transition: "all 0.2s ease",
     marginTop: tokens.spacingVerticalM,
     "&:hover": {
-      borderTopColor: tokens.colorBrandStroke1,
-      borderRightColor: tokens.colorBrandStroke1,
-      borderBottomColor: tokens.colorBrandStroke1,
-      borderLeftColor: tokens.colorBrandStroke1,
+      ...shorthands.borderColor(tokens.colorBrandStroke1),
       backgroundColor: tokens.colorBrandBackground2,
       color: tokens.colorBrandForeground1,
     },
