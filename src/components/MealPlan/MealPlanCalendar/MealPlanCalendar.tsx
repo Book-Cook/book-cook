@@ -16,6 +16,7 @@ import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import { CondensedWeekView } from "../CalendarViews/CondensedWeekView";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
+import WeekView from "../WeekView";
 import { useMealPlanMutations } from "../hooks/useMealPlanMutations";
 import { useSidebarResize } from "../hooks/useSidebarResize";
 import { MealPlanSidebar } from "../MealPlanSidebar/MealPlanSidebar";
@@ -228,11 +229,11 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       case "day":
         return <HourlyDayView {...dayWeekProps} />;
       case "week":
-        return <CondensedWeekView {...dayWeekProps} />;
+        return <WeekView {...dayWeekProps} />;
       case "month":
         return <MonthView {...monthProps} />;
       default:
-        return <CondensedWeekView {...dayWeekProps} />;
+        return <WeekView {...dayWeekProps} />;
     }
   }, [view, currentDate, mealPlansData?.mealPlans, removeMealMutation]);
 
