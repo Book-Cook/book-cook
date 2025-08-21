@@ -14,7 +14,7 @@ export const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     ...shorthands.gap(tokens.spacingVerticalM),
-    overflow: "hidden",
+    overflow: "visible",
   },
   topSection: {
     display: "flex",
