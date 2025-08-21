@@ -83,9 +83,7 @@ const useStyles = makeStyles({
   },
   isDraggingOver: {
     backgroundColor: tokens.colorBrandBackground2,
-    borderColor: tokens.colorBrandStroke1,
-    borderWidth: "2px",
-    borderStyle: "solid",
+    border: `2px solid ${tokens.colorBrandStroke1}`,
   },
   mealIndicators: {
     flex: 1,
