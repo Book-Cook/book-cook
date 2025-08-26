@@ -69,7 +69,7 @@ const useStyles = makeStyles({
 interface RecipeDragCardProps {
   id: string;
   title: string;
-  emoji: string;
+  emoji?: string;
   tags?: string[];
   isDragging?: boolean;
 }

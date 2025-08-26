@@ -9,7 +9,7 @@ export interface MealPlanCalendarProps {
 export interface DraggedRecipe {
   id: string;
   title: string;
-  emoji: string;
+  emoji?: string;
 }
 
 export interface DropTarget {

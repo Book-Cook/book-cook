@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Text, makeStyles, tokens, shorthands } from "@fluentui/react-components";
+import { Text, makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
 
-import { DayColumn } from "./DayColumn";
 import { 
   HOURS, 
   DAY_NAMES, 
@@ -10,7 +9,10 @@ import {
   HOUR_HEIGHT,
   TIME_COLUMN_WIDTH,
 } from "./constants";
-import type { MealPlanWithRecipes } from "../../../clientToServer/types";
+import { DayColumn } from "./DayColumn";
+import { MealCard } from "./MealCard";
+
+import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
 
 const useStyles = makeStyles({
   container: {
@@ -193,9 +195,9 @@ export const WeekView: React.FC<WeekViewProps> = ({
     const dateStr = date.toISOString().split("T")[0];
     const plan = mealPlans.find(p => p.date === dateStr);
     
-    if (!plan) return [];
+    if (!plan) {return [];}
     
-    const timeSlots = plan.meals.timeSlots || [];
+    const timeSlots = plan.meals.timeSlots ?? [];
     
     // Convert legacy meals to time slots
     const legacyTimeMap = {
@@ -212,11 +214,11 @@ export const WeekView: React.FC<WeekViewProps> = ({
       if (meal && typeof meal === 'object' && 'recipeId' in meal) {
         const existingSlot = convertedSlots.find(slot => slot.time === time);
         if (existingSlot) {
-          existingSlot.meals.push(meal as any);
+          existingSlot.meals.push(meal as MealItem & { recipe?: Record<string, unknown> });
         } else {
           convertedSlots.push({
             time,
-            meals: [meal as any],
+            meals: [meal as MealItem & { recipe?: Record<string, unknown> }],
           });
         }
       }
@@ -231,74 +233,75 @@ export const WeekView: React.FC<WeekViewProps> = ({
     const hours = now.getHours();
     const minutes = now.getMinutes();
     
-    if (hours < 6 || hours > 22) return null;
+    if (hours < 6 || hours > 22) {return null;}
     
     return getTimePosition(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
   }, [currentTime]);
+
   
   return (
     <div className={styles.container}>
-      {/* Simple header with day labels */}
-      <div className={styles.header}>
-        <div className={styles.headerTimeColumn} />
-        {weekDates.map((date, index) => {
-          const isToday = date.toDateString() === today;
-          return (
-            <div
-              key={date.toISOString()}
-              className={`${styles.headerDay} ${isToday ? styles.todayHeader : ''}`}
-            >
-              <Text className={`${styles.dayText} ${isToday ? styles.todayText : ''}`}>
-                {DAY_NAMES[index]} {date.getDate()}
-              </Text>
-            </div>
-          );
-        })}
-      </div>
-      
-      {/* Scrollable content */}
-      <div ref={scrollRef} className={styles.scrollContainer}>
-        <div className={styles.gridContainer}>
-          {/* Time column */}
-          <div className={styles.timeColumn}>
-            {HOURS.map(hour => (
-              <div key={hour} className={styles.timeSlot}>
-                <Text className={styles.timeLabel}>{formatHour(hour)}</Text>
-              </div>
-            ))}
-          </div>
-          
-          {/* Day columns */}
-          {weekDates.map(date => {
-            const dateStr = date.toISOString().split("T")[0];
-            const meals = getMealsForDate(date);
-            const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
-            
+        {/* Simple header with day labels */}
+        <div className={styles.header}>
+          <div className={styles.headerTimeColumn} />
+          {weekDates.map((date, index) => {
+            const isToday = date.toDateString() === today;
             return (
               <div
-                key={dateStr}
-                className={`${styles.dayColumn} ${isPast ? styles.pastDay : ''}`}
+                key={date.toISOString()}
+                className={mergeClasses(styles.headerDay, isToday && styles.todayHeader)}
               >
-                <DayColumn
-                  date={dateStr}
-                  meals={meals}
-                  onRemoveMeal={(time, index) => onMealRemove(dateStr, time, index)}
-                  isPast={isPast}
-                />
-                
-                {/* Current time indicator */}
-                {date.toDateString() === today && currentTimePosition !== null && (
-                  <div
-                    className={styles.currentTimeLine}
-                    style={{ top: `${currentTimePosition}px` }}
-                  />
-                )}
+                <Text className={mergeClasses(styles.dayText, isToday && styles.todayText)}>
+                  {DAY_NAMES[index]} {date.getDate()}
+                </Text>
               </div>
             );
           })}
         </div>
+        
+        {/* Scrollable content */}
+        <div ref={scrollRef} className={styles.scrollContainer}>
+          <div className={styles.gridContainer}>
+            {/* Time column */}
+            <div className={styles.timeColumn}>
+              {HOURS.map(hour => (
+                <div key={hour} className={styles.timeSlot}>
+                  <Text className={styles.timeLabel}>{formatHour(hour)}</Text>
+                </div>
+              ))}
+            </div>
+            
+            {/* Day columns */}
+            {weekDates.map(date => {
+              const dateStr = date.toISOString().split("T")[0];
+              const meals = getMealsForDate(date);
+              const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+              
+              return (
+                <div
+                  key={dateStr}
+                  className={mergeClasses(styles.dayColumn, isPast && styles.pastDay)}
+                >
+                  <DayColumn
+                    date={dateStr}
+                    meals={meals}
+                    onRemoveMeal={(time, index) => onMealRemove(dateStr, time, index)}
+                    isPast={isPast}
+                  />
+                  
+                  {/* Current time indicator */}
+                  {date.toDateString() === today && currentTimePosition !== null && (
+                    <div
+                      className={styles.currentTimeLine}
+                      style={{ top: `${currentTimePosition}px` }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-    </div>
   );
 };
 

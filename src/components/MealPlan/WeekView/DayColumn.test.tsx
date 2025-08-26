@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import { DndContext } from '@dnd-kit/core';
+import { render, screen } from '@testing-library/react';
 
 import { DayColumn } from './DayColumn';
 

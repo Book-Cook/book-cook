@@ -1,4 +1,5 @@
 import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
+
 import { HOUR_HEIGHT, TIME_COLUMN_WIDTH } from "./constants";
 
 export const useWeekViewStyles = makeStyles({

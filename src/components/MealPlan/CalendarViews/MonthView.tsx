@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, Button, makeStyles, tokens } from "@fluentui/react-components";
+import { Text, Button, makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useDroppable } from "@dnd-kit/core";
 import { useRouter } from "next/router";
@@ -304,7 +304,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
                   {date.getDate()}
                 </div>
               ) : (
-                <Text className={`${styles.dayNumber} ${isToday ? styles.isTodayText : ""}`}>
+                <Text className={mergeClasses(styles.dayNumber, isToday && styles.isTodayText)}>
                   {date.getDate()}
                 </Text>
               )}
@@ -334,7 +334,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
                       </div>
                       <Button
                         appearance="subtle"
-                        className={`${styles.removeButton} meal-remove-button`}
+                        className={mergeClasses(styles.removeButton, 'meal-remove-button')}
                         icon={<Dismiss12Regular />}
                         onClick={(e) => handleRemoveClick(dateStr, slot.time, mealIndex, e)}
                         title="Remove meal"
@@ -369,7 +369,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
                       </div>
                       <Button
                         appearance="subtle"
-                        className={`${styles.removeButton} meal-remove-button`}
+                        className={mergeClasses(styles.removeButton, 'meal-remove-button')}
                         icon={<Dismiss12Regular />}
                         onClick={(e) => handleRemoveClick(dateStr, legacyTimeMap[mealType], 0, e)}
                         title="Remove meal"

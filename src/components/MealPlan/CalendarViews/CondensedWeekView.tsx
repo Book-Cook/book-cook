@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, makeStyles, tokens, shorthands } from "@fluentui/react-components";
+import { Text, makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
 import { useDroppable } from "@dnd-kit/core";
 
 import { TimeSlot } from "../TimeSlot/TimeSlot";
@@ -24,7 +24,7 @@ const WeekDayDropZone: React.FC<{ dateStr: string; styles: WeekDayDropZoneStyles
   return (
     <div 
       ref={setNodeRef}
-      className={`${styles.addMealSlot} ${isOver ? 'dropping' : ''}`}
+      className={mergeClasses(styles.addMealSlot, isOver && 'dropping')}
       style={{
         borderColor: isOver ? tokens.colorBrandStroke1 : undefined,
         backgroundColor: isOver ? tokens.colorBrandBackground2 : undefined,
@@ -220,12 +220,12 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
         const isPast = dayDate < now;
         
         return (
-          <div key={date.toISOString()} className={`${styles.dayColumn} ${isPast ? styles.pastDay : ''}`}>
-            <div className={`${styles.dayHeader} ${isPast ? styles.pastDayHeader : ''}`}>
-              <Text className={`${styles.dayName} ${isToday ? styles.isToday : ""}`}>
+          <div key={date.toISOString()} className={mergeClasses(styles.dayColumn, isPast && styles.pastDay)}>
+            <div className={mergeClasses(styles.dayHeader, isPast && styles.pastDayHeader)}>
+              <Text className={mergeClasses(styles.dayName, isToday && styles.isToday)}>
                 {dayNames[index]}
               </Text>
-              <Text className={`${styles.dayDate} ${isToday ? styles.isToday : ""}`}>
+              <Text className={mergeClasses(styles.dayDate, isToday && styles.isToday)}>
                 {date.getDate()}
               </Text>
             </div>

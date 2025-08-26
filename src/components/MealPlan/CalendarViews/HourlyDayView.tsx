@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, makeStyles, tokens } from "@fluentui/react-components";
+import { Text, makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
 
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 
@@ -144,10 +144,10 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
           
           return (
             <React.Fragment key={time}>
-              <div className={`${styles.timeLabel} ${isPast ? styles.pastTimeLabel : ''}`}>
+              <div className={mergeClasses(styles.timeLabel, isPast && styles.pastTimeLabel)}>
                 {time}
               </div>
-              <div className={`${styles.timeSlotContainer} ${isPast ? styles.pastTime : ''}`}>
+              <div className={mergeClasses(styles.timeSlotContainer, isPast && styles.pastTime)}>
                 <TimeSlot
                   date={dateStr}
                   time={time}

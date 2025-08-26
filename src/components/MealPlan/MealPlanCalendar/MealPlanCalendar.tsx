@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button } from "@fluentui/react-components";
+import { Button, mergeClasses } from "@fluentui/react-components";
 import { PanelLeft24Regular } from "@fluentui/react-icons";
 import type { DragEndEvent} from "@dnd-kit/core";
 import { 
@@ -16,12 +16,12 @@ import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import { CondensedWeekView } from "../CalendarViews/CondensedWeekView";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
-import WeekView from "../WeekView";
 import { useMealPlanMutations } from "../hooks/useMealPlanMutations";
 import { useSidebarResize } from "../hooks/useSidebarResize";
 import { MealPlanSidebar } from "../MealPlanSidebar/MealPlanSidebar";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 import { TimePicker } from "../TimePicker/TimePicker";
+import WeekView from "../WeekView";
 
 export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({ 
   initialView = "week" 
@@ -99,7 +99,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   });
 
   // Use meal plan mutations
-  const { addMealMutation, removeMealMutation } = useMealPlanMutations({ dateRange });
+  const { addMealMutation, removeMealMutation, reorderMealMutation, moveMealMutation } = useMealPlanMutations({ dateRange });
 
   // Navigation handlers
   const handlePrevious = React.useCallback(() => {
@@ -131,10 +131,17 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   }, []);
 
   // Drag and drop handlers
-  const handleDragStart = React.useCallback((event: { active: { data: { current?: { recipe?: DraggedRecipe } } } }) => {
-    const recipe = event.active.data.current?.recipe;
-    if (recipe) {
-      setDraggedRecipe(recipe);
+  const handleDragStart = React.useCallback((event: { active: { data: { current?: { recipe?: DraggedRecipe; type?: string; title?: string; emoji?: string } } } }) => {
+    const data = event.active.data.current;
+    if (data?.recipe) {
+      setDraggedRecipe(data.recipe);
+    } else if (data?.type === 'meal-card') {
+      // Set a dragged recipe for meal cards too
+      setDraggedRecipe({
+        id: '',
+        title: data.title || 'Meal',
+        emoji: data.emoji || undefined
+      });
     }
   }, []);
 
@@ -142,6 +149,57 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     const { active, over } = event;
     
     if (!over) {
+      setDraggedRecipe(null);
+      return;
+    }
+
+    // Handle meal card being dropped on a time slot (to change time)
+    if (
+      active.data.current?.type === 'meal-card' &&
+      over.data.current?.type === 'time-slot'
+    ) {
+      const sourceDate = active.data.current.date;
+      const sourceTime = active.data.current.time;
+      const sourceMealIndex = active.data.current.mealIndex;
+      const targetDate = over.data.current.date;
+      const targetTime = over.data.current.time;
+      
+      // Don't move if dropping on the same time slot
+      if (sourceDate === targetDate && sourceTime === targetTime) {
+        setDraggedRecipe(null);
+        return;
+      }
+      // Move the meal to a different time slot
+      moveMealMutation.mutate({
+        sourceDate,
+        sourceTime,
+        mealIndex: sourceMealIndex,
+        targetDate,
+        targetTime,
+      });
+      
+      setDraggedRecipe(null);
+      return;
+    }
+
+    // Handle meal card reordering within same time slot
+    if (
+      active.data.current?.type === 'meal-card' &&
+      over.data.current?.type === 'meal-card' &&
+      active.data.current?.date === over.data.current?.date &&
+      active.data.current?.time === over.data.current?.time
+    ) {
+      const oldIndex = active.data.current.mealIndex;
+      const newIndex = over.data.current.mealIndex;
+      
+      if (oldIndex !== newIndex) {
+        reorderMealMutation.mutate({
+          date: active.data.current.date,
+          time: active.data.current.time,
+          oldIndex,
+          newIndex
+        });
+      }
       setDraggedRecipe(null);
       return;
     }
@@ -183,7 +241,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     }
 
     setDraggedRecipe(null);
-  }, [addMealMutation, setSidebarOpen, view]);
+  }, [addMealMutation, moveMealMutation, reorderMealMutation, setSidebarOpen, view]);
 
   const handleTimeSelect = React.useCallback((time: string) => {
     if (pendingMeal) {
@@ -235,7 +293,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
       default:
         return <WeekView {...dayWeekProps} />;
     }
-  }, [view, currentDate, mealPlansData?.mealPlans, removeMealMutation]);
+  }, [view, currentDate, mealPlansData?.mealPlans, removeMealMutation, reorderMealMutation]);
 
   return (
     <DndContext 
@@ -264,7 +322,11 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         )}
         
         <div 
-          className={`${styles.sidebar} ${sidebarOpen && !draggedRecipe ? styles.sidebarOpen : ''} ${draggedRecipe ? styles.sidebarNoTransition : ''}`}
+          className={mergeClasses(
+            styles.sidebar,
+            sidebarOpen && !draggedRecipe && styles.sidebarOpen,
+            draggedRecipe && styles.sidebarNoTransition
+          )}
           style={{ width: `${sidebarWidth}px` }}
         >
           <MealPlanSidebar />

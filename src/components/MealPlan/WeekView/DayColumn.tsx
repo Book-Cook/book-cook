@@ -1,9 +1,11 @@
 import * as React from "react";
+import { makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
 import { useDroppable } from "@dnd-kit/core";
-import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 
-import { MealCard } from "./MealCard";
 import { HOURS, HOUR_HEIGHT, getTimePosition, MIN_HOUR } from "./constants";
+import { MealCard } from "./MealCard";
+
 import type { MealItem } from "../../../clientToServer/types";
 
 const useStyles = makeStyles({
@@ -71,7 +73,7 @@ const DropZone: React.FC<DropZoneProps> = ({ date, hour, isActive }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`${styles.dropZone} ${isOver || isActive ? styles.dropZoneActive : ''}`}
+      className={mergeClasses(styles.dropZone, (isOver || isActive) && styles.dropZoneActive)}
       style={{
         top: `${(hour - MIN_HOUR) * HOUR_HEIGHT}px`,
         zIndex: isOver ? 1 : 0,
@@ -87,7 +89,7 @@ export const DayColumn: React.FC<DayColumnProps> = React.memo(({
   isPast = false,
 }) => {
   const styles = useStyles();
-  const [activeDropHour, setActiveDropHour] = React.useState<number | null>(null);
+  const [activeDropHour, _setActiveDropHour] = React.useState<number | null>(null);
   
   // Flatten meals for display
   const allMeals = React.useMemo(() => {
@@ -137,23 +139,30 @@ export const DayColumn: React.FC<DayColumnProps> = React.memo(({
         />
       ))}
       
-      {/* Meal cards */}
-      {allMeals.map(({ id, meal, time, index }) => {
-        const recipe = meal.recipe as { title?: string; emoji?: string } | undefined;
-        
-        return (
-          <MealCard
-            key={id}
-            id={id}
-            title={recipe?.title || 'Unknown Recipe'}
-            emoji={recipe?.emoji}
-            time={time}
-            duration={meal.duration || 60}
-            position={getTimePosition(time)}
-            onRemove={() => onRemoveMeal(time, index)}
-          />
-        );
-      })}
+      {/* Sortable meal cards */}
+      <SortableContext 
+        items={allMeals.map(meal => meal.id)} 
+        strategy={verticalListSortingStrategy}
+      >
+        {allMeals.map(({ id, meal, time, index }) => {
+          const recipe = meal.recipe as { title?: string; emoji?: string } | undefined;
+          
+          return (
+            <MealCard
+              key={id}
+              id={id}
+              title={recipe?.title ?? 'Unknown Recipe'}
+              emoji={recipe?.emoji}
+              time={time}
+              duration={meal.duration ?? 60}
+              position={getTimePosition(time)}
+              onRemove={() => onRemoveMeal(time, index)}
+              date={date}
+              mealIndex={index}
+            />
+          );
+        })}
+      </SortableContext>
     </div>
   );
 });
