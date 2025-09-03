@@ -77,11 +77,6 @@ const useStyles = makeStyles({
     flexShrink: 0,
   },
   
-  time: {
-    fontSize: tokens.fontSizeBase100,
-    color: tokens.colorNeutralForeground3,
-    fontWeight: tokens.fontWeightRegular,
-  },
 });
 
 export interface MealCardProps {
@@ -128,20 +123,6 @@ export const MealCard: React.FC<MealCardProps> = React.memo(({
     },
   });
   
-  const formatTime = (timeStr: string, durationMin: number): string => {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    const endMinutes = hours * 60 + minutes + durationMin;
-    const endHours = Math.floor(endMinutes / 60);
-    const endMins = endMinutes % 60;
-    
-    const formatHour = (h: number, m: number): string => {
-      const period = h >= 12 ? 'PM' : 'AM';
-      const displayHour = h > 12 ? h - 12 : h === 0 ? 12 : h;
-      return `${displayHour}:${m.toString().padStart(2, '0')} ${period}`;
-    };
-    
-    return `${formatHour(hours, minutes)} - ${formatHour(endHours, endMins)}`;
-  };
   
   const cardHeight = Math.max(30, (duration / 60) * 60 - 8);
   
@@ -177,11 +158,6 @@ export const MealCard: React.FC<MealCardProps> = React.memo(({
           aria-label="Remove meal"
         />
       </div>
-      {cardHeight > 45 && (
-        <Text className={styles.time}>
-          {formatTime(time, duration)}
-        </Text>
-      )}
     </div>
   );
 });

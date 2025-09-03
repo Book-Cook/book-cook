@@ -325,7 +325,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
           className={mergeClasses(
             styles.sidebar,
             sidebarOpen && !draggedRecipe && styles.sidebarOpen,
-            draggedRecipe && styles.sidebarNoTransition
+            draggedRecipe ? styles.sidebarNoTransition : undefined
           )}
           style={{ width: `${sidebarWidth}px` }}
         >

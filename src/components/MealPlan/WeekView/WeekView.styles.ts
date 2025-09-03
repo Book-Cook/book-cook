@@ -1,6 +1,6 @@
 import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
 
-import { HOUR_HEIGHT, TIME_COLUMN_WIDTH } from "./constants";
+import { HOUR_HEIGHT, TIME_COLUMN_WIDTH, HOURS, MIN_HOUR } from "./constants";
 
 export const useWeekViewStyles = makeStyles({
   container: {
@@ -35,9 +35,13 @@ export const useWeekViewStyles = makeStyles({
     left: 0,
     backgroundColor: tokens.colorNeutralBackground1,
     zIndex: 1,
+    minHeight: `${HOUR_HEIGHT * HOURS.length}px`,
   },
   
   timeSlot: {
+    position: "absolute",
+    left: 0,
+    right: 0,
     height: `${HOUR_HEIGHT}px`,
     ...shorthands.borderBottom("1px", "solid", tokens.colorNeutralStroke2),
     display: "flex",
@@ -50,7 +54,6 @@ export const useWeekViewStyles = makeStyles({
     fontSize: tokens.fontSizeBase100,
     color: tokens.colorNeutralForeground3,
     fontWeight: tokens.fontWeightRegular,
-    transform: "translateY(-50%)",
     "@media (max-width: 768px)": {
       fontSize: tokens.fontSizeBase100,
     },
