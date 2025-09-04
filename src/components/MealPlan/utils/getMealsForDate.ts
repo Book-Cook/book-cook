@@ -14,13 +14,8 @@ export const getMealsForDate = (date: Date, mealPlans: MealPlanWithRecipes[]): T
     return [];
   }
   
-  // Use time-based slots if available
-  if (plan.meals.timeSlots && plan.meals.timeSlots.length > 0) {
-    return plan.meals.timeSlots;
-  }
-  
-  // Convert legacy meals to time slots
-  const convertedSlots: TimeSlot[] = [];
+  // Start with existing time slots or empty array
+  const allSlots: TimeSlot[] = plan.meals.timeSlots ? [...plan.meals.timeSlots] : [];
   
   // Convert legacy meals using shared utility
   const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
@@ -29,12 +24,12 @@ export const getMealsForDate = (date: Date, mealPlans: MealPlanWithRecipes[]): T
     const meal = plan.meals[mealType];
     if (meal && typeof meal === 'object' && 'recipeId' in meal) {
       const time = mealTypeToTime(mealType);
-      const existingSlot = convertedSlots.find(slot => slot.time === time);
+      const existingSlot = allSlots.find(slot => slot.time === time);
       
       if (existingSlot) {
         existingSlot.meals.push(meal as MealItem & { recipe?: Record<string, unknown> });
       } else {
-        convertedSlots.push({
+        allSlots.push({
           time,
           meals: [meal as MealItem & { recipe?: Record<string, unknown> }],
         });
@@ -42,5 +37,5 @@ export const getMealsForDate = (date: Date, mealPlans: MealPlanWithRecipes[]): T
     }
   });
   
-  return convertedSlots.sort((a, b) => a.time.localeCompare(b.time));
+  return allSlots.sort((a, b) => a.time.localeCompare(b.time));
 };

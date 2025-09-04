@@ -110,7 +110,7 @@ describe('calendarUtils', () => {
 
   describe('navigateDate', () => {
     it('should navigate day correctly', () => {
-      const date = new Date('2024-01-15');
+      const date = new Date(2024, 0, 15); // Jan 15, 2024 (local time)
       
       const nextDay = navigateDate(date, 'next', 'day');
       expect(nextDay.getDate()).toBe(16);
@@ -120,7 +120,7 @@ describe('calendarUtils', () => {
     });
 
     it('should navigate week correctly', () => {
-      const date = new Date('2024-01-15');
+      const date = new Date(2024, 0, 15); // Jan 15, 2024 (local time)
       
       const nextWeek = navigateDate(date, 'next', 'week');
       expect(nextWeek.getDate()).toBe(22);
@@ -130,7 +130,7 @@ describe('calendarUtils', () => {
     });
 
     it('should navigate month correctly', () => {
-      const date = new Date('2024-01-15');
+      const date = new Date(2024, 0, 15); // Jan 15, 2024 (local time)
       
       const nextMonth = navigateDate(date, 'next', 'month');
       expect(nextMonth.getMonth()).toBe(1); // February

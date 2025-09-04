@@ -102,13 +102,13 @@ describe('mealUtils', () => {
         meals: [
           { recipeId: 'recipe1', duration: 60 },
           { recipeId: 'recipe2', duration: 30 },
-        ] as any[],
+        ] as Array<{ recipeId: string; duration: number }>,
       },
       {
         time: '14:00',
         meals: [
           { recipeId: 'recipe3', duration: 45 },
-        ] as any[],
+        ] as Array<{ recipeId: string; duration: number }>,
       },
     ];
 

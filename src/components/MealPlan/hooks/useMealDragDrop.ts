@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { DragEndEvent } from '@dnd-kit/core';
 
-import type { DraggedRecipe, PendingMeal, MealDragDropHandlers } from '../types';
+import type { DraggedRecipe, MealDragDropHandlers } from '../types';
 
 export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
   const [draggedRecipe, setDraggedRecipe] = useState<DraggedRecipe | null>(null);

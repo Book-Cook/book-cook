@@ -6,7 +6,7 @@ import type { ApiPayload, MealMovePayload, MealReorderPayload } from "../types";
 /**
  * Generic API call utility with error handling
  */
-async function apiCall<T = any>(
+async function apiCall<T = unknown>(
   endpoint: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   payload?: Record<string, unknown>
@@ -47,7 +47,7 @@ export function removeMeal(date: string, time: string, mealIndex: number) {
  * Move meal to different time slot
  */
 export function moveMeal(payload: MealMovePayload) {
-  const { date, time, mealIndex } = payload;
+  const { date, time } = payload;
   return apiCall(`/api/meal-plans/${date}/${time}/move`, 'POST', payload);
 }
 

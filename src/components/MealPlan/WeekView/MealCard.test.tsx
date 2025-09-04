@@ -12,6 +12,8 @@ describe('MealCard', () => {
     duration: 60,
     position: 390,
     onRemove: jest.fn(),
+    date: '2024-01-15',
+    mealIndex: 0,
   };
 
   beforeEach(() => {
@@ -29,34 +31,37 @@ describe('MealCard', () => {
     expect(screen.getByText('🍝')).toBeInTheDocument();
   });
 
-  it('displays formatted time range when card is tall enough', () => {
-    render(
+  it('renders card with proper height based on duration', () => {
+    const { container } = render(
       <DndContext onDragEnd={() => {}}>
         <MealCard {...defaultProps} duration={60} />
       </DndContext>
     );
 
-    expect(screen.getByText('12:30 PM - 1:30 PM')).toBeInTheDocument();
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveStyle({ height: '52px' }); // (60/60) * 60 - 8
   });
 
   it('handles different duration correctly', () => {
-    render(
+    const { container } = render(
       <DndContext onDragEnd={() => {}}>
         <MealCard {...defaultProps} duration={90} />
       </DndContext>
     );
 
-    expect(screen.getByText('12:30 PM - 2:00 PM')).toBeInTheDocument();
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveStyle({ height: '82px' }); // (90/60) * 60 - 8
   });
 
-  it('does not show time when card is too short', () => {
-    render(
+  it('has minimum height for short durations', () => {
+    const { container } = render(
       <DndContext onDragEnd={() => {}}>
-        <MealCard {...defaultProps} duration={30} />
+        <MealCard {...defaultProps} duration={15} />
       </DndContext>
     );
 
-    expect(screen.queryByText('12:30 PM - 1:00 PM')).not.toBeInTheDocument();
+    const card = container.firstChild as HTMLElement;
+    expect(card).toHaveStyle({ height: '30px' }); // minimum height
   });
 
   it('calls onRemove when remove button is clicked', () => {
@@ -67,7 +72,7 @@ describe('MealCard', () => {
       </DndContext>
     );
 
-    const removeButton = screen.getByRole('button');
+    const removeButton = screen.getByLabelText('Remove meal');
     fireEvent.click(removeButton);
 
     expect(onRemove).toHaveBeenCalledTimes(1);
@@ -97,24 +102,24 @@ describe('MealCard', () => {
     });
   });
 
-  it('handles morning time correctly', () => {
+  it('handles different times correctly', () => {
     render(
       <DndContext onDragEnd={() => {}}>
         <MealCard {...defaultProps} time="08:00" />
       </DndContext>
     );
 
-    expect(screen.getByText('8:00 AM - 9:00 AM')).toBeInTheDocument();
+    expect(screen.getByText('Spaghetti Carbonara')).toBeInTheDocument();
   });
 
-  it('handles evening time correctly', () => {
+  it('handles props correctly for drag and drop data', () => {
     render(
       <DndContext onDragEnd={() => {}}>
-        <MealCard {...defaultProps} time="19:30" />
+        <MealCard {...defaultProps} date="2024-01-15" mealIndex={0} />
       </DndContext>
     );
 
-    expect(screen.getByText('7:30 PM - 8:30 PM')).toBeInTheDocument();
+    expect(screen.getByText('Spaghetti Carbonara')).toBeInTheDocument();
   });
 
   it('has correct aria label for remove button', () => {

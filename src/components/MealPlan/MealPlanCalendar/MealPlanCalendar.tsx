@@ -13,7 +13,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useStyles } from "./MealPlanCalendar.styles";
 import type { MealPlanCalendarProps, CalendarView, DraggedRecipe } from "./MealPlanCalendar.types";
 import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
-import { CondensedWeekView } from "../CalendarViews/CondensedWeekView";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
 import { useMealPlanMutations } from "../hooks/useMealPlanMutations";

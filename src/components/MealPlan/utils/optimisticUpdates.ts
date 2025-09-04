@@ -16,7 +16,7 @@ export interface OptimisticUpdateContext {
 export function addMealOptimistically(
   oldData: MealPlanWithRecipes[] | undefined,
   newMeal: Record<string, unknown>,
-  context: OptimisticUpdateContext
+  _context: OptimisticUpdateContext
 ) {
   if (!oldData) {return oldData;}
   
@@ -34,15 +34,16 @@ export function addMealOptimistically(
       const existingSlot = updatedPlan.meals.timeSlots?.find(slot => slot.time === time);
       const newMealItem = {
         recipeId: newMeal.recipeId as string,
-        servings: (newMeal.servings as number) || 1,
-        duration: (newMeal.duration as number) || 60,
+        servings: (newMeal.servings as number) ?? 1,
+        time,
+        duration: (newMeal.duration as number) ?? 60,
       };
       
       if (existingSlot) {
         existingSlot.meals.push(newMealItem);
       } else {
         updatedPlan.meals.timeSlots = [
-          ...(updatedPlan.meals.timeSlots || []),
+          ...(updatedPlan.meals.timeSlots ?? []),
           { time, meals: [newMealItem] }
         ];
       }
@@ -124,7 +125,7 @@ export function moveMealOptimistically(
         targetSlot.meals.push(movedMeal);
       } else {
         updatedPlan.meals.timeSlots = [
-          ...(updatedPlan.meals.timeSlots || []),
+          ...(updatedPlan.meals.timeSlots ?? []),
           { time: newTime as string, meals: [movedMeal] }
         ];
       }

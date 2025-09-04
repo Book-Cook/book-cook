@@ -11,7 +11,7 @@ jest.mock('@dnd-kit/core', () => ({
     setNodeRef: jest.fn(),
     active: null,
   }),
-  DndContext: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  DndContext: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 describe('DayColumn', () => {

@@ -5,7 +5,6 @@ import type { MonthViewProps } from "./MonthView.types";
 import { DroppableDayCell } from "../components/DroppableDayCell";
 import { getCalendarDays, getMealPlanForDate, isPastDate, dayNames } from "../utils/monthCalendarUtils";
 
-
 const useStyles = makeStyles({
   container: {
     display: "grid",

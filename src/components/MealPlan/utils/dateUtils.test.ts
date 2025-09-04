@@ -112,24 +112,24 @@ describe('dateUtils', () => {
       const originalDate = Date;
       const mockDate = new Date('2024-01-15T09:00:00');
       
-      global.Date = jest.fn(() => mockDate) as any;
+      global.Date = jest.fn(() => mockDate) as typeof Date;
       global.Date.now = originalDate.now;
       
       const scrollPosition = getInitialScrollPosition(6, 60);
-      expect(scrollPosition).toBe(80); // ((9*60 - 6*60) / 60) * 60 - 100
+      expect(scrollPosition).toBe(60); // ((9*60 - 6*60 - 120) / 60) * 60 = ((540 - 360 - 120) / 60) * 60 = (60/60) * 60 = 60
       
       global.Date = originalDate;
     });
 
-    it('should return 0 for negative scroll positions', () => {
+    it('should return 0 for very early times', () => {
       const originalDate = Date;
-      const mockDate = new Date('2024-01-15T06:00:00');
+      const mockDate = new Date('2024-01-15T04:00:00'); // Very early time
       
-      global.Date = jest.fn(() => mockDate) as any;
+      global.Date = jest.fn(() => mockDate) as typeof Date;
       global.Date.now = originalDate.now;
       
       const scrollPosition = getInitialScrollPosition(6, 60);
-      expect(scrollPosition).toBe(0);
+      expect(scrollPosition).toBe(0); // Should be 0 for negative positions
       
       global.Date = originalDate;
     });

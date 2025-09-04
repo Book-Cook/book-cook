@@ -13,7 +13,6 @@ import { getWeekDates } from "../utils/getWeekDates";
 import { isPastDate } from "../utils/isPastDate";
 import { isToday } from "../utils/isToday";
 
-
 const useStyles = makeStyles({
   container: {
     display: "flex",
