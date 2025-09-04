@@ -21,7 +21,6 @@ if (
 }
 
 declare global {
-   
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
@@ -34,7 +33,9 @@ const dbName = process.env.MONGODB_DB;
 const customUri = process.env.MONGODB_URI;
 
 // Primary connection URI (SRV record)
-const uri = customUri || `mongodb+srv://${username}:${password}@${cluster}/${dbName}?retryWrites=true&w=majority`;
+const uri =
+  customUri ||
+  `mongodb+srv://${username}:${password}@${cluster}/${dbName}?retryWrites=true&w=majority`;
 
 // Simplified fallback for mobile hotspots (may not work with Atlas clusters)
 const fallbackUri = `mongodb://${username}:${password}@${cluster}:27017/${dbName}?ssl=true&authSource=admin&retryWrites=true&w=majority`;
@@ -70,53 +71,65 @@ let clientPromise: Promise<MongoClient>;
 // Enhanced connection logic with automatic fallback
 async function createMongoConnection(): Promise<MongoClient> {
   let client: MongoClient;
-  
-  console.log('MongoDB connection debug:', {
+
+  console.log("MongoDB connection debug:", {
     hasCustomUri: Boolean(customUri),
-    customUriStart: `${customUri?.substring(0, 20)  }...`,
+    customUriStart: `${customUri?.substring(0, 20)}...`,
   });
-  
+
   // If custom URI is provided, use it directly (best for mobile hotspots)
   if (customUri) {
-    console.log('Using custom MongoDB URI:', `${customUri.substring(0, 30)  }...`);
-    
+    console.log(
+      "Using custom MongoDB URI:",
+      `${customUri.substring(0, 30)}...`
+    );
+
     // Choose appropriate options based on URI type
-    const options = customUri.includes('mongodb+srv://') ? srvOptions : directOptions;
-    
+    const options = customUri.includes("mongodb+srv://")
+      ? srvOptions
+      : directOptions;
+
     try {
       client = new MongoClient(customUri, options);
       await client.connect();
-      console.log('Custom MongoDB connection successful');
+      console.log("Custom MongoDB connection successful");
       return client;
     } catch (error) {
-      console.error('Custom MongoDB URI failed:', error);
-      throw new Error(`Custom MongoDB connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Custom MongoDB URI failed:", error);
+      throw new Error(
+        `Custom MongoDB connection failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   }
-  
+
   try {
     // First try the primary SRV connection
-    console.log('Attempting primary MongoDB SRV connection...');
+    console.log("Attempting primary MongoDB SRV connection...");
     client = new MongoClient(uri, srvOptions);
     await client.connect();
-    console.log('Primary MongoDB SRV connection successful');
+    console.log("Primary MongoDB SRV connection successful");
     return client;
   } catch (error) {
-    console.warn('Primary MongoDB SRV connection failed, trying direct connection...', error);
-    
+    console.warn(
+      "Primary MongoDB SRV connection failed, trying direct connection...",
+      error
+    );
+
     try {
       // Fallback to direct connection (no SRV) - may not work with Atlas
-      console.log('Attempting fallback direct connection...');
+      console.log("Attempting fallback direct connection...");
       client = new MongoClient(fallbackUri, directOptions);
       await client.connect();
-      console.log('Fallback MongoDB direct connection successful');
+      console.log("Fallback MongoDB direct connection successful");
       return client;
     } catch (fallbackError) {
-      console.error('Both MongoDB connections failed:', {
+      console.error("Both MongoDB connections failed:", {
         primary: error,
-        fallback: fallbackError
+        fallback: fallbackError,
       });
-      throw new Error(`MongoDB connection failed. For mobile hotspots, try setting MONGODB_URI in .env with your Atlas connection string: ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`);
+      throw new Error(
+        `MongoDB connection failed. For mobile hotspots, try setting MONGODB_URI in .env with your Atlas connection string: ${fallbackError instanceof Error ? fallbackError.message : "Unknown error"}`
+      );
     }
   }
 }

@@ -2,7 +2,7 @@
  * Check if a date has passed
  */
 export const isPastDate = (date: Date, todayOverride?: boolean): boolean => {
-  if (todayOverride) return false;
+  if (todayOverride) {return false;}
   
   const today = new Date();
   today.setHours(0, 0, 0, 0);

@@ -1,16 +1,16 @@
 import * as React from "react";
 import { Text, mergeClasses, tokens } from "@fluentui/react-components";
 
-import { TimeSlot } from "../TimeSlot/TimeSlot";
-import { WeekDayDropZone } from "../components/WeekDayDropZone";
 import { useCondensedWeekViewStyles } from "./CondensedWeekView.styles";
-import { getWeekDates } from "../utils/getWeekDates";
-import { getScheduledMealsForDate } from "../utils/getScheduledMealsForDate";
-import { isPastDate } from "../utils/isPastDate";
-import { dayNames } from "../utils/dayNames";
-import { formatTimeForDisplay } from "../../../utils/timeSlots";
-
 import type { CondensedWeekViewProps } from "./CondensedWeekView.types";
+import { WeekDayDropZone } from "../components/WeekDayDropZone";
+import { TimeSlot } from "../TimeSlot/TimeSlot";
+import { dayNames } from "../utils/dayNames";
+import { getScheduledMealsForDate } from "../utils/getScheduledMealsForDate";
+import { getWeekDates } from "../utils/getWeekDates";
+import { isPastDate } from "../utils/isPastDate";
+
+import { formatTimeForDisplay } from "../../../utils/timeSlots";
 
 export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
   currentDate,

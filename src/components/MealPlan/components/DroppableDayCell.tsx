@@ -8,9 +8,10 @@ import { useDroppable } from "@dnd-kit/core";
 import { useRouter } from "next/router";
 
 import type { DroppableDayCellProps } from "./DroppableDayCell.types";
-import type { MealType } from "../../../clientToServer/types";
 import { useMonthDayCellStyles } from "./MonthDayCell.styles";
 import { legacyTimeMap } from "../utils/monthCalendarUtils";
+
+import type { MealType } from "../../../clientToServer/types";
 
 export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
   date,
@@ -75,7 +76,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
           mealPlan.meals.timeSlots
             .sort((a, b) => a.time.localeCompare(b.time))
             .flatMap((slot, slotIndex) => {
-            if (!slot.meals || slot.meals.length === 0) return [];
+            if (!slot.meals || slot.meals.length === 0) {return [];}
             
             // Show each meal in the time slot
             return slot.meals.map((meal, mealIndex) => (
@@ -103,7 +104,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
           /* Fall back to legacy meal types */
           ["breakfast", "lunch", "dinner", "snack"].map(mealType => {
             const meal = mealPlan?.meals?.[mealType as MealType];
-            if (!meal) return null;
+            if (!meal) {return null;}
             
             return (
               <div

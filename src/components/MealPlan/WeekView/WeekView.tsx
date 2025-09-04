@@ -3,16 +3,16 @@ import { makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-co
 
 import { HOUR_HEIGHT, TIME_COLUMN_WIDTH, MIN_HOUR } from "./constants";
 import { DayColumn } from "./DayColumn";
+import type { WeekViewProps } from "./WeekView.types";
 import { WeekHeader, TimeColumn, CurrentTimeLine } from "../components/WeekViewComponents";
-import { getWeekDates } from "../utils/getWeekDates";
-import { isToday } from "../utils/isToday";
-import { isPastDate } from "../utils/isPastDate";
 import { formatDateString } from "../utils/formatDateString";
 import { getCurrentTimePosition } from "../utils/getCurrentTimePosition";
 import { getInitialScrollPosition } from "../utils/getInitialScrollPosition";
 import { getMealsForDate } from "../utils/getMealsForDate";
+import { getWeekDates } from "../utils/getWeekDates";
+import { isPastDate } from "../utils/isPastDate";
+import { isToday } from "../utils/isToday";
 
-import type { WeekViewProps } from "./WeekView.types";
 
 const useStyles = makeStyles({
   container: {

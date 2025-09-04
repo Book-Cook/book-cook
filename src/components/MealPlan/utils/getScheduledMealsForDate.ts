@@ -1,8 +1,9 @@
 /**
  * Get all scheduled meals for a date, sorted by time
  */
-import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
 import { getMealPlanForDate } from "./getMealPlanForDate";
+
+import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
 
 export const getScheduledMealsForDate = (
   date: Date, 

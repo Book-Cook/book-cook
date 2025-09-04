@@ -1,10 +1,10 @@
 import * as React from "react";
 import { makeStyles, tokens } from "@fluentui/react-components";
 
+import type { MonthViewProps } from "./MonthView.types";
 import { DroppableDayCell } from "../components/DroppableDayCell";
 import { getCalendarDays, getMealPlanForDate, isPastDate, dayNames } from "../utils/monthCalendarUtils";
 
-import type { MonthViewProps } from "./MonthView.types";
 
 const useStyles = makeStyles({
   container: {
