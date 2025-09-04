@@ -1,4 +1,5 @@
-import { getMealsForDate, flattenMeals } from './mealUtils';
+import { getMealsForDate } from './getMealsForDate';
+import { flattenMeals } from './flattenMeals';
 
 import type { MealPlanWithRecipes } from '../../../clientToServer/types';
 

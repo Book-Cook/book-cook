@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "@testing-library/react";
 
-import { CurrentTimeLine } from "./CurrentTimeLine";
+import { CurrentTimeLine } from "../components/WeekViewComponents";
 
 describe('CurrentTimeLine', () => {
   it('should render at the correct position', () => {

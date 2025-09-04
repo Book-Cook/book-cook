@@ -1,11 +1,9 @@
-import {
-  getWeekDates,
-  isToday,
-  isPastDate,
-  formatDateString,
-  getCurrentTimePosition,
-  getInitialScrollPosition,
-} from './dateUtils';
+import { getWeekDates } from './getWeekDates';
+import { isToday } from './isToday';
+import { isPastDate } from './isPastDate';
+import { formatDateString } from './formatDateString';
+import { getCurrentTimePosition } from './getCurrentTimePosition';
+import { getInitialScrollPosition } from './getInitialScrollPosition';
 
 describe('dateUtils', () => {
   describe('getWeekDates', () => {

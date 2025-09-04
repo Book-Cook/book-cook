@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, screen } from "@testing-library/react";
 
-import { TimeColumn } from "./TimeColumn";
+import { TimeColumn } from "../components/WeekViewComponents";
 
 describe('TimeColumn', () => {
   it('should render all hours from 6 AM to 10 PM', () => {

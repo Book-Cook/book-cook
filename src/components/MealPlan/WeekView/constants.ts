@@ -20,16 +20,15 @@ export const DAY_NAMES_FULL = [
   'Saturday'
 ];
 
+import { formatTimeForDisplay, parseTime } from '../../../utils/timeSlots';
+
 export const formatHour = (hour: number): string => {
-  if (hour === 0) {return '12 AM';}
-  if (hour === 12) {return '12 PM';}
-  if (hour < 12) {return `${hour} AM`;}
-  return `${hour - 12} PM`;
+  return formatTimeForDisplay(`${hour.toString().padStart(2, '0')}:00`);
 };
 
 export const timeToMinutes = (time: string): number => {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
+  const { hour, minute } = parseTime(time);
+  return hour * 60 + minute;
 };
 
 export const minutesToTime = (minutes: number): string => {

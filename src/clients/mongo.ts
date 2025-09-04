@@ -72,13 +72,13 @@ async function createMongoConnection(): Promise<MongoClient> {
   let client: MongoClient;
   
   console.log('MongoDB connection debug:', {
-    hasCustomUri: !!customUri,
-    customUriStart: customUri?.substring(0, 20) + '...',
+    hasCustomUri: Boolean(customUri),
+    customUriStart: `${customUri?.substring(0, 20)  }...`,
   });
   
   // If custom URI is provided, use it directly (best for mobile hotspots)
   if (customUri) {
-    console.log('Using custom MongoDB URI:', customUri.substring(0, 30) + '...');
+    console.log('Using custom MongoDB URI:', `${customUri.substring(0, 30)  }...`);
     
     // Choose appropriate options based on URI type
     const options = customUri.includes('mongodb+srv://') ? srvOptions : directOptions;

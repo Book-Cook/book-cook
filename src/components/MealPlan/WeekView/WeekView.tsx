@@ -2,21 +2,17 @@ import * as React from "react";
 import { makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
 
 import { HOUR_HEIGHT, TIME_COLUMN_WIDTH, MIN_HOUR } from "./constants";
-import { CurrentTimeLine } from "./CurrentTimeLine";
 import { DayColumn } from "./DayColumn";
-import { TimeColumn } from "./TimeColumn";
-import { WeekHeader } from "./WeekHeader";
-import { 
-  getWeekDates, 
-  isToday, 
-  isPastDate, 
-  formatDateString,
-  getCurrentTimePosition,
-  getInitialScrollPosition 
-} from "../utils/dateUtils";
-import { getMealsForDate } from "../utils/mealUtils";
+import { WeekHeader, TimeColumn, CurrentTimeLine } from "../components/WeekViewComponents";
+import { getWeekDates } from "../utils/getWeekDates";
+import { isToday } from "../utils/isToday";
+import { isPastDate } from "../utils/isPastDate";
+import { formatDateString } from "../utils/formatDateString";
+import { getCurrentTimePosition } from "../utils/getCurrentTimePosition";
+import { getInitialScrollPosition } from "../utils/getInitialScrollPosition";
+import { getMealsForDate } from "../utils/getMealsForDate";
 
-import type { MealPlanWithRecipes } from "../../../clientToServer/types";
+import type { WeekViewProps } from "./WeekView.types";
 
 const useStyles = makeStyles({
   container: {
@@ -59,12 +55,6 @@ const useStyles = makeStyles({
     opacity: 0.7,
   },
 });
-
-interface WeekViewProps {
-  currentDate: Date;
-  mealPlans: MealPlanWithRecipes[];
-  onMealRemove: (date: string, time: string, mealIndex: number) => Promise<void>;
-}
 
 export const WeekView: React.FC<WeekViewProps> = ({
   currentDate,

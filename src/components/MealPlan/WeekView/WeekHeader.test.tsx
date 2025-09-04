@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, screen } from "@testing-library/react";
 
-import { WeekHeader } from "./WeekHeader";
+import { WeekHeader } from "../components/WeekViewComponents";
 
 describe('WeekHeader', () => {
   const mockWeekDates = [
