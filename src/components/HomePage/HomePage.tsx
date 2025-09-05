@@ -10,8 +10,9 @@ import { RecipesCarousel } from "../RecipeCarousel";
 import {
   fetchRecentlyViewed,
   fetchRecipeCollections,
+  fetchUpcomingMeals,
 } from "../../clientToServer";
-import type { Recipe, MealPlanWithRecipes } from "../../clientToServer/types";
+import type { Recipe, UpcomingMealsResult } from "../../clientToServer/types";
 
 const useStyles = makeStyles({
   container: {
@@ -55,124 +56,7 @@ const useStyles = makeStyles({
   },
 });
 
-type MealWithFullInfo = { 
-  recipe: Recipe; 
-  datetime: Date;
-  isPast: boolean;
-};
 
-const fetchUpcomingMeals = async (): Promise<{ meals: (Recipe & { isPast?: boolean })[]; currentMealIndex: number }> => {
-  const today = new Date();
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000); // Include yesterday
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-  
-  const startDate = yesterday.toISOString().split('T')[0];
-  const endDate = nextWeek.toISOString().split('T')[0];
-  
-  const response = await fetch(
-    `/api/meal-plans?startDate=${startDate}&endDate=${endDate}`
-  );
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch meal plans');
-  }
-  
-  const data = await response.json();
-  const mealPlans: MealPlanWithRecipes[] = data.mealPlans || [];
-  
-  const allMeals: MealWithFullInfo[] = [];
-  const currentTime = new Date();
-  const seenRecipeIds = new Set<string>();
-  
-  mealPlans.forEach(plan => {
-    // Handle time slots
-    if (plan.meals.timeSlots && Array.isArray(plan.meals.timeSlots)) {
-      plan.meals.timeSlots.forEach(slot => {
-        slot.meals.forEach(meal => {
-          const mealDateTime = new Date(`${plan.date  }T${slot.time}:00`);
-          
-          // Include meals from yesterday onwards, avoid duplicates
-          if (meal.recipeId && !seenRecipeIds.has(meal.recipeId)) {
-            const recipe = meal.recipe as any;
-            if (recipe?.title) {
-              allMeals.push({
-                recipe: {
-                  _id: meal.recipeId,
-                  title: recipe.title,
-                  emoji: recipe.emoji,
-                  imageURL: recipe.imageURL,
-                  tags: recipe.tags ?? [],
-                  createdAt: '2020-01-01T00:00:00.000Z', // Old date to avoid "new" badge
-                  data: '', // Not needed for carousel display
-                  owner: '', // Not needed for carousel display
-                  isPublic: false, // Not needed for carousel display
-                },
-                datetime: mealDateTime,
-                isPast: mealDateTime.getTime() < currentTime.getTime()
-              });
-              seenRecipeIds.add(meal.recipeId);
-            }
-          }
-        });
-      });
-    }
-    
-    // Handle legacy meal types
-    const legacyMealTimes = {
-      breakfast: '08:00',
-      lunch: '12:00', 
-      dinner: '18:30',
-      snack: '15:00'
-    };
-    
-    Object.entries(legacyMealTimes).forEach(([mealType, defaultTime]) => {
-      const meal = plan.meals[mealType as keyof typeof plan.meals];
-      if (meal && typeof meal === 'object' && 'recipeId' in meal) {
-        const mealDateTime = new Date(`${plan.date  }T${defaultTime}:00`);
-        
-        // Include meals from yesterday onwards, avoid duplicates
-        if (meal.recipeId && !seenRecipeIds.has(meal.recipeId)) {
-          const recipe = meal.recipe as any;
-          if (recipe?.title) {
-            allMeals.push({
-              recipe: {
-                _id: meal.recipeId,
-                title: recipe.title,
-                emoji: recipe.emoji,
-                imageURL: recipe.imageURL,
-                tags: recipe.tags ?? [],
-                createdAt: '2020-01-01T00:00:00.000Z', // Old date to avoid "new" badge
-                data: '', // Not needed for carousel display
-                owner: '', // Not needed for carousel display
-                isPublic: false, // Not needed for carousel display
-              },
-              datetime: mealDateTime,
-              isPast: mealDateTime.getTime() < currentTime.getTime()
-            });
-            seenRecipeIds.add(meal.recipeId);
-          }
-        }
-      }
-    });
-  });
-  
-  // Sort by datetime (earliest first)
-  allMeals.sort((a, b) => a.datetime.getTime() - b.datetime.getTime());
-  
-  // Find the first meal that is current or upcoming
-  const currentMealIndex = allMeals.findIndex(meal => !meal.isPast);
-  
-  // If no upcoming meals found, default to a reasonable position near the end
-  const defaultIndex = currentMealIndex >= 0 ? currentMealIndex : Math.max(0, allMeals.length - 3);
-  
-  return {
-    meals: allMeals.slice(0, 15).map(meal => ({
-      ...meal.recipe,
-      isPast: meal.isPast
-    })), // Show up to 15 recipes with isPast flag
-    currentMealIndex: Math.min(defaultIndex, 14) // Ensure index is within bounds
-  };
-};
 
 const HomePage = () => {
   const styles = useStyles();
@@ -194,7 +78,7 @@ const HomePage = () => {
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-  const { data: upcomingMealData, refetch } = useQuery<{ meals: (Recipe & { isPast?: boolean })[]; currentMealIndex: number }>({
+  const { data: upcomingMealData, refetch } = useQuery<UpcomingMealsResult>({
     queryKey: ["mealPlans", yesterday, nextWeek], // Match the meal plan query pattern
     queryFn: fetchUpcomingMeals,
     enabled: Boolean(session),

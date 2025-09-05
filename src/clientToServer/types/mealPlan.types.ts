@@ -90,3 +90,15 @@ export interface MealPlanResponse {
   mealPlans: MealPlan[];
   totalCount: number;
 }
+
+export interface MealPlanResponseWithRecipes {
+  mealPlans: MealPlanWithRecipes[];
+  totalCount: number;
+}
+
+import type { Recipe } from './recipes.types';
+
+export interface UpcomingMealsResult {
+  meals: Array<Recipe & { isPast?: boolean }>;
+  currentMealIndex: number;
+}

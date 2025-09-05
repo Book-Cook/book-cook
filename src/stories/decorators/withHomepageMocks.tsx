@@ -1,7 +1,7 @@
 import { withApiMocks } from "../mockApi";
 
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 import { generateMealPlanResponse } from "../../mocks/data/mealPlans";
+import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
 
 // Homepage-specific mock variants
 export const homepageVariants = {

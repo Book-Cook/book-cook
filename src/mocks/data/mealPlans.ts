@@ -1,12 +1,10 @@
-import type { MealPlanWithRecipes } from "../../clientToServer/types";
 import { 
-  chocolateChipCookies, 
-  thaiGreenCurry, 
-  caesarSalad, 
   avocadoToast,
   beefBolognese,
   lemonGarlicSalmon
 } from "./recipes";
+
+import type { MealPlanWithRecipes } from "../../clientToServer/types";
 
 // Helper to create dates relative to today
 const getDate = (daysOffset: number): string => {
@@ -45,15 +43,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
           time: "12:30",
           meals: [
             {
-              recipeId: caesarSalad._id,
+              recipeId: beefBolognese._id,
               servings: 1,
               time: "12:30",
               duration: 25,
               recipe: {
-                title: caesarSalad.title,
-                emoji: caesarSalad.emoji,
-                imageURL: caesarSalad.imageURL,
-                tags: caesarSalad.tags,
+                title: beefBolognese.title,
+                emoji: beefBolognese.emoji,
+                imageURL: beefBolognese.imageURL,
+                tags: beefBolognese.tags,
               },
             },
           ],
@@ -92,15 +90,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
           time: "08:30",
           meals: [
             {
-              recipeId: chocolateChipCookies._id,
+              recipeId: avocadoToast._id,
               servings: 1,
               time: "08:30",
               duration: 20,
               recipe: {
-                title: chocolateChipCookies.title,
-                emoji: chocolateChipCookies.emoji,
-                imageURL: chocolateChipCookies.imageURL,
-                tags: chocolateChipCookies.tags,
+                title: avocadoToast.title,
+                emoji: avocadoToast.emoji,
+                imageURL: avocadoToast.imageURL,
+                tags: avocadoToast.tags,
               },
             },
           ],
@@ -109,15 +107,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
           time: "13:00",
           meals: [
             {
-              recipeId: thaiGreenCurry._id,
+              recipeId: beefBolognese._id,
               servings: 2,
               time: "13:00",
               duration: 45,
               recipe: {
-                title: thaiGreenCurry.title,
-                emoji: thaiGreenCurry.emoji,
-                imageURL: thaiGreenCurry.imageURL,
-                tags: thaiGreenCurry.tags,
+                title: beefBolognese.title,
+                emoji: beefBolognese.emoji,
+                imageURL: beefBolognese.imageURL,
+                tags: beefBolognese.tags,
               },
             },
           ],
@@ -186,15 +184,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
           time: "12:00",
           meals: [
             {
-              recipeId: caesarSalad._id,
+              recipeId: lemonGarlicSalmon._id,
               servings: 1,
               time: "12:00",
               duration: 25,
               recipe: {
-                title: caesarSalad.title,
-                emoji: caesarSalad.emoji,
-                imageURL: caesarSalad.imageURL,
-                tags: caesarSalad.tags,
+                title: lemonGarlicSalmon.title,
+                emoji: lemonGarlicSalmon.emoji,
+                imageURL: lemonGarlicSalmon.imageURL,
+                tags: lemonGarlicSalmon.tags,
               },
             },
           ],
@@ -203,15 +201,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
           time: "19:30",
           meals: [
             {
-              recipeId: thaiGreenCurry._id,
+              recipeId: lemonGarlicSalmon._id,
               servings: 3,
               time: "19:30",
               duration: 45,
               recipe: {
-                title: thaiGreenCurry.title,
-                emoji: thaiGreenCurry.emoji,
-                imageURL: thaiGreenCurry.imageURL,
-                tags: thaiGreenCurry.tags,
+                title: lemonGarlicSalmon.title,
+                emoji: lemonGarlicSalmon.emoji,
+                imageURL: lemonGarlicSalmon.imageURL,
+                tags: lemonGarlicSalmon.tags,
               },
             },
           ],

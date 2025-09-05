@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
+import { mergeClasses } from "@griffel/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { mergeClasses } from "@griffel/react";
 
 import { useRecipeCardStyles } from "./RecipeCard.styles";
 import type { RecipeCardProps } from "./RecipeCard.types";

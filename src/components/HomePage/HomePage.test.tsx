@@ -5,8 +5,8 @@ import { SessionProvider } from "next-auth/react";
 
 import HomePage from "./HomePage";
 
-import { caesarSalad, chocolateChipCookies, thaiGreenCurry } from "../../mocks/data/recipes";
 import { generateMealPlanResponse } from "../../mocks/data/mealPlans";
+import { caesarSalad, chocolateChipCookies, thaiGreenCurry } from "../../mocks/data/recipes";
 import { GetRecentlyViewedResponses } from "../../mocks/responses/user/getRecentlyViewed";
 import { GetUserCollectionsResponses } from "../../mocks/responses/user/getUserCollections";
 import { mockUtils } from "../../mocks/utils/testUtils";
