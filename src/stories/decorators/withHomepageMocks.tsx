@@ -1,6 +1,7 @@
 import { withApiMocks } from "../mockApi";
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
+import { generateMealPlanResponse } from "../../mocks/data/mealPlans";
 
 // Homepage-specific mock variants
 export const homepageVariants = {
@@ -11,6 +12,9 @@ export const homepageVariants = {
     '/api/user/recentlyViewed': {
       response: [caesarSalad, chocolateChipCookies],
     },
+    '/api/meal-plans': {
+      response: generateMealPlanResponse(),
+    },
   }),
 
   empty: () => withApiMocks({
@@ -19,6 +23,9 @@ export const homepageVariants = {
     },
     '/api/user/recentlyViewed': {
       response: [],
+    },
+    '/api/meal-plans': {
+      response: { mealPlans: [], totalCount: 0 },
     },
   }),
 
@@ -29,6 +36,10 @@ export const homepageVariants = {
     },
     '/api/user/recentlyViewed': {
       response: [caesarSalad, chocolateChipCookies],
+      delay: 999999,
+    },
+    '/api/meal-plans': {
+      response: generateMealPlanResponse(),
       delay: 999999,
     },
   }),
@@ -42,6 +53,10 @@ export const homepageVariants = {
       response: { error: 'Server error' },
       status: 500,
     },
+    '/api/meal-plans': {
+      response: { error: 'Server error' },
+      status: 500,
+    },
   }),
 
   onlyRecentlyViewed: () => withApiMocks({
@@ -51,6 +66,9 @@ export const homepageVariants = {
     '/api/user/recentlyViewed': {
       response: [thaiGreenCurry, caesarSalad],
     },
+    '/api/meal-plans': {
+      response: generateMealPlanResponse(),
+    },
   }),
 
   onlyCollections: () => withApiMocks({
@@ -59,6 +77,9 @@ export const homepageVariants = {
     },
     '/api/user/recentlyViewed': {
       response: [],
+    },
+    '/api/meal-plans': {
+      response: generateMealPlanResponse(),
     },
   }),
 } as const;

@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import HomePage from "./HomePage";
 
 import { caesarSalad, chocolateChipCookies, thaiGreenCurry } from "../../mocks/data/recipes";
+import { generateMealPlanResponse } from "../../mocks/data/mealPlans";
 import { GetRecentlyViewedResponses } from "../../mocks/responses/user/getRecentlyViewed";
 import { GetUserCollectionsResponses } from "../../mocks/responses/user/getUserCollections";
 import { mockUtils } from "../../mocks/utils/testUtils";
@@ -42,6 +43,12 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 describe("HomePage Component", () => {
   beforeEach(() => {
     mockUtils.reset();
+    // Mock meal plans API for all tests
+    mockUtils.mockResponse(
+      "get",
+      "/api/meal-plans",
+      generateMealPlanResponse()
+    );
   });
 
   describe("Loading States", () => {

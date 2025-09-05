@@ -7,6 +7,7 @@
 export * from "./recipes";
 export * from "./users";
 export * from "./activity";
+export * from "./mealPlans";
 
 // Re-export for backward compatibility and convenience
 import {
