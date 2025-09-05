@@ -3,6 +3,17 @@ import { render, screen } from '@testing-library/react';
 
 import { DayColumn } from './DayColumn';
 
+// Mock Next.js router
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    route: '/',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+  })),
+}));
+
 // Mock dnd-kit hooks
 jest.mock('@dnd-kit/core', () => ({
   ...jest.requireActual('@dnd-kit/core'),

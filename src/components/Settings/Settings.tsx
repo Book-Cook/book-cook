@@ -13,6 +13,7 @@ import { AccountSection } from "./AccountSection/AccountSection";
 import { AppearanceSection } from "./AppearanceSection/AppearanceSection";
 import { sectionIds } from "./constants";
 import { SettingsSearchContext } from "./context";
+import { MealPlanSection } from "./MealPlanSection/MealPlanSection";
 import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
 import { SharingSection } from "./SharingSection/SharingSection";
 import { Unauthorized } from "../FallbackScreens";
@@ -130,6 +131,7 @@ export const SettingsPage = () => {
           >
             <AppearanceSection />
             <RecipePreferencesSection />
+            <MealPlanSection />
             <SharingSection />
             <AccountSection />
           </Accordion>

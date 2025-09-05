@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Text, Button, makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
+import { Text, Button, makeStyles, tokens, shorthands } from "@fluentui/react-components";
 import { Dismiss12Regular } from "@fluentui/react-icons";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles({
   card: {
@@ -19,22 +18,15 @@ const useStyles = makeStyles({
     transition: "all 0.2s ease",
     zIndex: 2,
     userSelect: "none",
-    cursor: "grab",
+    cursor: "pointer",
     boxShadow: tokens.shadow2,
     "&:hover": {
       backgroundColor: tokens.colorNeutralBackground1Hover,
       boxShadow: tokens.shadow4,
       ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
     },
-    "&:active": {
-      cursor: "grabbing",
-    },
   },
   
-  dragging: {
-    opacity: 0.5,
-    zIndex: 999,
-  },
   
   header: {
     display: "flex",
@@ -77,10 +69,12 @@ const useStyles = makeStyles({
     flexShrink: 0,
   },
   
+  
 });
 
 export interface MealCardProps {
   id: string;
+  recipeId: string;
   title: string;
   emoji?: string;
   time: string;
@@ -93,54 +87,36 @@ export interface MealCardProps {
 
 export const MealCard: React.FC<MealCardProps> = React.memo(({
   id,
+  recipeId,
   title,
   emoji,
-  time,
   duration,
   position,
   onRemove,
-  date,
-  mealIndex,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
   
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id,
-    data: {
-      type: "meal-card",
-      date,
-      time,
-      mealIndex,
-      title,
-      emoji,
-    },
-  });
-  
-  
+  const handleCardClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (recipeId) {
+      await router.push(`/recipes/${recipeId}`);
+    }
+  };
+
   const cardHeight = Math.max(30, (duration / 60) * 60 - 8);
   
   const style: React.CSSProperties = {
     top: `${position}px`,
     height: `${cardHeight}px`,
-    transform: CSS.Transform.toString(transform),
-    transition,
   };
   
   return (
     <div
-      ref={setNodeRef}
-      className={mergeClasses(styles.card, isDragging && styles.dragging)}
+      className={styles.card}
       style={style}
       data-meal-id={id}
-      {...attributes}
-      {...listeners}
+      onClick={handleCardClick}
     >
       <div className={styles.header}>
         <div className={styles.content}>

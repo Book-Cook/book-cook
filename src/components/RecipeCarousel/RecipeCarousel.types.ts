@@ -15,4 +15,9 @@ export type RecipesCarouselProps = {
    * Boolean indicating if the carousel is loading.
    */
   isLoading: boolean;
+
+  /**
+   * Optional initial scroll index to position the carousel at startup
+   */
+  initialScrollIndex?: number;
 };

@@ -2,6 +2,7 @@ import * as React from "react";
 import { tokens } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { RecipesCarousel } from "../RecipeCarousel";
@@ -9,8 +10,9 @@ import { RecipesCarousel } from "../RecipeCarousel";
 import {
   fetchRecentlyViewed,
   fetchRecipeCollections,
+  fetchUpcomingMeals,
 } from "../../clientToServer";
-import type { Recipe } from "../../clientToServer/types";
+import type { Recipe, UpcomingMealsResult } from "../../clientToServer/types";
 
 const useStyles = makeStyles({
   container: {
@@ -54,9 +56,12 @@ const useStyles = makeStyles({
   },
 });
 
+
+
 const HomePage = () => {
   const styles = useStyles();
   const { data: session } = useSession();
+  const router = useRouter();
 
   const { data: recentlyViewed } = useQuery<Recipe[]>({
     queryKey: ["recentlyViewed", session?.user?.id],
@@ -70,16 +75,47 @@ const HomePage = () => {
     enabled: Boolean(session),
   });
 
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+  const { data: upcomingMealData, refetch } = useQuery<UpcomingMealsResult>({
+    queryKey: ["mealPlans", yesterday, nextWeek], // Match the meal plan query pattern
+    queryFn: fetchUpcomingMeals,
+    enabled: Boolean(session),
+    staleTime: 0, // No stale time - always fresh data
+    gcTime: 0, // No cache - always fetch fresh
+    refetchOnWindowFocus: true, // Refetch when window gains focus
+    refetchOnMount: true, // Always refetch when component mounts
+  });
+
   const recentlyViewedRecipes =
     recentlyViewed && recentlyViewed?.length > 0 ? recentlyViewed : [];
 
   const recipeCollectionsList =
     recipeCollections && recipeCollections?.length > 0 ? recipeCollections : [];
 
+  const upcomingMealsList = upcomingMealData?.meals || [];
+  const initialScrollIndex = upcomingMealData?.currentMealIndex || 0;
+
+  // Refetch upcoming meals when navigating to home page
+  React.useEffect(() => {
+    if (refetch) {
+      void refetch();
+    }
+  }, [router.asPath, refetch]);
+
   return (
     <div className={styles.container}>
       <div className={styles.subContainer}>
         <div className={styles.sectionContainer}>
+          {(upcomingMealsList.length > 0 || !upcomingMealData) && (
+            <RecipesCarousel
+              recipes={upcomingMealsList}
+              title={"Upcoming Meals"}
+              isLoading={!upcomingMealData}
+              initialScrollIndex={initialScrollIndex}
+            />
+          )}
           <RecipesCarousel
             recipes={recentlyViewedRecipes}
             title={"Recently Viewed Recipes"}

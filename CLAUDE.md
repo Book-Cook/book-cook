@@ -25,11 +25,16 @@
 7. **CRITICAL**: Ensure 0 lint warnings in all files you created/modified before final commit
 8. Commit and push changes
 
-## Code Organization
+## Code Organization & Abstraction
 
-- Abstract code into individual functions, each in their own file when possible
+- **CRITICAL**: Abstract code into individual functions, each in their own file when possible
+- **NEVER** write complex functions directly in React components - always abstract to separate files
+- **NEVER** define types inline in .tsx files - use proper types files  
+- **ALWAYS** follow existing repository patterns and structure
+- **MINIMIZE** writing new functions - try to reuse and utilize existing code first
 - Write unit tests for each function
 - Each function should have a corresponding test file
+- Follow the clientToServer structure for API calls (fetch/, post/, delete/ folders)
 
 ## Project Commands
 

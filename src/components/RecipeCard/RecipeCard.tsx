@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Card, Text, tokens, Tooltip } from "@fluentui/react-components";
+import { mergeClasses } from "@griffel/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -19,7 +20,8 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
     isPublic, 
     creatorName, 
     savedCount, 
-    showActions = true 
+    showActions = true,
+    isPast = false
   } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -60,7 +62,11 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
   }, [createdDate]);
 
   return (
-    <Card ref={cardRef} onClick={onCardClick} className={styles.card}>
+    <Card 
+      ref={cardRef} 
+      onClick={onCardClick} 
+      className={mergeClasses(styles.card, isPast && styles.pastCard)}
+    >
       <div className={styles.cardInner}>
         {isNew && <span className={styles.badgeNew}>NEW</span>}
         <div className={styles.imageContainer}>
@@ -89,7 +95,7 @@ const RecipeCardComponent: React.FC<RecipeCardProps> = (props) => {
             </div>
           )}
         </div>
-        <div className={styles.content}>
+        <div className={mergeClasses(styles.content, isPast && styles.pastContent)}>
           <div className={styles.headerRoot}>
             <div className={styles.headerContent}>
               <Tooltip content={title} relationship="label">
@@ -180,6 +186,7 @@ export const RecipeCard = React.memo(RecipeCardComponent, (prevProps, nextProps)
     prevProps.creatorName === nextProps.creatorName &&
     prevProps.savedCount === nextProps.savedCount &&
     prevProps.showActions === nextProps.showActions &&
+    prevProps.isPast === nextProps.isPast &&
     JSON.stringify(prevProps.tags) === JSON.stringify(nextProps.tags)
   );
 });

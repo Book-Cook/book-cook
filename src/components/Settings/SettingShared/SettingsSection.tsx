@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "24px",
-    padding: "24px 0px",
+    padding: "8px 0px 24px 0px",
   },
   title: {
     fontSize: tokens.fontSizeBase600,

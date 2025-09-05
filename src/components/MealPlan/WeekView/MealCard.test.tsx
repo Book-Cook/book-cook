@@ -3,9 +3,21 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { MealCard } from './MealCard';
 
+// Mock Next.js router
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    route: '/',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+  })),
+}));
+
 describe('MealCard', () => {
   const defaultProps = {
     id: 'meal-1',
+    recipeId: 'recipe-1',
     title: 'Spaghetti Carbonara',
     emoji: '🍝',
     time: '12:30',
