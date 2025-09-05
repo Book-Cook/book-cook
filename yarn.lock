@@ -15,13 +15,13 @@
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.3"
 
-"@ai-sdk/google@^1.2.8":
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/google/-/google-1.2.22.tgz#9993e4781c9a773cd17d47490b9efdc90895abd2"
-  integrity sha512-Ppxu3DIieF1G9pyQ5O1Z646GYR0gkC57YdBqXJ82qvCdhEhZHu0TWhmnOoeIWe2olSbuDeoOY+MfJrW8dzS3Hw==
+"@ai-sdk/google@^2.0.0":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/google/-/google-2.0.12.tgz#9687b6d47093215f1dbe54c10e3e2d8ab261820b"
+  integrity sha512-BH3w0hPddNo82okuF/UmCZreKibUSDTW/SED0sBWlrj16S9/H/Urzf4mBwwT419kVenb8XvO55KJ6Byc8ONNXQ==
   dependencies:
-    "@ai-sdk/provider" "1.1.3"
-    "@ai-sdk/provider-utils" "2.2.8"
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.8"
 
 "@ai-sdk/openai@^1.3.7":
   version "1.3.23"
@@ -49,6 +49,15 @@
     "@standard-schema/spec" "^1.0.0"
     eventsource-parser "^3.0.3"
     zod-to-json-schema "^3.24.1"
+
+"@ai-sdk/provider-utils@3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-3.0.8.tgz#850f1c50f220f88dcf5e336eb2cdf30886eb2772"
+  integrity sha512-cDj1iigu7MW2tgAQeBzOiLhjHOUM9vENsgh4oAVitek0d//WdgfPCsKO3euP7m7LyO/j9a1vr/So+BGNdpFXYw==
+  dependencies:
+    "@ai-sdk/provider" "2.0.0"
+    "@standard-schema/spec" "^1.0.0"
+    eventsource-parser "^3.0.5"
 
 "@ai-sdk/provider@1.1.3":
   version "1.1.3"
@@ -9020,6 +9029,11 @@ eventsource-parser@^3.0.3:
   resolved "https://registry.yarnpkg.com/eventsource-parser/-/eventsource-parser-3.0.3.tgz#e9af1d40b77e6268cdcbc767321e8b9f066adea8"
   integrity sha512-nVpZkTMM9rF6AQ9gPJpFsNAMt48wIzB5TQgiTLdHiuO8XEDhUgZEhqKlZWXbIzo9VmJ/HvysHqEaVeD5v9TPvA==
 
+eventsource-parser@^3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/eventsource-parser/-/eventsource-parser-3.0.6.tgz#292e165e34cacbc936c3c92719ef326d4aeb4e90"
+  integrity sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==
+
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/evp_bytestokey/-/evp_bytestokey-1.0.3.tgz#7fcbdb198dc71959432efe13842684e0525acb02"
@@ -14720,7 +14734,14 @@ stringify-object@^3.3.0:
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
