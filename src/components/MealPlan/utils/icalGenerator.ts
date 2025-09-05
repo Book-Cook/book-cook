@@ -78,7 +78,7 @@ export function mealPlansToICalEvents(mealPlans: MealPlanWithRecipes[]): ICalEve
     };
 
     Object.entries(legacyMealTimes).forEach(([mealType, defaultTime]) => {
-      const meal = meals[mealType];
+      const meal = meals[mealType as keyof typeof meals];
       if (meal && typeof meal === 'object' && 'recipeId' in meal) {
         const startDate = parseTimeToDate(date, defaultTime);
         const endDate = new Date(startDate.getTime() + (meal.duration || 60) * 60 * 1000);

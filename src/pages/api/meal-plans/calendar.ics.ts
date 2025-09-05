@@ -162,8 +162,12 @@ export default async function handler(
       });
       
       return {
-        ...plan,
-        meals: enhancedMeals
+        _id: plan._id.toString(),
+        userId: (plan as any).userId ?? '',
+        date: (plan as any).date ?? '',
+        meals: enhancedMeals,
+        createdAt: (plan as any).createdAt ?? new Date(),
+        updatedAt: (plan as any).updatedAt ?? new Date()
       };
     });
 

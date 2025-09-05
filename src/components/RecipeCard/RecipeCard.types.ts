@@ -53,4 +53,9 @@ export type RecipeCardProps = {
    * Whether to show the edit menu (hide for other users' public recipes)
    */
   showActions?: boolean;
+
+  /**
+   * Whether this recipe represents a past meal (for visual styling)
+   */
+  isPast?: boolean;
 };

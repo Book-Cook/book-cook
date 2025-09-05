@@ -16,6 +16,7 @@ import { Calendar24Regular } from "@fluentui/react-icons";
 import { mealPlanSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
+
 import { CalendarSubscription } from "../../MealPlan/CalendarSubscription/CalendarSubscription";
 
 const sectionKeywords = [

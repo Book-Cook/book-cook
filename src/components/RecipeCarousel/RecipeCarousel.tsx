@@ -80,7 +80,7 @@ function useCarouselControls(emblaApi: EmblaCarouselType | undefined) {
 const skeletonCount = 6;
 
 export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
-  const { recipes, title, isLoading = true } = props;
+  const { recipes, title, isLoading = true, initialScrollIndex } = props;
 
   const styles = useRecipeCarouselStyles();
   const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions);
@@ -95,6 +95,17 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
     scrollNext,
     scrollTo,
   } = useCarouselControls(emblaApi);
+
+  // Auto-scroll to initial position when carousel is ready
+  React.useEffect(() => {
+    if (emblaApi && initialScrollIndex !== undefined && !isLoading && recipes.length > 0) {
+      // Use setTimeout to ensure DOM is fully rendered
+      const timer = setTimeout(() => {
+        scrollTo(initialScrollIndex);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [emblaApi, initialScrollIndex, isLoading, recipes.length, scrollTo]);
 
   const handleCardClick = React.useCallback(
     async (id: string) => {
@@ -160,6 +171,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
                     tags={recipe.tags}
                     createdDate={recipe.createdAt}
                     isPublic={recipe?.isPublic}
+                    isPast={(recipe as any).isPast}
                     isMinimal
                   />
                   <div

@@ -10,14 +10,6 @@ export const useTimeSlotStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     position: "relative",
-    transition: "all 0.2s ease",
-    "&:hover": {
-      borderTopColor: tokens.colorNeutralStroke1Hover,
-      borderRightColor: tokens.colorNeutralStroke1Hover,
-      borderBottomColor: tokens.colorNeutralStroke1Hover,
-      borderLeftColor: tokens.colorNeutralStroke1Hover,
-      backgroundColor: tokens.colorNeutralBackground1Hover,
-    },
   },
   isDraggingOver: {
     borderTopColor: tokens.colorBrandStroke1,

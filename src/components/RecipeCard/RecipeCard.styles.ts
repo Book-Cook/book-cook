@@ -123,4 +123,11 @@ export const useRecipeCardStyles = makeStyles({
     background: tokens.colorBrandBackground2,
     color: tokens.colorBrandForeground2,
   },
+  pastCard: {
+    opacity: 0.5,
+    filter: "grayscale(0.3)",
+  },
+  pastContent: {
+    background: tokens.colorNeutralBackground2,
+  },
 });

@@ -223,7 +223,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
       ) : (
         <>
           <div className={styles.section}>
-            <Caption1 weight="semibold">Subscription URL</Caption1>
+            <Caption1>Subscription URL</Caption1>
             <div className={styles.inputGroup}>
               <Input 
                 className={styles.input}
@@ -240,7 +240,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </div>
 
           <div className={styles.section}>
-            <Caption1 weight="semibold">Webcal URL (iOS/macOS)</Caption1>
+            <Caption1>Webcal URL (iOS/macOS)</Caption1>
             <div className={styles.inputGroup}>
               <Input 
                 className={styles.input}
@@ -257,7 +257,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </div>
 
           <div className={styles.instructions}>
-            <Caption1 weight="semibold">Quick Setup:</Caption1>
+            <Caption1>Quick Setup:</Caption1>
             <ul className={styles.instructionList}>
               <li>Google Calendar: Settings → Add calendar → From URL</li>
               <li>Apple: Click the webcal URL or paste in Calendar app</li>

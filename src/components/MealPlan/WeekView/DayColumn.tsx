@@ -151,6 +151,7 @@ export const DayColumn: React.FC<DayColumnProps> = React.memo(({
             <MealCard
               key={id}
               id={id}
+              recipeId={meal.recipeId}
               title={recipe?.title ?? 'Unknown Recipe'}
               emoji={recipe?.emoji}
               time={time}
