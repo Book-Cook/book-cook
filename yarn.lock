@@ -7,6 +7,14 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.3.tgz#beebbefb0264fdeb32d3052acae0e0d94315a9a2"
   integrity sha512-VQKMkwriZbaOgVCby1UDY/LDk5fIjhQicCvVPFqfe+69fWaPWydbWJ3wRt59/YzIwda1I81loas3oCoHxnqvdA==
 
+"@ai-sdk/gateway@1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-1.0.19.tgz#b49a951cfa73d8d69e6d37cfc542913933bccc94"
+  integrity sha512-TYLxx8Sclr/RdB0RIwGmA8OtJtyJxoPGtrTYgwrbzM2GdtwYtUuA/UIc4tZyCeyR1ujfqjbqiIF3kB54zGRD3A==
+  dependencies:
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.8"
+
 "@ai-sdk/gateway@1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-1.0.6.tgz#6ef310dc6cebd4aa03d731f212632ae1f85e1355"
@@ -50,6 +58,15 @@
     eventsource-parser "^3.0.3"
     zod-to-json-schema "^3.24.1"
 
+"@ai-sdk/provider-utils@3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-3.0.8.tgz#850f1c50f220f88dcf5e336eb2cdf30886eb2772"
+  integrity sha512-cDj1iigu7MW2tgAQeBzOiLhjHOUM9vENsgh4oAVitek0d//WdgfPCsKO3euP7m7LyO/j9a1vr/So+BGNdpFXYw==
+  dependencies:
+    "@ai-sdk/provider" "2.0.0"
+    "@standard-schema/spec" "^1.0.0"
+    eventsource-parser "^3.0.5"
+
 "@ai-sdk/provider@1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-1.1.3.tgz#ebdda8077b8d2b3f290dcba32c45ad19b2704681"
@@ -64,16 +81,6 @@
   dependencies:
     json-schema "^0.4.0"
 
-"@ai-sdk/react@1.2.12":
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/react/-/react-1.2.12.tgz#f4250b6df566b170af98a71d5708b52108dd0ce1"
-  integrity sha512-jK1IZZ22evPZoQW3vlkZ7wvjYGYF+tRBKXtrcolduIkQ/m/sOAVcVeVDUDvh1T91xCnWCdUGCPZg2avZ90mv3g==
-  dependencies:
-    "@ai-sdk/provider-utils" "2.2.8"
-    "@ai-sdk/ui-utils" "1.2.11"
-    swr "^2.2.5"
-    throttleit "2.1.0"
-
 "@ai-sdk/react@^2.0.0":
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/@ai-sdk/react/-/react-2.0.14.tgz#0a8fd47ec7197724403248611bf7a08ea17ffb7c"
@@ -83,15 +90,6 @@
     ai "5.0.14"
     swr "^2.2.5"
     throttleit "2.1.0"
-
-"@ai-sdk/ui-utils@1.2.11":
-  version "1.2.11"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/ui-utils/-/ui-utils-1.2.11.tgz#4f815589d08d8fef7292ade54ee5db5d09652603"
-  integrity sha512-3zcwCc8ezzFlwp3ZD15wAPjf2Au4s3vAbKsXQVyhxODHcmu0iyPO2Eua6D/vicq/AUm/BAo60r97O6HU+EI0+w==
-  dependencies:
-    "@ai-sdk/provider" "1.1.3"
-    "@ai-sdk/provider-utils" "2.2.8"
-    zod-to-json-schema "^3.24.1"
 
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
@@ -5895,11 +5893,6 @@
   resolved "https://registry.yarnpkg.com/@types/deep-eql/-/deep-eql-4.0.2.tgz#334311971d3a07121e7eb91b684a605e7eea9cbd"
   integrity sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==
 
-"@types/diff-match-patch@^1.0.36":
-  version "1.0.36"
-  resolved "https://registry.yarnpkg.com/@types/diff-match-patch/-/diff-match-patch-1.0.36.tgz#dcef10a69d357fe9d43ac4ff2eca6b85dbf466af"
-  integrity sha512-xFdR6tkm0MWvBfO8xXCSsinYxHcqkQUlcHeSpMC2ukzOb6lwQAfDmW+Qt0AvlGd8HpsS28qKsB+oPeJn9I39jg==
-
 "@types/doctrine@^0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@types/doctrine/-/doctrine-0.0.9.tgz#d86a5f452a15e3e3113b99e39616a9baa0f9863f"
@@ -6718,17 +6711,15 @@ ai@5.0.14:
     "@ai-sdk/provider-utils" "3.0.3"
     "@opentelemetry/api" "1.9.0"
 
-ai@^4.3.2:
-  version "4.3.19"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-4.3.19.tgz#e94f5b37f3885bc9c9637f892e13bddd0a1857e5"
-  integrity sha512-dIE2bfNpqHN3r6IINp9znguYdhIOheKW2LDigAMrgt/upT3B8eBGPSCblENvaZGoq+hxaN9fSMzjWpbqloP+7Q==
+ai@^5.0.0:
+  version "5.0.34"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.34.tgz#08efa19c6bbb3771c388dc5fd1cf2a52b43785b5"
+  integrity sha512-ouReddlmQ8ihFwY+g8fJP7u64l7uCPnJSK9R6kTiyTJ3VvztcH1HrYXqG8+XEzBVLJKJmUoYxY1gkFdwMdF8wQ==
   dependencies:
-    "@ai-sdk/provider" "1.1.3"
-    "@ai-sdk/provider-utils" "2.2.8"
-    "@ai-sdk/react" "1.2.12"
-    "@ai-sdk/ui-utils" "1.2.11"
+    "@ai-sdk/gateway" "1.0.19"
+    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider-utils" "3.0.8"
     "@opentelemetry/api" "1.9.0"
-    jsondiffpatch "0.6.0"
 
 ajv-formats@^2.1.1:
   version "2.1.1"
@@ -7527,7 +7518,7 @@ chai@^5.2.0:
     loupe "^3.1.0"
     pathval "^2.0.0"
 
-chalk@5.4.1, chalk@^5.3.0:
+chalk@5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.4.1.tgz#1b48bf0963ec158dce2aacf69c093ae2dd2092d8"
   integrity sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==
@@ -8204,11 +8195,6 @@ devlop@^1.0.0:
   integrity sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==
   dependencies:
     dequal "^2.0.0"
-
-diff-match-patch@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.5.tgz#abb584d5f10cd1196dfc55aa03701592ae3f7b37"
-  integrity sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==
 
 diff@8.0.2:
   version "8.0.2"
@@ -9019,6 +9005,11 @@ eventsource-parser@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/eventsource-parser/-/eventsource-parser-3.0.3.tgz#e9af1d40b77e6268cdcbc767321e8b9f066adea8"
   integrity sha512-nVpZkTMM9rF6AQ9gPJpFsNAMt48wIzB5TQgiTLdHiuO8XEDhUgZEhqKlZWXbIzo9VmJ/HvysHqEaVeD5v9TPvA==
+
+eventsource-parser@^3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/eventsource-parser/-/eventsource-parser-3.0.6.tgz#292e165e34cacbc936c3c92719ef326d4aeb4e90"
+  integrity sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==
 
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
@@ -11163,15 +11154,6 @@ jsonc-parser@3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.3.1.tgz#f2a524b4f7fd11e3d791e559977ad60b98b798b4"
   integrity sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==
-
-jsondiffpatch@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/jsondiffpatch/-/jsondiffpatch-0.6.0.tgz#daa6a25bedf0830974c81545568d5f671c82551f"
-  integrity sha512-3QItJOXp2AP1uv7waBkao5nCvhEv+QmJAd38Ybq7wNI74Q+BBmnLn4EDKz6yI9xGAIQoUF87qHt+kc1IVxB4zQ==
-  dependencies:
-    "@types/diff-match-patch" "^1.0.36"
-    chalk "^5.3.0"
-    diff-match-patch "^1.0.5"
 
 jsonfile@^6.0.1:
   version "6.1.0"
@@ -14720,7 +14702,14 @@ stringify-object@^3.3.0:
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
