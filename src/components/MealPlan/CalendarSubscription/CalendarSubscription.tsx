@@ -22,7 +22,6 @@ import {
 } from '@fluentui/react-components';
 import {
   Copy24Regular,
-  Delete24Regular,
   Add24Regular,
   CheckmarkCircle16Regular
 } from '@fluentui/react-icons';
@@ -119,7 +118,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
     try {
       setLoading(true);
       const response = await fetch('/api/meal-plans/calendar-token');
-      
+
       if (response.status === 404) {
         setTokenData(null);
         setError(null);
@@ -142,15 +141,15 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch('/api/meal-plans/calendar-token', {
         method: 'POST'
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to create calendar token');
       }
-      
+
       const data = await response.json();
       setTokenData(data);
     } catch (err) {
@@ -164,15 +163,15 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch('/api/meal-plans/calendar-token', {
         method: 'DELETE'
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to delete calendar token');
       }
-      
+
       setTokenData(null);
       setShowDeleteDialog(false);
     } catch (err) {
@@ -211,8 +210,8 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
       {!tokenData ? (
         <div className={styles.section}>
           <Text>Sync your meal plan with your calendar app for easy access.</Text>
-          <Button 
-            appearance="primary" 
+          <Button
+            appearance="primary"
             icon={<Add24Regular />}
             onClick={createToken}
             disabled={loading}
@@ -225,7 +224,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           <div className={styles.section}>
             <Caption1>Subscription URL</Caption1>
             <div className={styles.inputGroup}>
-              <Input 
+              <Input
                 className={styles.input}
                 value={tokenData.subscriptionUrl}
                 readOnly
@@ -242,7 +241,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           <div className={styles.section}>
             <Caption1>Webcal URL (iOS/macOS)</Caption1>
             <div className={styles.inputGroup}>
-              <Input 
+              <Input
                 className={styles.input}
                 value={tokenData.webcalUrl}
                 readOnly
@@ -283,7 +282,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
                   <DialogTitle>Delete Calendar Subscription</DialogTitle>
                   <DialogContent>
                     <Text>
-                      Are you sure you want to delete your calendar subscription? 
+                      Are you sure you want to delete your calendar subscription?
                       This will invalidate all existing calendar subscriptions and cannot be undone.
                     </Text>
                   </DialogContent>
@@ -291,7 +290,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
                     <DialogTrigger disableButtonEnhancement>
                       <Button appearance="secondary">Cancel</Button>
                     </DialogTrigger>
-                    <Button 
+                    <Button
                       appearance="primary"
                       onClick={deleteToken}
                       disabled={loading}
