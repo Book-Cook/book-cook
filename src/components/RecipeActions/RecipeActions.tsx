@@ -12,9 +12,7 @@ import {
 import {
   DeleteRegular,
   MoreHorizontalRegular,
-  EditRegular,
   TagRegular,
-  EmojiRegular,
   PeopleTeamRegular,
 } from "@fluentui/react-icons";
 import isEqual from "fast-deep-equal";
@@ -54,7 +52,7 @@ const ChangeSharedWithDialog = dynamic(
 export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const { editableData, saveChanges, deleteRecipe, updateEditableData } =
     useRecipe();
-  
+
   // Use props if provided, otherwise fall back to editableData from context
   const _id = props._id ?? editableData?._id;
   const title = props.title ?? editableData?.title;
@@ -63,7 +61,8 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const imageURL = props.imageURL ?? editableData?.imageURL;
   const isPublic = props.isPublic ?? editableData?.isPublic;
   const { availableTags } = useFetchAllTags();
-  const { mutate: toggleVisibility, isPending: isTogglingVisibility } = useToggleRecipeVisibility();
+  const { mutate: toggleVisibility, isPending: isTogglingVisibility } =
+    useToggleRecipeVisibility();
 
   const [activeDialog, setActiveDialog] = React.useState<DialogType>(null);
 
@@ -73,13 +72,13 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       e.nativeEvent.stopImmediatePropagation();
 
       const newData = {
+        ...editableData,
         _id,
-        title: title ?? "",
-        tags: tags ?? [],
-        emoji: emoji ?? "",
-        imageURL: imageURL ?? "",
-        isPublic: isPublic ?? false,
-        content: "",
+        title: title ?? editableData?.title ?? "",
+        tags: tags ?? editableData?.tags ?? [],
+        emoji: emoji ?? editableData?.emoji ?? "",
+        imageURL: imageURL ?? editableData?.imageURL ?? "",
+        isPublic: isPublic ?? editableData?.isPublic ?? false,
       };
 
       if (_id && !isEqual(editableData, newData)) {
@@ -121,10 +120,12 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const handleVisibilitySave = React.useCallback(
     (value: string) => {
       const isPublic = value === "true";
-      
+
       if (!editableData._id) {
         console.error("No recipe ID found in editableData:", editableData);
-        alert("Unable to update recipe visibility: Recipe ID not found. Please refresh the page and try again.");
+        alert(
+          "Unable to update recipe visibility: Recipe ID not found. Please refresh the page and try again."
+        );
         return;
       }
 
@@ -139,16 +140,25 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
           onError: (error) => {
             console.error("Failed to update recipe visibility:", error);
             // Keep dialog open on error so user can retry
-            let errorMessage = "Failed to update recipe visibility. Please check your internet connection and try again.";
-            
+            let errorMessage =
+              "Failed to update recipe visibility. Please check your internet connection and try again.";
+
             if (error instanceof Error) {
-              if (error.message.includes("not found") || error.message.includes("permission")) {
-                errorMessage = "You don't have permission to modify this recipe, or it no longer exists.";
-              } else if (error.message.includes("network") || error.message.includes("fetch")) {
-                errorMessage = "Network error. Please check your internet connection and try again.";
+              if (
+                error.message.includes("not found") ||
+                error.message.includes("permission")
+              ) {
+                errorMessage =
+                  "You don't have permission to modify this recipe, or it no longer exists.";
+              } else if (
+                error.message.includes("network") ||
+                error.message.includes("fetch")
+              ) {
+                errorMessage =
+                  "Network error. Please check your internet connection and try again.";
               }
             }
-            
+
             alert(errorMessage);
           },
         }
@@ -168,12 +178,6 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
   const menuContent = React.useMemo(
     () => (
       <MenuList onClick={(ev) => ev.stopPropagation()}>
-        <MenuItem icon={<EditRegular />} onClick={openDialog("title")}>
-          Change Title
-        </MenuItem>
-        <MenuItem icon={<EmojiRegular />} onClick={openDialog("emoji")}>
-          Change Emoji
-        </MenuItem>
         <MenuItem icon={<PeopleTeamRegular />} onClick={openDialog("isPublic")}>
           Visibility
         </MenuItem>

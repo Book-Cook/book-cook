@@ -8,17 +8,16 @@ import { getDb } from "src/utils/db";
 import { authOptions } from "../auth/[...nextauth]";
 
 import { generateICalContent, mealPlansToICalEvents } from "../../../components/MealPlan/utils/icalGenerator";
-import crypto from "crypto";
 
 /**
  * Validate calendar token and get user ID
  */
 async function getUserIdFromToken(token: string): Promise<string | null> {
   if (!token) {return null;}
-  
+
   const db = await getDb();
   const user = await db.collection("users").findOne({ calendarToken: token });
-  
+
   return user?._id.toString() || null;
 }
 
@@ -28,8 +27,8 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ 
-      message: "Method not allowed" 
+    return res.status(405).json({
+      message: "Method not allowed"
     });
   }
 
@@ -42,20 +41,20 @@ export default async function handler(
     if (token && typeof token === 'string') {
       userId = await getUserIdFromToken(token);
       if (!userId) {
-        return res.status(401).json({ 
-          message: "Invalid calendar token" 
+        return res.status(401).json({
+          message: "Invalid calendar token"
         });
       }
     } else {
       // Handle session-based access (for authenticated users)
       const session: Session | null = await getServerSession(req, res, authOptions);
-      
+
       if (!session?.user?.id) {
-        return res.status(401).json({ 
-          message: "Unauthorized. Please log in or provide a valid token." 
+        return res.status(401).json({
+          message: "Unauthorized. Please log in or provide a valid token."
         });
       }
-      
+
       userId = session.user.id;
     }
 
@@ -66,7 +65,7 @@ export default async function handler(
       .split('T')[0];
 
     const db = await getDb();
-    
+
     // Fetch meal plans for the date range
     const mealPlans = await db
       .collection("mealPlans")
@@ -84,7 +83,7 @@ export default async function handler(
     const recipeIds = new Set<string>();
     mealPlans.forEach(plan => {
       const meals = plan.meals ?? {};
-      
+
       // Handle timeSlots structure
       if (meals.timeSlots && Array.isArray(meals.timeSlots)) {
         meals.timeSlots.forEach((slot: any) => {
@@ -97,7 +96,7 @@ export default async function handler(
           }
         });
       }
-      
+
       // Handle legacy meal types
       Object.values(meals).forEach((meal: any) => {
         if (meal && typeof meal === 'object' && !Array.isArray(meal) && meal?.recipeId) {
@@ -124,7 +123,7 @@ export default async function handler(
     const enhancedMealPlans = mealPlans.map(plan => {
       const meals = plan.meals ?? {};
       const enhancedMeals: any = {};
-      
+
       // Handle timeSlots structure
       if (meals.timeSlots && Array.isArray(meals.timeSlots)) {
         enhancedMeals.timeSlots = meals.timeSlots.map((slot: any) => {
@@ -145,7 +144,7 @@ export default async function handler(
           return slot;
         });
       }
-      
+
       // Handle legacy meal types
       Object.entries(meals).forEach(([mealType, meal]) => {
         if (mealType !== 'timeSlots' && meal && typeof meal === 'object' && !Array.isArray(meal)) {
@@ -160,7 +159,7 @@ export default async function handler(
           }
         }
       });
-      
+
       return {
         _id: plan._id.toString(),
         userId: (plan as any).userId ?? '',
@@ -179,7 +178,7 @@ export default async function handler(
     res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
     res.setHeader('Content-Disposition', 'attachment; filename="meal-plan.ics"');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    
+
     res.status(200).send(iCalContent);
 
   } catch (error) {

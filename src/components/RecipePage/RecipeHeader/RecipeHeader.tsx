@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Button,
   Tooltip,
@@ -14,13 +14,20 @@ import {
   Heart20Regular,
   Heart20Filled,
   SparkleRegular,
+  EditRegular,
 } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 
 import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
+
+const ChangeTitleDialog = dynamic(
+  () => import("../../RecipeActions/ChangeTitleDialog"),
+  { loading: () => null, ssr: false }
+);
 
 import {
   useConvertMeasurements,
@@ -44,6 +51,8 @@ export const RecipeHeader = () => {
     onSaveRecipe,
   } = useRecipe();
 
+  const [isTitleDialogOpen, setIsTitleDialogOpen] = useState(false);
+
   const toasterId = useId("toaster");
   const { dispatchToast } = useToastController(toasterId);
 
@@ -58,7 +67,9 @@ export const RecipeHeader = () => {
     queryKey: ["savedRecipes"],
     queryFn: async () => {
       const response = await fetch("/api/user/saved-recipes");
-      if (!response.ok) {throw new Error("Failed to fetch saved recipes");}
+      if (!response.ok) {
+        throw new Error("Failed to fetch saved recipes");
+      }
       return response.json();
     },
     enabled: Boolean(session),
@@ -169,7 +180,22 @@ export const RecipeHeader = () => {
       <Toaster toasterId={toasterId} />
       <FadeIn up delay={0.4} className={styles.headerSection}>
         <div className={styles.titleRow}>
-          <div className={styles.titleContainer}>{editableData.title}</div>
+          <Tooltip content="Click to edit title" relationship="label">
+            <div
+              className={`${styles.titleContainer} ${styles.titleClickable}`}
+              onClick={() => setIsTitleDialogOpen(true)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setIsTitleDialogOpen(true);
+                }
+              }}
+            >
+              <span>{editableData.title}</span>
+              <EditRegular className={styles.editIcon} />
+            </div>
+          </Tooltip>
           <div className={styles.actionsContainer}>
             <Tooltip content="Convert Measurements (AI)" relationship="label">
               <Button
@@ -221,6 +247,15 @@ export const RecipeHeader = () => {
           )}
         </div>
       </FadeIn>
+      <ChangeTitleDialog
+        isOpen={isTitleDialogOpen}
+        currentTitle={editableData.title}
+        onSave={(newTitle) => {
+          saveChanges({ title: newTitle });
+          setIsTitleDialogOpen(false);
+        }}
+        onClose={() => setIsTitleDialogOpen(false)}
+      />
     </>
   );
 };

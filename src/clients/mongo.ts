@@ -72,17 +72,8 @@ let clientPromise: Promise<MongoClient>;
 async function createMongoConnection(): Promise<MongoClient> {
   let client: MongoClient;
 
-  console.log("MongoDB connection debug:", {
-    hasCustomUri: Boolean(customUri),
-    customUriStart: `${customUri?.substring(0, 20)}...`,
-  });
-
   // If custom URI is provided, use it directly (best for mobile hotspots)
   if (customUri) {
-    console.log(
-      "Using custom MongoDB URI:",
-      `${customUri.substring(0, 30)}...`
-    );
 
     // Choose appropriate options based on URI type
     const options = customUri.includes("mongodb+srv://")
@@ -92,7 +83,6 @@ async function createMongoConnection(): Promise<MongoClient> {
     try {
       client = new MongoClient(customUri, options);
       await client.connect();
-      console.log("Custom MongoDB connection successful");
       return client;
     } catch (error) {
       console.error("Custom MongoDB URI failed:", error);
@@ -104,10 +94,8 @@ async function createMongoConnection(): Promise<MongoClient> {
 
   try {
     // First try the primary SRV connection
-    console.log("Attempting primary MongoDB SRV connection...");
     client = new MongoClient(uri, srvOptions);
     await client.connect();
-    console.log("Primary MongoDB SRV connection successful");
     return client;
   } catch (error) {
     console.warn(
@@ -117,10 +105,8 @@ async function createMongoConnection(): Promise<MongoClient> {
 
     try {
       // Fallback to direct connection (no SRV) - may not work with Atlas
-      console.log("Attempting fallback direct connection...");
       client = new MongoClient(fallbackUri, directOptions);
       await client.connect();
-      console.log("Fallback MongoDB direct connection successful");
       return client;
     } catch (fallbackError) {
       console.error("Both MongoDB connections failed:", {
