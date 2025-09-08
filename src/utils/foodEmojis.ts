@@ -3,30 +3,37 @@
 
 export const FOOD_EMOJIS = {
   // Main dishes
-  "🍕": { name: "pizza", category: "main dishes" },
-  "🍔": { name: "hamburger", category: "main dishes" },
-  "🍟": { name: "french fries", category: "main dishes" },
-  "🌭": { name: "hot dog", category: "main dishes" },
-  "🥪": { name: "sandwich", category: "main dishes" },
-  "🌮": { name: "taco", category: "main dishes" },
-  "🌯": { name: "burrito", category: "main dishes" },
-  "🥗": { name: "salad", category: "main dishes" },
-  "🍝": { name: "pasta", category: "main dishes" },
-  "🍜": { name: "noodles", category: "main dishes" },
-  "🍲": { name: "soup", category: "main dishes" },
-  "🍛": { name: "curry", category: "main dishes" },
-  "🥘": { name: "paella", category: "main dishes" },
-  "🫕": { name: "fondue", category: "main dishes" },
+  "🍕": { name: "pizza pie", category: "main dishes" },
+  "🍔": { name: "hamburger cheeseburger burger", category: "main dishes" },
+  "🍟": { name: "french fries chips", category: "main dishes" },
+  "🌭": { name: "hot dog sausage frankfurter", category: "main dishes" },
+  "🥪": { name: "sandwich sub hoagie", category: "main dishes" },
+  "🌮": { name: "taco mexican", category: "main dishes" },
+  "🌯": { name: "burrito wrap mexican", category: "main dishes" },
+  "🥗": { name: "green salad lettuce greens", category: "main dishes" },
+  "🍝": { name: "spaghetti pasta noodles italian", category: "main dishes" },
+  "🍜": { name: "ramen noodles soup asian", category: "main dishes" },
+  "🍲": { name: "pot of food stew soup", category: "main dishes" },
+  "🍛": { name: "curry rice indian asian", category: "main dishes" },
+  "🥘": { name: "paella spanish rice dish", category: "main dishes" },
+  "🫕": { name: "fondue cheese melted", category: "main dishes" },
+  "🍱": { name: "bento box japanese lunch", category: "main dishes" },
+  "🥟": { name: "dumpling gyoza potsticker", category: "main dishes" },
+  "🫔": { name: "tamale mexican", category: "main dishes" },
+  "🧆": { name: "falafel", category: "main dishes" },
+  "🥙": { name: "stuffed flatbread", category: "main dishes" },
+  "🥫": { name: "canned food soup", category: "main dishes" },
 
   // Rice & Grains
   "🍚": { name: "cooked rice", category: "rice & grains" },
   "🍙": { name: "rice ball", category: "rice & grains" },
   "🍘": { name: "rice cracker", category: "rice & grains" },
   "🥯": { name: "bagel", category: "rice & grains" },
-  "🥖": { name: "baguette", category: "rice & grains" },
+  "🥖": { name: "baguette bread", category: "rice & grains" },
   "🥨": { name: "pretzel", category: "rice & grains" },
   "🥐": { name: "croissant", category: "rice & grains" },
   "🫓": { name: "flatbread", category: "rice & grains" },
+  "🍞": { name: "bread loaf", category: "rice & grains" },
 
   // Proteins & Seafood
   "🍗": { name: "chicken leg", category: "proteins" },
@@ -46,7 +53,7 @@ export const FOOD_EMOJIS = {
   // Breakfast & Eggs
   "🍳": { name: "cooking egg", category: "breakfast" },
   "🥚": { name: "egg", category: "breakfast" },
-  "�": { name: "waffle", category: "breakfast" },
+  "🧇": { name: "waffle", category: "breakfast" },
   "🥞": { name: "pancakes", category: "breakfast" },
   "🥣": { name: "bowl with spoon", category: "breakfast" },
 
@@ -62,6 +69,10 @@ export const FOOD_EMOJIS = {
   "🍨": { name: "ice cream", category: "desserts" },
   "🍦": { name: "soft ice cream", category: "desserts" },
   "🍯": { name: "honey pot", category: "desserts" },
+  "🍮": { name: "custard flan pudding", category: "desserts" },
+  "🍧": { name: "shaved ice", category: "desserts" },
+  "🥧": { name: "pie", category: "desserts" },
+  "🍭": { name: "lollipop candy", category: "desserts" },
 
   // Beverages
   "🫖": { name: "teapot", category: "drinks" },
@@ -78,42 +89,51 @@ export const FOOD_EMOJIS = {
   "🍸": { name: "cocktail glass", category: "alcohol" },
   "🍹": { name: "tropical drink", category: "alcohol" },
   "🍺": { name: "beer mug", category: "alcohol" },
-  "🍻": { name: "clinking beer mugs", category: "alcohol" },
   "🍶": { name: "sake", category: "alcohol" },
 
   // Fruits
-  "🍎": { name: "red apple", category: "fruits" },
-  "🍐": { name: "pear", category: "fruits" },
-  "🍊": { name: "tangerine", category: "fruits" },
-  "🍋": { name: "lemon", category: "fruits" },
-  "🍌": { name: "banana", category: "fruits" },
-  "🍉": { name: "watermelon", category: "fruits" },
-  "🍇": { name: "grapes", category: "fruits" },
-  "🫐": { name: "blueberries", category: "fruits" },
-  "🍓": { name: "strawberry", category: "fruits" },
-  "🥝": { name: "kiwi fruit", category: "fruits" },
-  "🍑": { name: "peach", category: "fruits" },
-  "🍒": { name: "cherries", category: "fruits" },
-  "🥭": { name: "mango", category: "fruits" },
-  "🍍": { name: "pineapple", category: "fruits" },
-  "🥥": { name: "coconut", category: "fruits" },
+  "🍎": { name: "red apple fruit", category: "fruits" },
+  "🍏": { name: "green apple fruit", category: "fruits" },
+  "🍐": { name: "pear fruit", category: "fruits" },
+  "🍊": { name: "tangerine orange mandarin citrus", category: "fruits" },
+  "🍋": { name: "lemon citrus", category: "fruits" },
+  "🍌": { name: "banana fruit", category: "fruits" },
+  "🍉": { name: "watermelon melon summer fruit", category: "fruits" },
+  "🍇": { name: "grapes wine fruit", category: "fruits" },
+  "🫐": { name: "blueberries berries fruit", category: "fruits" },
+  "🍓": { name: "strawberry berry fruit", category: "fruits" },
+  "🥝": { name: "kiwi fruit green", category: "fruits" },
+  "🍑": { name: "peach fruit", category: "fruits" },
+  "🍒": { name: "cherries cherry fruit", category: "fruits" },
+  "🥭": { name: "mango tropical fruit", category: "fruits" },
+  "🍍": { name: "pineapple tropical fruit", category: "fruits" },
+  "🥥": { name: "coconut tropical fruit", category: "fruits" },
+  "🍈": { name: "melon cantaloupe honeydew", category: "fruits" },
+  "🥑": { name: "avocado fruit", category: "fruits" },
+  "🍋‍🟩": { name: "lime", category: "fruits" },
 
   // Vegetables
-  "🥕": { name: "carrot", category: "vegetables" },
-  "🥬": { name: "leafy green", category: "vegetables" },
-  "🥦": { name: "broccoli", category: "vegetables" },
-  "🥒": { name: "cucumber", category: "vegetables" },
-  "🌶️": { name: "hot pepper", category: "vegetables" },
-  "🫑": { name: "bell pepper", category: "vegetables" },
-  "🍅": { name: "tomato", category: "vegetables" },
-  "🫒": { name: "olive", category: "vegetables" },
-  "🌽": { name: "ear of corn", category: "vegetables" },
-  "🥔": { name: "potato", category: "vegetables" },
-  "🧄": { name: "garlic", category: "vegetables" },
-  "🧅": { name: "onion", category: "vegetables" },
-  "🍄": { name: "mushroom", category: "vegetables" },
-  "🥜": { name: "peanuts", category: "vegetables" },
-  "🫘": { name: "beans", category: "vegetables" },
+  "🥕": { name: "carrot vegetable root", category: "vegetables" },
+  "🥬": { name: "leafy green lettuce kale spinach", category: "vegetables" },
+  "🥦": { name: "broccoli green vegetable", category: "vegetables" },
+  "🥒": { name: "cucumber vegetable pickle", category: "vegetables" },
+  "🌶️": { name: "hot pepper chili spicy cayenne", category: "vegetables" },
+  "🫑": { name: "bell pepper sweet capsicum", category: "vegetables" },
+  "🍅": { name: "tomato vegetable", category: "vegetables" },
+  "🫒": { name: "olive mediterranean", category: "vegetables" },
+  "🌽": { name: "ear of corn maize", category: "vegetables" },
+  "🥔": { name: "potato root vegetable", category: "vegetables" },
+  "🧄": { name: "garlic aromatic seasoning", category: "vegetables" },
+  "🧅": { name: "onion aromatic vegetable", category: "vegetables" },
+  "🍄‍🟫": { name: "mushroom fungus", category: "vegetables" },
+  "🥜": { name: "peanuts nuts legumes", category: "vegetables" },
+  "🫘": { name: "beans legumes pulses", category: "vegetables" },
+  "🍠": { name: "sweet potato yam", category: "vegetables" },
+  "🍆": { name: "eggplant aubergine", category: "vegetables" },
+  "🫛": { name: "pea", category: "vegetables" },
+  "🫚": { name: "ginger root", category: "vegetables" },
+  "🫜": { name: "root turnip", category: "vegetables" },
+  "🌰": { name: "chestnut nut", category: "vegetables" },
 
   // Cooking
   "🍽️": { name: "plate with utensils", category: "cooking" },
@@ -122,11 +142,16 @@ export const FOOD_EMOJIS = {
 export const searchFoodEmojis = (keyword: string): string[] => {
   const results: string[] = [];
   const lowerKeyword = keyword.toLowerCase();
+  const searchTerms = lowerKeyword.split(/[\s,-]+/).filter(Boolean);
 
   for (const [emoji, info] of Object.entries(FOOD_EMOJIS)) {
+    // Match if any search term is found in either name or category
     if (
-      info.name.includes(lowerKeyword) ||
-      info.category.includes(lowerKeyword)
+      searchTerms.some(
+        (term) =>
+          info.name.toLowerCase().includes(term) ||
+          info.category.toLowerCase().includes(term)
+      )
     ) {
       results.push(emoji);
     }
@@ -143,38 +168,21 @@ export const getFoodEmojisByCategory = (category: string): string[] => {
 
 export const getDefaultFoodEmojis = (): string[] => {
   return [
+    "🍽️",
     "🍕",
     "🍔",
     "🍗",
-    "🍖",
-    "🍛",
     "🍜",
     "🍝",
-    "🍲",
     "🍳",
     "🥗",
-    "🥘",
-    "🌮",
-    "🌯",
-    "🍱",
     "🍚",
-    "🥟",
     "🍤",
-    "🍙",
-    "🧁",
-    "🍰",
     "🎂",
-    "🍮",
-    "🍩",
     "🍪",
     "🍫",
     "🍬",
-    "🍷",
-    "🍸",
-    "🍹",
-    "☕",
     "🍵",
     "🥛",
-    "🍽️",
   ];
 };
