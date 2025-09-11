@@ -64,6 +64,7 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
       appearance="outline"
       placeholder="Search recipes or tags"
       onKeyDown={handleKeyDown}
+      style={{ width: "300px", height: "36px", borderRadius: "8px" }}
     />
   );
 };

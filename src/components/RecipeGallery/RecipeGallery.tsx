@@ -66,12 +66,23 @@ export const RecipeGallery = () => {
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-    void router.replace(
-      { pathname: router.pathname, query: { ...router.query, page: 1 } },
-      undefined,
-      { shallow: true }
-    );
-  }, [router, searchBoxValue, sortOption]);
+  }, [searchBoxValue, sortOption, selectedTags]);
+
+  React.useEffect(() => {
+    const { tag, page } = router.query;
+    if (tag && typeof tag === "string") {
+      if (!selectedTags.includes(tag)) {
+        setSelectedTags([...selectedTags, tag]);
+      }
+    }
+    if (page && typeof page === "string") {
+      const pageNum = parseInt(page, 10);
+      if (!isNaN(pageNum) && pageNum > 0) {
+        setCurrentPage(pageNum);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -82,18 +93,31 @@ export const RecipeGallery = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = async (page: number) => {
     setCurrentPage(page);
-    void router.replace(
-      { pathname: router.pathname, query: { ...router.query, page } },
-      undefined,
-      { shallow: true }
-    );
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: page.toString() },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
-  const handlePageSizeChange = (newPageSize: number) => {
+  const handlePageSizeChange = async (newPageSize: number) => {
     setPageSize(newPageSize);
-    handlePageChange(1);
+    setCurrentPage(1);
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: "1" },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
   if (!session) {
@@ -121,6 +145,11 @@ export const RecipeGallery = () => {
             <div className={styles.searchWrapper}>
               <SearchBar />
             </div>
+            <TagPicker
+              availableTags={availableTags}
+              selectedTags={selectedTags}
+              onTagsChange={setSelectedTags}
+            />
             <Dropdown
               className={styles.sortDropdown}
               appearance="outline"
@@ -133,6 +162,7 @@ export const RecipeGallery = () => {
               <Option value={"ascTitle"}>Sort by title (asc)</Option>
               <Option value={"descTitle"}>Sort by title (desc)</Option>
             </Dropdown>
+
           </div>
         </div>
 
