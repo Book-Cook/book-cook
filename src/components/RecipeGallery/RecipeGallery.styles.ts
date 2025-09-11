@@ -11,35 +11,43 @@ export const useStyles = makeStyles({
   },
   header: {
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "16px",
+    flexDirection: "column",
+    gap: "24px",
   },
   titleSection: {
     display: "flex",
     flexDirection: "column",
-    gap: "4px",
+    gap: "8px",
   },
   controlsRow: {
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
+    // backgroundColor: "pink",
+    display: "flex",
+    alignItems: "center",
     gap: "16px",
     width: "100%",
-    alignItems: "center",
-    "@media (max-width: 500px)": {
-      gridTemplateColumns: "1fr",
+    "@media (max-width: 768px)": {
+      flexDirection: "column",
+      alignItems: "stretch",
     },
   },
   searchWrapper: {
-    flexGrow: 1,
-    maxWidth: "500px",
-  },
-  sortDropdown: {
-    minWidth: "220px",
+    width: "300px",
+    flexShrink: 0,
   },
   tagPickerWrapper: {
-    width: "100%",
+    width: "300px",
+    flexShrink: 0,
+  },
+  sortDropdown: {
+    marginLeft: "auto",
+    marginRight: "0",
+    width: "180px",
+    flexShrink: 0,
+    height: "36px",
+    "& button": {
+      height: "36px",
+    },
+    borderRadius: "8px",
   },
   grid: {
     display: "grid",
