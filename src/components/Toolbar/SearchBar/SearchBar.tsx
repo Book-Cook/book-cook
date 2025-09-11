@@ -64,6 +64,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
       appearance="outline"
       placeholder="Search for snacks"
       onKeyDown={handleKeyDown}
+      style={{ width: "300px", height: "36px", borderRadius: "8px" }}
     />
   );
 };

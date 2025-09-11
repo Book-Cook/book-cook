@@ -22,7 +22,7 @@ export const FOOD_EMOJIS = {
   "🫔": { name: "tamale mexican", category: "main dishes" },
   "🧆": { name: "falafel", category: "main dishes" },
   "🥙": { name: "stuffed flatbread", category: "main dishes" },
-  "🥫": { name: "canned food soup", category: "main dishes" },
+  "🥫": { name: "sauce can soup", category: "main dishes" },
 
   // Rice & Grains
   "🍚": { name: "cooked rice", category: "rice & grains" },
@@ -36,16 +36,16 @@ export const FOOD_EMOJIS = {
   "🍞": { name: "bread loaf", category: "rice & grains" },
 
   // Proteins & Seafood
-  "🍗": { name: "chicken leg", category: "proteins" },
+  "🍗": { name: "chicken turkey leg", category: "proteins" },
   "🍖": { name: "meat on bone", category: "proteins" },
   "🥩": { name: "cut of meat", category: "proteins" },
   "🥓": { name: "bacon", category: "proteins" },
   "🦴": { name: "bone", category: "proteins" },
   "🐟": { name: "fish", category: "seafood" },
-  "🍤": { name: "fried shrimp", category: "seafood" },
+  "🍤": { name: "fried shrimp prawn", category: "seafood" },
   "🦀": { name: "crab", category: "seafood" },
   "🦞": { name: "lobster", category: "seafood" },
-  "🦐": { name: "shrimp", category: "seafood" },
+  "🦐": { name: "shrimp prawn", category: "seafood" },
   "🦑": { name: "squid", category: "seafood" },
   "🐙": { name: "octopus", category: "seafood" },
   "🦪": { name: "oyster", category: "seafood" },
@@ -75,6 +75,7 @@ export const FOOD_EMOJIS = {
   "🍭": { name: "lollipop candy", category: "desserts" },
 
   // Beverages
+  "☕": { name: "hot beverage coffee", category: "drinks" },
   "🫖": { name: "teapot", category: "drinks" },
   "🍵": { name: "tea", category: "drinks" },
   "🧃": { name: "juice box", category: "drinks" },

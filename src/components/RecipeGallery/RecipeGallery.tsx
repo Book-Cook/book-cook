@@ -33,24 +33,31 @@ export const RecipeGallery = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage, pageSize],
-    queryFn: () => fetchRecipesPaginated({
+    queryKey: [
+      "recipes",
       searchBoxValue,
-      orderBy: sortOption,
+      sortOption,
       selectedTags,
-      offset: (currentPage - 1) * pageSize,
-      limit: pageSize,
-    }),
+      currentPage,
+      pageSize,
+    ],
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue,
+        orderBy: sortOption,
+        selectedTags,
+        offset: (currentPage - 1) * pageSize,
+        limit: pageSize,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
-  
 
   const router = useRouter();
 
-  // Extract unique tags from recipes  
+  // Extract unique tags from recipes
   React.useEffect(() => {
     if (recipes?.length) {
       const uniqueTags = Array.from(
@@ -67,10 +74,16 @@ export const RecipeGallery = () => {
   }, [searchBoxValue, sortOption, selectedTags]);
 
   React.useEffect(() => {
-    const { tag } = router.query;
+    const { tag, page } = router.query;
     if (tag && typeof tag === "string") {
       if (!selectedTags.includes(tag)) {
         setSelectedTags([...selectedTags, tag]);
+      }
+    }
+    if (page && typeof page === "string") {
+      const pageNum = parseInt(page, 10);
+      if (!isNaN(pageNum) && pageNum > 0) {
+        setCurrentPage(pageNum);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,13 +98,31 @@ export const RecipeGallery = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = async (page: number) => {
     setCurrentPage(page);
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: page.toString() },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
-  const handlePageSizeChange = (newPageSize: number) => {
+  const handlePageSizeChange = async (newPageSize: number) => {
     setPageSize(newPageSize);
     setCurrentPage(1);
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: "1" },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
   if (!session) {
@@ -121,6 +152,11 @@ export const RecipeGallery = () => {
             <div className={styles.searchWrapper}>
               <SearchBar />
             </div>
+            <TagPicker
+              availableTags={availableTags}
+              selectedTags={selectedTags}
+              onTagsChange={setSelectedTags}
+            />
             <Dropdown
               className={styles.sortDropdown}
               appearance="outline"
@@ -133,14 +169,10 @@ export const RecipeGallery = () => {
               <Option value={"ascTitle"}>Sort by title (asc)</Option>
               <Option value={"descTitle"}>Sort by title (desc)</Option>
             </Dropdown>
-            <TagPicker
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
+
           </div>
         </div>
-        
+
         <VirtualizedRecipeList
           recipes={recipes}
           totalCount={totalCount}
