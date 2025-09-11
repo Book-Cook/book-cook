@@ -7,7 +7,7 @@ export const useStyles = makeStyles({
     flexDirection: "column",
     gap: "8px",
     width: "100%",
-    maxWidth: "600px",
+    maxWidth: "250px",
     position: "relative",
   },
   inputContainer: {
