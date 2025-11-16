@@ -6,6 +6,7 @@ import type { CondensedWeekViewProps } from "./CondensedWeekView.types";
 import { WeekDayDropZone } from "../components/WeekDayDropZone";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 import { dayNames } from "../utils/dayNames";
+import { formatDateString } from "../utils/formatDateString";
 import { getScheduledMealsForDate } from "../utils/getScheduledMealsForDate";
 import { getWeekDates } from "../utils/getWeekDates";
 import { isPastDate } from "../utils/isPastDate";
@@ -26,7 +27,7 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
     <div className={styles.container}>
       {weekDates.map((date, index) => {
         const isToday = date.toDateString() === today;
-        const dateStr = date.toISOString().split("T")[0];
+        const dateStr = formatDateString(date);
         const scheduledMeals = getScheduledMealsForDate(date, mealPlans);
         const isPast = isPastDate(date);
         

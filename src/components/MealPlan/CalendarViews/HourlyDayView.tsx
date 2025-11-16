@@ -2,9 +2,10 @@ import * as React from "react";
 import { Text, makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
 
 import { TimeSlot } from "../TimeSlot/TimeSlot";
+import { formatDateString } from "../utils/formatDateString";
 
 import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
-import { generateTimeSlots, DEFAULT_TIME_CONFIG } from "../../../utils/timeSlots";
+import { generateTimeSlots, DEFAULT_TIME_CONFIG, mealTypeToTime } from "../../../utils/timeSlots";
 
 const useStyles = makeStyles({
   container: {
@@ -64,8 +65,8 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
   onMealRemove,
 }) => {
   const styles = useStyles();
-  
-  const dateStr = currentDate.toISOString().split("T")[0];
+
+  const dateStr = formatDateString(currentDate);
   const timeSlots = generateTimeSlots(DEFAULT_TIME_CONFIG);
   
   // Get meal plan for current date
@@ -89,16 +90,12 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
     }
     
     // Add legacy meal types at their default times
-    const legacyTimeMap: Record<string, string> = {
-      breakfast: '08:00',
-      lunch: '12:30',
-      dinner: '18:30',
-      snack: '15:00',
-    };
-    
-    Object.entries(legacyTimeMap).forEach(([mealType, defaultTime]) => {
+    const legacyMealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
+
+    legacyMealTypes.forEach((mealType) => {
       const meal = dayPlan.meals[mealType as keyof typeof dayPlan.meals];
       if (meal && typeof meal === 'object' && 'recipeId' in meal && 'servings' in meal) {
+        const defaultTime = mealTypeToTime(mealType);
         // Only add if we don't already have a meal at this time from timeSlots
         if (!mealsByTime.has(defaultTime)) {
           mealsByTime.set(defaultTime, [{

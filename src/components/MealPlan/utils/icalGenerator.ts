@@ -2,6 +2,7 @@
  * iCal generation utilities for meal plan calendar sync
  */
 import type { MealPlanWithRecipes } from "../../../clientToServer/types";
+import { mealTypeToTime } from "../../../utils/timeSlots";
 
 export type ICalEvent = {
   uid: string;
@@ -70,16 +71,12 @@ export function mealPlansToICalEvents(mealPlans: MealPlanWithRecipes[]): ICalEve
     }
 
     // Handle legacy meal types
-    const legacyMealTimes = {
-      breakfast: '08:00',
-      lunch: '12:00', 
-      dinner: '18:30',
-      snack: '15:00'
-    };
+    const legacyMealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
 
-    Object.entries(legacyMealTimes).forEach(([mealType, defaultTime]) => {
+    legacyMealTypes.forEach((mealType) => {
       const meal = meals[mealType as keyof typeof meals];
       if (meal && typeof meal === 'object' && 'recipeId' in meal) {
+        const defaultTime = mealTypeToTime(mealType);
         const startDate = parseTimeToDate(date, defaultTime);
         const endDate = new Date(startDate.getTime() + (meal.duration || 60) * 60 * 1000);
         

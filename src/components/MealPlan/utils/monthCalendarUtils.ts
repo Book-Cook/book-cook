@@ -1,6 +1,8 @@
 /**
  * Month calendar utility functions
  */
+import { formatDateString } from "./formatDateString";
+
 import type { MealPlanWithRecipes } from "../../../clientToServer/types";
 
 /**
@@ -38,7 +40,7 @@ export const getCalendarDays = (currentDate: Date): Date[] => {
  * Get meal plan for a specific date
  */
 export const getMealPlanForDate = (date: Date, mealPlans: MealPlanWithRecipes[]): MealPlanWithRecipes | undefined => {
-  const dateStr = date.toISOString().split("T")[0];
+  const dateStr = formatDateString(date);
   return mealPlans.find(p => p.date === dateStr);
 };
 
@@ -47,22 +49,12 @@ export const getMealPlanForDate = (date: Date, mealPlans: MealPlanWithRecipes[])
  */
 export const isPastDate = (date: Date, isToday?: boolean): boolean => {
   if (isToday) {return false;}
-  
+
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const dayDate = new Date(date);
   dayDate.setHours(0, 0, 0, 0);
   return dayDate < now;
-};
-
-/**
- * Legacy meal type to default time mapping
- */
-export const legacyTimeMap: Record<string, string> = {
-  breakfast: '08:00',
-  lunch: '12:30',
-  dinner: '18:30',
-  snack: '15:00',
 };
 
 /**
