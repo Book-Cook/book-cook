@@ -1,3 +1,4 @@
+import { getMockId, getMockTimestamp } from "./utils/mockDates";
 import type { Recipe } from "../clientToServer/types";
 
 // Mock user data
@@ -134,7 +135,7 @@ export const mockTags = Array.from(
 
 // Helper functions for generating dynamic data
 export const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
-  _id: `recipe_${Date.now()}`,
+  _id: getMockId('recipe'),
   title: "Mock Recipe",
   data: "## Mock recipe content",
   tags: ["mock"],
@@ -142,7 +143,7 @@ export const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
   imageURL: "",
   owner: mockUsers.testUser.id,
   isPublic: false,
-  createdAt: new Date().toISOString(),
+  createdAt: getMockTimestamp(),
   ...overrides,
 });
 
