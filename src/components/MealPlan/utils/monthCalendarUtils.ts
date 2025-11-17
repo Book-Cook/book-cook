@@ -58,6 +58,14 @@ export const isPastDate = (date: Date, isToday?: boolean): boolean => {
 };
 
 /**
+ * Check if a date is today
+ */
+export const isToday = (date: Date): boolean => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
+/**
  * Day names for month header
  */
 export const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

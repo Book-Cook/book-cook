@@ -1,7 +1,7 @@
 /**
  * Get all scheduled meals for a date, sorted by time
  */
-import { getMealPlanForDate } from "./getMealPlanForDate";
+import { getMealPlanForDate } from "./monthCalendarUtils";
 
 import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
 import { mealTypeToTime } from "../../../utils/timeSlots";
