@@ -69,7 +69,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
+const VirtualizedRecipeListComponent: React.FC<VirtualizedRecipeListProps> = ({
   recipes,
   totalCount,
   currentPage,
@@ -82,8 +82,8 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
   loadingMessage = 'Loading recipes...',
 }) => {
   const styles = useStyles();
-  
-  
+
+
   const totalPages = Math.ceil(totalCount / pageSize);
 
   if (isLoading) {
@@ -158,3 +158,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
     </div>
   );
 };
+
+VirtualizedRecipeListComponent.displayName = 'VirtualizedRecipeList';
+
+export const VirtualizedRecipeList = React.memo(VirtualizedRecipeListComponent);

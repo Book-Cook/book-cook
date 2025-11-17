@@ -76,23 +76,23 @@ export const RecipeGallery = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
-  const onSortOptionSelect = (
+  const onSortOptionSelect = React.useCallback((
     _ev: SelectionEvents,
     data: OptionOnSelectData
   ) => {
     if (data.selectedOptions?.[0]) {
       setSortOption(data.selectedOptions[0]);
     }
-  };
+  }, []);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = React.useCallback((page: number) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  const handlePageSizeChange = (newPageSize: number) => {
+  const handlePageSizeChange = React.useCallback((newPageSize: number) => {
     setPageSize(newPageSize);
     setCurrentPage(1);
-  };
+  }, []);
 
   if (!session) {
     return <Unauthorized />;

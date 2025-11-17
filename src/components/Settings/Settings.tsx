@@ -69,21 +69,31 @@ export const SettingsPage = () => {
     setSearchTerm(data.value.toLowerCase());
   };
 
+  const addVisibleSection = React.useCallback((id: string) => {
+    setVisibleSectionIds((prev) => {
+      if (prev.has(id)) {return prev;}
+      const newSet = new Set(prev);
+      newSet.add(id);
+      return newSet;
+    });
+  }, []);
+
+  const removeVisibleSection = React.useCallback((id: string) => {
+    setVisibleSectionIds((prev) => {
+      if (!prev.has(id)) {return prev;}
+      const newSet = new Set(prev);
+      newSet.delete(id);
+      return newSet;
+    });
+  }, []);
+
   const settingsContextValue = React.useMemo(
     () => ({
       searchTerm,
-      addVisibleSection: (id: string) => {
-        setVisibleSectionIds((prev) => new Set(prev).add(id));
-      },
-      removeVisibleSection: (id: string) => {
-        setVisibleSectionIds((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(id);
-          return newSet;
-        });
-      },
+      addVisibleSection,
+      removeVisibleSection,
     }),
-    [searchTerm]
+    [searchTerm, addVisibleSection, removeVisibleSection]
   );
 
   const handleToggle: AccordionToggleEventHandler<string> = (_event, data) => {

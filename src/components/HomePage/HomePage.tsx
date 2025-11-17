@@ -75,8 +75,10 @@ const HomePage = () => {
     enabled: Boolean(session),
   });
 
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-  const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const { yesterday, nextWeek } = React.useMemo(() => ({
+    yesterday: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    nextWeek: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+  }), []);
 
   const { data: upcomingMealData, refetch } = useQuery<UpcomingMealsResult>({
     queryKey: ["mealPlans", yesterday, nextWeek], // Match the meal plan query pattern
