@@ -1,17 +1,11 @@
-import { 
+import {
   avocadoToast,
   beefBolognese,
   lemonGarlicSalmon
 } from "./recipes";
+import { MOCK_DATES, MOCK_TIMESTAMPS } from "../utils/mockDates";
 
 import type { MealPlanWithRecipes } from "../../clientToServer/types";
-
-// Helper to create dates relative to today
-const getDate = (daysOffset: number): string => {
-  const date = new Date();
-  date.setDate(date.getDate() + daysOffset);
-  return date.toISOString().split('T')[0];
-};
 
 // Mock meal plans for the past few days and upcoming week
 export const mockMealPlans: MealPlanWithRecipes[] = [
@@ -19,7 +13,7 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
   {
     _id: "meal-plan-yesterday",
     userId: "test-user-id",
-    date: getDate(-1),
+    date: MOCK_DATES.yesterday,
     meals: {
       timeSlots: [
         {
@@ -75,15 +69,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
         },
       ],
     },
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    createdAt: MOCK_TIMESTAMPS.yesterday,
+    updatedAt: MOCK_TIMESTAMPS.yesterday,
   },
   
   // Today's meals
   {
     _id: "meal-plan-today",
     userId: "test-user-id",
-    date: getDate(0),
+    date: MOCK_DATES.today,
     meals: {
       timeSlots: [
         {
@@ -122,15 +116,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
         },
       ],
     },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: MOCK_TIMESTAMPS.today,
+    updatedAt: MOCK_TIMESTAMPS.today,
   },
-  
+
   // Tomorrow's meals (upcoming)
   {
     _id: "meal-plan-tomorrow",
     userId: "test-user-id",
-    date: getDate(1),
+    date: MOCK_DATES.tomorrow,
     meals: {
       timeSlots: [
         {
@@ -169,15 +163,15 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
         },
       ],
     },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: MOCK_TIMESTAMPS.tomorrow,
+    updatedAt: MOCK_TIMESTAMPS.tomorrow,
   },
-  
+
   // Day after tomorrow
   {
     _id: "meal-plan-day-after-tomorrow",
     userId: "test-user-id",
-    date: getDate(2),
+    date: MOCK_DATES.dayAfterTomorrow,
     meals: {
       timeSlots: [
         {
@@ -216,8 +210,8 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
         },
       ],
     },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: MOCK_TIMESTAMPS.dayAfterTomorrow,
+    updatedAt: MOCK_TIMESTAMPS.dayAfterTomorrow,
   },
 ];
 

@@ -11,10 +11,10 @@ import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 const mockSession: Session = {
   user: {
     id: "user_123",
-    email: "test@example.com", 
+    email: "test@example.com",
     name: "Test User",
   },
-  expires: "2024-12-31",
+  expires: "2099-12-31", // Far future date to avoid expiry issues
 };
 
 export const withGlobalProviders = (Story: StoryFn, context: StoryContext) => {

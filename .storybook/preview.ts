@@ -1,5 +1,27 @@
 import type { Preview } from "@storybook/nextjs";
 import { withGlobalProviders } from "../src/stories/globalProviders";
+import { MOCK_BASE_DATE } from "../src/mocks/utils/mockDates";
+
+// Mock Date globally for consistent Chromatic snapshots
+// This ensures all stories use the same fixed date
+const mockDate = new Date(MOCK_BASE_DATE);
+const OriginalDate = Date;
+
+// @ts-ignore - Mocking Date constructor
+global.Date = class extends OriginalDate {
+  constructor(...args: any[]) {
+    if (args.length === 0) {
+      super(MOCK_BASE_DATE);
+    } else {
+      // @ts-ignore
+      super(...args);
+    }
+  }
+
+  static now() {
+    return mockDate.getTime();
+  }
+} as any;
 
 export const globalTypes = {
   themeMode: {

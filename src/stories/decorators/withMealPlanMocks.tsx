@@ -2,6 +2,7 @@
 import { withApiMocks } from "../mockApi";
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese } from "../../mocks/data/recipes";
+import { getMockId, getMockTimestamp } from "../../mocks/utils/mockDates";
 
 // Mock meal plans data
 const mockMealPlans = [
@@ -104,7 +105,7 @@ const addMealToMockData = (date: string, time: string, recipeId: string, serving
   } else {
     // Create new meal plan
     const newPlan = {
-      _id: `mealplan_${Date.now()}`,
+      _id: getMockId('mealplan'),
       userId: "user_001",
       date,
       meals: {
@@ -118,8 +119,8 @@ const addMealToMockData = (date: string, time: string, recipeId: string, serving
           }]
         }]
       },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: getMockTimestamp(),
+      updatedAt: getMockTimestamp(),
     };
     currentMealPlans.push(newPlan as any);
   }

@@ -1,3 +1,5 @@
+import { getMockTimestamp } from "../utils/mockDates";
+
 import type { Recipe } from "../../clientToServer/types";
 
 /**
@@ -18,7 +20,7 @@ export class RecipeFactory {
       imageURL: "",
       owner: "user_123",
       isPublic: false,
-      createdAt: new Date().toISOString(),
+      createdAt: getMockTimestamp(),
       ...overrides,
     };
   }
