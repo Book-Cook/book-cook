@@ -24,7 +24,6 @@ export const RecipeGallery = () => {
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  const [availableTags, setAvailableTags] = React.useState<string[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(20);
 
@@ -46,20 +45,19 @@ export const RecipeGallery = () => {
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
-  
+
 
   const router = useRouter();
 
-  // Extract unique tags from recipes  
-  React.useEffect(() => {
-    if (recipes?.length) {
-      const uniqueTags = Array.from(
-        new Set(recipes.flatMap((recipe) => recipe.tags ?? []))
-      );
-      setAvailableTags(uniqueTags);
+  // Extract unique tags from recipes
+  const availableTags = React.useMemo(() => {
+    if (!recipes?.length) {
+      return [];
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recipes?.length]);
+    return Array.from(
+      new Set(recipes.flatMap((recipe) => recipe.tags ?? []))
+    );
+  }, [recipes]);
 
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {

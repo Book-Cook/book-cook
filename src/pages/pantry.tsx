@@ -151,21 +151,23 @@ export default function PantryPage() {
   };
 
   // Sort items by expiration date
-  const sortedItems = [...pantryItems].sort((a, b) => {
-    if (!a.expirationDate && !b.expirationDate) {
-      return 0;
-    }
-    if (!a.expirationDate) {
-      return 1;
-    }
-    if (!b.expirationDate) {
-      return -1;
-    }
-    return (
-      new Date(a.expirationDate).getTime() -
-      new Date(b.expirationDate).getTime()
-    );
-  });
+  const sortedItems = React.useMemo(() => {
+    return [...pantryItems].sort((a, b) => {
+      if (!a.expirationDate && !b.expirationDate) {
+        return 0;
+      }
+      if (!a.expirationDate) {
+        return 1;
+      }
+      if (!b.expirationDate) {
+        return -1;
+      }
+      return (
+        new Date(a.expirationDate).getTime() -
+        new Date(b.expirationDate).getTime()
+      );
+    });
+  }, [pantryItems]);
 
   return (
     <div className={styles.container}>
