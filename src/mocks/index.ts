@@ -71,6 +71,13 @@ class MSWManager {
   }
 
   /**
+   * Get the MSW server instance for direct access
+   */
+  getServer() {
+    return this.server;
+  }
+
+  /**
    * Add custom handlers for specific tests
    */
   use(...handlers: Parameters<typeof this.server.use>) {
@@ -89,3 +96,4 @@ export const resetMockData = mswManager.resetData.bind(mswManager);
 export const getMockState = mswManager.getDataState.bind(mswManager);
 export const getMockStore = mswManager.getStore.bind(mswManager);
 export const useMockHandler = mswManager.use.bind(mswManager);
+export const server = mswManager.getServer();

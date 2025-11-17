@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
-import { resetMockData, getMockState } from "../../mocks/handlers";
-import { mockUsers } from "../../mocks/mockData";
+import { resetMockData, getMockState } from "../../mocks";
+import { mockUsers } from "../../mocks/data";
 import { server } from "../../mocks/server";
 
 /**
@@ -146,4 +146,4 @@ export const createApiCallVerifier = () => {
 /**
  * Export mock users for easy access in tests
  */
-export { mockUsers } from "../../mocks/mockData";
+export { mockUsers } from "../../mocks/data";

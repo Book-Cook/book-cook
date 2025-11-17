@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 
-import { resetMockData, getMockState } from "../handlers";
+import { resetMockData, getMockState } from "../index";
 import { server } from "../server";
 
 /**
