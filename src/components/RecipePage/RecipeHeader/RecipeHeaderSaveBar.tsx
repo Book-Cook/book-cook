@@ -30,7 +30,7 @@ export type RecipeHeaderSaveBarProps = {
   onCancel: () => void;
 };
 
-export const RecipeHeaderSaveBar: React.FC<RecipeHeaderSaveBarProps> = ({
+const RecipeHeaderSaveBarComponent: React.FC<RecipeHeaderSaveBarProps> = ({
   hasEdits,
   onSave,
   onCancel,
@@ -62,3 +62,5 @@ export const RecipeHeaderSaveBar: React.FC<RecipeHeaderSaveBarProps> = ({
     </div>
   );
 };
+
+export const RecipeHeaderSaveBar = React.memo(RecipeHeaderSaveBarComponent);

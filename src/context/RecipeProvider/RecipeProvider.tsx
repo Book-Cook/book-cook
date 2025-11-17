@@ -58,54 +58,66 @@ export const RecipeProvider: React.FC<{
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableDataKey = (field: string, value: any) => {
+  const updateEditableDataKey = React.useCallback((field: string, value: any) => {
     setEditableData((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableData = (value: any) => {
+  const updateEditableData = React.useCallback((value: any) => {
     setEditableData(value);
-  };
+  }, []);
 
-  const handleAddTag = (tag: string) => {
-    if (tag.trim() !== "" && !editableData.tags.includes(tag.trim())) {
-      updateEditableDataKey("tags", [...editableData.tags, tag.trim()]);
-    }
-  };
+  const handleAddTag = React.useCallback(
+    (tag: string) => {
+      if (tag.trim() !== "" && !editableData.tags.includes(tag.trim())) {
+        setEditableData((prev) => ({
+          ...prev,
+          tags: [...prev.tags, tag.trim()],
+        }));
+      }
+    },
+    [editableData.tags]
+  );
 
-  const handleRemoveTag = (tagToRemove: string) => {
-    updateEditableDataKey(
-      "tags",
-      editableData.tags.filter((tag) => tag !== tagToRemove)
-    );
-  };
+  const handleRemoveTag = React.useCallback(
+    (tagToRemove: string) => {
+      setEditableData((prev) => ({
+        ...prev,
+        tags: prev.tags.filter((tag) => tag !== tagToRemove),
+      }));
+    },
+    []
+  );
 
-  const saveChanges = (immediateUpdate?: Partial<UpdateRecipePayload>) => {
-    if (immediateUpdate) {
-      updateRecipe({
-        ...{
-          title: editableData?.title,
-          data: editableData?.content,
-          tags: editableData?.tags,
-          imageURL: editableData?.imageURL,
-          emoji: editableData?.emoji,
-          isPublic: editableData?.isPublic ?? false,
-        },
-        ...(immediateUpdate || {}),
-      });
-    } else {
-      updateRecipe({
-        title: editableData.title,
-        data: editableData.content,
-        tags: editableData.tags,
-        imageURL: editableData.imageURL,
-        emoji: editableData?.emoji || "",
-        isPublic: editableData.isPublic ?? false,
-      });
-    }
-  };
+  const saveChanges = React.useCallback(
+    (immediateUpdate?: Partial<UpdateRecipePayload>) => {
+      if (immediateUpdate) {
+        updateRecipe({
+          ...{
+            title: editableData?.title,
+            data: editableData?.content,
+            tags: editableData?.tags,
+            imageURL: editableData?.imageURL,
+            emoji: editableData?.emoji,
+            isPublic: editableData?.isPublic ?? false,
+          },
+          ...(immediateUpdate || {}),
+        });
+      } else {
+        updateRecipe({
+          title: editableData.title,
+          data: editableData.content,
+          tags: editableData.tags,
+          imageURL: editableData.imageURL,
+          emoji: editableData?.emoji || "",
+          isPublic: editableData.isPublic ?? false,
+        });
+      }
+    },
+    [editableData, updateRecipe]
+  );
 
-  const cancelEditing = () => {
+  const cancelEditing = React.useCallback(() => {
     if (recipe) {
       const initialData = {
         title: recipe.title || "",
@@ -118,9 +130,9 @@ export const RecipeProvider: React.FC<{
       };
       setEditableData(initialData);
     }
-  };
+  }, [recipe]);
 
-  const deleteRecipe = () => {
+  const deleteRecipe = React.useCallback(() => {
     const idToDelete = recipe?._id ?? editableData._id;
 
     if (idToDelete) {
@@ -139,29 +151,35 @@ export const RecipeProvider: React.FC<{
         });
       }
     }
-  };
+  }, [recipe, editableData._id, deleteMutate, router]);
 
-  const onAddToCollection = (recipeId: string) => {
-    addToCollection(recipeId, {
-      onSuccess: (_data) => {
-        // Recipe successfully added/removed from collection
-      },
-      onError: (error) => {
-        console.error("Failed to update collection:", error);
-      },
-    });
-  };
+  const onAddToCollection = React.useCallback(
+    (recipeId: string) => {
+      addToCollection(recipeId, {
+        onSuccess: (_data) => {
+          // Recipe successfully added/removed from collection
+        },
+        onError: (error) => {
+          console.error("Failed to update collection:", error);
+        },
+      });
+    },
+    [addToCollection]
+  );
 
-  const onSaveRecipe = (recipeId: string) => {
-    saveRecipe(recipeId, {
-      onSuccess: (_data) => {
-        // Recipe saved/unsaved successfully
-      },
-      onError: (error) => {
-        console.error("Failed to save recipe:", error);
-      },
-    });
-  };
+  const onSaveRecipe = React.useCallback(
+    (recipeId: string) => {
+      saveRecipe(recipeId, {
+        onSuccess: (_data) => {
+          // Recipe saved/unsaved successfully
+        },
+        onError: (error) => {
+          console.error("Failed to save recipe:", error);
+        },
+      });
+    },
+    [saveRecipe]
+  );
 
   React.useEffect(() => {
     if (recipe) {
@@ -207,23 +225,42 @@ export const RecipeProvider: React.FC<{
     return true;
   }, [recipe, session]);
 
-  const contextValue = {
-    recipe,
-    isLoading,
-    isAuthorized,
-    error,
-    editableData,
-    updateEditableDataKey,
-    updateEditableData,
-    handleAddTag,
-    handleRemoveTag,
-    saveChanges,
-    cancelEditing,
-    deleteRecipe,
-    onAddToCollection,
-    onSaveRecipe,
-    hasEdits,
-  };
+  const contextValue = React.useMemo(
+    () => ({
+      recipe,
+      isLoading,
+      isAuthorized,
+      error,
+      editableData,
+      updateEditableDataKey,
+      updateEditableData,
+      handleAddTag,
+      handleRemoveTag,
+      saveChanges,
+      cancelEditing,
+      deleteRecipe,
+      onAddToCollection,
+      onSaveRecipe,
+      hasEdits,
+    }),
+    [
+      recipe,
+      isLoading,
+      isAuthorized,
+      error,
+      editableData,
+      updateEditableDataKey,
+      updateEditableData,
+      handleAddTag,
+      handleRemoveTag,
+      saveChanges,
+      cancelEditing,
+      deleteRecipe,
+      onAddToCollection,
+      onSaveRecipe,
+      hasEdits,
+    ]
+  );
 
   return (
     <RecipeContext.Provider value={contextValue}>

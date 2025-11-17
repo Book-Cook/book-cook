@@ -44,7 +44,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Logo = () => {
+const LogoComponent = () => {
   const styles = useStyles();
 
   return (
@@ -56,3 +56,5 @@ export const Logo = () => {
     </Link>
   );
 };
+
+export const Logo = React.memo(LogoComponent);

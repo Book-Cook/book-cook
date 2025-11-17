@@ -26,13 +26,18 @@ const AppContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const isFullWidthPage = router.pathname === "/meal-plan";
 
   const [searchBoxValue, setSearchBoxValue] = React.useState("");
-  const onSearchBoxValueChange = (incomingValue: string) => {
+  const onSearchBoxValueChange = React.useCallback((incomingValue: string) => {
     setSearchBoxValue(incomingValue);
-  };
+  }, []);
+
+  const searchBoxContextValue = React.useMemo(
+    () => ({ searchBoxValue, onSearchBoxValueChange }),
+    [searchBoxValue, onSearchBoxValueChange]
+  );
 
   return (
     <FluentProvider theme={theme} style={fluentProviderStyles}>
-      <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+      <SearchBoxProvider value={searchBoxContextValue}>
         <Toolbar />
         <div style={{ 
           padding: isFullWidthPage ? "0" : "12px 24px", 

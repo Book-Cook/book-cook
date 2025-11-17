@@ -16,7 +16,7 @@ export type SearchBarProps = {
   onSearch?: () => void;
 };
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
   const [inputValue, setInputValue] = React.useState(searchBoxValue);
@@ -67,3 +67,5 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
     />
   );
 };
+
+export const SearchBar = React.memo(SearchBarComponent);

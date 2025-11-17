@@ -16,7 +16,7 @@ const ChangeEmojiDialog = dynamic(
   }
 );
 
-export const RecipeImage = () => {
+const RecipeImageComponent = () => {
   const styles = useStyles();
   const { recipe, saveChanges } = useRecipe();
   const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
@@ -74,3 +74,5 @@ export const RecipeImage = () => {
     </>
   );
 };
+
+export const RecipeImage = React.memo(RecipeImageComponent);

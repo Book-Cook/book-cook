@@ -6,7 +6,7 @@ import { useNavigationStyles } from "./NavigationLInks.styles";
 import type { NavigationLinksProps } from "./NavigationLinks.types";
 import { navLinks } from "../constants";
 
-export const NavigationLinks: React.FC<NavigationLinksProps> = ({
+const NavigationLinksComponent: React.FC<NavigationLinksProps> = ({
   currentPath,
 }) => {
   const styles = useNavigationStyles();
@@ -33,3 +33,5 @@ export const NavigationLinks: React.FC<NavigationLinksProps> = ({
     </>
   );
 };
+
+export const NavigationLinks = React.memo(NavigationLinksComponent);

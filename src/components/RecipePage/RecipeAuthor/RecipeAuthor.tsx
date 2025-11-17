@@ -7,7 +7,7 @@ import { useStyles } from "./RecipeAuthor.styles";
 import { useFetchUser } from "../../../clientToServer/fetch/useFetchUser";
 import { useRecipe } from "../../../context";
 
-export const RecipeAuthor: React.FC = () => {
+const RecipeAuthorComponent: React.FC = () => {
   const styles = useStyles();
   const { recipe } = useRecipe();
   const { user } = useFetchUser(recipe?.owner ?? "");
@@ -19,3 +19,5 @@ export const RecipeAuthor: React.FC = () => {
     </div>
   ) : null;
 };
+
+export const RecipeAuthor = React.memo(RecipeAuthorComponent);
