@@ -1,4 +1,5 @@
 import { fetchJson } from "src/utils";
+import { mealTypeToTime } from "src/utils/timeSlots";
 import type { Recipe, MealPlanResponseWithRecipes, UpcomingMealsResult } from "../types";
 
 export const fetchUpcomingMeals = async (): Promise<UpcomingMealsResult> => {
@@ -52,17 +53,13 @@ export const fetchUpcomingMeals = async (): Promise<UpcomingMealsResult> => {
       }
 
       // Handle legacy meal types
-      const legacyMealTimes = {
-        breakfast: '08:00',
-        lunch: '12:00', 
-        dinner: '18:30',
-        snack: '15:00'
-      };
+      const legacyMealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
 
-      Object.entries(legacyMealTimes).forEach(([mealType, defaultTime]) => {
+      legacyMealTypes.forEach((mealType) => {
         const meal = plan.meals[mealType as keyof typeof plan.meals];
         if (meal && typeof meal === 'object' && 'recipeId' in meal && meal.recipe) {
           if (meal.recipeId && !seenRecipeIds.has(meal.recipeId)) {
+            const defaultTime = mealTypeToTime(mealType);
             const mealDateTime = new Date(`${plan.date}T${defaultTime}:00.000Z`);
             const recipe = meal.recipe;
             

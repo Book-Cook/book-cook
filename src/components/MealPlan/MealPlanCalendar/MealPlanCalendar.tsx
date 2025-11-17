@@ -20,6 +20,7 @@ import { useSidebarResize } from "../hooks/useSidebarResize";
 import { MealPlanSidebar } from "../MealPlanSidebar/MealPlanSidebar";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 import { TimePicker } from "../TimePicker/TimePicker";
+import { formatDateString } from "../utils/formatDateString";
 import WeekView from "../WeekView";
 
 export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({ 
@@ -79,8 +80,8 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     }
 
     return {
-      startDate: start.toISOString().split("T")[0],
-      endDate: end.toISOString().split("T")[0],
+      startDate: formatDateString(start),
+      endDate: formatDateString(end),
     };
   };
 

@@ -4,6 +4,7 @@
 import { getMealPlanForDate } from "./getMealPlanForDate";
 
 import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
+import { mealTypeToTime } from "../../../utils/timeSlots";
 
 export const getScheduledMealsForDate = (
   date: Date, 
@@ -22,16 +23,12 @@ export const getScheduledMealsForDate = (
   }
   
   // Convert legacy meal types to time slots for display
-  const legacyTimeMap = {
-    breakfast: '08:00',
-    lunch: '12:30', 
-    dinner: '18:30',
-    snack: '15:00',
-  };
-  
-  Object.entries(legacyTimeMap).forEach(([mealType, time]) => {
+  const legacyMealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
+
+  legacyMealTypes.forEach((mealType) => {
     const meal = dayPlan.meals[mealType as keyof typeof dayPlan.meals];
     if (meal && typeof meal === 'object' && 'recipeId' in meal && 'servings' in meal) {
+      const time = mealTypeToTime(mealType);
       // Check if we already have a time slot for this time
       const existingSlot = scheduledMeals.find(slot => slot.time === time);
       if (existingSlot) {

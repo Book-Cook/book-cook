@@ -1,9 +1,11 @@
 /**
  * Get meal plan for a specific date
  */
+import { formatDateString } from "./formatDateString";
+
 import type { MealPlanWithRecipes } from "../../../clientToServer/types";
 
 export const getMealPlanForDate = (date: Date, mealPlans: MealPlanWithRecipes[]): MealPlanWithRecipes | undefined => {
-  const dateStr = date.toISOString().split("T")[0];
+  const dateStr = formatDateString(date);
   return mealPlans.find(p => p.date === dateStr);
 };

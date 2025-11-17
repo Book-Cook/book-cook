@@ -3,6 +3,7 @@ import { makeStyles, tokens } from "@fluentui/react-components";
 
 import type { MonthViewProps } from "./MonthView.types";
 import { DroppableDayCell } from "../components/DroppableDayCell";
+import { formatDateString } from "../utils/formatDateString";
 import { getCalendarDays, getMealPlanForDate, isPastDate, dayNames } from "../utils/monthCalendarUtils";
 
 const useStyles = makeStyles({
@@ -54,7 +55,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
       
       {/* Calendar days */}
       {calendarDays.map(date => {
-        const dateStr = date.toISOString().split("T")[0];
+        const dateStr = formatDateString(date);
         const isToday = date.toDateString() === today;
         const isCurrentMonth = date.getMonth() === currentMonth;
         const mealPlan = getMealPlanForDate(date, mealPlans);

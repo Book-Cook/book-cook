@@ -9,9 +9,10 @@ import { useRouter } from "next/router";
 
 import type { DroppableDayCellProps } from "./DroppableDayCell.types";
 import { useMonthDayCellStyles } from "./MonthDayCell.styles";
-import { legacyTimeMap } from "../utils/monthCalendarUtils";
+import { formatDateString } from "../utils/formatDateString";
 
 import type { MealType } from "../../../clientToServer/types";
+import { mealTypeToTime } from "../../../utils/timeSlots";
 
 export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
   date,
@@ -24,7 +25,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
 }) => {
   const styles = useMonthDayCellStyles();
   const router = useRouter();
-  const dateStr = date.toISOString().split("T")[0];
+  const dateStr = formatDateString(date);
   
   const { isOver, setNodeRef } = useDroppable({
     id: `month-day-${dateStr}`,
@@ -121,7 +122,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                   appearance="subtle"
                   className={mergeClasses(styles.removeButton, 'meal-remove-button')}
                   icon={<Dismiss12Regular />}
-                  onClick={(e) => handleRemoveClick(dateStr, legacyTimeMap[mealType], 0, e)}
+                  onClick={(e) => handleRemoveClick(dateStr, mealTypeToTime(mealType), 0, e)}
                   title="Remove meal"
                 />
               </div>
