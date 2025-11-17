@@ -5,11 +5,10 @@ import { useCondensedWeekViewStyles } from "./CondensedWeekView.styles";
 import type { CondensedWeekViewProps } from "./CondensedWeekView.types";
 import { WeekDayDropZone } from "../components/WeekDayDropZone";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
-import { dayNames } from "../utils/dayNames";
 import { formatDateString } from "../utils/formatDateString";
 import { getScheduledMealsForDate } from "../utils/getScheduledMealsForDate";
 import { getWeekDates } from "../utils/getWeekDates";
-import { isPastDate } from "../utils/isPastDate";
+import { dayNames, isPastDate } from "../utils/monthCalendarUtils";
 
 import { formatTimeForDisplay } from "../../../utils/timeSlots";
 

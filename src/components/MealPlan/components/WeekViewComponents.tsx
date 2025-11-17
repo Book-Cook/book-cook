@@ -4,7 +4,7 @@
 import * as React from "react";
 import { Text, makeStyles, tokens, shorthands, mergeClasses } from "@fluentui/react-components";
 
-import { isToday } from "../utils/isToday";
+import { isToday } from "../utils/monthCalendarUtils";
 import { HOURS, formatHour, HOUR_HEIGHT, MIN_HOUR, TIME_COLUMN_WIDTH, DAY_NAMES } from "../WeekView/constants";
 
 // ============================================================================

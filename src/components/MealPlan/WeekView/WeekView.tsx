@@ -10,8 +10,7 @@ import { getCurrentTimePosition } from "../utils/getCurrentTimePosition";
 import { getInitialScrollPosition } from "../utils/getInitialScrollPosition";
 import { getMealsForDate } from "../utils/getMealsForDate";
 import { getWeekDates } from "../utils/getWeekDates";
-import { isPastDate } from "../utils/isPastDate";
-import { isToday } from "../utils/isToday";
+import { isPastDate, isToday } from "../utils/monthCalendarUtils";
 
 const useStyles = makeStyles({
   container: {
