@@ -4,7 +4,7 @@ import { Add24Regular } from "@fluentui/react-icons";
 
 import { useNewRecipeButtonStyles } from "./NewRecipeButton.styles";
 
-export const NewRecipeButton = (props: { onClick: () => void }) => {
+const NewRecipeButtonComponent = (props: { onClick: () => void }) => {
   const { onClick } = props;
   const styles = useNewRecipeButtonStyles();
 
@@ -19,3 +19,5 @@ export const NewRecipeButton = (props: { onClick: () => void }) => {
     </Button>
   );
 };
+
+export const NewRecipeButton = React.memo(NewRecipeButtonComponent);

@@ -38,7 +38,7 @@ import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
 
-export const RecipeHeader = () => {
+const RecipeHeaderComponent = () => {
   const styles = useHeaderStyles();
   const {
     recipe,
@@ -259,3 +259,5 @@ export const RecipeHeader = () => {
     </>
   );
 };
+
+export const RecipeHeader = React.memo(RecipeHeaderComponent);
