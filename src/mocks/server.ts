@@ -1,10 +1,12 @@
 /**
- * Legacy server.ts - Re-exports from new modular structure
- * This file maintains backward compatibility for existing imports
+ * MSW Server - Public API for mock service worker
+ *
+ * This is the standard import point for accessing the MSW server instance
+ * and related utilities throughout the application.
+ *
+ * Usage:
+ *   import { server, resetMockData } from '@/mocks/server';
  */
 
-// Export server and utilities from new structure
 export { server, resetMockData, getMockState, resetHandlers } from "./index";
-
-// Export mock data from new structure
 export * from "./data";
