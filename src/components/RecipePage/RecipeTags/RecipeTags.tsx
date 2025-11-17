@@ -5,7 +5,7 @@ import { useStyles } from "./RecipeTags.styles";
 
 import { useRecipe } from "../../../context";
 
-export const RecipeTags = () => {
+const RecipeTagsComponent = () => {
   const styles = useStyles();
   const { recipe } = useRecipe();
   const router = useRouter();
@@ -37,3 +37,5 @@ export const RecipeTags = () => {
     </div>
   ) : null;
 };
+
+export const RecipeTags = React.memo(RecipeTagsComponent);

@@ -10,7 +10,7 @@ const Editor = dynamic(() => import("../../Editor/Editor").then(mod => ({ defaul
   ssr: false
 });
 
-export const RecipeContent = () => {
+const RecipeContentComponent = () => {
   const { isLoading, editableData, updateEditableDataKey, isAuthorized } =
     useRecipe();
 
@@ -38,3 +38,5 @@ export const RecipeContent = () => {
     </FadeIn>
   );
 };
+
+export const RecipeContent = React.memo(RecipeContentComponent);

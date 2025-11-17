@@ -64,6 +64,13 @@ const nextConfig = {
     optimizePackageImports: [
       "@fluentui/react-components",
       "@fluentui/react-icons",
+      "@fluentui/react-utilities",
+      "@fluentui/react-window-provider",
+      "@tanstack/react-query",
+      "@dnd-kit/core",
+      "@dnd-kit/modifiers",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
       "lodash",
       "node-emoji",
       "grapheme-splitter",
@@ -75,6 +82,8 @@ const nextConfig = {
       "@tiptap/pm",
       "@tiptap/react",
       "@tiptap/starter-kit",
+      "embla-carousel-react",
+      "fast-deep-equal",
     ],
   },
   images: {

@@ -1,9 +1,20 @@
 import * as React from "react";
 import { makeStyles, tokens } from "@fluentui/react-components";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 
 import { Unauthorized } from "../components/FallbackScreens";
-import { MealPlanCalendar } from "../components/MealPlan/MealPlanCalendar/MealPlanCalendar";
+
+const MealPlanCalendar = dynamic(
+  () =>
+    import("../components/MealPlan/MealPlanCalendar/MealPlanCalendar").then(
+      (mod) => mod.MealPlanCalendar
+    ),
+  {
+    loading: () => null,
+    ssr: false,
+  }
+);
 
 const useStyles = makeStyles({
   container: {

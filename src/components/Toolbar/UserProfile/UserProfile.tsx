@@ -16,7 +16,7 @@ import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 
-export const UserProfile = () => {
+const UserProfileComponent = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -80,3 +80,5 @@ export const UserProfile = () => {
     </Menu>
   );
 };
+
+export const UserProfile = React.memo(UserProfileComponent);
