@@ -65,7 +65,7 @@
     "embla-carousel-react": "^8.5.2",
     "fast-deep-equal": "^3.1.3",
     "grapheme-splitter": "^1.0.4",
-    "mongodb": "^6.9.0",
+    "mongodb": "^7.0.0",
     "next": "^15.3.0",
     "next-auth": "^4.24.11",
     "node-emoji": "^2.2.0",
