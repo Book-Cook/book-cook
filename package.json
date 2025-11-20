@@ -73,7 +73,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "unicode-emoji-json": "^0.8.0",
-    "zod": "^3.23.8"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@bundle-stats/plugin-webpack-filter": "^4.19.1",
