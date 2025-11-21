@@ -1,5 +1,3 @@
-// import { chocolateChipCookies } from "../../data/recipes";
-
 /**
  * POST /api/recipes responses
  */
