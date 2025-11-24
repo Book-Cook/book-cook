@@ -215,7 +215,7 @@ describe("RecipeCard", () => {
       </RecipeWrapper>
     );
     
-    const card = screen.getByRole("group");
+    const card = screen.getByRole("button", { name: /test recipe/i });
     fireEvent.click(card);
     
     // Wait for async router.push to be called

@@ -1,0 +1,62 @@
+import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+
+export const useMealCardStyles = makeStyles({
+  card: {
+    position: "absolute",
+    left: tokens.spacingHorizontalXS,
+    right: tokens.spacingHorizontalXS,
+    backgroundColor: tokens.colorNeutralBackground1,
+    ...shorthands.borderRadius(tokens.borderRadiusMedium),
+    ...shorthands.padding(tokens.spacingVerticalXS, tokens.spacingHorizontalS),
+    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
+    display: "flex",
+    flexDirection: "column",
+    ...shorthands.gap(tokens.spacingVerticalXXS),
+    transition: "all 0.2s ease",
+    zIndex: 2,
+    userSelect: "none",
+    cursor: "pointer",
+    boxShadow: tokens.shadow2,
+    "&:hover": {
+      backgroundColor: tokens.colorNeutralBackground1Hover,
+      boxShadow: tokens.shadow4,
+      ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+    },
+  },
+  header: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    ...shorthands.gap(tokens.spacingHorizontalXS),
+  },
+  content: {
+    display: "flex",
+    alignItems: "flex-start",
+    ...shorthands.gap(tokens.spacingHorizontalXS),
+    flex: 1,
+    minWidth: 0,
+  },
+  emoji: {
+    fontSize: tokens.fontSizeBase400,
+    lineHeight: 1,
+    flexShrink: 0,
+  },
+  title: {
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground1,
+    lineHeight: tokens.lineHeightBase200,
+    ...shorthands.overflow("hidden"),
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    wordBreak: "break-word",
+  },
+  removeButton: {
+    minWidth: "20px",
+    minHeight: "20px",
+    ...shorthands.padding(0),
+    flexShrink: 0,
+  },
+});

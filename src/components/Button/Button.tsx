@@ -3,18 +3,29 @@ import * as React from "react";
 import styles from "./Button.module.css";
 import type { ButtonProps } from "./Button.types";
 
-const ButtonComponent = ({
-  appearance = "secondary",
-  icon,
-  children,
-  ...rest
-}: ButtonProps): React.ReactElement => {
-  return (
-    <button className={styles[appearance]} {...rest}>
-      {icon && <span className={styles.icon}>{icon}</span>}
-      {children && <span className={styles.content}>{children}</span>}
-    </button>
-  );
-};
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      appearance = "secondary",
+      icon,
+      children,
+      className,
+      type = "button",
+      ...rest
+    },
+    ref
+  ): React.ReactElement => {
+    const buttonClassName = [styles.button, styles[appearance], className]
+      .filter(Boolean)
+      .join(" ");
 
-export const Button = React.memo(ButtonComponent);
+    return (
+      <button ref={ref} className={buttonClassName} type={type} {...rest}>
+        {icon && <span className={styles.icon}>{icon}</span>}
+        {children && <span className={styles.content}>{children}</span>}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";

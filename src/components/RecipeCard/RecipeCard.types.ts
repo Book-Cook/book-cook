@@ -1,4 +1,8 @@
-export type RecipeCardProps = {
+import type * as React from "react";
+
+import type { CardProps } from "../Card";
+
+export type RecipeCardProps = Omit<CardProps, "onClick" | "children" | "title"> & {
   /**
    * The title of the recipe
    */
@@ -58,4 +62,8 @@ export type RecipeCardProps = {
    * Whether this recipe represents a past meal (for visual styling)
    */
   isPast?: boolean;
+  /**
+   * Optional className to add to the card root
+   */
+  className?: string;
 };
