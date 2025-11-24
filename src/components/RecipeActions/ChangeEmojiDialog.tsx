@@ -3,18 +3,14 @@ import type {
   SearchBoxChangeEvent,
   InputOnChangeData,
 } from "@fluentui/react-components";
-import {
-  SearchBox,
-  makeStyles,
-  shorthands,
-  tokens,
-  Text,
-} from "@fluentui/react-components";
+import { SearchBox, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import emojiRegex from "emoji-regex";
 
 import { ChangeDialog } from "./ChangeDialog";
 
 import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
+
+import { Text } from "../Text";
 
 // Default emojis for food categories
 const defaultSuggestedEmojis = getDefaultFoodEmojis();

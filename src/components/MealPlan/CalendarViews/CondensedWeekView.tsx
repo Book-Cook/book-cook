@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, mergeClasses, tokens } from "@fluentui/react-components";
+import { mergeClasses, tokens } from "@fluentui/react-components";
 
 import { useCondensedWeekViewStyles } from "./CondensedWeekView.styles";
 import type { CondensedWeekViewProps } from "./CondensedWeekView.types";
@@ -11,6 +11,8 @@ import { getWeekDates } from "../utils/getWeekDates";
 import { dayNames, isPastDate } from "../utils/monthCalendarUtils";
 
 import { formatTimeForDisplay } from "../../../utils/timeSlots";
+
+import { Text } from "../../Text";
 
 export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
   currentDate,

@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Text,
   SearchBox,
   makeStyles,
   tokens,
@@ -11,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   container: {

@@ -1,18 +1,5 @@
 import * as React from "react";
-import {
-  Input,
-  Button,
-  tokens,
-  Text,
-  Spinner,
-  Avatar,
-  useToastController,
-  Toast,
-  ToastTitle,
-  ToastBody,
-  Toaster,
-  useId,
-} from "@fluentui/react-components";
+import { Input, Button, tokens, Spinner, Avatar, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
 import {
   PersonAddRegular,
   PersonAdd24Regular,
@@ -20,10 +7,11 @@ import {
 } from "@fluentui/react-icons";
 import { makeStyles, shorthands } from "@griffel/react";
 
-
 import { sharingSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
+
+import { Text } from "../../Text";
 
 import {
   useShareWithUser,

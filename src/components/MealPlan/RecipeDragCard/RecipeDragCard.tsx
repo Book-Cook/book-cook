@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Text, makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 import { useDraggable } from "@dnd-kit/core";
+
+import { Text } from "../../Text";
 
 // Recipe drag card component
 
