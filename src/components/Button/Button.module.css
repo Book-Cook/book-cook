@@ -1,8 +1,4 @@
-/* Base styles shared across all button variants */
-.primary,
-.secondary,
-.subtle,
-.transparent {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,18 +16,12 @@
   user-select: none;
 }
 
-.primary:focus-visible,
-.secondary:focus-visible,
-.subtle:focus-visible,
-.transparent:focus-visible {
+.button:focus-visible {
   outline: 2px solid var(--colorStrokeFocus2);
   outline-offset: 2px;
 }
 
-.primary:disabled,
-.secondary:disabled,
-.subtle:disabled,
-.transparent:disabled {
+.button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   pointer-events: none;
