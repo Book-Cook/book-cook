@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, makeStyles, Switch, tokens, Spinner } from "@fluentui/react-components";
+import { makeStyles, Switch, tokens, Spinner } from "@fluentui/react-components";
+import { Button } from "../Button";
 
 import { ChangeDialog } from "./ChangeDialog";
 

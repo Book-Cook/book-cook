@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { Text, makeStyles, tokens } from "@fluentui/react-components";
+import { Button } from "../../Button";
 import {
   ChevronLeft24Regular,
   ChevronRight24Regular,

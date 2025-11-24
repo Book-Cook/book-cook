@@ -2,7 +2,8 @@
  * Individual meal item component for time slots
  */
 import * as React from "react";
-import { Text, Button, mergeClasses } from "@fluentui/react-components";
+import { Text, mergeClasses } from "@fluentui/react-components";
+import { Button } from "../../Button";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 

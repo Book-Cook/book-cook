@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Text, Button, makeStyles, tokens, shorthands } from "@fluentui/react-components";
+import { Text, makeStyles, tokens, shorthands } from "@fluentui/react-components";
+import { Button } from "../../Button";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 

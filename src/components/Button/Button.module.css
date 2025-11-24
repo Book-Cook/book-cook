@@ -1,0 +1,113 @@
+/* Base styles shared across all button variants */
+.primary,
+.secondary,
+.subtle,
+.transparent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible,
+.subtle:focus-visible,
+.transparent:focus-visible {
+  outline: 2px solid var(--colorStrokeFocus2);
+  outline-offset: 2px;
+}
+
+.primary:disabled,
+.secondary:disabled,
+.subtle:disabled,
+.transparent:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Primary */
+.primary {
+  background-color: var(--colorBrandBackground);
+  color: var(--colorNeutralForegroundOnBrand);
+  border-color: var(--colorBrandBackground);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--colorBrandBackgroundHover);
+  border-color: var(--colorBrandBackgroundHover);
+}
+
+.primary:active:not(:disabled) {
+  background-color: var(--colorBrandBackgroundPressed);
+  border-color: var(--colorBrandBackgroundPressed);
+}
+
+/* Secondary */
+.secondary {
+  background-color: var(--colorNeutralBackground1);
+  color: var(--colorNeutralForeground1);
+  border-color: var(--colorNeutralStroke1);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--colorNeutralBackground1Hover);
+  border-color: var(--colorNeutralStroke1Hover);
+}
+
+.secondary:active:not(:disabled) {
+  background-color: var(--colorNeutralBackground1Pressed);
+  border-color: var(--colorNeutralStroke1Pressed);
+}
+
+/* Subtle */
+.subtle {
+  background-color: transparent;
+  color: var(--colorNeutralForeground1);
+  border-color: transparent;
+}
+
+.subtle:hover:not(:disabled) {
+  background-color: var(--colorSubtleBackgroundHover);
+}
+
+.subtle:active:not(:disabled) {
+  background-color: var(--colorSubtleBackgroundPressed);
+}
+
+/* Transparent */
+.transparent {
+  background-color: transparent;
+  color: var(--colorNeutralForeground1);
+  border-color: transparent;
+}
+
+.transparent:hover:not(:disabled) {
+  background-color: var(--colorTransparentBackgroundHover);
+}
+
+.transparent:active:not(:disabled) {
+  background-color: var(--colorTransparentBackgroundPressed);
+}
+
+/* Icon and content wrappers */
+.icon {
+  display: inline-flex;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.content {
+  display: inline-flex;
+}
