@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Title2, Body1, Button, tokens } from "@fluentui/react-components";
+import { Title2, Body1, tokens } from "@fluentui/react-components";
+import { Button } from "../Button";
 import { LockClosed24Regular } from "@fluentui/react-icons";
 import { makeStyles, shorthands } from "@griffel/react";
 import { signIn } from "next-auth/react";

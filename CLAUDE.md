@@ -1,76 +1,91 @@
-# Claude Instructions
+## 🛠️ Development Environment
 
-## Branch Management
+- **Language**: TypeScript (`^5.8.3`)
+- **Framework**: Next.js (Pages Router)
+- **Styling**: CSS Modules
+- **Component Library**: FluentUI
+- **Data Fetching**: React Query (TanStack)
+- **Testing**: Jest + React Testing Library
+- **Linting**: ESLint with `@typescript-eslint`
+- **Formatting**: Prettier
+- **Package Manager**: `yarn` (preferred)
 
-- Always create branches using the structure: `users/<github-username>/<feature-name>`
-- Example: `users/calebzearing/add-recipe-search`
-- Always base new branches off of `main` branch
+## ⚙️ Dev Commands
 
-## Development Workflow
+- **Dev server**: `yarn dev`
+- **Build**: `yarn build`
+- **Start**: `yarn start`
+- **Lint**: `yarn lint`
+- **Test**: `yarn test`
+- **Coverage**: `yarn test:coverage`
 
-- **CRITICAL**: Always pull from main IMMEDIATELY after creating a branch and before making any changes
-- Always pull from main before committing changes
-- Run tests before committing changes
-- Check for lint/typecheck commands and run them before completing tasks
-- **REQUIREMENT**: All PRs must have 0 lint warnings - fix ALL lint issues in files you create/modify
+## 📂 Project Structure
 
-## Branch Workflow Steps
+```
+.
+├── src/
+│   ├── pages/              # Next.js Pages Router
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── api/            # API routes
+│   │   ├── collections.tsx
+│   │   ├── discover.tsx
+│   │   ├── meal-plan.tsx
+│   │   ├── pantry.tsx
+│   │   ├── recipes/
+│   │   └── settings.tsx
+│   ├── components/         # UI components
+│   │   ├── Animation/
+│   │   ├── Editor/
+│   │   ├── MealPlan/
+│   │   ├── RecipeCard/
+│   │   ├── RecipePage/
+│   │   └── ...
+│   ├── clientToServer/     # API client wrappers
+│   │   ├── fetch/          # GET requests
+│   │   ├── post/           # POST requests
+│   │   ├── delete/         # DELETE requests
+│   │   └── types/
+│   ├── hooks/              # Custom React hooks
+│   ├── context/            # React Context providers
+│   ├── utils/              # Utility functions
+│   ├── types/              # TypeScript type definitions
+│   ├── constants/          # App constants
+│   ├── mocks/              # Mock data for testing
+│   ├── server/             # Server-side utilities
+│   ├── clients/            # External API clients
+│   └── stories/            # Storybook stories
+├── tests/                  # Unit and integration tests
+├── public/                 # Static assets
+│   ├── icons/
+│   └── image/
+├── lib/                    # Build/config helpers
+├── scripts/                # Build and dev scripts
+├── .storybook/             # Storybook configuration
+├── .husky/                 # Git hooks
+├── specs/                  # Specifications
+├── next.config.js
+├── tsconfig.json
+├── package.json
+└── README.md
+```
 
-1. Create branch from main: `git checkout main && git pull origin main && git checkout -b users/<username>/<feature>`
-2. **IMMEDIATELY** pull main again: `git pull origin main` (to avoid conflicts)
-3. Make your changes
-4. Pull main one more time before committing: `git pull origin main --rebase`
-5. Run yarn build, yarn test, and yarn lint to verify that the CI will succeed.
-6. **ALWAYS** run `yarn lint --fix` before committing to auto-fix linting issues
-7. **CRITICAL**: Ensure 0 lint warnings in all files you created/modified before final commit
-8. Commit and push changes
+## 📝 Code Style Standards
 
-## Code Organization & Abstraction
+- Prefer arrow functions
+- Annotate return types
+- Always destructure props
+- Avoid `any` type, use `unknown` or strict generics
+- Group imports: react → next → libraries → local
 
-- **CRITICAL**: Abstract code into individual functions, each in their own file when possible
-- **NEVER** write complex functions directly in React components - always abstract to separate files
-- **NEVER** define types inline in .tsx files - use proper types files  
-- **ALWAYS** follow existing repository patterns and structure
-- **MINIMIZE** writing new functions - try to reuse and utilize existing code first
-- Write unit tests for each function
-- Each function should have a corresponding test file
-- Follow the clientToServer structure for API calls (fetch/, post/, delete/ folders)
+## 🔍 Documentation & Onboarding
 
-## Project Commands
+- Each component and hook should include a short comment on usage
+- Document top-level files (like `pages/_app.tsx`) and configs
+- Keep `README.md` up to date with getting started, design tokens, and component usage notes
 
-- `yarn dev` - Start development server
-- `yarn build` - Build for production
-- `yarn test` - Run Jest tests
-- `yarn test:coverage` - Run tests with coverage
-- `yarn lint` - Run ESLint
-- `yarn lint:fix` - Fix ESLint issues automatically
-- `yarn` - To install package dependencies
+## 🔐 Security
 
-## Tech Stack
-
-- Next.js (React framework)
-- TypeScript
-- Jest for testing
-- ESLint for linting
-- Fluent UI components
-- MongoDB for database
-
-## Security & Best Practices
-
-- Never commit secrets, API keys, or sensitive data
-- Use environment variables for configuration
-- Follow TypeScript strict mode practices
-- Prefer functional components with hooks over class components
-
-## File Naming Conventions
-
-- Use camel casing for component files: `RecipeCard.tsx`
-- Use camelCase for utility files: `formatDate.ts`
-- Test files should match their source: `RecipeCard.test.tsx`
-
-## Code Quality
-
-- Use meaningful variable and function names
-- Add JSDoc comments for complex functions
-- Keep functions small and focused (single responsibility)
-- Use TypeScript types instead of `any`
+- Validate all server-side inputs (API routes)
+- Use HTTPS-only cookies and CSRF tokens when applicable
+- Protect sensitive routes with middleware or session logic

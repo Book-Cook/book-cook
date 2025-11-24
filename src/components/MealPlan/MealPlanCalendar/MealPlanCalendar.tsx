@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, mergeClasses } from "@fluentui/react-components";
+import { mergeClasses } from "@fluentui/react-components";
+import { Button } from "../../Button";
 import { PanelLeft24Regular } from "@fluentui/react-icons";
 import type { DragEndEvent} from "@dnd-kit/core";
 import { 
