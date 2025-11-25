@@ -1,11 +1,12 @@
-import { setupServer } from "msw/node";
+/**
+ * MSW Server - Public API for mock service worker
+ *
+ * This is the standard import point for accessing the MSW server instance
+ * and related utilities throughout the application.
+ *
+ * Usage:
+ *   import { server, resetMockData } from '@/mocks/server';
+ */
 
-import { recipeHandlers } from "./handlers";
-
-// Create MSW server with all handlers
-export const server = setupServer(...recipeHandlers);
-
-// Export handlers and utilities
-export { recipeHandlers } from "./handlers";
-export { resetMockData, getMockState } from "./handlers";
-export * from "./mockData";
+export { server, resetMockData, getMockState, resetHandlers } from "./index";
+export * from "./data";
