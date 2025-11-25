@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, Dropdown, Option, makeStyles, tokens, SearchBox } from "@fluentui/react-components";
+import { Button, Dropdown, Option, makeStyles, tokens } from "@fluentui/react-components";
+import { SearchBox } from "../components/SearchBox";
 import { Search24Regular, Filter24Regular } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 
@@ -151,7 +152,7 @@ export default function DiscoverPage() {
               className={discoverStyles.searchBox}
               placeholder="Search recipes, ingredients, or creators..."
               value={search}
-              onChange={(_, data) => setSearch(data.value)}
+              onChange={(_, value) => setSearch(value)}
               contentBefore={<Search24Regular />}
             />
           </div>

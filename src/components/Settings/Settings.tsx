@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  tokens,
-  Spinner,
-  Accordion,
-  SearchBox,
-} from "@fluentui/react-components";
+import { tokens, Spinner, Accordion } from "@fluentui/react-components";
 import type { AccordionToggleEventHandler } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 import { useSession } from "next-auth/react";
@@ -17,6 +12,7 @@ import { MealPlanSection } from "./MealPlanSection/MealPlanSection";
 import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
 import { SharingSection } from "./SharingSection/SharingSection";
 import { Unauthorized } from "../FallbackScreens";
+import { SearchBox } from "../SearchBox";
 
 const useStyles = makeStyles({
   page: {
@@ -62,11 +58,8 @@ export const SettingsPage = () => {
   );
   const [openItems, setOpenItems] = React.useState<string[]>([]); // Add state for open accordion items
 
-  const handleSearchChange = (
-    _event: React.FormEvent<HTMLElement>,
-    data: { value: string }
-  ) => {
-    setSearchTerm(data.value.toLowerCase());
+  const handleSearchChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    setSearchTerm(value.toLowerCase());
   };
 
   const settingsContextValue = React.useMemo(

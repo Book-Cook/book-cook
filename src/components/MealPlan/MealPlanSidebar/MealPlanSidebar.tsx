@@ -1,16 +1,12 @@
 import * as React from "react";
-import {
-  SearchBox,
-  makeStyles,
-  tokens,
-  Spinner,
-} from "@fluentui/react-components";
+import { makeStyles, tokens, Spinner } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { Text } from "../../Text";
+import { SearchBox } from "../../SearchBox";
 
 const useStyles = makeStyles({
   container: {
@@ -116,7 +112,7 @@ export const MealPlanSidebar: React.FC = () => {
           className={styles.searchBox}
           placeholder="Search recipes..."
           value={searchQuery}
-          onChange={(_, data) => setSearchQuery(data.value)}
+          onChange={(_, value) => setSearchQuery(value)}
         />
       </div>
 

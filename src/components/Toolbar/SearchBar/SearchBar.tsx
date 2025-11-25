@@ -1,13 +1,9 @@
 import * as React from "react";
-import { SearchBox } from "@fluentui/react-components";
-import type {
-  SearchBoxChangeEvent,
-  InputOnChangeData,
-} from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
 import { useSearchBox } from "../../../context";
 import { useDebounce } from "../../../hooks";
+import { SearchBox } from "../../SearchBox";
 
 export type SearchBarProps = {
   /**
@@ -34,14 +30,14 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
   const path = router.asPath;
 
   const onSearchBarChange = (
-    _ev: SearchBoxChangeEvent,
-    data: InputOnChangeData
+    _ev: React.ChangeEvent<HTMLInputElement>,
+    newValue: string
   ) => {
-    setInputValue(data.value);
+    setInputValue(newValue);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleKeyDown = async (event: any) => {
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       // Immediately update the shared search value so that navigating
       // to the recipes page reflects the typed query even if the
@@ -61,7 +57,6 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
     <SearchBox
       value={inputValue}
       onChange={onSearchBarChange}
-      appearance="outline"
       placeholder="Search for snacks"
       onKeyDown={handleKeyDown}
     />
