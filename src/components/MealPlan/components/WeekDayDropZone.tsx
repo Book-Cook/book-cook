@@ -2,8 +2,10 @@
  * Drop zone component for week day
  */
 import * as React from "react";
-import { Text, mergeClasses, tokens } from "@fluentui/react-components";
+import { mergeClasses, tokens } from "@fluentui/react-components";
 import { useDroppable } from "@dnd-kit/core";
+
+import { Text } from "../../Text";
 
 export type WeekDayDropZoneProps = {
   dateStr: string;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text } from "@fluentui/react-components";
+
 import { useDroppable } from "@dnd-kit/core";
 
 import { useTimeSlotStyles } from "./TimeSlot.styles";
@@ -7,6 +7,8 @@ import type { TimeSlotProps } from "./TimeSlot.types";
 import { MealItem as MealItemComponent } from "../components/MealItem";
 
 import { formatTimeForDisplay } from "../../../utils/timeSlots";
+
+import { Text } from "../../Text";
 
 export const TimeSlot: React.FC<TimeSlotProps> = ({
   date,

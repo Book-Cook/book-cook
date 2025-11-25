@@ -2,7 +2,7 @@
  * Droppable day cell component for MonthView
  */
 import * as React from "react";
-import { Text, mergeClasses } from "@fluentui/react-components";
+import { mergeClasses } from "@fluentui/react-components";
 import { Button } from "../../Button";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useDroppable } from "@dnd-kit/core";
@@ -14,6 +14,8 @@ import { formatDateString } from "../utils/formatDateString";
 
 import type { MealType } from "../../../clientToServer/types";
 import { mealTypeToTime } from "../../../utils/timeSlots";
+
+import { Text } from "../../Text";
 
 export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
   date,

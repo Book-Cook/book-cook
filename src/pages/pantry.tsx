@@ -1,30 +1,8 @@
 import * as React from "react";
-import {
-  Title2,
-  Subtitle1,
-  Card,
-  CardHeader,
-  Button,
-  Table,
-  TableHeader,
-  TableRow,
-  TableHeaderCell,
-  TableBody,
-  TableCell,
-  Badge,
-  Dialog,
-  Field,
-  Input,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogSurface,
-  DialogBody,
-  Text,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
+import { Title2, Subtitle1, Card, CardHeader, Button, Table, TableHeader, TableRow, TableHeaderCell, TableBody, TableCell, Badge, Dialog, Field, Input, DialogActions, DialogContent, DialogTitle, DialogSurface, DialogBody, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
+
+import { Text } from "../components/Text";
 
 // Simple type to track pantry items
 interface PantryItem {

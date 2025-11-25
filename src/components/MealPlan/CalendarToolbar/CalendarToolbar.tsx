@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 import { Button } from "../../Button";
 import {
   ChevronLeft24Regular,
@@ -8,6 +8,8 @@ import {
 } from "@fluentui/react-icons";
 
 import type { CalendarView } from "../MealPlanCalendar/MealPlanCalendar.types";
+
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   viewControls: {

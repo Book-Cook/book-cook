@@ -1,11 +1,13 @@
 import * as React from "react";
-import { Text, makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
+import { makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
 
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 import { formatDateString } from "../utils/formatDateString";
 
 import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
 import { generateTimeSlots, DEFAULT_TIME_CONFIG, mealTypeToTime } from "../../../utils/timeSlots";
+
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   container: {

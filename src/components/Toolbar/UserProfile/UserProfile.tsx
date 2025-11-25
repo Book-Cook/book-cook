@@ -1,20 +1,10 @@
 import * as React from "react";
-import {
-  Avatar,
-  Tooltip,
-  Menu,
-  MenuItem,
-  MenuTrigger,
-  MenuPopover,
-  MenuList,
-  MenuDivider,
-  Text,
-  Button,
-  Spinner,
-} from "@fluentui/react-components";
+import { Avatar, Tooltip, Menu, MenuItem, MenuTrigger, MenuPopover, MenuList, MenuDivider, Button, Spinner } from "@fluentui/react-components";
 import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
+
+import { Text } from "../../Text";
 
 const UserProfileComponent = () => {
   const { data: session, status } = useSession();

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Spinner, Text, makeStyles, tokens } from '@fluentui/react-components';
+import { Spinner, makeStyles, tokens } from '@fluentui/react-components';
+import { Text } from "../Text";
 
 import { PaginationControls } from '../PaginationControls/PaginationControls';
 import { RecipeCard } from '../RecipeCard';

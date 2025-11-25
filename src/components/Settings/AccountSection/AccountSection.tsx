@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Button,
-  tokens,
-  Text,
-  Avatar,
-  Divider,
-} from "@fluentui/react-components";
+import { Button, tokens, Avatar, Divider } from "@fluentui/react-components";
 import { PersonAccounts24Regular } from "@fluentui/react-icons";
 import { makeStyles, shorthands } from "@griffel/react";
 import { signOut, useSession } from "next-auth/react";
@@ -13,6 +7,8 @@ import { signOut, useSession } from "next-auth/react";
 import { accountSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
+
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   profileInfo: {

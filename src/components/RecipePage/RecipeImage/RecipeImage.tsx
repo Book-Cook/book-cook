@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text } from "@fluentui/react-components";
+
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
@@ -7,6 +7,8 @@ import { useStyles } from "./RecipeImage.styles";
 
 import { useRecipe } from "../../../context";
 import { ScaleOnHover } from "../../Animation";
+
+import { Text } from "../../Text";
 
 const ChangeEmojiDialog = dynamic(
   () => import("../../RecipeActions/ChangeEmojiDialog"),

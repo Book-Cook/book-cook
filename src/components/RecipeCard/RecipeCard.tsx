@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, Tooltip } from "@fluentui/react-components";
+import { Tooltip } from "@fluentui/react-components";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -7,6 +7,8 @@ import styles from "./RecipeCard.module.css";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { Card } from "../Card";
 import { RecipeActions } from "../RecipeActions";
+
+import { Text } from "../Text";
 
 const PLACEHOLDER_BLUR =
   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=";

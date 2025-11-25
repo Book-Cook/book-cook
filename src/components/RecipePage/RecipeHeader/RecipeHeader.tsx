@@ -1,15 +1,5 @@
 import React, { useMemo, useState } from "react";
-import {
-  Button,
-  Tooltip,
-  Text,
-  useToastController,
-  Toast,
-  ToastTitle,
-  ToastBody,
-  Toaster,
-  useId,
-} from "@fluentui/react-components";
+import { Button, Tooltip, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
 import {
   Heart20Regular,
   Heart20Filled,
@@ -37,6 +27,8 @@ import type { Recipe } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
+
+import { Text } from "../../Text";
 
 const RecipeHeaderComponent = () => {
   const styles = useHeaderStyles();

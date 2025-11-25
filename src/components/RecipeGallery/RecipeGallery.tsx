@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, Title3, Dropdown, Option } from "@fluentui/react-components";
+import { Dropdown, Option } from "@fluentui/react-components";
 import type {
   SelectionEvents,
   OptionOnSelectData,
@@ -16,6 +16,8 @@ import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecip
 
 import { Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
+
+import { Text, Heading1 } from "../Text";
 
 export const RecipeGallery = () => {
   const styles = useStyles();
@@ -103,7 +105,7 @@ export const RecipeGallery = () => {
       <div className={styles.pageContainer}>
         <div className={styles.header}>
           <div className={styles.titleSection}>
-            <Title3 as="h1">My Recipes</Title3>
+            <Heading1>My Recipes</Heading1>
             <Text
               size={200}
               weight="medium"
