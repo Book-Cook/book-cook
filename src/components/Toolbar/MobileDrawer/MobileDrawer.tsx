@@ -28,7 +28,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
     <Drawer
       open={isOpen}
       onOpenChange={(_, { open }) => onOpenChange(open)}
-      position="end"
+      position="start"
     >
       <DrawerHeader>
         <DrawerHeaderTitle

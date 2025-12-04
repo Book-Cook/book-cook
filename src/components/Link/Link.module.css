@@ -1,11 +1,19 @@
 .link {
-  color: var(--colorBrandForegroundLink);
+  color: var(--colorBrandForegroundLinkHover);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
+.link:visited {
+  color: var(--colorBrandForegroundLinkHover);
+}
+
 .muted {
+  color: var(--colorNeutralForeground2);
+}
+
+.muted:visited {
   color: var(--colorNeutralForeground2);
 }
 
@@ -24,7 +32,7 @@
 }
 
 .link:hover {
-  color: var(--colorBrandForegroundLinkHover);
+  color: var(--colorBrandForegroundLink);
 }
 
 .link:active {
