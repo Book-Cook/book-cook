@@ -1,13 +1,20 @@
 import * as React from "react";
-import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import {
+  makeStyles,
+  shorthands,
+  tokens,
+  SearchBox,
+} from "@fluentui/react-components";
+import type {
+  SearchBoxChangeEvent,
+  InputOnChangeData,
+} from "@fluentui/react-components";
 import emojiRegex from "emoji-regex";
 
 import { ChangeDialog } from "./ChangeDialog";
+import { Text } from "../Text";
 
 import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
-
-import { Text } from "../Text";
-import { SearchBox } from "../SearchBox";
 
 // Default emojis for food categories
 const defaultSuggestedEmojis = getDefaultFoodEmojis();
@@ -155,16 +162,16 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
   }, [isOpen, currentEmoji]);
 
   const handleInputChange = (
-    _e: React.ChangeEvent<HTMLInputElement>,
-    newValue: string
+    _e: SearchBoxChangeEvent,
+    data: InputOnChangeData
   ) => {
-    setInputValue(newValue);
+    setInputValue(data.value);
 
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
     debounceTimeout.current = setTimeout(() => {
-      const trimmed = newValue.trim().toLowerCase();
+      const trimmed = data.value.trim().toLowerCase();
 
       if (isSingleEmoji(trimmed)) {
         setSelectedEmoji(trimmed);
