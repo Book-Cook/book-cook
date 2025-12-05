@@ -7,8 +7,8 @@ describe("SearchBox", () => {
   it("renders with placeholder and value", () => {
     render(<SearchBox placeholder="Search..." value="hello" onChange={() => {}} />);
 
-    const input = screen.getByPlaceholderText("Search...") as HTMLInputElement;
-    expect(input.value).toBe("hello");
+    const input = screen.getByPlaceholderText("Search...");
+    expect(input).toHaveValue("hello");
   });
 
   it("calls onChange with updated value", async () => {
