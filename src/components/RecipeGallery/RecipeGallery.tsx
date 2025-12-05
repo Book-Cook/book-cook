@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, Title3, Dropdown, Option } from "@fluentui/react-components";
+import { Dropdown, Option } from "@fluentui/react-components";
 import type {
   SelectionEvents,
   OptionOnSelectData,
@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
+import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
 import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
 
@@ -33,24 +34,31 @@ export const RecipeGallery = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage, pageSize],
-    queryFn: () => fetchRecipesPaginated({
+    queryKey: [
+      "recipes",
       searchBoxValue,
-      orderBy: sortOption,
+      sortOption,
       selectedTags,
-      offset: (currentPage - 1) * pageSize,
-      limit: pageSize,
-    }),
+      currentPage,
+      pageSize,
+    ],
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue,
+        orderBy: sortOption,
+        selectedTags,
+        offset: (currentPage - 1) * pageSize,
+        limit: pageSize,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
-  
 
   const router = useRouter();
 
-  // Extract unique tags from recipes  
+  // Extract unique tags from recipes
   React.useEffect(() => {
     if (recipes?.length) {
       const uniqueTags = Array.from(
@@ -103,7 +111,7 @@ export const RecipeGallery = () => {
       <div className={styles.pageContainer}>
         <div className={styles.header}>
           <div className={styles.titleSection}>
-            <Title3 as="h1">My Recipes</Title3>
+            <Heading1>My Recipes</Heading1>
             <Text
               size={200}
               weight="medium"
@@ -140,7 +148,7 @@ export const RecipeGallery = () => {
             />
           </div>
         </div>
-        
+
         <VirtualizedRecipeList
           recipes={recipes}
           totalCount={totalCount}

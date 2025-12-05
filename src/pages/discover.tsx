@@ -1,19 +1,13 @@
 import * as React from "react";
-import { 
-  Title3, 
-  Text, 
-  Button,
-  Dropdown,
-  Option,
-  makeStyles,
-  tokens,
-  SearchBox,
-} from "@fluentui/react-components";
+import { Button, Dropdown, Option, makeStyles, tokens } from "@fluentui/react-components";
+import { SearchBox } from "../components/SearchBox";
 import { Search24Regular, Filter24Regular } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
+
+import { Text, Heading1 } from "../components/Text";
 
 interface PublicRecipe {
   _id: string;
@@ -138,7 +132,7 @@ export default function DiscoverPage() {
     <div className={styles.pageContainer}>
         <div className={styles.header}>
           <div className={styles.titleSection}>
-            <Title3 as="h1">Discover Recipes</Title3>
+            <Heading1>Discover Recipes</Heading1>
             <Text
               size={200}
               weight="medium"
@@ -158,7 +152,7 @@ export default function DiscoverPage() {
               className={discoverStyles.searchBox}
               placeholder="Search recipes, ingredients, or creators..."
               value={search}
-              onChange={(_, data) => setSearch(data.value)}
+              onChange={(_, value) => setSearch(value)}
               contentBefore={<Search24Regular />}
             />
           </div>

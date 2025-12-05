@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  Title3,
-  Text,
-  Button,
-  tokens,
-  Skeleton,
-  SkeletonItem,
-} from "@fluentui/react-components";
+import { Button, tokens, Skeleton, SkeletonItem } from "@fluentui/react-components";
 import { ArrowLeftRegular, ArrowRightRegular } from "@fluentui/react-icons";
 import { mergeClasses } from "@griffel/react";
 import type { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
@@ -16,6 +9,8 @@ import { useRouter } from "next/router";
 import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
 import type { RecipesCarouselProps } from "./RecipeCarousel.types";
 import { RecipeCard } from "../RecipeCard/RecipeCard";
+
+import { Text, Heading3 } from "../Text";
 
 const emblaOptions: EmblaOptionsType = {
   align: "start",
@@ -123,7 +118,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
     return (
       <div className={styles.root}>
         <div className={styles.header}>
-          <Title3 className={styles.title}>{title}</Title3>{" "}
+          <Heading3 className={styles.title}>{title}</Heading3>{" "}
         </div>
         <div className={styles.emptyState}>
           <Text size={400}>{`You haven't viewed any recipes yet.`}</Text>
@@ -138,7 +133,7 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <Title3 className={styles.title}>{title}</Title3>
+        <Heading3 className={styles.title}>{title}</Heading3>
         <div className={styles.controls}>
           <Button
             className={styles.navButton}

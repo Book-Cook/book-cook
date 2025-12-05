@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Title3, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchRecipeCollections } from "src/clientToServer";
@@ -7,6 +7,8 @@ import type { Recipe } from "src/clientToServer";
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
 import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
+
+import { Text, Heading1, Heading2 } from "../components/Text";
 
 const useCollectionStyles = makeStyles({
   section: {
@@ -44,7 +46,7 @@ export default function CollectionsPage() {
       <div className={styles.pageContainer}>
         <div className={styles.header}>
           <div className={styles.titleSection}>
-            <Title3 as="h1">Collections</Title3>
+            <Heading1>Collections</Heading1>
             <Text
               size={200}
               weight="medium"
@@ -59,7 +61,7 @@ export default function CollectionsPage() {
         {favoriteRecipes && favoriteRecipes.length > 0 && (
           <div className={collectionStyles.section}>
             <div className={collectionStyles.sectionHeader}>
-              <Title3 as="h2">My Favorite Recipes</Title3>
+              <Heading2>My Favorite Recipes</Heading2>
               <Text size={200} style={{ color: "var(--colorNeutralForeground2)" }}>
                 {favoriteRecipes.length} recipes from your own cookbook
               </Text>
@@ -101,7 +103,7 @@ export default function CollectionsPage() {
         {savedRecipes && savedRecipes.length > 0 && (
           <div className={collectionStyles.section}>
             <div className={collectionStyles.sectionHeader}>
-              <Title3 as="h2">Saved from Community</Title3>
+              <Heading2>Saved from Community</Heading2>
               <Text size={200} style={{ color: "var(--colorNeutralForeground2)" }}>
                 {savedRecipes.length} recipes saved from other creators
               </Text>

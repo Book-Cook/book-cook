@@ -1,0 +1,42 @@
+.link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--colorNeutralForeground1);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--colorBrandBackground);
+  transform: translateX(-50%);
+  transition: width 0.2s ease-in-out;
+  border-radius: 999px;
+}
+
+.link:hover {
+  color: var(--colorBrandForeground1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(146, 114, 230, 0.15);
+  text-decoration: none;
+}
+
+.link:hover::after {
+  width: 40%;
+}
+
+.active {
+  background-color: var(--colorNeutralBackground3);
+}

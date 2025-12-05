@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  Button,
-  Text,
-  Card,
-  CardPreview,
-  CardHeader,
-  mergeClasses,
-} from "@fluentui/react-components";
+import { Button, Card, CardPreview, CardHeader, mergeClasses } from "@fluentui/react-components";
 import {
   ArrowRight24Regular,
   Star24Regular,
@@ -20,6 +13,8 @@ import { useSession, signIn } from "next-auth/react";
 
 import { useStyles } from "./LandingPage.styles";
 import { FadeIn, ScaleOnHover } from "../Animation";
+
+import { Text } from "../Text";
 
 // Mock data for featured recipes
 const featuredRecipes = [
