@@ -18,6 +18,7 @@ const NavigationLinksComponent: React.FC<NavigationLinksProps> = ({
           className={[styles.link, currentPath === link.url && styles.active]
             .filter(Boolean)
             .join(" ")}
+          underline="none"
         >
           {link.label}
         </Link>

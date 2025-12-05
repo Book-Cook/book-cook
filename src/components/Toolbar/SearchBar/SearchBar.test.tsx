@@ -13,7 +13,7 @@ jest.mock("../../../context", () => ({
 }));
 jest.mock("next/router", () => jest.requireActual("next-router-mock"));
 
-it("renders search input", () => {
-  const { getByPlaceholderText } = render(<SearchBar />);
-  expect(getByPlaceholderText("Search for snacks")).toBeInTheDocument();
+it("renders correctly and matches snapshot", () => {
+  const { container } = render(<SearchBar />);
+  expect(container).toMatchSnapshot();
 });

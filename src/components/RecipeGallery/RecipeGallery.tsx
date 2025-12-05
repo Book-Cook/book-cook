@@ -11,13 +11,12 @@ import { useSession } from "next-auth/react";
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
 import { TagPicker } from "../TagPicker/TagPicker";
+import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
 import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
 
 import { Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
-
-import { Text, Heading1 } from "../Text";
 
 export const RecipeGallery = () => {
   const styles = useStyles();
@@ -35,24 +34,31 @@ export const RecipeGallery = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage, pageSize],
-    queryFn: () => fetchRecipesPaginated({
+    queryKey: [
+      "recipes",
       searchBoxValue,
-      orderBy: sortOption,
+      sortOption,
       selectedTags,
-      offset: (currentPage - 1) * pageSize,
-      limit: pageSize,
-    }),
+      currentPage,
+      pageSize,
+    ],
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue,
+        orderBy: sortOption,
+        selectedTags,
+        offset: (currentPage - 1) * pageSize,
+        limit: pageSize,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
-  
 
   const router = useRouter();
 
-  // Extract unique tags from recipes  
+  // Extract unique tags from recipes
   React.useEffect(() => {
     if (recipes?.length) {
       const uniqueTags = Array.from(
@@ -142,7 +148,7 @@ export const RecipeGallery = () => {
             />
           </div>
         </div>
-        
+
         <VirtualizedRecipeList
           recipes={recipes}
           totalCount={totalCount}

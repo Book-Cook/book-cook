@@ -1,19 +1,11 @@
 .link {
-  color: var(--colorBrandForegroundLinkHover);
+  color: var(--colorNeutralForeground1);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
-.link:visited {
-  color: var(--colorBrandForegroundLinkHover);
-}
-
 .muted {
-  color: var(--colorNeutralForeground2);
-}
-
-.muted:visited {
   color: var(--colorNeutralForeground2);
 }
 
@@ -32,11 +24,11 @@
 }
 
 .link:hover {
-  color: var(--colorBrandForegroundLink);
+  color: var(--colorBrandBackgroundHover);
 }
 
 .link:active {
-  color: var(--colorBrandForegroundLinkPressed);
+  color: var(--colorBrandBackgroundSelected);
 }
 
 .link:focus-visible {
