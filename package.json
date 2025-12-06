@@ -37,7 +37,7 @@
   },
   "resolutions": {
     "string-width": "8.1.0",
-    "wrap-ansi": "9.0.0"
+    "wrap-ansi": "9.0.2"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.8",
