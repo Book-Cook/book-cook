@@ -17,7 +17,7 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --max-warnings=0",
     "lint:fix": "next lint --fix",
     "export": "next build && next export",
     "analyze": "ANALYZE=true next build",
