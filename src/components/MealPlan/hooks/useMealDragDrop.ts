@@ -25,7 +25,7 @@ export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
     } else if (activeData?.type === "meal-card") {
       setDraggedRecipe({
         id: active.id as string,
-        title: activeData.title || 'Unknown Recipe',
+        title: activeData.title ?? 'Unknown Recipe',
         emoji: activeData.emoji,
       });
     }

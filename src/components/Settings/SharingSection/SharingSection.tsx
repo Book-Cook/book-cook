@@ -11,13 +11,12 @@ import { sharingSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 
-import { Text } from "../../Text";
-
 import {
   useShareWithUser,
   useDeleteSharedUser,
   useSharedUsers,
 } from "../../../clientToServer";
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   shareContainer: {

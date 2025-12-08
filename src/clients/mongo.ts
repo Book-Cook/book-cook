@@ -34,7 +34,7 @@ const customUri = process.env.MONGODB_URI;
 
 // Primary connection URI (SRV record)
 const uri =
-  customUri ||
+  customUri ??
   `mongodb+srv://${username}:${password}@${cluster}/${dbName}?retryWrites=true&w=majority`;
 
 // Simplified fallback for mobile hotspots (may not work with Atlas clusters)
@@ -123,9 +123,7 @@ async function createMongoConnection(): Promise<MongoClient> {
 try {
   if (process.env.NODE_ENV === "development") {
     // In development, use a global variable to preserve the connection across hot-reloads
-    if (!global._mongoClientPromise) {
-      global._mongoClientPromise = createMongoConnection();
-    }
+    global._mongoClientPromise ??= createMongoConnection();
     clientPromise = global._mongoClientPromise;
   } else {
     // In production, create a new connection

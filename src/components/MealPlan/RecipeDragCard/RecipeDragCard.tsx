@@ -100,6 +100,7 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
   const containerClass = `${styles.container} ${
     isDragging ? `${styles.isDragging} ${styles.overlay}` : ""
   }`;
+  const displayEmoji = emoji && emoji.trim().length > 0 ? emoji : "🍽️";
 
   return (
     <div
@@ -109,7 +110,7 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
       {...listeners}
       {...attributes}
     >
-      <span className={styles.emoji}>{emoji || "🍽️"}</span>
+      <span className={styles.emoji}>{displayEmoji}</span>
       <div className={styles.content}>
         <Text className={styles.title}>{title}</Text>
         {tags && tags.length > 0 && (

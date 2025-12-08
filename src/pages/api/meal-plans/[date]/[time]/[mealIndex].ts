@@ -1,3 +1,4 @@
+import type { Document, UpdateFilter } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
@@ -75,15 +76,16 @@ export default async function handler(
     // Remove the meal from the time slot
     if (timeSlot.meals.length === 1) {
       // Remove the entire time slot if it's the only meal
+      const removeTimeSlotUpdate = {
+        $pull: { "meals.timeSlots": { time: time as string } },
+        $set: { updatedAt: new Date() },
+      } as unknown as UpdateFilter<Document>;
       await db.collection("mealPlans").updateOne(
         { 
           userId: session.user.id, 
           date: date as string 
         },
-        {
-          $pull: { "meals.timeSlots": { time: time as string } } as any,
-          $set: { updatedAt: new Date() },
-        }
+        removeTimeSlotUpdate
       );
     } else {
       // Remove just the specific meal
@@ -99,14 +101,15 @@ export default async function handler(
       );
 
       // Clean up the array (remove null elements)
+      const cleanUpMealsUpdate = {
+        $pull: { [`meals.timeSlots.${timeSlotIndex}.meals`]: null },
+      } as unknown as UpdateFilter<Document>;
       await db.collection("mealPlans").updateOne(
         { 
           userId: session.user.id, 
           date: date as string 
         },
-        {
-          $pull: { [`meals.timeSlots.${timeSlotIndex}.meals`]: null } as any,
-        }
+        cleanUpMealsUpdate
       );
     }
 

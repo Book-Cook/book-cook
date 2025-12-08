@@ -7,7 +7,6 @@ import styles from "./RecipeCard.module.css";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { Card } from "../Card";
 import { RecipeActions } from "../RecipeActions";
-
 import { Text } from "../Text";
 
 const PLACEHOLDER_BLUR =

@@ -1,8 +1,13 @@
 import * as React from "react";
-import { makeStyles, Switch, tokens, Spinner } from "@fluentui/react-components";
-import { Button } from "../Button";
+import {
+  makeStyles,
+  Switch,
+  tokens,
+  Spinner,
+} from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
+import { Button } from "../Button";
 
 const useStyles = makeStyles({
   textArea: {
@@ -109,7 +114,11 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
         onChange={() => {
           setNewIsPublic(!newIsPublic);
         }}
-        label={newIsPublic ? "Public - Anyone can view this recipe" : "Private - Only you can view this recipe"}
+        label={
+          newIsPublic
+            ? "Public - Anyone can view this recipe"
+            : "Private - Only you can view this recipe"
+        }
         disabled={isLoading}
       />
     </ChangeDialog>

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Button } from "../../Button";
 import { Add24Regular } from "@fluentui/react-icons";
 
 import { useNewRecipeButtonStyles } from "./NewRecipeButton.styles";
+
+import { Button } from "../../Button";
 
 const NewRecipeButtonComponent = (props: { onClick: () => void }) => {
   const { onClick } = props;

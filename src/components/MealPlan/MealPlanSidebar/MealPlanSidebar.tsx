@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
-import { Text } from "../../Text";
 import { SearchBox } from "../../SearchBox";
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   container: {

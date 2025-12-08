@@ -1,7 +1,12 @@
 /**
  * Optimistic update utilities for meal plan mutations
  */
-import type { MealPlanWithRecipes } from "../../../clientToServer/types";
+import type {
+  CreateMealPlanPayload,
+  MealPlanWithRecipes,
+  MealType,
+} from "../../../clientToServer/types";
+import { mealTypeToTime } from "../../../utils/timeSlots";
 
 export interface OptimisticUpdateContext {
   dateRange: {
@@ -10,19 +15,25 @@ export interface OptimisticUpdateContext {
   };
 }
 
+type NewMealPayload = Partial<CreateMealPlanPayload> & { mealType?: string };
+type MoveMealPayload = {
+  date?: string;
+  time?: string;
+  mealIndex?: number;
+  newTime?: string;
+};
+
 /**
  * Add meal optimistically to meal plans data
  */
 export function addMealOptimistically(
   oldData: MealPlanWithRecipes[] | undefined,
-  newMeal: Record<string, unknown>,
+  newMeal: NewMealPayload,
   _context: OptimisticUpdateContext
 ) {
-  if (!oldData) {return oldData;}
+  if (!oldData || !newMeal.date) {return oldData;}
   
-  const date = newMeal.date as string;
-  const time = newMeal.time as string;
-  const mealType = newMeal.mealType as string;
+  const { date, time, mealType } = newMeal;
   
   return oldData.map(plan => {
     if (plan.date !== date) {return plan;}
@@ -33,10 +44,10 @@ export function addMealOptimistically(
       // Add to time slots
       const existingSlot = updatedPlan.meals.timeSlots?.find(slot => slot.time === time);
       const newMealItem = {
-        recipeId: newMeal.recipeId as string,
-        servings: (newMeal.servings as number) ?? 1,
+        recipeId: newMeal.recipeId ?? "",
+        servings: newMeal.servings ?? 1,
         time,
-        duration: (newMeal.duration as number) ?? 60,
+        duration: newMeal.duration ?? 60,
       };
       
       if (existingSlot) {
@@ -49,10 +60,18 @@ export function addMealOptimistically(
       }
     } else if (mealType) {
       // Legacy meal type
-      (updatedPlan.meals as any)[mealType] = {
-        recipeId: newMeal.recipeId as string,
-        servings: (newMeal.servings as number) || 1,
+      const legacyKey = mealType as MealType;
+      const legacyMealTypes: MealType[] = ["breakfast", "lunch", "dinner", "snack"];
+      if (!legacyMealTypes.includes(legacyKey)) {return plan;}
+      const meals = { ...updatedPlan.meals };
+      const defaultTime = time ?? mealTypeToTime(legacyKey);
+      meals[legacyKey] = {
+        recipeId: newMeal.recipeId ?? "",
+        servings: newMeal.servings ?? 1,
+        time: defaultTime,
+        duration: newMeal.duration ?? 60,
       };
+      updatedPlan.meals = meals;
     }
     
     return updatedPlan;
@@ -78,7 +97,9 @@ export function removeMealOptimistically(
     // Check if it's a legacy meal type
     const legacyTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
     if (legacyTypes.includes(time)) {
-      delete (updatedPlan.meals as any)[time];
+      const meals = { ...updatedPlan.meals };
+      delete meals[time as keyof MealPlanWithRecipes["meals"]];
+      updatedPlan.meals = meals;
     } else {
       // Remove from time slots
       const timeSlot = updatedPlan.meals.timeSlots?.find(slot => slot.time === time);
@@ -103,7 +124,7 @@ export function removeMealOptimistically(
  */
 export function moveMealOptimistically(
   oldData: MealPlanWithRecipes[] | undefined,
-  moveData: Record<string, unknown>
+  moveData: MoveMealPayload
 ) {
   if (!oldData) {return oldData;}
   

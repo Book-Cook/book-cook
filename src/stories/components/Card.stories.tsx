@@ -99,19 +99,19 @@ export const AllVariants: Story = {
       <div>
         <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Card Grid</h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
-          <Card onClick={() => console.log("Card 1")}>
+          <Card onClick={() => console.warn("Card 1")}>
             <h4 style={{ margin: 0, marginBottom: "8px" }}>Recipe 1</h4>
             <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
               Quick and easy meal
             </p>
           </Card>
-          <Card onClick={() => console.log("Card 2")}>
+          <Card onClick={() => console.warn("Card 2")}>
             <h4 style={{ margin: 0, marginBottom: "8px" }}>Recipe 2</h4>
             <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
               Healthy dinner option
             </p>
           </Card>
-          <Card onClick={() => console.log("Card 3")}>
+          <Card onClick={() => console.warn("Card 3")}>
             <h4 style={{ margin: 0, marginBottom: "8px" }}>Recipe 3</h4>
             <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
               Family favorite

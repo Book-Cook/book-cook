@@ -1,11 +1,35 @@
 // Meal plan mocks for Storybook
-import { withApiMocks } from "../mockApi";
+import { withApiMocks, type MockHandlerRequest } from "../mockApi";
 
+import type { Recipe } from "../../clientToServer/types";
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese } from "../../mocks/data/recipes";
 import { getMockId, getMockTimestamp } from "../../mocks/utils/mockDates";
 
+type MockMeal = {
+  recipeId: string;
+  servings: number;
+  time?: string;
+  duration?: number;
+  recipe?: Recipe;
+};
+
+type MockMealPlan = {
+  _id: string;
+  userId: string;
+  date: string;
+  meals: {
+    breakfast?: MockMeal;
+    lunch?: MockMeal;
+    dinner?: MockMeal;
+    snack?: MockMeal;
+    timeSlots?: Array<{ time: string; meals: MockMeal[] }>;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Mock meal plans data
-const mockMealPlans = [
+const mockMealPlans: MockMealPlan[] = [
   {
     _id: "mealplan_001",
     userId: "user_001",
@@ -70,24 +94,40 @@ const mockMealPlans = [
   },
 ];
 
+const parseRequestBody = (req: MockHandlerRequest) => {
+  const { body } = req;
+  if (!body) {return {};}
+  
+  if (typeof body === "string") {
+    try {
+      return JSON.parse(body);
+    } catch {
+      return {};
+    }
+  }
+  
+  if (body instanceof URLSearchParams) {
+    return Object.fromEntries(body.entries());
+  }
+  
+  return {};
+};
+
 // Create a stateful mock that can be updated
-let currentMealPlans = [...mockMealPlans];
+let currentMealPlans: MockMealPlan[] = [...mockMealPlans];
 
 // Helper to add meal to mock data
 const addMealToMockData = (date: string, time: string, recipeId: string, servings: number = 1) => {
   const existingPlanIndex = currentMealPlans.findIndex(plan => plan.date === date);
   
   if (existingPlanIndex >= 0) {
-    const plan = currentMealPlans[existingPlanIndex] as any;
+    const plan = currentMealPlans[existingPlanIndex];
     
-    // Initialize timeSlots if not exists
-    if (!plan.meals.timeSlots) {
-      plan.meals.timeSlots = [];
-    }
+    plan.meals.timeSlots ??= [];
     
     // Find existing time slot or create new one
-    const existingSlotIndex = plan.meals.timeSlots.findIndex((slot: any) => slot.time === time);
-    const newMeal = {
+    const existingSlotIndex = plan.meals.timeSlots.findIndex((slot) => slot.time === time);
+    const newMeal: MockMeal = {
       recipeId,
       servings,
       time,
@@ -122,7 +162,7 @@ const addMealToMockData = (date: string, time: string, recipeId: string, serving
       createdAt: getMockTimestamp(),
       updatedAt: getMockTimestamp(),
     };
-    currentMealPlans.push(newPlan as any);
+    currentMealPlans.push(newPlan);
   }
 };
 
@@ -140,8 +180,8 @@ export const mealPlanVariants = {
         response: { message: "Meal plan updated successfully" },
         status: 201,
         delay: 300,
-        handler: (req: any) => {
-          const body = JSON.parse(req.body || '{}');
+        handler: (req: MockHandlerRequest) => {
+          const body = parseRequestBody(req);
           const { date, time, recipeId, servings = 1 } = body;
           
           if (date && time && recipeId) {
@@ -173,8 +213,8 @@ export const mealPlanVariants = {
         response: { message: "Meal plan updated successfully" },
         status: 201,
         delay: 300,
-        handler: (req: any) => {
-          const body = JSON.parse(req.body || '{}');
+        handler: (req: MockHandlerRequest) => {
+          const body = parseRequestBody(req);
           const { date, time, recipeId, servings = 1 } = body;
           
           if (date && time && recipeId) {
@@ -204,17 +244,17 @@ export const mealPlanVariants = {
             totalCount: 0,
           },
         },
-        POST: {
-          response: { message: "Meal plan updated successfully" },
-          status: 201,
-          delay: 300,
-          handler: (req: any) => {
-            const body = JSON.parse(req.body || '{}');
-            const { date, time, recipeId, servings = 1 } = body;
-            
-            if (date && time && recipeId) {
-              addMealToMockData(date, time, recipeId, servings);
-            }
+      POST: {
+        response: { message: "Meal plan updated successfully" },
+        status: 201,
+        delay: 300,
+        handler: (req: MockHandlerRequest) => {
+          const body = parseRequestBody(req);
+          const { date, time, recipeId, servings = 1 } = body;
+          
+          if (date && time && recipeId) {
+            addMealToMockData(date, time, recipeId, servings);
+          }
             
             return { message: "Meal plan updated successfully" };
           }

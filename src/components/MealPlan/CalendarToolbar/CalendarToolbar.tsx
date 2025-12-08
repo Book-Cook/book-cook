@@ -1,6 +1,5 @@
 import * as React from "react";
 import { makeStyles, tokens } from "@fluentui/react-components";
-import { Button } from "../../Button";
 import {
   ChevronLeft24Regular,
   ChevronRight24Regular,
@@ -9,6 +8,7 @@ import {
 
 import type { CalendarView } from "../MealPlanCalendar/MealPlanCalendar.types";
 
+import { Button } from "../../Button";
 import { Text } from "../../Text";
 
 const useStyles = makeStyles({
@@ -80,96 +80,96 @@ interface CalendarToolbarProps {
   onToday: () => void;
 }
 
-export const CalendarToolbar: React.FC<CalendarToolbarProps> = React.memo(function CalendarToolbar({
-  view,
-  currentDate,
-  onViewChange,
-  onPrevious,
-  onNext,
-  onToday,
-}) {
-  const styles = useStyles();
+export const CalendarToolbar: React.FC<CalendarToolbarProps> = React.memo(
+  function CalendarToolbar({
+    view,
+    currentDate,
+    onViewChange,
+    onPrevious,
+    onNext,
+    onToday,
+  }) {
+    const styles = useStyles();
 
-  const formatDateDisplay = () => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
+    const formatDateDisplay = () => {
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+      };
+
+      if (view === "day") {
+        options.day = "numeric";
+        options.weekday = "long";
+      } else if (view === "week") {
+        const start = new Date(currentDate);
+        const day = start.getDay();
+        start.setDate(start.getDate() - day);
+        const end = new Date(start);
+        end.setDate(end.getDate() + 6);
+
+        return `${start.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })} - ${end.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}`;
+      }
+
+      return currentDate.toLocaleDateString("en-US", options);
     };
 
-    if (view === "day") {
-      options.day = "numeric";
-      options.weekday = "long";
-    } else if (view === "week") {
-      const start = new Date(currentDate);
-      const day = start.getDay();
-      start.setDate(start.getDate() - day);
-      const end = new Date(start);
-      end.setDate(end.getDate() + 6);
-      
-      return `${start.toLocaleDateString("en-US", { 
-        month: "short", 
-        day: "numeric" 
-      })} - ${end.toLocaleDateString("en-US", { 
-        month: "short", 
-        day: "numeric",
-        year: "numeric"
-      })}`;
-    }
+    return (
+      <div className={styles.viewControls}>
+        <div className={styles.viewButtons}>
+          <Button
+            appearance={view === "day" ? "primary" : "subtle"}
+            className={styles.viewButton}
+            onClick={() => onViewChange("day")}
+          >
+            Day
+          </Button>
+          <Button
+            appearance={view === "week" ? "primary" : "subtle"}
+            className={styles.viewButton}
+            onClick={() => onViewChange("week")}
+          >
+            Week
+          </Button>
+          <Button
+            appearance={view === "month" ? "primary" : "subtle"}
+            className={styles.viewButton}
+            onClick={() => onViewChange("month")}
+          >
+            Month
+          </Button>
+        </div>
 
-    return currentDate.toLocaleDateString("en-US", options);
-  };
+        <Text className={styles.dateDisplay}>{formatDateDisplay()}</Text>
 
-  return (
-    <div className={styles.viewControls}>
-      <div className={styles.viewButtons}>
-        <Button
-          appearance={view === "day" ? "primary" : "subtle"}
-          className={styles.viewButton}
-          onClick={() => onViewChange("day")}
-        >
-          Day
-        </Button>
-        <Button
-          appearance={view === "week" ? "primary" : "subtle"}
-          className={styles.viewButton}
-          onClick={() => onViewChange("week")}
-        >
-          Week
-        </Button>
-        <Button
-          appearance={view === "month" ? "primary" : "subtle"}
-          className={styles.viewButton}
-          onClick={() => onViewChange("month")}
-        >
-          Month
-        </Button>
+        <div className={styles.navigationButtons}>
+          <Button
+            appearance="subtle"
+            icon={<ChevronLeft24Regular />}
+            onClick={onPrevious}
+            title="Previous"
+          />
+          <Button
+            appearance="subtle"
+            icon={<CalendarToday24Regular />}
+            onClick={onToday}
+          >
+            Today
+          </Button>
+          <Button
+            appearance="subtle"
+            icon={<ChevronRight24Regular />}
+            onClick={onNext}
+            title="Next"
+          />
+        </div>
       </div>
-      
-      <Text className={styles.dateDisplay}>
-        {formatDateDisplay()}
-      </Text>
-      
-      <div className={styles.navigationButtons}>
-        <Button
-          appearance="subtle"
-          icon={<ChevronLeft24Regular />}
-          onClick={onPrevious}
-          title="Previous"
-        />
-        <Button
-          appearance="subtle"
-          icon={<CalendarToday24Regular />}
-          onClick={onToday}
-        >
-          Today
-        </Button>
-        <Button
-          appearance="subtle"
-          icon={<ChevronRight24Regular />}
-          onClick={onNext}
-          title="Next"
-        />
-      </div>
-    </div>
-  );
-});
+    );
+  }
+);

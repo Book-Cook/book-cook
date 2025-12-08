@@ -1,5 +1,3 @@
-import type * as React from "react";
-
 import type { CardProps } from "../Card";
 
 export type RecipeCardProps = Omit<CardProps, "onClick" | "children" | "title"> & {

@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Title2, Body1, tokens } from "@fluentui/react-components";
-import { Button } from "../Button";
 import { LockClosed24Regular } from "@fluentui/react-icons";
 import { makeStyles, shorthands } from "@griffel/react";
 import { signIn } from "next-auth/react";
+
+import { Button } from "../Button";
 
 const useStyles = makeStyles({
   container: {

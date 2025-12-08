@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useRecipeCarouselStyles } from "./RecipeCarousel.styles";
 import type { RecipesCarouselProps } from "./RecipeCarousel.types";
 import { RecipeCard } from "../RecipeCard/RecipeCard";
-
 import { Text, Heading3 } from "../Text";
 
 const emblaOptions: EmblaOptionsType = {
@@ -160,13 +159,13 @@ export const RecipesCarousel: React.FC<RecipesCarouselProps> = (props) => {
                 <div className={styles.slide} key={recipe._id}>
                   <RecipeCard
                     id={recipe._id}
-                    emoji={recipe?.emoji || "🍽️"}
+                    emoji={recipe?.emoji ?? "🍽️"}
                     title={recipe.title}
                     imageSrc={recipe.imageURL}
                     tags={recipe.tags}
                     createdDate={recipe.createdAt}
                     isPublic={recipe?.isPublic}
-                    isPast={(recipe as any).isPast}
+                    isPast={recipe.isPast ?? false}
                     isMinimal
                   />
                   <div

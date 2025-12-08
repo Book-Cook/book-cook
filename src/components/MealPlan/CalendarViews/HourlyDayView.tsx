@@ -4,9 +4,15 @@ import { makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 import { formatDateString } from "../utils/formatDateString";
 
-import type { MealPlanWithRecipes, MealItem } from "../../../clientToServer/types";
-import { generateTimeSlots, DEFAULT_TIME_CONFIG, mealTypeToTime } from "../../../utils/timeSlots";
-
+import type {
+  MealPlanWithRecipes,
+  MealItem,
+} from "../../../clientToServer/types";
+import {
+  generateTimeSlots,
+  DEFAULT_TIME_CONFIG,
+  mealTypeToTime,
+} from "../../../utils/timeSlots";
 import { Text } from "../../Text";
 
 const useStyles = makeStyles({
@@ -58,7 +64,11 @@ const useStyles = makeStyles({
 interface HourlyDayViewProps {
   currentDate: Date;
   mealPlans: MealPlanWithRecipes[];
-  onMealRemove: (date: string, time: string, mealIndex: number) => Promise<void>;
+  onMealRemove: (
+    date: string,
+    time: string,
+    mealIndex: number
+  ) => Promise<void>;
 }
 
 export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
@@ -70,49 +80,62 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
 
   const dateStr = formatDateString(currentDate);
   const timeSlots = generateTimeSlots(DEFAULT_TIME_CONFIG);
-  
+
   // Get meal plan for current date
-  const dayPlan = mealPlans.find(plan => plan.date === dateStr);
-  
+  const dayPlan = mealPlans.find((plan) => plan.date === dateStr);
+
   // Get all meals for the day, organized by time
-  const getAllMealsOrganized = (): Map<string, Array<MealItem & { recipe?: Record<string, unknown> }>> => {
-    const mealsByTime = new Map<string, Array<MealItem & { recipe?: Record<string, unknown> }>>();
-    
+  const getAllMealsOrganized = (): Map<
+    string,
+    Array<MealItem & { recipe?: Record<string, unknown> }>
+  > => {
+    const mealsByTime = new Map<
+      string,
+      Array<MealItem & { recipe?: Record<string, unknown> }>
+    >();
+
     if (!dayPlan) {
       return mealsByTime;
     }
-    
+
     // Add time-based slots
     if (dayPlan.meals.timeSlots && Array.isArray(dayPlan.meals.timeSlots)) {
-      dayPlan.meals.timeSlots.forEach(slot => {
+      dayPlan.meals.timeSlots.forEach((slot) => {
         if (slot.time && slot.meals) {
           mealsByTime.set(slot.time, slot.meals);
         }
       });
     }
-    
+
     // Add legacy meal types at their default times
-    const legacyMealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
+    const legacyMealTypes = ["breakfast", "lunch", "dinner", "snack"] as const;
 
     legacyMealTypes.forEach((mealType) => {
       const meal = dayPlan.meals[mealType as keyof typeof dayPlan.meals];
-      if (meal && typeof meal === 'object' && 'recipeId' in meal && 'servings' in meal) {
+      if (
+        meal &&
+        typeof meal === "object" &&
+        "recipeId" in meal &&
+        "servings" in meal
+      ) {
         const defaultTime = mealTypeToTime(mealType);
         // Only add if we don't already have a meal at this time from timeSlots
         if (!mealsByTime.has(defaultTime)) {
-          mealsByTime.set(defaultTime, [{
-            ...meal,
-            time: defaultTime,
-          } as MealItem & { recipe?: Record<string, unknown> }]);
+          mealsByTime.set(defaultTime, [
+            {
+              ...meal,
+              time: defaultTime,
+            } as MealItem & { recipe?: Record<string, unknown> },
+          ]);
         }
       }
     });
-    
+
     return mealsByTime;
   };
-  
+
   const allMeals = getAllMealsOrganized();
-  
+
   const formatDateHeader = (date: Date): string => {
     return date.toLocaleDateString("en-US", {
       weekday: "long",
@@ -121,7 +144,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
       day: "numeric",
     });
   };
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -129,24 +152,34 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
           {formatDateHeader(currentDate)}
         </Text>
       </div>
-      
+
       <div className={styles.timeGrid}>
-        {timeSlots.map(time => {
+        {timeSlots.map((time) => {
           const meals = allMeals.get(time) ?? [];
-          
+
           // Check if this time has passed
           const now = new Date();
-          const [hours, minutes] = time.split(':').map(Number);
+          const [hours, minutes] = time.split(":").map(Number);
           const timeDate = new Date(currentDate);
           timeDate.setHours(hours, minutes, 0, 0);
           const isPast = timeDate < now;
-          
+
           return (
             <React.Fragment key={time}>
-              <div className={mergeClasses(styles.timeLabel, isPast && styles.pastTimeLabel)}>
+              <div
+                className={mergeClasses(
+                  styles.timeLabel,
+                  isPast && styles.pastTimeLabel
+                )}
+              >
                 {time}
               </div>
-              <div className={mergeClasses(styles.timeSlotContainer, isPast && styles.pastTime)}>
+              <div
+                className={mergeClasses(
+                  styles.timeSlotContainer,
+                  isPast && styles.pastTime
+                )}
+              >
                 <TimeSlot
                   date={dateStr}
                   time={time}

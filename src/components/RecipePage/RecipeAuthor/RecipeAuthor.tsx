@@ -1,12 +1,10 @@
 import * as React from "react";
-
 import { PersonRegular } from "@fluentui/react-icons";
 
 import { useStyles } from "./RecipeAuthor.styles";
 
 import { useFetchUser } from "../../../clientToServer/fetch/useFetchUser";
 import { useRecipe } from "../../../context";
-
 import { Text } from "../../Text";
 
 const RecipeAuthorComponent: React.FC = () => {
