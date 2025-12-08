@@ -10,7 +10,6 @@ import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
-import { TagPicker } from "../TagPicker/TagPicker";
 import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
 import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
@@ -24,8 +23,6 @@ export const RecipeGallery = () => {
   const { data: session } = useSession();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
-  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  const [availableTags, setAvailableTags] = React.useState<string[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(20);
 
@@ -38,7 +35,6 @@ export const RecipeGallery = () => {
       "recipes",
       searchBoxValue,
       sortOption,
-      selectedTags,
       currentPage,
       pageSize,
     ],
@@ -46,7 +42,6 @@ export const RecipeGallery = () => {
       fetchRecipesPaginated({
         searchBoxValue,
         orderBy: sortOption,
-        selectedTags,
         offset: (currentPage - 1) * pageSize,
         limit: pageSize,
       }),
@@ -58,31 +53,10 @@ export const RecipeGallery = () => {
 
   const router = useRouter();
 
-  // Extract unique tags from recipes
-  React.useEffect(() => {
-    if (recipes?.length) {
-      const uniqueTags = Array.from(
-        new Set(recipes.flatMap((recipe) => recipe.tags ?? []))
-      );
-      setAvailableTags(uniqueTags);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recipes?.length]);
-
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchBoxValue, sortOption, selectedTags]);
-
-  React.useEffect(() => {
-    const { tag } = router.query;
-    if (tag && typeof tag === "string") {
-      if (!selectedTags.includes(tag)) {
-        setSelectedTags([...selectedTags, tag]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query]);
+  }, [searchBoxValue, sortOption]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -121,8 +95,6 @@ export const RecipeGallery = () => {
               {searchBoxValue
                 ? `matching "${searchBoxValue}"`
                 : "in your collection"}
-              {selectedTags.length > 0 &&
-                ` with tags: ${selectedTags.join(", ")}`}
             </Text>
           </div>
           <div className={styles.controlsRow}>
@@ -141,11 +113,6 @@ export const RecipeGallery = () => {
               <Option value={"ascTitle"}>Sort by title (asc)</Option>
               <Option value={"descTitle"}>Sort by title (desc)</Option>
             </Dropdown>
-            <TagPicker
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
           </div>
         </div>
 

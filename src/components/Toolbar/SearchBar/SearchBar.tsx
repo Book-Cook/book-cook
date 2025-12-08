@@ -62,7 +62,7 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
       value={inputValue}
       onChange={onSearchBarChange}
       appearance="outline"
-      placeholder="Search for snacks"
+      placeholder="Search recipes or tags"
       onKeyDown={handleKeyDown}
     />
   );

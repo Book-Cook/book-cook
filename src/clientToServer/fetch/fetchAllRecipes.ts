@@ -19,7 +19,7 @@ export interface RecipesResponse {
 export interface FetchRecipesParams {
   searchBoxValue: string;
   orderBy: string;
-  selectedTags: string[];
+  selectedTags?: string[];
   offset?: number;
   limit?: number;
 }
@@ -27,7 +27,7 @@ export interface FetchRecipesParams {
 export const fetchAllRecipes = async (
   searchBoxValue: string,
   orderBy: string,
-  selectedTags: string[]
+  selectedTags: string[] = []
 ): Promise<Recipe[]> => {
   const response = await fetchRecipesPaginated({
     searchBoxValue,
@@ -40,7 +40,7 @@ export const fetchAllRecipes = async (
 export const fetchRecipesPaginated = async ({
   searchBoxValue,
   orderBy,
-  selectedTags,
+  selectedTags = [],
   offset = 0,
   limit = 20,
 }: FetchRecipesParams): Promise<RecipesResponse> => {
