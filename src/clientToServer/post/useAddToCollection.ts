@@ -43,14 +43,11 @@ export function useAddToCollection() {
       const previousCollections = queryClient.getQueryData(["collections"]);
 
       queryClient.setQueryData(["collections"], (old: unknown) => {
-        if (!old) {
-          return old;
-        }
-        const recipes = old as Array<{ _id: string }>;
+        const recipes = Array.isArray(old) ? (old as Array<{ _id: string }>) : [];
         const isInCollection = recipes.some((recipe) => recipe._id === recipeId);
         return isInCollection 
           ? recipes.filter((recipe) => recipe._id !== recipeId)
-          : recipes;
+          : [...recipes, { _id: recipeId }];
       });
 
       return { previousCollections };
