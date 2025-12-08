@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Find the time slot
-    const timeSlots = mealPlan.meals?.timeSlots || [];
+    const timeSlots = mealPlan.meals?.timeSlots ?? [];
     const timeSlotIndex = timeSlots.findIndex((slot: { time: string }) => slot.time === time);
 
     if (timeSlotIndex === -1) {

@@ -36,7 +36,7 @@ export const Examples: Story = {
         position={16}
         date="2024-01-15"
         mealIndex={0}
-        onRemove={() => console.log("Removed Spaghetti Carbonara")}
+        onRemove={() => console.warn("Removed Spaghetti Carbonara")}
       />
       <MealCard
         id="meal-2"
@@ -48,7 +48,7 @@ export const Examples: Story = {
         position={96}
         date="2024-01-15"
         mealIndex={1}
-        onRemove={() => console.log("Removed Avocado Toast")}
+        onRemove={() => console.warn("Removed Avocado Toast")}
       />
       <MealCard
         id="meal-3"
@@ -60,7 +60,7 @@ export const Examples: Story = {
         position={180}
         date="2024-01-15"
         mealIndex={2}
-        onRemove={() => console.log("Removed Smoothie")}
+        onRemove={() => console.warn("Removed Smoothie")}
       />
     </div>
   ),

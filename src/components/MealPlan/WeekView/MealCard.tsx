@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 
@@ -7,7 +6,6 @@ import { useMealCardStyles } from "./MealCard.styles";
 import type { MealCardProps } from "./MealCard.types";
 
 import { Button } from "../../Button";
-
 import { Text } from "../../Text";
 
 export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(

@@ -3,16 +3,20 @@
  */
 import * as React from "react";
 import { mergeClasses } from "@fluentui/react-components";
-import { Button } from "../../Button";
 import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 
 import type { MealItemProps } from "./MealItem.types";
 import { useTimeSlotStyles } from "../TimeSlot/TimeSlot.styles";
 
+import { Button } from "../../Button";
 import { Text } from "../../Text";
 
-export const MealItem: React.FC<MealItemProps> = ({ meal, mealIndex, onRemove }) => {
+export const MealItem: React.FC<MealItemProps> = ({
+  meal,
+  mealIndex,
+  onRemove,
+}) => {
   const styles = useTimeSlotStyles();
   const router = useRouter();
 
@@ -40,7 +44,7 @@ export const MealItem: React.FC<MealItemProps> = ({ meal, mealIndex, onRemove })
         </Text>
         {meal.servings && meal.servings > 1 && (
           <Text className={styles.servings}>
-            {meal.servings} serving{meal.servings > 1 ? 's' : ''}
+            {meal.servings} serving{meal.servings > 1 ? "s" : ""}
           </Text>
         )}
       </div>

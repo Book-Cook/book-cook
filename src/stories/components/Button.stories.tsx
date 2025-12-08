@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Add24Regular, Delete24Regular, Edit24Regular } from "@fluentui/react-icons";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../components/Button";
 

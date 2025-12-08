@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { useDroppable } from "@dnd-kit/core";
 
 import { useTimeSlotStyles } from "./TimeSlot.styles";
@@ -7,7 +6,6 @@ import type { TimeSlotProps } from "./TimeSlot.types";
 import { MealItem as MealItemComponent } from "../components/MealItem";
 
 import { formatTimeForDisplay } from "../../../utils/timeSlots";
-
 import { Text } from "../../Text";
 
 export const TimeSlot: React.FC<TimeSlotProps> = ({
@@ -18,7 +16,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
   showTimeLabel = true,
 }) => {
   const styles = useTimeSlotStyles();
-  
+
   const { isOver, setNodeRef } = useDroppable({
     id: `${date}-${time}`,
     data: {
@@ -33,11 +31,9 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
   return (
     <div ref={setNodeRef} className={containerClass}>
       {showTimeLabel && (
-        <Text className={styles.timeLabel}>
-          {formatTimeForDisplay(time)}
-        </Text>
+        <Text className={styles.timeLabel}>{formatTimeForDisplay(time)}</Text>
       )}
-      
+
       {meals.length === 0 ? (
         <div className={styles.empty}>
           <Text>Drop recipe here</Text>

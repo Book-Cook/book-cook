@@ -4,7 +4,7 @@ export type RecipesCarouselProps = {
   /**
    * The list of recipes to be displayed in the carousel.
    */
-  recipes: Recipe[] | [];
+  recipes: Array<Recipe & { isPast?: boolean }> | [];
 
   /**
    * The title of the carousel, displayed above the recipes.

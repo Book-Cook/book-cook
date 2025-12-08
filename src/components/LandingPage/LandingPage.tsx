@@ -13,7 +13,6 @@ import { useSession, signIn } from "next-auth/react";
 
 import { useStyles } from "./LandingPage.styles";
 import { FadeIn, ScaleOnHover } from "../Animation";
-
 import { Text } from "../Text";
 
 // Mock data for featured recipes

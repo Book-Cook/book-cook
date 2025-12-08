@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, type Document, type UpdateFilter } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
@@ -180,28 +180,30 @@ async function handlePost(
         
         if (existingTimeSlotIndex >= 0) {
           // Add to existing time slot
+          const addToExistingSlot = {
+            $push: {
+              [`meals.timeSlots.${existingTimeSlotIndex}.meals`]: mealData,
+            },
+            $set: { updatedAt: new Date() },
+          } as unknown as UpdateFilter<Document>;
           await db.collection("mealPlans").updateOne(
             { userId, date },
-            {
-              $push: {
-                [`meals.timeSlots.${existingTimeSlotIndex}.meals`]: mealData
-              } as any,
-              $set: { updatedAt: new Date() },
-            }
+            addToExistingSlot
           );
         } else {
           // Create new time slot
+          const createTimeSlotUpdate = {
+            $push: {
+              "meals.timeSlots": {
+                time,
+                meals: [mealData],
+              },
+            },
+            $set: { updatedAt: new Date() },
+          } as unknown as UpdateFilter<Document>;
           await db.collection("mealPlans").updateOne(
             { userId, date },
-            {
-              $push: {
-                "meals.timeSlots": {
-                  time,
-                  meals: [mealData]
-                }
-              } as any,
-              $set: { updatedAt: new Date() },
-            }
+            createTimeSlotUpdate
           );
         }
       } else {

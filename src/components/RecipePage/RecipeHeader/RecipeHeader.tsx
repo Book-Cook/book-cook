@@ -1,5 +1,14 @@
 import React, { useMemo, useState } from "react";
-import { Button, Tooltip, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
+import {
+  Button,
+  Tooltip,
+  useToastController,
+  Toast,
+  ToastTitle,
+  ToastBody,
+  Toaster,
+  useId,
+} from "@fluentui/react-components";
 import {
   Heart20Regular,
   Heart20Filled,
@@ -14,11 +23,6 @@ import { useHeaderStyles } from "./RecipeHeader.styles";
 import { RecipeHeaderSaveBar } from "./RecipeHeaderSaveBar";
 import { RecipeAuthor } from "../RecipeAuthor/RecipeAuthor";
 
-const ChangeTitleDialog = dynamic(
-  () => import("../../RecipeActions/ChangeTitleDialog"),
-  { loading: () => null, ssr: false }
-);
-
 import {
   useConvertMeasurements,
   fetchRecipeCollections,
@@ -27,8 +31,12 @@ import type { Recipe } from "../../../clientToServer";
 import { useRecipe } from "../../../context";
 import { FadeIn } from "../../Animation";
 import { RecipeActions } from "../../RecipeActions";
-
 import { Text } from "../../Text";
+
+const ChangeTitleDialog = dynamic(
+  () => import("../../RecipeActions/ChangeTitleDialog"),
+  { loading: () => null, ssr: false }
+);
 
 const RecipeHeaderComponent = () => {
   const styles = useHeaderStyles();

@@ -6,9 +6,8 @@ import { fetchRecipeCollections } from "src/clientToServer";
 import type { Recipe } from "src/clientToServer";
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
-import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
-
 import { Text, Heading1, Heading2 } from "../components/Text";
+import { RecipeProvider } from "../context/RecipeProvider/RecipeProvider";
 
 const useCollectionStyles = makeStyles({
   section: {

@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Button, Dropdown, Option, makeStyles, tokens } from "@fluentui/react-components";
-import { SearchBox } from "../components/SearchBox";
 import { Search24Regular, Filter24Regular } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
-
+import { SearchBox } from "../components/SearchBox";
 import { Text, Heading1 } from "../components/Text";
 
 interface PublicRecipe {

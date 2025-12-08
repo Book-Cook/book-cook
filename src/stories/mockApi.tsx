@@ -2,21 +2,28 @@ import React, { useEffect } from 'react';
 
 import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from '../mocks/data/recipes';
 
+export type MockHandlerRequest = { body?: BodyInit | null; headers?: HeadersInit; method: string };
+
+type SingleMockConfig = {
+  method?: string;
+  response: unknown;
+  status?: number;
+  delay?: number;
+  handler?: (req: MockHandlerRequest) => unknown;
+};
+
+type MethodSpecificConfig = {
+  [method: string]: SingleMockConfig;
+};
+
 export interface ApiMockConfig {
   [endpoint: string]: {
     method?: string;
     response: unknown;
     status?: number;
     delay?: number;
-    handler?: (req: any) => unknown;
-  } | {
-    [method: string]: {
-      response: unknown;
-      status?: number;
-      delay?: number;
-      handler?: (req: any) => unknown;
-    };
-  };
+    handler?: (req: MockHandlerRequest) => unknown;
+  } | MethodSpecificConfig;
 }
 
 export const defaultMocks: ApiMockConfig = {
@@ -40,34 +47,34 @@ const createFetchMock = (mockConfig: ApiMockConfig) => {
     
     for (const [endpoint, config] of Object.entries(mockConfig)) {
       if (urlString.includes(endpoint)) {
-        let mockConfig: any = null;
+        let matchedConfig: SingleMockConfig | undefined;
         
         // Check if this is a method-specific configuration
         if ('method' in config || 'response' in config) {
           // Legacy format: single config with optional method
-          const legacyConfig = config as { method?: string; response: unknown; status?: number; delay?: number; handler?: (req: any) => unknown; };
+          const legacyConfig = config as SingleMockConfig;
           const mockMethod = legacyConfig.method?.toUpperCase() ?? 'GET';
           if (method === mockMethod) {
-            mockConfig = legacyConfig;
+            matchedConfig = legacyConfig;
           }
         } else {
           // New format: method-specific configs
-          const methodConfigs = config as { [method: string]: { response: unknown; status?: number; delay?: number; handler?: (req: any) => unknown; } };
-          mockConfig = methodConfigs[method];
+          const methodConfigs = config;
+          matchedConfig = methodConfigs[method];
         }
         
-        if (mockConfig) {
-          if (mockConfig.delay) {
-            await new Promise(resolve => setTimeout(resolve, mockConfig.delay));
+        if (matchedConfig) {
+          if (matchedConfig.delay) {
+            await new Promise(resolve => setTimeout(resolve, matchedConfig.delay));
           }
           
           // Use handler if available, otherwise use response
-          const responseData = mockConfig.handler 
-            ? mockConfig.handler({ body: options?.body, headers: options?.headers, method })
-            : mockConfig.response;
+          const responseData = matchedConfig.handler 
+            ? matchedConfig.handler({ body: options?.body ?? null, headers: options?.headers, method })
+            : matchedConfig.response;
           
           return new Response(JSON.stringify(responseData), {
-            status: mockConfig.status ?? 200,
+            status: matchedConfig.status ?? 200,
             headers: { 'Content-Type': 'application/json' }
           });
         }

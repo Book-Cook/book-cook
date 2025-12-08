@@ -94,8 +94,8 @@ const HomePage = () => {
   const recipeCollectionsList =
     recipeCollections && recipeCollections?.length > 0 ? recipeCollections : [];
 
-  const upcomingMealsList = upcomingMealData?.meals || [];
-  const initialScrollIndex = upcomingMealData?.currentMealIndex || 0;
+  const upcomingMealsList = upcomingMealData?.meals ?? [];
+  const initialScrollIndex = upcomingMealData?.currentMealIndex ?? 0;
 
   // Refetch upcoming meals when navigating to home page
   React.useEffect(() => {
