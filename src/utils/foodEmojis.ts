@@ -23,6 +23,7 @@ export const FOOD_EMOJIS = {
   "🧆": { name: "falafel", category: "main dishes" },
   "🥙": { name: "stuffed flatbread", category: "main dishes" },
   "🥫": { name: "sauce can soup", category: "main dishes" },
+  "🍣": { name: "sushi", category: "main dishes" },
 
   // Rice & Grains
   "🍚": { name: "cooked rice", category: "rice & grains" },
@@ -75,9 +76,9 @@ export const FOOD_EMOJIS = {
   "🍭": { name: "lollipop candy", category: "desserts" },
 
   // Beverages
-  "☕": { name: "hot beverage coffee", category: "drinks" },
+  "☕": { name: "hot beverage coffee latte", category: "drinks" },
   "🫖": { name: "teapot", category: "drinks" },
-  "🍵": { name: "tea", category: "drinks" },
+  "🍵": { name: "tea matcha", category: "drinks" },
   "🧃": { name: "juice box", category: "drinks" },
   "🥤": { name: "cup with straw", category: "drinks" },
   "🧋": { name: "bubble tea", category: "drinks" },

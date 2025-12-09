@@ -6,7 +6,7 @@ export const navLinks = [
   { url: "/recipes", label: "Recipes" },
   { url: "/collections", label: "Collections" },
   // { url: "/discover", label: "Discover" },
-  { url: "/meal-plan", label: "Meal Plan" },
+  // { url: "/meal-plan", label: "Meal Plan" },
   // { url: "/pantry", label: "Pantry" },
   // { url: "/explore", label: "Explore" },
   // { url: "/shopping-list", label: "Shopping List" },
