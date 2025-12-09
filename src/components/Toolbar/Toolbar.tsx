@@ -18,17 +18,14 @@ import { UserProfile } from "./UserProfile";
 import { useMediaQuery } from "../../hooks";
 
 const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
-  loading: () => null,
   ssr: false,
 });
-const NewRecipeDialog = dynamic(
-  () => import("./NewRecipeDialog").then((mod) => mod.NewRecipeDialog),
-  { loading: () => null }
-);
+const NewRecipeDialog = dynamic(() => import("./NewRecipeDialog").then((mod) => mod.NewRecipeDialog), {
+  ssr: false,
+});
 
 export const Toolbar = () => {
   const router = useRouter();
-  const path = router.asPath;
 
   const { data: session } = useSession();
   const isAuthenticated = Boolean(session?.user);
@@ -37,10 +34,38 @@ export const Toolbar = () => {
   const [isNewRecipeDialogOpen, setIsNewRecipeDialogOpen] =
     React.useState(false);
 
-  const toggleMenu = React.useCallback(
-    () => setIsMenuOpen((prev) => !prev),
-    []
+  const toggleMenu = React.useCallback(() => {
+    setIsMenuOpen((prev) => !prev);
+  }, []);
+
+  const handleNavigate = React.useCallback(
+    async (url: string) => {
+      await router.push(url);
+      setIsMenuOpen(false);
+    },
+    [router]
   );
+
+  const openNewRecipe = React.useCallback(() => {
+    setIsNewRecipeDialogOpen(true);
+  }, []);
+
+  const showSearch = router.pathname !== "/recipes";
+
+  if (!isAuthenticated) {
+    return (
+      <ToolbarComponent className={styles.root}>
+        <div className={styles.leftSection}>
+          <Logo />
+        </div>
+        <div className={styles.rightSection}>
+          <Button appearance="primary" onClick={() => signIn("google")}>
+            Sign In
+          </Button>
+        </div>
+      </ToolbarComponent>
+    );
+  }
 
   return (
     <>
@@ -64,42 +89,27 @@ export const Toolbar = () => {
         )}
         <div className={styles.leftSection}>
           <Logo />
-          {isAuthenticated && (
-            <div className={styles.navLinks}>
-              <NavigationLinks currentPath={router.pathname} />
-            </div>
-          )}
+          <div className={styles.navLinks}>
+            <NavigationLinks currentPath={router.pathname} />
+          </div>
         </div>
         <div className={styles.rightSection}>
-          {isAuthenticated && (
-            <>
-              <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
-              {path !== "/recipes" && (
-                <div className={styles.searchBarWrapper}>
-                  <SearchBar />
-                </div>
-              )}
-            </>
+          <NewRecipeButton onClick={openNewRecipe} />
+          {showSearch && (
+            <div className={styles.searchBarWrapper}>
+              <SearchBar />
+            </div>
           )}
-          {isAuthenticated ? (
-            <UserProfile />
-          ) : (
-            <Button appearance="primary" onClick={() => signIn("google")}>
-              Sign In
-            </Button>
-          )}
+          <UserProfile />
         </div>
       </ToolbarComponent>
-      {isAuthenticated && (
+      {isMobile && (
         <MobileDrawer
           isOpen={isMenuOpen}
-          onNewRecipeDialogOpen={() => setIsNewRecipeDialogOpen(true)}
+          onNewRecipeDialogOpen={openNewRecipe}
           onOpenChange={setIsMenuOpen}
           currentPath={router.pathname}
-          onNavigate={async (url) => {
-            await router.push(url);
-            setIsMenuOpen(false);
-          }}
+          onNavigate={handleNavigate}
         />
       )}
     </>

@@ -16,7 +16,7 @@ export type SearchBarProps = {
   onSearch?: () => void;
 };
 
-const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
+export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
   const [inputValue, setInputValue] = React.useState(searchBoxValue);
@@ -67,5 +67,3 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
     />
   );
 };
-
-export const SearchBar = React.memo(SearchBarComponent);

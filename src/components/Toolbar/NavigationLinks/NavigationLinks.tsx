@@ -6,9 +6,7 @@ import { navLinks } from "../constants";
 
 import { Link } from "../../Link";
 
-const NavigationLinksComponent: React.FC<NavigationLinksProps> = ({
-  currentPath,
-}) => {
+export const NavigationLinks: React.FC<NavigationLinksProps> = ({ currentPath }) => {
   return (
     <>
       {navLinks.map((link) => (
@@ -26,5 +24,3 @@ const NavigationLinksComponent: React.FC<NavigationLinksProps> = ({
     </>
   );
 };
-
-export const NavigationLinks = React.memo(NavigationLinksComponent);

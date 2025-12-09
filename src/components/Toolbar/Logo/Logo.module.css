@@ -1,0 +1,38 @@
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacingHorizontalSNudge);
+  font-weight: var(--fontWeightSemibold);
+  font-size: var(--fontSizeBase500);
+  color: var(--colorNeutralForeground1);
+  text-decoration-line: none;
+  cursor: pointer;
+  outline-style: none;
+}
+
+.logoLink:hover .logoIcon {
+  transform: translateY(-2px);
+  color: var(--colorBrandForeground2);
+}
+
+.logoLink:hover .logoText {
+  color: var(--colorNeutralForeground1);
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+  color: var(--colorBrandForeground1);
+  font-size: 24px;
+  transition-property: transform, color;
+  transition-duration: var(--durationNormal);
+  transition-timing-function: var(--curveEasyEase);
+}
+
+.logoText {
+  line-height: 1.2;
+  color: var(--colorNeutralForeground1);
+  transition-property: color;
+  transition-duration: var(--durationNormal);
+  transition-timing-function: var(--curveEasyEase);
+}

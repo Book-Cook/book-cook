@@ -6,7 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 
 import { Text } from "../../Text";
 
-const UserProfileComponent = () => {
+export const UserProfile: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -70,5 +70,3 @@ const UserProfileComponent = () => {
     </Menu>
   );
 };
-
-export const UserProfile = React.memo(UserProfileComponent);

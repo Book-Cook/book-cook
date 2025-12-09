@@ -5,8 +5,7 @@ import { useNewRecipeButtonStyles } from "./NewRecipeButton.styles";
 
 import { Button } from "../../Button";
 
-const NewRecipeButtonComponent = (props: { onClick: () => void }) => {
-  const { onClick } = props;
+export const NewRecipeButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   const styles = useNewRecipeButtonStyles();
 
   return (
@@ -20,5 +19,3 @@ const NewRecipeButtonComponent = (props: { onClick: () => void }) => {
     </Button>
   );
 };
-
-export const NewRecipeButton = React.memo(NewRecipeButtonComponent);
