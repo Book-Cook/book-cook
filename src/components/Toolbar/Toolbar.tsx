@@ -11,9 +11,8 @@ import { useSession, signIn } from "next-auth/react";
 import { Logo } from "./Logo";
 import { NavigationLinks } from "./NavigationLinks";
 import { NewRecipeButton } from "./NewRecipeButton";
-import { NewRecipeDialog } from "./NewRecipeDialog";
 import { SearchBar } from "./SearchBar";
-import { useToolbarStyles } from "./Toolbar.styles";
+import styles from "./Toolbar.module.css";
 import { UserProfile } from "./UserProfile";
 
 import { useMediaQuery } from "../../hooks";
@@ -22,28 +21,37 @@ const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
   loading: () => null,
   ssr: false,
 });
+const NewRecipeDialog = dynamic(
+  () => import("./NewRecipeDialog").then((mod) => mod.NewRecipeDialog),
+  { loading: () => null }
+);
 
 export const Toolbar = () => {
-  const styles = useToolbarStyles();
   const router = useRouter();
   const path = router.asPath;
 
   const { data: session } = useSession();
+  const isAuthenticated = Boolean(session?.user);
   const isMobile = useMediaQuery("(max-width: 900px)");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isNewRecipeDialogOpen, setIsNewRecipeDialogOpen] =
     React.useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = React.useCallback(
+    () => setIsMenuOpen((prev) => !prev),
+    []
+  );
 
   return (
     <>
-      <NewRecipeDialog
-        isOpen={isNewRecipeDialogOpen}
-        onClose={() => {
-          setIsNewRecipeDialogOpen(false);
-        }}
-      />
+      {isNewRecipeDialogOpen && (
+        <NewRecipeDialog
+          isOpen
+          onClose={() => {
+            setIsNewRecipeDialogOpen(false);
+          }}
+        />
+      )}
       <ToolbarComponent className={styles.root}>
         {isMobile && (
           <Button
@@ -56,14 +64,14 @@ export const Toolbar = () => {
         )}
         <div className={styles.leftSection}>
           <Logo />
-          {session?.user && (
+          {isAuthenticated && (
             <div className={styles.navLinks}>
               <NavigationLinks currentPath={router.pathname} />
             </div>
           )}
         </div>
         <div className={styles.rightSection}>
-          {session?.user && (
+          {isAuthenticated && (
             <>
               <NewRecipeButton onClick={() => setIsNewRecipeDialogOpen(true)} />
               {path !== "/recipes" && (
@@ -73,7 +81,7 @@ export const Toolbar = () => {
               )}
             </>
           )}
-          {session?.user ? (
+          {isAuthenticated ? (
             <UserProfile />
           ) : (
             <Button appearance="primary" onClick={() => signIn("google")}>
@@ -82,7 +90,7 @@ export const Toolbar = () => {
           )}
         </div>
       </ToolbarComponent>
-      {session?.user && (
+      {isAuthenticated && (
         <MobileDrawer
           isOpen={isMenuOpen}
           onNewRecipeDialogOpen={() => setIsNewRecipeDialogOpen(true)}

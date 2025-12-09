@@ -42,11 +42,9 @@
   "dependencies": {
     "@ai-sdk/google": "^1.2.8",
     "@ai-sdk/openai": "^1.3.7",
-    "@ai-sdk/react": "^2.0.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@fluentui/react-components": "^9.46.8",
     "@fluentui/react-window-provider": "^2.2.29",
@@ -64,15 +62,11 @@
     "dompurify": "^3.2.3",
     "embla-carousel-react": "^8.5.2",
     "fast-deep-equal": "^3.1.3",
-    "grapheme-splitter": "^1.0.4",
     "mongodb": "^7.0.0",
     "next": "^15.3.0",
     "next-auth": "^4.24.11",
-    "node-emoji": "^2.2.0",
-    "openai": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "unicode-emoji-json": "^0.8.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
