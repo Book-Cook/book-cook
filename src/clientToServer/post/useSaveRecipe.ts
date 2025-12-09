@@ -41,13 +41,12 @@ export function useSaveRecipe() {
       const previousSavedRecipes = queryClient.getQueryData(["savedRecipes"]);
 
       queryClient.setQueryData(["savedRecipes"], (old: unknown) => {
-        if (!old) {return old;}
-        const recipes = old as Array<{ _id: string }>;
+        const recipes = Array.isArray(old) ? (old as Array<{ _id: string }>) : [];
         const isAlreadySaved = recipes.some((recipe) => recipe._id === recipeId);
         
         return isAlreadySaved 
           ? recipes.filter((recipe) => recipe._id !== recipeId)
-          : recipes;
+          : [...recipes, { _id: recipeId }];
       });
 
       return { previousSavedRecipes };

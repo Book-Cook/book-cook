@@ -10,7 +10,6 @@ import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
-import { TagPicker } from "../TagPicker/TagPicker";
 import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
 import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
@@ -18,14 +17,18 @@ import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecip
 import { Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
 
+export const parsePageQuery = (page: unknown): number => {
+  const parsed = Number(page);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1;
+};
+
 export const RecipeGallery = () => {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
-  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  const [availableTags, setAvailableTags] = React.useState<string[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(20);
 
@@ -38,7 +41,6 @@ export const RecipeGallery = () => {
       "recipes",
       searchBoxValue,
       sortOption,
-      selectedTags,
       currentPage,
       pageSize,
     ],
@@ -46,7 +48,6 @@ export const RecipeGallery = () => {
       fetchRecipesPaginated({
         searchBoxValue,
         orderBy: sortOption,
-        selectedTags,
         offset: (currentPage - 1) * pageSize,
         limit: pageSize,
       }),
@@ -55,34 +56,22 @@ export const RecipeGallery = () => {
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
+  const searchPage = parsePageQuery(router.query.page);
 
-  const router = useRouter();
-
-  // Extract unique tags from recipes
   React.useEffect(() => {
-    if (recipes?.length) {
-      const uniqueTags = Array.from(
-        new Set(recipes.flatMap((recipe) => recipe.tags ?? []))
-      );
-      setAvailableTags(uniqueTags);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recipes?.length]);
+    if (!router.isReady) {return;}
+    setCurrentPage(searchPage);
+  }, [router.isReady, searchPage]);
 
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchBoxValue, sortOption, selectedTags]);
-
-  React.useEffect(() => {
-    const { tag } = router.query;
-    if (tag && typeof tag === "string") {
-      if (!selectedTags.includes(tag)) {
-        setSelectedTags([...selectedTags, tag]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query]);
+    void router.replace(
+      { pathname: router.pathname, query: { ...router.query, page: 1 } },
+      undefined,
+      { shallow: true }
+    );
+  }, [router, searchBoxValue, sortOption]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -95,11 +84,16 @@ export const RecipeGallery = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    void router.replace(
+      { pathname: router.pathname, query: { ...router.query, page } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
-    setCurrentPage(1);
+    handlePageChange(1);
   };
 
   if (!session) {
@@ -121,8 +115,6 @@ export const RecipeGallery = () => {
               {searchBoxValue
                 ? `matching "${searchBoxValue}"`
                 : "in your collection"}
-              {selectedTags.length > 0 &&
-                ` with tags: ${selectedTags.join(", ")}`}
             </Text>
           </div>
           <div className={styles.controlsRow}>
@@ -141,11 +133,6 @@ export const RecipeGallery = () => {
               <Option value={"ascTitle"}>Sort by title (asc)</Option>
               <Option value={"descTitle"}>Sort by title (desc)</Option>
             </Dropdown>
-            <TagPicker
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
           </div>
         </div>
 
