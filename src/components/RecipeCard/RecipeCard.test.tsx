@@ -46,7 +46,6 @@ const mockRecipeContext = {
     _id: "test-recipe-id",
     isPublic: false,
   },
-  updateEditableDataKey: jest.fn(),
   updateEditableData: jest.fn(),
   handleAddTag: jest.fn(),
   handleRemoveTag: jest.fn(),

@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
+import styles from "./HomePage.module.css";
+import { RecipesCarousel } from "../RecipeCarousel";
+
 import {
   fetchRecentlyViewed,
   fetchRecipeCollections,
   fetchUpcomingMeals,
 } from "../../clientToServer";
 import type { Recipe, UpcomingMealsResult } from "../../clientToServer/types";
-import { RecipesCarousel } from "../RecipeCarousel";
-import styles from "./HomePage.module.css";
 
 const sharedQueryOptions = {
   staleTime: 5 * 60 * 1000,

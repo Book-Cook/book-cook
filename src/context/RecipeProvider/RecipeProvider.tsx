@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import isEqual from "fast-deep-equal";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -8,6 +7,11 @@ import type {
   RecipeContextType,
   EditableData,
 } from "./RecipeProvider.types";
+import {
+  toEditableData,
+  hasPendingEdits,
+  buildUpdatePayload,
+} from "./RecipeProvider.utils";
 
 import {
   fetchRecipe,
@@ -17,25 +21,6 @@ import {
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
-import type { Recipe } from "../../clientToServer";
-
-export const toEditableData = (recipe?: Recipe | null): EditableData => ({
-  title: recipe?.title || "",
-  content: recipe?.data || "",
-  tags: recipe?.tags || [],
-  imageURL: recipe?.imageURL || "",
-  emoji: recipe?.emoji || "",
-  isPublic: recipe?.isPublic ?? false,
-  _id: recipe?._id,
-});
-
-export const hasPendingEdits = (
-  current: EditableData,
-  snapshot: EditableData | null
-): boolean => {
-  if (!snapshot) return false;
-  return !isEqual(current, snapshot);
-};
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
@@ -56,15 +41,9 @@ export const RecipeProvider: React.FC<{
     specificRecipeId ??
     (typeof routerRecipeId === "string" ? routerRecipeId : undefined);
 
-  const [editableData, setEditableData] = React.useState<EditableData>({
-    title: "",
-    content: "",
-    tags: [] as string[],
-    imageURL: "",
-    emoji: "",
-    _id: undefined,
-    isPublic: false,
-  });
+  const [editableData, setEditableData] = React.useState<EditableData>(
+    toEditableData()
+  );
   const [savedData, setSavedData] = React.useState<EditableData | null>(null);
 
   const { mutate: deleteMutate } = useDeleteRecipe();
@@ -84,15 +63,12 @@ export const RecipeProvider: React.FC<{
     enabled: Boolean(recipeId),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableDataKey = React.useCallback((field: string, value: any) => {
-    setEditableData((prev) => ({ ...prev, [field]: value }));
-  }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableData = React.useCallback((value: any) => {
-    setEditableData(value);
-  }, []);
+  const updateEditableData = React.useCallback(
+    (patch: Partial<EditableData>) => {
+      setEditableData((prev) => ({ ...prev, ...patch }));
+    },
+    []
+  );
 
   const handleAddTag = React.useCallback(
     (tag: string) => {
@@ -116,32 +92,19 @@ export const RecipeProvider: React.FC<{
     []
   );
 
+  /**
+   * Merges immediate updates into local state and fires the mutation.
+   * Keeps savedData in sync so UI elements (save bar) react instantly.
+   */
   const saveChanges = React.useCallback(
     (immediateUpdate?: Partial<UpdateRecipePayload>) => {
       if (immediateUpdate) {
         setEditableData((prev) => ({ ...prev, ...immediateUpdate }));
         setSavedData((prev) => ({ ...(prev ?? editableData), ...immediateUpdate }));
-        updateRecipe({
-          ...{
-            title: editableData?.title,
-            data: editableData?.content,
-            tags: editableData?.tags,
-            imageURL: editableData?.imageURL,
-            emoji: editableData?.emoji,
-            isPublic: editableData?.isPublic ?? false,
-          },
-          ...(immediateUpdate || {}),
-        });
+        updateRecipe(buildUpdatePayload(editableData, immediateUpdate));
       } else {
         setSavedData(editableData);
-        updateRecipe({
-          title: editableData.title,
-          data: editableData.content,
-          tags: editableData.tags,
-          imageURL: editableData.imageURL,
-          emoji: editableData?.emoji || "",
-          isPublic: editableData.isPublic ?? false,
-        });
+        updateRecipe(buildUpdatePayload(editableData));
       }
     },
     [editableData, setEditableData, setSavedData, updateRecipe]
@@ -232,7 +195,6 @@ export const RecipeProvider: React.FC<{
       isAuthorized,
       error,
       editableData,
-      updateEditableDataKey,
       updateEditableData,
       handleAddTag,
       handleRemoveTag,
@@ -249,7 +211,6 @@ export const RecipeProvider: React.FC<{
       isAuthorized,
       error,
       editableData,
-      updateEditableDataKey,
       updateEditableData,
       handleAddTag,
       handleRemoveTag,

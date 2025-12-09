@@ -1,6 +1,7 @@
-import { hasPendingEdits, toEditableData } from "./RecipeProvider";
-import type { Recipe } from "../../clientToServer";
 import type { EditableData } from "./RecipeProvider.types";
+import { hasPendingEdits, toEditableData } from "./RecipeProvider.utils";
+
+import type { Recipe } from "../../clientToServer";
 
 const baseRecipe = {
   _id: "recipe-1",

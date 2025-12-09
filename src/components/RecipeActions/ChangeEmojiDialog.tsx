@@ -115,7 +115,7 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
 
         {!results.length && !canUseCustom && (
           <div className={styles.empty}>
-            Tip: try a food name like "taco" or paste any emoji.
+            Tip: try a food name like &quot;taco&quot; or paste any emoji.
           </div>
         )}
       </div>

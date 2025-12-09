@@ -22,7 +22,7 @@ const RecipeImageComponent = () => {
   const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
 
   const defaultEmoji = "🍽️";
-  const displayEmoji = editableData.emoji || recipe?.emoji || defaultEmoji;
+  const displayEmoji = editableData.emoji ?? recipe?.emoji ?? defaultEmoji;
 
   const handleEmojiClick = (e: React.MouseEvent) => {
     e.stopPropagation();
