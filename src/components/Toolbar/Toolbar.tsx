@@ -58,13 +58,15 @@ export const Toolbar = () => {
   if (!isAuthenticated) {
     return (
       <ToolbarComponent className={styles.root}>
-        <div className={styles.leftSection}>
-          <Logo />
-        </div>
-        <div className={styles.rightSection}>
-          <Button appearance="primary" onClick={() => signIn("google")}>
-            Sign In
-          </Button>
+        <div className={styles.content}>
+          <div className={styles.leftSection}>
+            <Logo />
+          </div>
+          <div className={styles.rightSection}>
+            <Button appearance="primary" onClick={() => signIn("google")}>
+              Sign In
+            </Button>
+          </div>
         </div>
       </ToolbarComponent>
     );
