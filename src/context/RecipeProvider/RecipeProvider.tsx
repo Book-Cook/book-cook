@@ -4,7 +4,10 @@ import isEqual from "fast-deep-equal";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
+import type {
+  RecipeContextType,
+  EditableData,
+} from "./RecipeProvider.types";
 
 import {
   fetchRecipe,
@@ -14,11 +17,34 @@ import {
 } from "../../clientToServer";
 import type { UpdateRecipePayload } from "../../clientToServer";
 import { useSaveRecipe } from "../../clientToServer/post/useSaveRecipe";
+import type { Recipe } from "../../clientToServer";
+
+export const toEditableData = (recipe?: Recipe | null): EditableData => ({
+  title: recipe?.title || "",
+  content: recipe?.data || "",
+  tags: recipe?.tags || [],
+  imageURL: recipe?.imageURL || "",
+  emoji: recipe?.emoji || "",
+  isPublic: recipe?.isPublic ?? false,
+  _id: recipe?._id,
+});
+
+export const hasPendingEdits = (
+  current: EditableData,
+  snapshot: EditableData | null
+): boolean => {
+  if (!snapshot) return false;
+  return !isEqual(current, snapshot);
+};
 
 export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
 );
 
+/**
+ * Encapsulates recipe fetching, edit state, and mutations for a single recipe page.
+ * Keeps a saved snapshot (`savedData`) so UI elements like save bars react instantly.
+ */
 export const RecipeProvider: React.FC<{
   children: React.ReactNode;
   specificRecipeId?: string;
@@ -39,6 +65,7 @@ export const RecipeProvider: React.FC<{
     _id: undefined,
     isPublic: false,
   });
+  const [savedData, setSavedData] = React.useState<EditableData | null>(null);
 
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
@@ -93,6 +120,7 @@ export const RecipeProvider: React.FC<{
     (immediateUpdate?: Partial<UpdateRecipePayload>) => {
       if (immediateUpdate) {
         setEditableData((prev) => ({ ...prev, ...immediateUpdate }));
+        setSavedData((prev) => ({ ...(prev ?? editableData), ...immediateUpdate }));
         updateRecipe({
           ...{
             title: editableData?.title,
@@ -105,6 +133,7 @@ export const RecipeProvider: React.FC<{
           ...(immediateUpdate || {}),
         });
       } else {
+        setSavedData(editableData);
         updateRecipe({
           title: editableData.title,
           data: editableData.content,
@@ -115,23 +144,18 @@ export const RecipeProvider: React.FC<{
         });
       }
     },
-    [editableData, setEditableData, updateRecipe]
+    [editableData, setEditableData, setSavedData, updateRecipe]
   );
 
   const cancelEditing = React.useCallback(() => {
-    if (recipe) {
-      const initialData = {
-        title: recipe.title || "",
-        content: recipe.data || "",
-        tags: recipe.tags || [],
-        imageURL: recipe.imageURL || "",
-        emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic ?? false,
-        _id: recipe._id,
-      };
-      setEditableData(initialData);
+    if (savedData) {
+      setEditableData(savedData);
+    } else if (recipe) {
+      const reset = toEditableData(recipe);
+      setEditableData(reset);
+      setSavedData(reset);
     }
-  }, [recipe]);
+  }, [recipe, savedData]);
 
   const deleteRecipe = React.useCallback(() => {
     const idToDelete = recipe?._id ?? editableData._id;
@@ -184,40 +208,15 @@ export const RecipeProvider: React.FC<{
 
   React.useEffect(() => {
     if (recipe) {
-      const initialData = {
-        title: recipe.title || "",
-        content: recipe.data || "",
-        tags: recipe.tags || [],
-        imageURL: recipe.imageURL || "",
-        emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic ?? false,
-        _id: recipe._id,
-      };
+      const initialData = toEditableData(recipe);
       setEditableData(initialData);
+      setSavedData(initialData);
     }
-  }, [recipe]);
-
-  const initialEditableData = React.useMemo(() => {
-    if (!recipe) {
-      return null;
-    }
-    return {
-      title: recipe.title || "",
-      content: recipe.data || "",
-      tags: recipe.tags || [],
-      imageURL: recipe.imageURL || "",
-      emoji: recipe.emoji || "",
-      isPublic: recipe.isPublic ?? false,
-      _id: recipe._id,
-    };
   }, [recipe]);
 
   const hasEdits = React.useMemo(() => {
-    if (!initialEditableData) {
-      return false;
-    }
-    return !isEqual(editableData, initialEditableData);
-  }, [editableData, initialEditableData]);
+    return hasPendingEdits(editableData, savedData);
+  }, [editableData, savedData]);
 
   const isAuthorized = React.useMemo(() => {
     if (!recipe || !session?.user?.email) {
