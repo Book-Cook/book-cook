@@ -80,7 +80,7 @@ const HomePage = () => {
           />
           <RecipesCarousel
             recipes={recipeCollectionsList}
-            title="Favorite recipes"
+            title="Favorite Recipes"
             isLoading={!recipeCollections}
           />
         </div>

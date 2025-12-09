@@ -4,7 +4,7 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -37,13 +37,7 @@ export const RecipeGallery = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: [
-      "recipes",
-      searchBoxValue,
-      sortOption,
-      currentPage,
-      pageSize,
-    ],
+    queryKey: ["recipes", searchBoxValue, sortOption, currentPage, pageSize],
     queryFn: () =>
       fetchRecipesPaginated({
         searchBoxValue,
@@ -54,24 +48,56 @@ export const RecipeGallery = () => {
     placeholderData: (previousData) => previousData,
   });
 
+  const queryClient = useQueryClient();
+
+  // When the user navigates back to the gallery (browser back), Next's
+  // routeChangeComplete event fires with the target URL. Detect when the
+  // target is the gallery root (`/recipes`) and force the recipes queries
+  // to refetch so the list shows any updated titles.
+  React.useEffect(() => {
+    const isGalleryUrl = (url: string) =>
+      url.startsWith("/recipes?");
+
+    const handleRouteChange = (url: string) => {
+      if (isGalleryUrl(url)) {
+        void queryClient.invalidateQueries({
+          queryKey: ["recipes"],
+          refetchType: "all",
+        });
+      }
+    };
+
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [queryClient, router.events]);
+
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
   const searchPage = parsePageQuery(router.query.page);
 
   React.useEffect(() => {
-    if (!router.isReady) {return;}
+    if (!router.isReady) {
+      return;
+    }
     setCurrentPage(searchPage);
   }, [router.isReady, searchPage]);
 
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-    void router.replace(
-      { pathname: router.pathname, query: { ...router.query, page: 1 } },
-      undefined,
-      { shallow: true }
-    );
-  }, [router, searchBoxValue, sortOption]);
+  }, [searchBoxValue, sortOption]);
+
+  React.useEffect(() => {
+    const { page } = router.query;
+    if (page && typeof page === "string") {
+      const pageNum = parseInt(page, 10);
+      if (!isNaN(pageNum) && pageNum > 0) {
+        setCurrentPage(pageNum);
+      }
+    }
+  }, [router.query]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -82,18 +108,31 @@ export const RecipeGallery = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = async (page: number) => {
     setCurrentPage(page);
-    void router.replace(
-      { pathname: router.pathname, query: { ...router.query, page } },
-      undefined,
-      { shallow: true }
-    );
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: page.toString() },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
-  const handlePageSizeChange = (newPageSize: number) => {
+  const handlePageSizeChange = async (newPageSize: number) => {
     setPageSize(newPageSize);
-    handlePageChange(1);
+    setCurrentPage(1);
+    await router
+      .replace(
+        {
+          query: { ...router.query, page: "1" },
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(console.error);
   };
 
   if (!session) {
