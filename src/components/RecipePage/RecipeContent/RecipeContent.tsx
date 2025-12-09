@@ -11,14 +11,14 @@ const Editor = dynamic(() => import("../../Editor/Editor").then(mod => ({ defaul
 });
 
 const RecipeContentComponent = () => {
-  const { isLoading, editableData, updateEditableDataKey, isAuthorized } =
+  const { isLoading, editableData, updateEditableData, isAuthorized } =
     useRecipe();
 
   const handleEditorChange = React.useCallback(
     (htmlContent: string) => {
-      updateEditableDataKey("content", htmlContent);
+      updateEditableData({ content: htmlContent });
     },
-    [updateEditableDataKey]
+    [updateEditableData]
   );
 
   return (

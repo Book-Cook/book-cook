@@ -43,7 +43,7 @@ const RecipeHeaderComponent = () => {
   const {
     recipe,
     editableData,
-    updateEditableDataKey,
+    updateEditableData,
     saveChanges,
     cancelEditing,
     hasEdits,
@@ -151,7 +151,7 @@ const RecipeHeaderComponent = () => {
       { htmlContent: editableData.content },
       {
         onSuccess: (data) => {
-          updateEditableDataKey("content", data.processedContent);
+          updateEditableData({ content: data.processedContent });
 
           dispatchToast(
             <Toast>

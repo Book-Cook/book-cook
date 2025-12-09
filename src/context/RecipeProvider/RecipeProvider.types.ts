@@ -17,9 +17,7 @@ export type RecipeContextType = {
   error: unknown;
   hasEdits: boolean;
   editableData: EditableData;
-  updateEditableData: (value: EditableData) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateEditableDataKey: (field: string, value: any) => void;
+  updateEditableData: (patch: Partial<EditableData>) => void;
   handleAddTag: (tag: string) => void;
   handleRemoveTag: (tag: string) => void;
   saveChanges: (immediateUpdate?: Partial<UpdateRecipePayload>) => void;
