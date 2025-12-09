@@ -11,9 +11,10 @@ import {
 } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
-import { useCreateRecipe } from "../../../clientToServer";
 import styles from "./NewRecipeDialog.module.css";
 import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
+
+import { useCreateRecipe } from "../../../clientToServer";
 
 export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   isOpen,

@@ -30,12 +30,18 @@ const NewRecipeDialog = dynamic(
 export const Toolbar = () => {
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const [isHydrated, setIsHydrated] = React.useState(false);
+  const rawIsMobile = useMediaQuery("(max-width: 900px)");
+  const isMobile = isHydrated && rawIsMobile;
   const isAuthenticated = Boolean(session?.user);
-  const isMobile = useMediaQuery("(max-width: 900px)");
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isNewRecipeDialogOpen, setIsNewRecipeDialogOpen] =
     React.useState(false);
+
+  React.useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const toggleMenu = React.useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -54,6 +60,18 @@ export const Toolbar = () => {
   }, []);
 
   const showSearch = router.pathname !== "/recipes";
+
+  if (status === "loading") {
+    return (
+      <ToolbarComponent className={styles.root}>
+        <div className={styles.content}>
+          <div className={styles.leftSection}>
+            <Logo />
+          </div>
+        </div>
+      </ToolbarComponent>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
