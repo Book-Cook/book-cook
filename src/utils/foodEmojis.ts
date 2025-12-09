@@ -67,7 +67,7 @@ export const FOOD_EMOJIS = {
   "🍩": { name: "doughnut", category: "desserts" },
   "🍫": { name: "chocolate bar", category: "desserts" },
   "🍬": { name: "candy", category: "desserts" },
-  "🍨": { name: "ice cream", category: "desserts" },
+  "🍨": { name: "ice cream gelato", category: "desserts" },
   "🍦": { name: "soft ice cream", category: "desserts" },
   "🍯": { name: "honey pot", category: "desserts" },
   "🍮": { name: "custard flan pudding", category: "desserts" },

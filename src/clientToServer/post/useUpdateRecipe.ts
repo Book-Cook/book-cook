@@ -41,9 +41,22 @@ export function useUpdateRecipe(recipeId: string | undefined) {
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
-      await queryClient.invalidateQueries({ queryKey: ["recipes"] });
-      await queryClient.invalidateQueries({ queryKey: ["allTags"] });
+      // Ensure any queries that include the "recipe" or "recipes" keys
+      // are fully refetched (including paginated or parameterized variants).
+      // Using refetchType: "all" forces active and inactive queries to refetch
+      // which prevents stale cache showing old titles in the gallery.
+      await queryClient.invalidateQueries({
+        queryKey: ["recipe", recipeId],
+        refetchType: "all",
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["recipes"],
+        refetchType: "all",
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["allTags"],
+        refetchType: "all",
+      });
     },
   });
 }
