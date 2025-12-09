@@ -1,0 +1,49 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.emoji {
+  border: 1px solid var(--colorNeutralStroke1);
+  border-radius: 10px;
+  background: var(--colorNeutralBackground3);
+  cursor: pointer;
+  font-size: 24px;
+  padding: 10px;
+  text-align: center;
+}
+
+.emoji:hover {
+  background: var(--colorNeutralBackground2);
+}
+
+.empty {
+  color: var(--colorNeutralForeground3);
+  padding: 8px 0;
+  text-align: center;
+}
+
+.pill {
+  align-self: flex-start;
+  background: var(--colorBrandBackground2);
+  color: var(--colorBrandForeground1);
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+}

@@ -1,10 +1,17 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import isEqual from "fast-deep-equal";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import type { RecipeContextType, EditableData } from "./RecipeProvider.types";
+import type {
+  RecipeContextType,
+  EditableData,
+} from "./RecipeProvider.types";
+import {
+  toEditableData,
+  hasPendingEdits,
+  buildUpdatePayload,
+} from "./RecipeProvider.utils";
 
 import {
   fetchRecipe,
@@ -19,6 +26,10 @@ export const RecipeContext = React.createContext<RecipeContextType | null>(
   null
 );
 
+/**
+ * Encapsulates recipe fetching, edit state, and mutations for a single recipe page.
+ * Keeps a saved snapshot (`savedData`) so UI elements like save bars react instantly.
+ */
 export const RecipeProvider: React.FC<{
   children: React.ReactNode;
   specificRecipeId?: string;
@@ -30,15 +41,10 @@ export const RecipeProvider: React.FC<{
     specificRecipeId ??
     (typeof routerRecipeId === "string" ? routerRecipeId : undefined);
 
-  const [editableData, setEditableData] = React.useState<EditableData>({
-    title: "",
-    content: "",
-    tags: [] as string[],
-    imageURL: "",
-    emoji: "",
-    _id: undefined,
-    isPublic: false,
-  });
+  const [editableData, setEditableData] = React.useState<EditableData>(
+    toEditableData()
+  );
+  const [savedData, setSavedData] = React.useState<EditableData | null>(null);
 
   const { mutate: deleteMutate } = useDeleteRecipe();
   const { mutate: addToCollection } = useAddToCollection();
@@ -57,15 +63,12 @@ export const RecipeProvider: React.FC<{
     enabled: Boolean(recipeId),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableDataKey = React.useCallback((field: string, value: any) => {
-    setEditableData((prev) => ({ ...prev, [field]: value }));
-  }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateEditableData = React.useCallback((value: any) => {
-    setEditableData(value);
-  }, []);
+  const updateEditableData = React.useCallback(
+    (patch: Partial<EditableData>) => {
+      setEditableData((prev) => ({ ...prev, ...patch }));
+    },
+    []
+  );
 
   const handleAddTag = React.useCallback(
     (tag: string) => {
@@ -89,48 +92,33 @@ export const RecipeProvider: React.FC<{
     []
   );
 
+  /**
+   * Merges immediate updates into local state and fires the mutation.
+   * Keeps savedData in sync so UI elements (save bar) react instantly.
+   */
   const saveChanges = React.useCallback(
     (immediateUpdate?: Partial<UpdateRecipePayload>) => {
       if (immediateUpdate) {
-        updateRecipe({
-          ...{
-            title: editableData?.title,
-            data: editableData?.content,
-            tags: editableData?.tags,
-            imageURL: editableData?.imageURL,
-            emoji: editableData?.emoji,
-            isPublic: editableData?.isPublic ?? false,
-          },
-          ...(immediateUpdate || {}),
-        });
+        setEditableData((prev) => ({ ...prev, ...immediateUpdate }));
+        setSavedData((prev) => ({ ...(prev ?? editableData), ...immediateUpdate }));
+        updateRecipe(buildUpdatePayload(editableData, immediateUpdate));
       } else {
-        updateRecipe({
-          title: editableData.title,
-          data: editableData.content,
-          tags: editableData.tags,
-          imageURL: editableData.imageURL,
-          emoji: editableData?.emoji || "",
-          isPublic: editableData.isPublic ?? false,
-        });
+        setSavedData(editableData);
+        updateRecipe(buildUpdatePayload(editableData));
       }
     },
-    [editableData, updateRecipe]
+    [editableData, setEditableData, setSavedData, updateRecipe]
   );
 
   const cancelEditing = React.useCallback(() => {
-    if (recipe) {
-      const initialData = {
-        title: recipe.title || "",
-        content: recipe.data || "",
-        tags: recipe.tags || [],
-        imageURL: recipe.imageURL || "",
-        emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic ?? false,
-        _id: recipe._id,
-      };
-      setEditableData(initialData);
+    if (savedData) {
+      setEditableData(savedData);
+    } else if (recipe) {
+      const reset = toEditableData(recipe);
+      setEditableData(reset);
+      setSavedData(reset);
     }
-  }, [recipe]);
+  }, [recipe, savedData]);
 
   const deleteRecipe = React.useCallback(() => {
     const idToDelete = recipe?._id ?? editableData._id;
@@ -183,40 +171,15 @@ export const RecipeProvider: React.FC<{
 
   React.useEffect(() => {
     if (recipe) {
-      const initialData = {
-        title: recipe.title || "",
-        content: recipe.data || "",
-        tags: recipe.tags || [],
-        imageURL: recipe.imageURL || "",
-        emoji: recipe.emoji || "",
-        isPublic: recipe.isPublic ?? false,
-        _id: recipe._id,
-      };
+      const initialData = toEditableData(recipe);
       setEditableData(initialData);
+      setSavedData(initialData);
     }
-  }, [recipe]);
-
-  const initialEditableData = React.useMemo(() => {
-    if (!recipe) {
-      return null;
-    }
-    return {
-      title: recipe.title || "",
-      content: recipe.data || "",
-      tags: recipe.tags || [],
-      imageURL: recipe.imageURL || "",
-      emoji: recipe.emoji || "",
-      isPublic: recipe.isPublic ?? false,
-      _id: recipe._id,
-    };
   }, [recipe]);
 
   const hasEdits = React.useMemo(() => {
-    if (!initialEditableData) {
-      return false;
-    }
-    return !isEqual(editableData, initialEditableData);
-  }, [editableData, initialEditableData]);
+    return hasPendingEdits(editableData, savedData);
+  }, [editableData, savedData]);
 
   const isAuthorized = React.useMemo(() => {
     if (!recipe || !session?.user?.email) {
@@ -232,7 +195,6 @@ export const RecipeProvider: React.FC<{
       isAuthorized,
       error,
       editableData,
-      updateEditableDataKey,
       updateEditableData,
       handleAddTag,
       handleRemoveTag,
@@ -249,7 +211,6 @@ export const RecipeProvider: React.FC<{
       isAuthorized,
       error,
       editableData,
-      updateEditableDataKey,
       updateEditableData,
       handleAddTag,
       handleRemoveTag,
