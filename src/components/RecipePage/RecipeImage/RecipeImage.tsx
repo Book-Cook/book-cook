@@ -18,11 +18,11 @@ const ChangeEmojiDialog = dynamic(
 
 const RecipeImageComponent = () => {
   const styles = useStyles();
-  const { recipe, saveChanges } = useRecipe();
+  const { recipe, editableData, saveChanges } = useRecipe();
   const [isEmojiDialogOpen, setIsEmojiDialogOpen] = React.useState(false);
 
   const defaultEmoji = "🍽️";
-  const displayEmoji = recipe?.emoji ?? defaultEmoji;
+  const displayEmoji = editableData.emoji || recipe?.emoji || defaultEmoji;
 
   const handleEmojiClick = (e: React.MouseEvent) => {
     e.stopPropagation();

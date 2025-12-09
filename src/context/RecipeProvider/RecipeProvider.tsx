@@ -92,6 +92,7 @@ export const RecipeProvider: React.FC<{
   const saveChanges = React.useCallback(
     (immediateUpdate?: Partial<UpdateRecipePayload>) => {
       if (immediateUpdate) {
+        setEditableData((prev) => ({ ...prev, ...immediateUpdate }));
         updateRecipe({
           ...{
             title: editableData?.title,
@@ -114,7 +115,7 @@ export const RecipeProvider: React.FC<{
         });
       }
     },
-    [editableData, updateRecipe]
+    [editableData, setEditableData, updateRecipe]
   );
 
   const cancelEditing = React.useCallback(() => {
