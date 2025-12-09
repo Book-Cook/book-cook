@@ -66,22 +66,16 @@ export const RecipeGallery = () => {
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchBoxValue, sortOption, selectedTags]);
+  }, [searchBoxValue, sortOption]);
 
   React.useEffect(() => {
-    const { tag, page } = router.query;
-    if (tag && typeof tag === "string") {
-      if (!selectedTags.includes(tag)) {
-        setSelectedTags([...selectedTags, tag]);
-      }
-    }
+    const { page } = router.query;
     if (page && typeof page === "string") {
       const pageNum = parseInt(page, 10);
       if (!isNaN(pageNum) && pageNum > 0) {
         setCurrentPage(pageNum);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
   const onSortOptionSelect = (
@@ -145,11 +139,6 @@ export const RecipeGallery = () => {
             <div className={styles.searchWrapper}>
               <SearchBar />
             </div>
-            <TagPicker
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
             <Dropdown
               className={styles.sortDropdown}
               appearance="outline"
