@@ -17,10 +17,16 @@ import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecip
 import { Unauthorized } from "..";
 import { useSearchBox, RecipeProvider } from "../../context";
 
+export const parsePageQuery = (page: unknown): number => {
+  const parsed = Number(page);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1;
+};
+
 export const RecipeGallery = () => {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -50,13 +56,22 @@ export const RecipeGallery = () => {
 
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
+  const searchPage = parsePageQuery(router.query.page);
 
-  const router = useRouter();
+  React.useEffect(() => {
+    if (!router.isReady) {return;}
+    setCurrentPage(searchPage);
+  }, [router.isReady, searchPage]);
 
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchBoxValue, sortOption]);
+    void router.replace(
+      { pathname: router.pathname, query: { ...router.query, page: 1 } },
+      undefined,
+      { shallow: true }
+    );
+  }, [router, searchBoxValue, sortOption]);
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
@@ -69,11 +84,16 @@ export const RecipeGallery = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    void router.replace(
+      { pathname: router.pathname, query: { ...router.query, page } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
-    setCurrentPage(1);
+    handlePageChange(1);
   };
 
   if (!session) {
