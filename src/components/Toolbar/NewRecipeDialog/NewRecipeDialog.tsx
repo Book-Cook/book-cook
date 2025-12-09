@@ -7,89 +7,18 @@ import {
   DialogBody,
   DialogActions,
   Button,
-  makeStyles,
-  shorthands,
-  tokens,
   Spinner,
 } from "@fluentui/react-components";
-import type { DialogOpenChangeEvent } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
 import { useCreateRecipe } from "../../../clientToServer";
-
-const useStyles = makeStyles({
-  dialogSurface: {
-    maxWidth: "450px",
-    width: "100%",
-    ...shorthands.borderRadius("14px"),
-    boxShadow: tokens.shadow16,
-  },
-  dialogBody: {
-    paddingTop: "12px",
-    paddingBottom: "24px",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  textArea: {
-    width: "100%",
-    flexGrow: 1,
-    fontSize: tokens.fontSizeBase300,
-    lineHeight: tokens.lineHeightBase300,
-    minHeight: "80px",
-    resize: "none",
-  },
-  dialogActions: {
-    paddingTop: "0",
-    ...shorthands.gap("12px"),
-  },
-  primaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    },
-  },
-  secondaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-    },
-  },
-  characterCount: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground3,
-    textAlign: "right",
-    marginTop: "4px",
-  },
-  errorMessage: {
-    color: tokens.colorPaletteRedForeground1,
-    fontSize: tokens.fontSizeBase200,
-    marginTop: tokens.spacingVerticalS,
-  },
-  spinnerContainer: {
-    display: "inline-flex",
-    marginLeft: tokens.spacingHorizontalS,
-    alignItems: "center",
-  },
-});
-
-export type NewRecipeDialogProps = {
-  /**
-   * Whether the dialog is open or closed.
-   */
-  isOpen: boolean;
-  /**
-   * Callback function to handle closing the dialog.
-   */
-  onClose: () => void;
-};
+import styles from "./NewRecipeDialog.module.css";
+import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
 
 export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   isOpen,
   onClose,
 }) => {
-  const styles = useStyles();
   const router = useRouter();
   const [newRecipeTitle, setNewRecipeTitle] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -100,11 +29,9 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
     if (isOpen) {
       setNewRecipeTitle("");
       setErrorMessage(null);
-      setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-        }
-      }, 50);
+      requestAnimationFrame(() => {
+        textareaRef.current?.focus();
+      });
     }
   }, [isOpen]);
 
@@ -142,19 +69,6 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
     );
   };
 
-  const handleCancelClick = () => {
-    onClose();
-  };
-
-  const handleOpenChange = (
-    _event: DialogOpenChangeEvent,
-    data: { open: boolean }
-  ) => {
-    if (!data.open) {
-      onClose();
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -175,7 +89,11 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={handleOpenChange}
+      onOpenChange={(_, data) => {
+        if (!data.open) {
+          onClose();
+        }
+      }}
       modalType="modal"
       surfaceMotion={null}
     >
@@ -208,7 +126,7 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
         <DialogActions className={styles.dialogActions}>
           <Button
             appearance="subtle"
-            onClick={handleCancelClick}
+            onClick={onClose}
             className={styles.secondaryButton}
             disabled={isPending}
           >

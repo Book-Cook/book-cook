@@ -1,13 +1,11 @@
 import * as React from "react";
 import { Add24Regular } from "@fluentui/react-icons";
 
-import { useNewRecipeButtonStyles } from "./NewRecipeButton.styles";
-
+import styles from "./NewRecipeButton.module.css";
+import type { NewRecipeButtonProps } from "./NewRecipeButton.types";
 import { Button } from "../../Button";
 
-export const NewRecipeButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  const styles = useNewRecipeButtonStyles();
-
+export const NewRecipeButton: React.FC<NewRecipeButtonProps> = ({ onClick }) => {
   return (
     <Button
       appearance="primary"

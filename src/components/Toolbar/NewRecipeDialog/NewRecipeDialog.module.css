@@ -1,0 +1,64 @@
+.dialogSurface {
+  max-width: 450px;
+  width: 100%;
+  border-radius: var(--borderRadiusLarge, 14px);
+  box-shadow: var(--shadow16, 0 8px 24px rgba(0, 0, 0, 0.12));
+}
+
+.dialogBody {
+  padding-top: 12px;
+  padding-bottom: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.textArea {
+  width: 100%;
+  flex-grow: 1;
+  font-size: var(--fontSizeBase300);
+  line-height: var(--lineHeightBase300);
+  min-height: 80px;
+  resize: none;
+}
+
+.dialogActions {
+  padding-top: 0;
+  gap: 12px;
+}
+
+.primaryButton {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.secondaryButton {
+  transition: transform 0.2s ease;
+}
+
+.secondaryButton:hover {
+  transform: translateY(-1px);
+}
+
+.characterCount {
+  font-size: var(--fontSizeBase200);
+  color: var(--colorNeutralForeground3);
+  text-align: right;
+  margin-top: 4px;
+}
+
+.errorMessage {
+  color: var(--colorPaletteRedForeground1);
+  font-size: var(--fontSizeBase200);
+  margin-top: var(--spacingVerticalS);
+}
+
+.spinnerContainer {
+  display: inline-flex;
+  margin-left: var(--spacingHorizontalS);
+  align-items: center;
+}

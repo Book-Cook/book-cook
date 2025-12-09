@@ -8,13 +8,7 @@ import { useRouter } from "next/router";
 
 import { useSearchBox } from "../../../context";
 import { useDebounce } from "../../../hooks";
-
-export type SearchBarProps = {
-  /**
-   * Optional callback fired when the user submits a search.
-   */
-  onSearch?: () => void;
-};
+import type { SearchBarProps } from "./SearchBar.types";
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
