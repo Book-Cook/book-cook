@@ -20,9 +20,12 @@ import { useMediaQuery } from "../../hooks";
 const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
   ssr: false,
 });
-const NewRecipeDialog = dynamic(() => import("./NewRecipeDialog").then((mod) => mod.NewRecipeDialog), {
-  ssr: false,
-});
+const NewRecipeDialog = dynamic(
+  () => import("./NewRecipeDialog").then((mod) => mod.NewRecipeDialog),
+  {
+    ssr: false,
+  }
+);
 
 export const Toolbar = () => {
   const router = useRouter();
@@ -78,29 +81,31 @@ export const Toolbar = () => {
         />
       )}
       <ToolbarComponent className={styles.root}>
-        {isMobile && (
-          <Button
-            icon={<Navigation24Regular />}
-            appearance="subtle"
-            className={styles.hamburgerButton}
-            onClick={toggleMenu}
-            aria-label="Menu"
-          />
-        )}
-        <div className={styles.leftSection}>
-          <Logo />
-          <div className={styles.navLinks}>
-            <NavigationLinks currentPath={router.pathname} />
-          </div>
-        </div>
-        <div className={styles.rightSection}>
-          <NewRecipeButton onClick={openNewRecipe} />
-          {showSearch && (
-            <div className={styles.searchBarWrapper}>
-              <SearchBar />
-            </div>
+        <div className={styles.content}>
+          {isMobile && (
+            <Button
+              icon={<Navigation24Regular />}
+              appearance="subtle"
+              className={styles.hamburgerButton}
+              onClick={toggleMenu}
+              aria-label="Menu"
+            />
           )}
-          <UserProfile />
+          <div className={styles.leftSection}>
+            <Logo />
+            <div className={styles.navLinks}>
+              <NavigationLinks currentPath={router.pathname} />
+            </div>
+          </div>
+          <div className={styles.rightSection}>
+            <NewRecipeButton onClick={openNewRecipe} />
+            {showSearch && (
+              <div className={styles.searchBarWrapper}>
+                <SearchBar />
+              </div>
+            )}
+            <UserProfile />
+          </div>
         </div>
       </ToolbarComponent>
       {isMobile && (
