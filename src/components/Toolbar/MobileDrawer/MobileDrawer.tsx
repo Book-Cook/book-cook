@@ -6,11 +6,10 @@ import {
   DrawerHeader,
   DrawerHeaderTitle,
   Divider,
-  mergeClasses,
 } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 
-import { useMobileDrawerStyles } from "./MobileDrawer.styles";
+import styles from "./MobileDrawer.module.css";
 import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
 import { SearchBar } from "../SearchBar";
@@ -22,8 +21,6 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onNavigate,
   onNewRecipeDialogOpen,
 }) => {
-  const styles = useMobileDrawerStyles();
-
   return (
     <Drawer
       open={isOpen}
@@ -48,7 +45,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
 
       <DrawerBody className={styles.mobileMenu}>
         <div className={styles.drawerContentWrapper}>
-          <div className={styles.searchWrapper}>
+          <div>
             <SearchBar onSearch={() => onOpenChange(false)} />
           </div>
 
@@ -57,10 +54,9 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               <Button
                 key={link.url}
                 appearance="subtle"
-                className={mergeClasses(
-                  styles.mobileNavLink,
-                  currentPath === link.url && styles.activeLink
-                )}
+                className={`${styles.mobileNavLink} ${
+                  currentPath === link.url ? styles.activeLink : ""
+                }`}
                 onClick={() => {
                   onNavigate(link.url);
                   onOpenChange(false);

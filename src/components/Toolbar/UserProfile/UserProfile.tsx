@@ -4,9 +4,11 @@ import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 
+import styles from "./UserProfile.module.css";
+
 import { Text } from "../../Text";
 
-const UserProfileComponent = () => {
+export const UserProfile: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -38,18 +40,10 @@ const UserProfileComponent = () => {
       </MenuTrigger>
       <MenuPopover>
         <MenuList>
-          <div
-            style={{
-              padding: "8px 16px",
-              borderBottom: "1px solid var(--colorNeutralStroke1)",
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-            }}
-          >
+          <div className={styles.header}>
             <div>
               <Text weight="semibold">{userName}</Text>
-              <Text size={200} style={{ display: "block", opacity: 0.8 }}>
+              <Text size={200} className={styles.email}>
                 {session?.user?.email}
               </Text>
             </div>
@@ -70,5 +64,3 @@ const UserProfileComponent = () => {
     </Menu>
   );
 };
-
-export const UserProfile = React.memo(UserProfileComponent);
