@@ -4,7 +4,7 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -37,13 +37,7 @@ export const RecipeGallery = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: [
-      "recipes",
-      searchBoxValue,
-      sortOption,
-      currentPage,
-      pageSize,
-    ],
+    queryKey: ["recipes", searchBoxValue, sortOption, currentPage, pageSize],
     queryFn: () =>
       fetchRecipesPaginated({
         searchBoxValue,
@@ -54,12 +48,38 @@ export const RecipeGallery = () => {
     placeholderData: (previousData) => previousData,
   });
 
-    const recipes = recipesResponse?.recipes ?? [];
+  const queryClient = useQueryClient();
+
+  // When the user navigates back to the gallery (browser back), Next's
+  // routeChangeComplete event fires with the target URL. Detect when the
+  // target is the gallery root (`/recipes`) and force the recipes queries
+  // to refetch so the list shows any updated titles.
+  React.useEffect(() => {
+    const isGalleryUrl = (url: string) => url.startsWith("/recipes?");
+
+    const handleRouteChange = (url: string) => {
+      if (isGalleryUrl(url)) {
+        void queryClient.invalidateQueries({
+          queryKey: ["recipes"],
+          refetchType: "all",
+        });
+      }
+    };
+
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [queryClient, router.events]);
+
+  const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
   const searchPage = parsePageQuery(router.query.page);
 
   React.useEffect(() => {
-    if (!router.isReady) {return;}
+    if (!router.isReady) {
+      return;
+    }
     setCurrentPage(searchPage);
   }, [router.isReady, searchPage]);
 

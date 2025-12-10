@@ -76,7 +76,7 @@ describe("HomePage Component", () => {
       // Should show skeleton loading states
       await waitFor(() => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
       });
     });
 
@@ -106,7 +106,7 @@ describe("HomePage Component", () => {
       });
 
       // Collections should still be loading
-      expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+      expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
     });
   });
 
@@ -139,7 +139,7 @@ describe("HomePage Component", () => {
       });
     });
 
-    it("should display favorite recipes when available", async () => {
+    it("should display Favorite Recipes when available", async () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
@@ -159,7 +159,7 @@ describe("HomePage Component", () => {
 
       // Wait for collections to load
       await waitFor(() => {
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
           screen.getByText(chocolateChipCookies.title)
         ).toBeInTheDocument();
@@ -188,7 +188,7 @@ describe("HomePage Component", () => {
       await waitFor(() => {
         // Both carousel titles should be present
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
 
         // Should have multiple recipe cards
         const recipeCards = screen.getAllByText(chocolateChipCookies.title);
@@ -243,7 +243,7 @@ describe("HomePage Component", () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
           screen.getByText("You haven't viewed any recipes yet.")
         ).toBeInTheDocument();
@@ -270,7 +270,7 @@ describe("HomePage Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
 
         // Should show empty state messages
         const emptyMessages = screen.getAllByText(
@@ -285,7 +285,7 @@ describe("HomePage Component", () => {
     it("should handle recently viewed API errors gracefully", async () => {
       // Suppress expected console errors during this test
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-      
+
       mockUtils.mockError(
         "get",
         "/api/user/recentlyViewed",
@@ -309,19 +309,19 @@ describe("HomePage Component", () => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
 
         // Collections should work fine
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
           screen.getByText(chocolateChipCookies.title)
         ).toBeInTheDocument();
       });
-      
+
       consoleSpy.mockRestore();
     });
 
     it("should handle collections API errors gracefully", async () => {
       // Suppress expected console errors during this test
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-      
+
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
@@ -346,16 +346,16 @@ describe("HomePage Component", () => {
         expect(screen.getByText(caesarSalad.title)).toBeInTheDocument();
 
         // Should still show the collections title
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
       });
-      
+
       consoleSpy.mockRestore();
     });
 
     it("should handle both APIs failing", async () => {
       // Suppress expected console errors during this test
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-      
+
       mockUtils.mockError(
         "get",
         "/api/user/recentlyViewed",
@@ -378,9 +378,9 @@ describe("HomePage Component", () => {
       await waitFor(() => {
         // Should still render the page structure
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
       });
-      
+
       consoleSpy.mockRestore();
     });
   });
@@ -412,7 +412,7 @@ describe("HomePage Component", () => {
 
       // Should still render structure but not make API calls
       expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-      expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+      expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
     });
   });
 
@@ -427,12 +427,12 @@ describe("HomePage Component", () => {
       // Wait for the component to render
       await waitFor(() => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
       });
 
       // Verify that both carousels are rendered with correct structure
       expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-      expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+      expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
     });
   });
 
@@ -447,12 +447,12 @@ describe("HomePage Component", () => {
       await waitFor(() => {
         // Should render carousel component structure correctly
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
-        expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+        expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
       });
 
       // Verify that both RecipesCarousel components are rendered
       // The exact recipe content depends on React Query + MSW integration working
-      const carouselTitles = screen.getAllByText(/Recently Viewed Recipes|Favorite recipes/);
+      const carouselTitles = screen.getAllByText(/Recently Viewed Recipes|Favorite Recipes/);
       expect(carouselTitles).toHaveLength(2);
     });
 
@@ -482,7 +482,7 @@ describe("HomePage Component", () => {
       });
 
       // Collections should still be loading (showing skeleton)
-      expect(screen.getByText("Favorite recipes")).toBeInTheDocument();
+      expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
     });
   });
 });
