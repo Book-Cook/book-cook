@@ -49,10 +49,6 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
       </DrawerHeader>
       <DrawerBody className={styles.mobileMenu}>
         <div className={styles.drawerContentWrapper}>
-          <div className={styles.searchWrapper}>
-            <SearchBar onSearch={() => onOpenChange(false)} />
-          </div>
-
           <div className={styles.navSection}>
             {navLinks.map((link) => {
               const linkClassName = [
@@ -77,9 +73,9 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               );
             })}
           </div>
-
-          <Divider />
-
+          <div className={styles.searchWrapper}>
+            <SearchBar onSearch={() => onOpenChange(false)} />
+          </div>
           <div className={styles.footerSection}>
             <Button
               appearance="primary"

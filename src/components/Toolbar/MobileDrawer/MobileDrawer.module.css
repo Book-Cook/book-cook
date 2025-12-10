@@ -1,6 +1,7 @@
 .mobileMenu {
   background-color: var(--colorNeutralBackground1);
   padding: 0;
+
 }
 
 .drawerContentWrapper {
@@ -81,15 +82,17 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: 100%;
   font-weight: 700;
   font-size: 14px;
   min-height: 44px;
-  width: 100%;
   text-wrap: nowrap;
   padding: 0 16px;
   border-radius: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+
 
 .primaryActionButton:hover {
   transform: translateY(-2px);
