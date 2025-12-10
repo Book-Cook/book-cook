@@ -8,6 +8,7 @@ import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { SearchBox } from "../../SearchBox";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
+import { Spinner } from "../../Spinner";
 
 const useStyles = makeStyles({
   container: {

@@ -8,7 +8,7 @@ import {
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
-} from "../../components/Drawer/Drawer";
+} from "../../components/Drawer";
 
 const meta: Meta<typeof Drawer> = {
   title: "Components/Drawer",

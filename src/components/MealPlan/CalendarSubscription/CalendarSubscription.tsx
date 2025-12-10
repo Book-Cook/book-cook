@@ -26,6 +26,7 @@ import {
 } from '@fluentui/react-icons';
 
 import type { CalendarTokenData, CalendarSubscriptionProps } from './CalendarSubscription.types';
+import { Spinner } from '../../Spinner';
 
 import { Spinner } from '../../Spinner';
 

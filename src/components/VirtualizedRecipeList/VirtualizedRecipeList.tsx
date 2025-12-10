@@ -5,6 +5,7 @@ import { PaginationControls } from '../PaginationControls/PaginationControls';
 import { RecipeCard } from '../RecipeCard';
 import { Spinner } from "../Spinner";
 import { Text } from "../Text";
+import { Spinner } from "../Spinner";
 
 import type { Recipe } from '../../clientToServer/types';
 

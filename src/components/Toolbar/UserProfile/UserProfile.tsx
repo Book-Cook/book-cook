@@ -8,6 +8,7 @@ import styles from "./UserProfile.module.css";
 
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
+import { Spinner } from "../../Spinner";
 
 export const UserProfile: React.FC = () => {
   const { data: session, status } = useSession();

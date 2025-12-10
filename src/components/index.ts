@@ -4,5 +4,5 @@ export * from "./FallbackScreens";
 export * from "./RecipeCard";
 export * from "./TagPicker";
 export * from "./Animation";
-export * from "./Drawer/Drawer";
+export * from "./Drawer";
 export * from "./Spinner";

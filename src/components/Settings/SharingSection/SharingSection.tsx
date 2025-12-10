@@ -18,6 +18,7 @@ import {
 } from "../../../clientToServer";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
+import { Spinner } from "../../Spinner";
 
 const useStyles = makeStyles({
   shareContainer: {
