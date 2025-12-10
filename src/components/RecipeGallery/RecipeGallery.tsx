@@ -4,11 +4,12 @@ import type {
   SelectionEvents,
   OptionOnSelectData,
 } from "@fluentui/react-components";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
+import type { RecipesResponse } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useStyles } from "./RecipeGallery.styles";
 import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
@@ -22,21 +23,29 @@ export const parsePageQuery = (page: unknown): number => {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1;
 };
 
-export const RecipeGallery = () => {
+interface RecipeGalleryProps {
+  initialPage?: number;
+}
+
+export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
+  initialPage,
+}) => {
   const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
   const router = useRouter();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(20);
+  const [currentPage, setCurrentPage] = React.useState<number>(
+    initialPage ?? 1
+  );
+  const pageSize = 20;
 
   const {
     data: recipesResponse,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<RecipesResponse | undefined, Error>({
     queryKey: ["recipes", searchBoxValue, sortOption, currentPage, pageSize],
     queryFn: () =>
       fetchRecipesPaginated({
@@ -48,31 +57,6 @@ export const RecipeGallery = () => {
     placeholderData: (previousData) => previousData,
   });
 
-  const queryClient = useQueryClient();
-
-  // When the user navigates back to the gallery (browser back), Next's
-  // routeChangeComplete event fires with the target URL. Detect when the
-  // target is the gallery root (`/recipes`) and force the recipes queries
-  // to refetch so the list shows any updated titles.
-  React.useEffect(() => {
-    const isGalleryUrl = (url: string) =>
-      url.startsWith("/recipes?");
-
-    const handleRouteChange = (url: string) => {
-      if (isGalleryUrl(url)) {
-        void queryClient.invalidateQueries({
-          queryKey: ["recipes"],
-          refetchType: "all",
-        });
-      }
-    };
-
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [queryClient, router.events]);
-
   const recipes = recipesResponse?.recipes ?? [];
   const totalCount = recipesResponse?.totalCount ?? 0;
   const searchPage = parsePageQuery(router.query.page);
@@ -82,7 +66,7 @@ export const RecipeGallery = () => {
       return;
     }
     setCurrentPage(searchPage);
-  }, [router.isReady, searchPage]);
+  }, [router.isReady, searchPage, router.query.pageSize]);
 
   // Reset to page 1 when search/filter changes
   React.useEffect(() => {
@@ -114,20 +98,6 @@ export const RecipeGallery = () => {
       .replace(
         {
           query: { ...router.query, page: page.toString() },
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(console.error);
-  };
-
-  const handlePageSizeChange = async (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setCurrentPage(1);
-    await router
-      .replace(
-        {
-          query: { ...router.query, page: "1" },
         },
         undefined,
         { shallow: true }
@@ -183,7 +153,7 @@ export const RecipeGallery = () => {
           isLoading={isLoading}
           error={error as Error}
           onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
+          onPageSizeChange={() => {}}
           emptyStateMessage="No recipes found in your collection."
           loadingMessage="Loading your recipes..."
         />
