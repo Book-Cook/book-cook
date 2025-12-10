@@ -33,6 +33,10 @@
   gap: 16px;
 }
 
+.newRecipeButton {
+  display: flex;
+}
+
 .navLinks {
   display: flex;
   gap: 8px;
@@ -60,5 +64,11 @@
 @media (max-width: 768px) {
   .rightSection {
     gap: 8px;
+  }
+}
+
+@media (max-width: 500px) {
+  .newRecipeButton {
+    display: none;
   }
 }
