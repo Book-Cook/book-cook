@@ -3,11 +3,11 @@ import {
   makeStyles,
   Switch,
   tokens,
-  Spinner,
 } from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
 import { Button } from "../Button";
+import { Spinner } from "../Spinner";
 
 const useStyles = makeStyles({
   textArea: {
