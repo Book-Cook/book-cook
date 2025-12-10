@@ -6,7 +6,7 @@
   visibility: hidden;
   transition: opacity 0.25s ease, visibility 0.25s ease;
   pointer-events: none;
-  z-index: 999;
+  z-index: 11990;
 }
 
 .backdropOpen {
@@ -28,7 +28,7 @@
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
   border: 1px solid var(--colorNeutralStroke2);
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 12000;
   transition: transform 0.25s ease, opacity 0.2s ease;
   opacity: 0;
   outline: none;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Divider } from "@fluentui/react-components";
+import { Divider } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 
 import styles from "./MobileDrawer.module.css";
@@ -7,6 +7,7 @@ import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
 import { SearchBar } from "../SearchBar";
 
+import { Button } from "../../Button";
 import {
   Drawer,
   DrawerBody,
@@ -46,7 +47,6 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           Menu
         </DrawerHeaderTitle>
       </DrawerHeader>
-
       <DrawerBody className={styles.mobileMenu}>
         <div className={styles.drawerContentWrapper}>
           <div className={styles.searchWrapper}>
