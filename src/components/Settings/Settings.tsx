@@ -1,5 +1,5 @@
 import * as React from "react";
-import { tokens, Spinner, Accordion } from "@fluentui/react-components";
+import { tokens, Accordion } from "@fluentui/react-components";
 import type { AccordionToggleEventHandler } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 import { useSession } from "next-auth/react";
@@ -13,6 +13,7 @@ import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePrefe
 import { SharingSection } from "./SharingSection/SharingSection";
 import { Unauthorized } from "../FallbackScreens";
 import { SearchBox } from "../SearchBox";
+import { Spinner } from "../Spinner";
 
 const useStyles = makeStyles({
   page: {

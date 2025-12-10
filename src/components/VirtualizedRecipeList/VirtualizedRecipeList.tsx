@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Spinner, makeStyles, tokens } from '@fluentui/react-components';
+import { makeStyles, tokens } from '@fluentui/react-components';
 
 import { PaginationControls } from '../PaginationControls/PaginationControls';
 import { RecipeCard } from '../RecipeCard';
 import { Text } from "../Text";
+import { Spinner } from "../Spinner";
 
 import type { Recipe } from '../../clientToServer/types';
 

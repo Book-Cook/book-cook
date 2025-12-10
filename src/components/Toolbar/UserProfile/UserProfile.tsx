@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Avatar, Tooltip, Menu, MenuItem, MenuTrigger, MenuPopover, MenuList, MenuDivider, Button, Spinner } from "@fluentui/react-components";
+import { Avatar, Tooltip, Menu, MenuItem, MenuTrigger, MenuPopover, MenuList, MenuDivider, Button } from "@fluentui/react-components";
 import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
@@ -7,6 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import styles from "./UserProfile.module.css";
 
 import { Text } from "../../Text";
+import { Spinner } from "../../Spinner";
 
 export const UserProfile: React.FC = () => {
   const { data: session, status } = useSession();

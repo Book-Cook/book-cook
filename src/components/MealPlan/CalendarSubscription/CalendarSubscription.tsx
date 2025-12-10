@@ -9,7 +9,6 @@ import {
   Input,
   MessageBar,
   MessageBarBody,
-  Spinner,
   Dialog,
   DialogTrigger,
   DialogSurface,
@@ -27,6 +26,7 @@ import {
 } from '@fluentui/react-icons';
 
 import type { CalendarTokenData, CalendarSubscriptionProps } from './CalendarSubscription.types';
+import { Spinner } from '../../Spinner';
 
 const useStyles = makeStyles({
   container: {

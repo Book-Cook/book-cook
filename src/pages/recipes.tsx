@@ -1,9 +1,9 @@
-import { Spinner } from "@fluentui/react-components";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import type { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { getServerSession } from "next-auth";
 
+import { Spinner } from "src/components/Spinner";
 import { getDb } from "src/utils/db";
 import { authOptions } from "./api/auth/[...nextauth]";
 
