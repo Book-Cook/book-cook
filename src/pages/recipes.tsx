@@ -20,12 +20,10 @@ const RecipeGallery = dynamic(
 
 export default function Recipes(props: {
   initialPage?: number;
-  initialPageSize?: number;
 }) {
   return (
     <RecipeGallery
       initialPage={props.initialPage}
-      initialPageSize={props.initialPageSize}
     />
   );
 }
@@ -152,8 +150,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
-        initialPage: page,
-        initialPageSize: pageSize,
+        initialPage: page
       },
     };
   } catch (error) {
