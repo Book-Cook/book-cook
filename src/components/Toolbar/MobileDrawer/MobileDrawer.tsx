@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Divider } from "@fluentui/react-components";
+import { Button, Divider } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 
 import styles from "./MobileDrawer.module.css";
@@ -7,14 +7,12 @@ import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
 import { SearchBar } from "../SearchBar";
 
-import { Button } from "../../Button";
 import {
   Drawer,
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
 } from "../../Drawer/Drawer";
-import { useMediaQuery } from "../../../hooks";
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -23,7 +21,6 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onNavigate,
   onNewRecipeDialogOpen,
 }) => {
-  const isSmallScreen = useMediaQuery("(max-width: 500px)");
   const titleId = "mobile-drawer-title";
 
   return (
@@ -49,50 +46,46 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           Menu
         </DrawerHeaderTitle>
       </DrawerHeader>
+
       <DrawerBody className={styles.mobileMenu}>
         <div className={styles.drawerContentWrapper}>
-          <div className={styles.navSection}>
-            {navLinks.map((link) => {
-              const linkClassName = [
-                styles.mobileNavLink,
-                currentPath === link.url ? styles.activeLink : "",
-              ]
-                .filter(Boolean)
-                .join(" ");
-
-              return (
-                <Button
-                  key={link.url}
-                  appearance="subtle"
-                  className={linkClassName}
-                  onClick={() => {
-                    onNavigate(link.url);
-                    onOpenChange(false);
-                  }}
-                >
-                  {link.label}
-                </Button>
-              );
-            })}
-          </div>
-          <div className={styles.searchWrapper}>
+          <div>
             <SearchBar onSearch={() => onOpenChange(false)} />
           </div>
-          {isSmallScreen && (
-            <div className={styles.footerSection}>
+
+          <div className={styles.navSection}>
+            {navLinks.map((link) => (
               <Button
-                appearance="primary"
-                icon={<Add24Regular />}
+                key={link.url}
+                appearance="subtle"
+                className={`${styles.mobileNavLink} ${
+                  currentPath === link.url ? styles.activeLink : ""
+                }`}
                 onClick={() => {
-                  onNewRecipeDialogOpen();
+                  onNavigate(link.url);
                   onOpenChange(false);
                 }}
-                className={styles.primaryActionButton}
               >
-                New Recipe
+                {link.label}
               </Button>
-            </div>
-          )}
+            ))}
+          </div>
+
+          <Divider />
+
+          <div className={styles.footerSection}>
+            <Button
+              appearance="primary"
+              icon={<Add24Regular />}
+              onClick={() => {
+                onNewRecipeDialogOpen();
+                onOpenChange(false);
+              }}
+              className={styles.primaryActionButton}
+            >
+              New Recipe
+            </Button>
+          </div>
         </div>
       </DrawerBody>
     </Drawer>
