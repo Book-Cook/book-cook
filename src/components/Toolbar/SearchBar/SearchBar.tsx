@@ -6,17 +6,12 @@ import type {
 } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
+import type { SearchBarProps } from "./SearchBar.types";
+
 import { useSearchBox } from "../../../context";
 import { useDebounce } from "../../../hooks";
 
-export type SearchBarProps = {
-  /**
-   * Optional callback fired when the user submits a search.
-   */
-  onSearch?: () => void;
-};
-
-const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
+export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
 
   const [inputValue, setInputValue] = React.useState(searchBoxValue);
@@ -68,5 +63,3 @@ const SearchBarComponent = ({ onSearch }: SearchBarProps) => {
     />
   );
 };
-
-export const SearchBar = React.memo(SearchBarComponent);

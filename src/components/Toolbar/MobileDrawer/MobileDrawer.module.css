@@ -1,0 +1,96 @@
+.mobileMenu {
+  background-color: var(--colorNeutralBackground1);
+}
+
+.drawerHeaderAction {
+  color: var(--colorNeutralForeground1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.drawerHeaderAction:hover {
+  background-color: var(--colorNeutralBackground3);
+  transform: rotate(90deg);
+}
+
+.drawerContentWrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+  padding: var(--spacingVerticalXXL) var(--spacingHorizontalL) var(--spacingVerticalL);
+  gap: var(--spacingVerticalL);
+}
+
+.navSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
+  width: 100%;
+}
+
+.mobileNavLink {
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightRegular);
+  padding: var(--spacingVerticalM) var(--spacingHorizontalM);
+  width: 100%;
+  text-align: left;
+  border-radius: var(--borderRadiusMedium);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  color: var(--colorNeutralForeground1);
+  justify-content: flex-start;
+}
+
+.mobileNavLink:hover {
+  background-color: var(--colorNeutralBackground1Hover);
+  transform: translateX(4px);
+  color: var(--colorNeutralForeground1Hover);
+}
+
+.mobileNavLink:active {
+  background-color: var(--colorNeutralBackground1Pressed);
+  color: var(--colorNeutralForeground1Pressed);
+}
+
+.activeLink {
+  background-color: var(--colorSubtleBackgroundSelected);
+  font-weight: var(--fontWeightSemibold);
+  color: var(--colorNeutralForeground1);
+  position: relative;
+}
+
+.activeLink::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background-color: var(--colorCompoundBrandStroke);
+  border-top-right-radius: var(--borderRadiusMedium);
+  border-bottom-right-radius: var(--borderRadiusMedium);
+}
+
+.footerSection {
+  padding-top: var(--spacingVerticalL);
+  flex-shrink: 0;
+}
+
+.primaryActionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacingHorizontalS);
+  font-weight: var(--fontWeightSemibold);
+  font-size: var(--fontSizeBase300);
+  min-height: 44px;
+  width: 100%;
+  text-wrap: nowrap;
+  padding: 0 var(--spacingHorizontalL);
+  border-radius: var(--borderRadiusMedium);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryActionButton:hover {
+  transform: translateY(-2px);
+}
