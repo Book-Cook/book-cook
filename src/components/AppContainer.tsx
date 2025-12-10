@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
 
