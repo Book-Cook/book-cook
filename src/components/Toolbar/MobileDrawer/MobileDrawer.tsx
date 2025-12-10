@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Button, Divider } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
-
-import clsx from "clsx";
+import cx from "clsx";
 
 import styles from "./MobileDrawer.module.css";
 import type { MobileDrawerProps } from "./MobileDrawer.types";
@@ -60,7 +59,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               <Button
                 key={link.url}
                 appearance="subtle"
-                className={clsx(
+                className={cx(
                   styles.mobileNavLink,
                   currentPath === link.url && styles.activeLink
                 )}

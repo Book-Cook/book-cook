@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Tooltip } from "@fluentui/react-components";
+import cx from "clsx";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-import clsx from "clsx";
 
 import styles from "./RecipeCard.module.css";
 import type { RecipeCardProps } from "./RecipeCard.types";
@@ -67,8 +67,8 @@ export const RecipeCard = React.forwardRef<HTMLDivElement, RecipeCardProps>(
     const tagsToShow = React.useMemo(() => tags?.slice(0, 3) ?? [], [tags]);
     const overflowTags = React.useMemo(() => tags?.slice(3) ?? [], [tags]);
 
-    const cardClassName = clsx(styles.card, isPast && styles.pastCard, className);
-    const contentClassName = clsx(styles.content, isPast && styles.pastContent);
+    const cardClassName = cx(styles.card, isPast && styles.pastCard, className);
+    const contentClassName = cx(styles.content, isPast && styles.pastContent);
 
     return (
       <Card ref={ref} onClick={onCardClick} className={cardClassName} {...rest}>
@@ -116,14 +116,14 @@ export const RecipeCard = React.forwardRef<HTMLDivElement, RecipeCardProps>(
                 {creatorName ? (
                   <Text
                     size={200}
-                    className={clsx(styles.description, styles.descriptionTint)}
+                    className={cx(styles.description, styles.descriptionTint)}
                   >
                     By {creatorName} • {savedCount ?? 0} saves
                   </Text>
                 ) : formattedDate ? (
                   <Text
                     size={200}
-                    className={clsx(styles.description, styles.descriptionTint)}
+                    className={cx(styles.description, styles.descriptionTint)}
                   >
                     {formattedDate}
                   </Text>

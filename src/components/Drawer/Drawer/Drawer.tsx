@@ -1,5 +1,5 @@
 import * as React from "react";
-import clsx from "clsx";
+import cx from "clsx";
 
 import styles from "./Drawer.module.css";
 import type { DrawerPosition, DrawerProps, DrawerSize } from "./Drawer.types";
@@ -78,7 +78,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
         [backdropProps, closeOnBackdropClick, onOpenChange]
       );
 
-    const drawerClasses = clsx(
+    const drawerClasses = cx(
       styles.drawer,
       positionClassMap[position],
       sizeClassMap[size],
@@ -86,7 +86,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       className
     );
 
-    const backdropClasses = clsx(
+    const backdropClasses = cx(
       styles.backdrop,
       open && styles.backdropOpen,
       backdropProps?.className

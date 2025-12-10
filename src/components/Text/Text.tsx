@@ -1,6 +1,5 @@
 import * as React from "react";
-
-import clsx from "clsx";
+import cx from "clsx";
 
 import styles from "./Text.module.css";
 import type {
@@ -66,7 +65,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     const resolvedSize = variantDefaultsOverride?.size ?? size;
     const resolvedWeight = variantDefaultsOverride?.weight ?? weight;
 
-    const classNames = clsx(
+    const classNames = cx(
       styles.base,
       sizeClassMap[resolvedSize],
       weightClassMap[resolvedWeight],

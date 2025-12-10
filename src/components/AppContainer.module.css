@@ -1,0 +1,16 @@
+.root {
+  min-height: 100vh;
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+  font-family: var(--app-font);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.content {
+  padding: 12px 24px;
+  box-sizing: border-box;
+}
+
+.fullWidth {
+  padding: 0;
+}
