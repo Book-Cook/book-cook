@@ -1,18 +1,18 @@
 import * as React from "react";
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
-  Divider,
-} from "@fluentui/react-components";
+import { Button, Divider } from "@fluentui/react-components";
 import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
 
 import styles from "./MobileDrawer.module.css";
 import type { MobileDrawerProps } from "./MobileDrawer.types";
 import { navLinks } from "../constants";
 import { SearchBar } from "../SearchBar";
+
+import {
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+} from "../../Drawer/Drawer";
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -21,14 +21,18 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onNavigate,
   onNewRecipeDialogOpen,
 }) => {
+  const titleId = "mobile-drawer-title";
+
   return (
     <Drawer
       open={isOpen}
+      ariaLabelledBy={titleId}
       onOpenChange={(_, { open }) => onOpenChange(open)}
       position="start"
     >
       <DrawerHeader>
         <DrawerHeaderTitle
+          id={titleId}
           action={
             <Button
               appearance="subtle"

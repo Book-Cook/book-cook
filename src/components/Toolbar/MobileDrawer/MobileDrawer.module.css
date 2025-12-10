@@ -17,7 +17,8 @@
   flex-direction: column;
   flex-grow: 1;
   min-height: 0;
-  padding: var(--spacingVerticalXXL) var(--spacingHorizontalL) var(--spacingVerticalL);
+  padding: var(--spacingVerticalXXL) var(--spacingHorizontalL)
+    var(--spacingVerticalL);
   gap: var(--spacingVerticalL);
 }
 
@@ -93,4 +94,10 @@
 
 .primaryActionButton:hover {
   transform: translateY(-2px);
+}
+
+@media (min-width: 501px) {
+  .footerSection {
+    display: none;
+  }
 }
