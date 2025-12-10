@@ -14,6 +14,7 @@ import {
   DrawerHeader,
   DrawerHeaderTitle,
 } from "../../Drawer/Drawer";
+import { useMediaQuery } from "../../../hooks";
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -22,6 +23,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onNavigate,
   onNewRecipeDialogOpen,
 }) => {
+  const isSmallScreen = useMediaQuery("(max-width: 500px)");
   const titleId = "mobile-drawer-title";
 
   return (
@@ -76,19 +78,21 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           <div className={styles.searchWrapper}>
             <SearchBar onSearch={() => onOpenChange(false)} />
           </div>
-          <div className={styles.footerSection}>
-            <Button
-              appearance="primary"
-              icon={<Add24Regular />}
-              onClick={() => {
-                onNewRecipeDialogOpen();
-                onOpenChange(false);
-              }}
-              className={styles.primaryActionButton}
-            >
-              New Recipe
-            </Button>
-          </div>
+          {isSmallScreen && (
+            <div className={styles.footerSection}>
+              <Button
+                appearance="primary"
+                icon={<Add24Regular />}
+                onClick={() => {
+                  onNewRecipeDialogOpen();
+                  onOpenChange(false);
+                }}
+                className={styles.primaryActionButton}
+              >
+                New Recipe
+              </Button>
+            </div>
+          )}
         </div>
       </DrawerBody>
     </Drawer>
