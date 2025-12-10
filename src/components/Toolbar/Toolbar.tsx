@@ -18,6 +18,7 @@ import { UserProfile } from "./UserProfile";
 import { useMediaQuery } from "../../hooks";
 
 const MobileDrawer = dynamic(() => import("./MobileDrawer"), {
+  loading: () => null,
   ssr: false,
 });
 const NewRecipeDialog = dynamic(
@@ -29,6 +30,7 @@ const NewRecipeDialog = dynamic(
 
 export const Toolbar = () => {
   const router = useRouter();
+  const path = router.asPath;
 
   const { data: session, status } = useSession();
   const [isHydrated, setIsHydrated] = React.useState(false);
@@ -59,7 +61,7 @@ export const Toolbar = () => {
     setIsNewRecipeDialogOpen(true);
   }, []);
 
-  const showSearch = router.pathname !== "/recipes";
+  const showSearch = !path.startsWith("/recipes");
 
   if (status === "loading") {
     return (
