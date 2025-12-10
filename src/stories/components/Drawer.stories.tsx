@@ -1,15 +1,20 @@
-import { Dismiss24Regular } from '@fluentui/react-icons';
-import type { Meta, StoryObj } from '@storybook/react';
-import * as React from 'react';
+import * as React from "react";
+import { Dismiss24Regular } from "@fluentui/react-icons";
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from '../../components/Button';
-import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from '../../components/Drawer';
+import { Button } from "../../components/Button";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+} from "../../components/Drawer/Drawer";
 
 const meta: Meta<typeof Drawer> = {
-  title: 'Components/Drawer',
+  title: "Components/Drawer",
   component: Drawer,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -17,15 +22,15 @@ export default meta;
 
 type Story = StoryObj<typeof Drawer>;
 
-const DrawerPreview: React.FC<{ position?: 'start' | 'end'; label: string }> = ({
-  position = 'end',
-  label,
-}) => {
+const DrawerPreview: React.FC<{
+  position?: "start" | "end";
+  label: string;
+}> = ({ position = "end", label }) => {
   const [open, setOpen] = React.useState(false);
   const titleId = `${position}-drawer-title`;
 
   return (
-    <div style={{ minHeight: '360px', padding: '16px' }}>
+    <div style={{ minHeight: "360px", padding: "16px" }}>
       <Button appearance="primary" onClick={() => setOpen(true)}>
         Open {label}
       </Button>
@@ -53,11 +58,18 @@ const DrawerPreview: React.FC<{ position?: 'start' | 'end'; label: string }> = (
         </DrawerHeader>
 
         <DrawerBody>
-          <p style={{ marginTop: 0, color: 'var(--colorNeutralForeground2)' }}>
-            Use the Drawer component to present focused tasks or navigation on mobile. It is powered
-            by the native popover API and stays consistent with the app theme.
+          <p style={{ marginTop: 0, color: "var(--colorNeutralForeground2)" }}>
+            Use the Drawer component to present focused tasks or navigation on
+            mobile. It is powered by the native popover API and stays consistent
+            with the app theme.
           </p>
-          <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--colorNeutralForeground1)' }}>
+          <ul
+            style={{
+              paddingLeft: "20px",
+              margin: 0,
+              color: "var(--colorNeutralForeground1)",
+            }}
+          >
             <li>Supports start or end positioning</li>
             <li>Backdrop click and Escape to close</li>
             <li>Composable header and body slots</li>

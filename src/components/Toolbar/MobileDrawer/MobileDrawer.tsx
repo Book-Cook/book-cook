@@ -12,7 +12,7 @@ import {
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
-} from "../../Drawer";
+} from "../../Drawer/Drawer";
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
