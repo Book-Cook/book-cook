@@ -7,14 +7,17 @@ describe("Spinner", () => {
   it("renders with a default accessible label", () => {
     render(<Spinner />);
 
-    expect(screen.getByRole("status")).toHaveAttribute("aria-label", "Loading");
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
+      "aria-label",
+      "Loading"
+    );
   });
 
   it("renders provided label text", () => {
     render(<Spinner label="Fetching recipes..." />);
 
     expect(screen.getByText("Fetching recipes...")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveAttribute(
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
       "aria-label",
       "Fetching recipes..."
     );
@@ -23,15 +26,20 @@ describe("Spinner", () => {
   it("applies size modifier and custom className", () => {
     render(<Spinner size="tiny" className="extra-class" />);
 
-    expect(screen.getByRole("status")).toHaveClass("spinner");
-    expect(screen.getByRole("status")).toHaveClass("tiny");
-    expect(screen.getByRole("status")).toHaveClass("extra-class");
+    expect(screen.getByRole("progressbar")).toHaveClass("spinner");
+    expect(screen.getByRole("progressbar")).toHaveClass("tiny");
+    expect(screen.getByRole("progressbar")).toHaveClass("extra-class");
   });
 
   it("uses ariaLabel when label is not a string", () => {
-    render(<Spinner label={<span>Custom node</span>} ariaLabel="Loading data" />);
+    render(
+      <Spinner label={<span>Custom node</span>} ariaLabel="Loading data" />
+    );
 
-    expect(screen.getByRole("status")).toHaveAttribute("aria-label", "Loading data");
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
+      "aria-label",
+      "Loading data"
+    );
   });
 
   it("forwards refs to the outer element", () => {

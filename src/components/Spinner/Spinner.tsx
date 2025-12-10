@@ -6,7 +6,10 @@ import type { SpinnerProps } from "./Spinner.types";
 const DEFAULT_LABEL = "Loading";
 
 export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ size = "medium", label, ariaLabel = DEFAULT_LABEL, className, ...rest }, ref) => {
+  (
+    { size = "medium", label, ariaLabel = DEFAULT_LABEL, className, ...rest },
+    ref
+  ) => {
     const mergedClassName = [styles.spinner, styles[size], className]
       .filter(Boolean)
       .join(" ");
@@ -20,7 +23,7 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
       <div
         ref={ref}
         className={mergedClassName}
-        role="status"
+        role="progressbar"
         aria-live="polite"
         aria-label={accessibleLabel}
         {...rest}
