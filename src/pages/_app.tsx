@@ -2,7 +2,8 @@ import * as React from "react";
 import { tokens } from "@fluentui/react-components";
 import { SSRProvider } from "@fluentui/react-utilities";
 import { RendererProvider, createDOMRenderer } from "@griffel/react";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, hydrate } from "@tanstack/react-query";
+import type { DehydratedState } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { AppProps } from "next/app";
@@ -55,6 +56,16 @@ export default function App(props: AppProps) {
           }
         `}
       </style>
+      {/* hydrate query client with server state if present */}
+      {(() => {
+        const dehydrated = (
+          pageProps as unknown as { dehydratedState?: DehydratedState }
+        ).dehydratedState;
+        if (dehydrated) {
+          hydrate(queryClient, dehydrated);
+        }
+        return null;
+      })()}
       <QueryClientProvider client={queryClient}>
         <RendererProvider renderer={pageProps.renderer ?? createDOMRenderer()}>
           <SSRProvider>
