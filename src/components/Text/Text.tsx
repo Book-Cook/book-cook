@@ -1,4 +1,5 @@
 import * as React from "react";
+import cx from "clsx";
 
 import styles from "./Text.module.css";
 import type {
@@ -64,17 +65,15 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     const resolvedSize = variantDefaultsOverride?.size ?? size;
     const resolvedWeight = variantDefaultsOverride?.weight ?? weight;
 
-    const classNames = [
+    const classNames = cx(
       styles.base,
       sizeClassMap[resolvedSize],
       weightClassMap[resolvedWeight],
       italic && styles.italic,
       block && styles.block,
       truncate && styles.truncate,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     return (
       <Component

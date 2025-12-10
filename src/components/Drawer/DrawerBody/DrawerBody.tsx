@@ -1,5 +1,5 @@
 import * as React from "react";
-import { clsx } from "clsx";
+import cx from "clsx";
 
 import styles from "./DrawerBody.module.css";
 import type { DrawerBodyProps } from "../Drawer/Drawer.types";
@@ -9,7 +9,7 @@ export const DrawerBody: React.FC<DrawerBodyProps> = ({
   className,
   ...rest
 }) => (
-  <div className={clsx(styles.body, className)} {...rest}>
+  <div className={cx(styles.body, className)} {...rest}>
     {children}
   </div>
 );

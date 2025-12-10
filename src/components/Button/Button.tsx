@@ -1,4 +1,5 @@
 import * as React from "react";
+import cx from "clsx";
 
 import styles from "./Button.module.css";
 import type { ButtonProps } from "./Button.types";
@@ -15,9 +16,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ): React.ReactElement => {
-    const buttonClassName = [styles.button, styles[appearance], className]
-      .filter(Boolean)
-      .join(" ");
+    const buttonClassName = cx(styles.button, styles[appearance], className);
 
     return (
       <button ref={ref} className={buttonClassName} type={type} {...rest}>

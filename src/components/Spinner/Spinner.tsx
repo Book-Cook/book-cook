@@ -1,4 +1,5 @@
 import * as React from "react";
+import cx from "clsx";
 
 import styles from "./Spinner.module.css";
 import type { SpinnerProps } from "./Spinner.types";
@@ -10,9 +11,7 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
     { size = "medium", label, ariaLabel = DEFAULT_LABEL, className, ...rest },
     ref
   ) => {
-    const mergedClassName = [styles.spinner, styles[size], className]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = cx(styles.spinner, styles[size], className);
 
     const accessibleLabel =
       typeof label === "string" && label.trim().length > 0
