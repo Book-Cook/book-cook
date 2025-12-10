@@ -1,19 +1,18 @@
 import * as React from "react";
+import { Button, Divider } from "@fluentui/react-components";
+import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
+
+import styles from "./MobileDrawer.module.css";
+import type { MobileDrawerProps } from "./MobileDrawer.types";
+import { navLinks } from "../constants";
+import { SearchBar } from "../SearchBar";
+
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
-  Divider,
-  mergeClasses,
-} from "@fluentui/react-components";
-import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
-
-import { useMobileDrawerStyles } from "./MobileDrawer.styles";
-import type { MobileDrawerProps } from "./MobileDrawer.types";
-import { navLinks } from "../constants";
-import { SearchBar } from "../SearchBar";
+} from "../../Drawer";
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -22,16 +21,18 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onNavigate,
   onNewRecipeDialogOpen,
 }) => {
-  const styles = useMobileDrawerStyles();
+  const titleId = "mobile-drawer-title";
 
   return (
     <Drawer
       open={isOpen}
+      ariaLabelledBy={titleId}
       onOpenChange={(_, { open }) => onOpenChange(open)}
       position="start"
     >
       <DrawerHeader>
         <DrawerHeaderTitle
+          id={titleId}
           action={
             <Button
               appearance="subtle"
@@ -53,22 +54,28 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           </div>
 
           <div className={styles.navSection}>
-            {navLinks.map((link) => (
-              <Button
-                key={link.url}
-                appearance="subtle"
-                className={mergeClasses(
-                  styles.mobileNavLink,
-                  currentPath === link.url && styles.activeLink
-                )}
-                onClick={() => {
-                  onNavigate(link.url);
-                  onOpenChange(false);
-                }}
-              >
-                {link.label}
-              </Button>
-            ))}
+            {navLinks.map((link) => {
+              const linkClassName = [
+                styles.mobileNavLink,
+                currentPath === link.url ? styles.activeLink : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+
+              return (
+                <Button
+                  key={link.url}
+                  appearance="subtle"
+                  className={linkClassName}
+                  onClick={() => {
+                    onNavigate(link.url);
+                    onOpenChange(false);
+                  }}
+                >
+                  {link.label}
+                </Button>
+              );
+            })}
           </div>
 
           <Divider />
