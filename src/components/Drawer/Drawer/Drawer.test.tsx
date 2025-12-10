@@ -1,7 +1,7 @@
 import * as React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from ".";
+import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "..";
 
 describe("Drawer", () => {
   it("renders content when open", () => {

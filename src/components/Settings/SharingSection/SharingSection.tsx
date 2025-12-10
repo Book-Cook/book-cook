@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Input, Button, tokens, Spinner, Avatar, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
+import { Input, Button, tokens, Avatar, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
 import {
   PersonAddRegular,
   PersonAdd24Regular,
@@ -16,6 +16,7 @@ import {
   useDeleteSharedUser,
   useSharedUsers,
 } from "../../../clientToServer";
+import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 
 const useStyles = makeStyles({

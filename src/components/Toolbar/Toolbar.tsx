@@ -120,7 +120,9 @@ export const Toolbar = () => {
             </div>
           </div>
           <div className={styles.rightSection}>
-            <NewRecipeButton onClick={openNewRecipe} />
+            <div className={styles.newRecipeButton}>
+              <NewRecipeButton onClick={openNewRecipe} />
+            </div>
             {showSearch && (
               <div className={styles.searchBarWrapper}>
                 <SearchBar />

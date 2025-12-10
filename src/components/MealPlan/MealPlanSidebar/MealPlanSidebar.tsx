@@ -1,11 +1,12 @@
 import * as React from "react";
-import { makeStyles, tokens, Spinner } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { SearchBox } from "../../SearchBox";
+import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 
 const useStyles = makeStyles({

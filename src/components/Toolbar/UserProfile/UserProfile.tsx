@@ -1,11 +1,12 @@
 import * as React from "react";
-import { Avatar, Tooltip, Menu, MenuItem, MenuTrigger, MenuPopover, MenuList, MenuDivider, Button, Spinner } from "@fluentui/react-components";
+import { Avatar, Tooltip, Menu, MenuItem, MenuTrigger, MenuPopover, MenuList, MenuDivider, Button } from "@fluentui/react-components";
 import { Settings24Regular, SignOut24Regular } from "@fluentui/react-icons";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 
 import styles from "./UserProfile.module.css";
 
+import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 
 export const UserProfile: React.FC = () => {

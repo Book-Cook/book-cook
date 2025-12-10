@@ -7,7 +7,6 @@ import {
   DialogBody,
   DialogActions,
   Button,
-  Spinner,
 } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
@@ -15,6 +14,7 @@ import styles from "./NewRecipeDialog.module.css";
 import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
 
 import { useCreateRecipe } from "../../../clientToServer";
+import { Spinner } from "../../Spinner";
 
 export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   isOpen,
