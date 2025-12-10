@@ -1,10 +1,11 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5";
 import { SessionProvider } from "next-auth/react";
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5";
+
+import { withStoryProviders } from "../decorators/withStoryProviders";
 
 import { Toolbar } from "../../components/Toolbar";
-import { withStoryProviders } from "../decorators/withStoryProviders";
 
 const meta: Meta<typeof Toolbar> = {
   title: "Components/Toolbar",

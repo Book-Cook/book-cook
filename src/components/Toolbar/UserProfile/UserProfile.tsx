@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 
 import styles from "./UserProfile.module.css";
+
 import { Text } from "../../Text";
 
 export const UserProfile: React.FC = () => {

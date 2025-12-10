@@ -3,6 +3,7 @@ import { Add24Regular } from "@fluentui/react-icons";
 
 import styles from "./NewRecipeButton.module.css";
 import type { NewRecipeButtonProps } from "./NewRecipeButton.types";
+
 import { Button } from "../../Button";
 
 export const NewRecipeButton: React.FC<NewRecipeButtonProps> = ({ onClick }) => {

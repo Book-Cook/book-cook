@@ -6,9 +6,10 @@ import type {
 } from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
+import type { SearchBarProps } from "./SearchBar.types";
+
 import { useSearchBox } from "../../../context";
 import { useDebounce } from "../../../hooks";
-import type { SearchBarProps } from "./SearchBar.types";
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { searchBoxValue = "", onSearchBoxValueChange } = useSearchBox();
