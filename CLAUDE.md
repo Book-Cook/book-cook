@@ -3,7 +3,7 @@
 - **Language**: TypeScript (`^5.8.3`)
 - **Framework**: Next.js (Pages Router)
 - **Styling**: CSS Modules
-- **Component Library**: FluentUI
+- **Component Library**: None
 - **Data Fetching**: React Query (TanStack)
 - **Testing**: Jest + React Testing Library
 - **Linting**: ESLint with `@typescript-eslint`

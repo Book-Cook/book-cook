@@ -1,6 +1,8 @@
 import * as React from "react";
 import NextLink from "next/link";
 
+import clsx from "clsx";
+
 import styles from "./Link.module.css";
 import type { LinkProps, LinkTone, LinkUnderline } from "./Link.types";
 
@@ -34,14 +36,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     },
     ref
   ) => {
-    const classes = [
+    const classes = clsx(
       styles.link,
       underlineClassMap[underline],
       toneClassMap[tone],
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     const safeRel = target === "_blank" ? (rel ?? "noreferrer noopener") : rel;
 

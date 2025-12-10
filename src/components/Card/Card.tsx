@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import clsx from "clsx";
+
 import styles from "./Card.module.css";
 import type { CardProps } from "./Card.types";
 
@@ -34,13 +36,11 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
     const shouldHandleKeyDown = isClickable || Boolean(onKeyDown);
 
-    const cardClassName = [
+    const cardClassName = clsx(
       styles.card,
       isClickable && styles.clickable,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     return (
       <div

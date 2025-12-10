@@ -1,5 +1,5 @@
 import * as React from "react";
-import { clsx } from "clsx";
+import clsx from "clsx";
 
 import styles from "./Drawer.module.css";
 import type { DrawerPosition, DrawerProps, DrawerSize } from "./Drawer.types";

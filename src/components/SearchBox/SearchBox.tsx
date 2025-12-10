@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import clsx from "clsx";
+
 import styles from "./SearchBox.module.css";
 import type { SearchBoxProps } from "./SearchBox.types";
 
@@ -39,13 +41,11 @@ export const SearchBox = React.forwardRef<HTMLInputElement, SearchBoxProps>(
 
     const showClear = allowClear && !contentAfter && Boolean(currentValue);
 
-    const classes = [
+    const classes = clsx(
       styles.input,
       contentBefore && styles.withContentBefore,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     return (
       <div className={styles.root}>

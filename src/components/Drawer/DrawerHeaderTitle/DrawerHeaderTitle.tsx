@@ -1,5 +1,5 @@
 import * as React from "react";
-import { clsx } from "clsx";
+import clsx from "clsx";
 
 import styles from "./DrawerHeaderTitle.module.css";
 import type { DrawerHeaderTitleProps } from "../Drawer/Drawer.types";

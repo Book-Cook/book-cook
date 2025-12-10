@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import clsx from "clsx";
+
 import styles from "./NavigationLinks.module.css";
 import type { NavigationLinksProps } from "./NavigationLinks.types";
 import { navLinks } from "../constants";
@@ -13,9 +15,10 @@ export const NavigationLinks: React.FC<NavigationLinksProps> = ({ currentPath })
         <Link
           key={link.url}
           href={link.url}
-          className={[styles.link, currentPath === link.url && styles.active]
-            .filter(Boolean)
-            .join(" ")}
+          className={clsx(
+            styles.link,
+            currentPath === link.url && styles.active
+          )}
           underline="none"
         >
           {link.label}
