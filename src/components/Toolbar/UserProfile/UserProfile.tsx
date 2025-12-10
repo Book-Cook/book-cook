@@ -6,8 +6,8 @@ import { useSession, signOut } from "next-auth/react";
 
 import styles from "./UserProfile.module.css";
 
-import { Text } from "../../Text";
 import { Spinner } from "../../Spinner";
+import { Text } from "../../Text";
 
 export const UserProfile: React.FC = () => {
   const { data: session, status } = useSession();

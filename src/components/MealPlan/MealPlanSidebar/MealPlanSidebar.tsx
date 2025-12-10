@@ -6,8 +6,8 @@ import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { SearchBox } from "../../SearchBox";
-import { Text } from "../../Text";
 import { Spinner } from "../../Spinner";
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   container: {

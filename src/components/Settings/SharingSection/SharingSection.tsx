@@ -16,8 +16,8 @@ import {
   useDeleteSharedUser,
   useSharedUsers,
 } from "../../../clientToServer";
-import { Text } from "../../Text";
 import { Spinner } from "../../Spinner";
+import { Text } from "../../Text";
 
 const useStyles = makeStyles({
   shareContainer: {
