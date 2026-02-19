@@ -7,20 +7,16 @@ import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { useQuery } from "@tanstack/react-query";
 
 import { useStyles } from "./MealPlanCalendar.styles";
-import type {
-  MealPlanCalendarProps,
-  CalendarView,
-  DraggedRecipe,
-} from "./MealPlanCalendar.types";
+import type { MealPlanCalendarProps, DraggedRecipe } from "./MealPlanCalendar.types";
 import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
+import { useCalendarNavigation } from "../hooks/useCalendarNavigation";
 import { useMealPlanMutations } from "../hooks/useMealPlanMutations";
 import { useSidebarResize } from "../hooks/useSidebarResize";
 import { MealPlanSidebar } from "../MealPlanSidebar/MealPlanSidebar";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 import { TimePicker } from "../TimePicker/TimePicker";
-import { formatDateString } from "../utils/formatDateString";
 import WeekView from "../WeekView";
 
 import type { CreateMealPlanPayload } from "../../../clientToServer/types";
@@ -31,8 +27,16 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   initialView = "week",
 }) => {
   const styles = useStyles();
-  const [view, setView] = React.useState<CalendarView>(initialView);
-  const [currentDate, setCurrentDate] = React.useState(new Date());
+  const {
+    view,
+    setView,
+    currentDate,
+    dateRange,
+    handlePrevious,
+    handleNext,
+    handleToday,
+  } = useCalendarNavigation(new Date(), initialView);
+
   const [draggedRecipe, setDraggedRecipe] =
     React.useState<DraggedRecipe | null>(null);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
@@ -62,36 +66,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     };
   }, [isMobile, sidebarOpen]);
 
-  // Calculate date range based on view
-  const getDateRange = () => {
-    const start = new Date(currentDate);
-    const end = new Date(currentDate);
-
-    if (view === "day") {
-      start.setHours(0, 0, 0, 0);
-      end.setHours(23, 59, 59, 999);
-    } else if (view === "week") {
-      const day = start.getDay();
-      start.setDate(start.getDate() - day);
-      start.setHours(0, 0, 0, 0);
-      end.setDate(start.getDate() + 6);
-      end.setHours(23, 59, 59, 999);
-    } else {
-      start.setDate(1);
-      start.setHours(0, 0, 0, 0);
-      end.setMonth(end.getMonth() + 1);
-      end.setDate(0);
-      end.setHours(23, 59, 59, 999);
-    }
-
-    return {
-      startDate: formatDateString(start),
-      endDate: formatDateString(end),
-    };
-  };
-
   // Fetch meal plans for current date range
-  const dateRange = getDateRange();
   const { data: mealPlansData } = useQuery({
     queryKey: ["mealPlans", dateRange.startDate, dateRange.endDate],
     queryFn: async () => {
@@ -112,35 +87,6 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     reorderMealMutation,
     moveMealMutation,
   } = useMealPlanMutations({ dateRange });
-
-  // Navigation handlers
-  const handlePrevious = React.useCallback(() => {
-    const newDate = new Date(currentDate);
-    if (view === "day") {
-      newDate.setDate(newDate.getDate() - 1);
-    } else if (view === "week") {
-      newDate.setDate(newDate.getDate() - 7);
-    } else {
-      newDate.setMonth(newDate.getMonth() - 1);
-    }
-    setCurrentDate(newDate);
-  }, [currentDate, view]);
-
-  const handleNext = React.useCallback(() => {
-    const newDate = new Date(currentDate);
-    if (view === "day") {
-      newDate.setDate(newDate.getDate() + 1);
-    } else if (view === "week") {
-      newDate.setDate(newDate.getDate() + 7);
-    } else {
-      newDate.setMonth(newDate.getMonth() + 1);
-    }
-    setCurrentDate(newDate);
-  }, [currentDate, view]);
-
-  const handleToday = React.useCallback(() => {
-    setCurrentDate(new Date());
-  }, []);
 
   // Drag and drop handlers
   const handleDragStart = React.useCallback(
@@ -306,42 +252,32 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
     [pendingMeal, addMealMutation, isMobile]
   );
 
-  // Render current view
-  const renderView = React.useCallback(() => {
-    const timeMealRemove = async (
-      date: string,
-      time: string,
-      mealIndex: number
-    ): Promise<void> => {
-      return new Promise<void>((resolve) => {
-        removeMealMutation.mutate({ date, time, mealIndex });
-        resolve();
-      });
-    };
+  const onMealRemove = React.useCallback(
+    (date: string, time: string, mealIndex: number): Promise<void> =>
+      removeMealMutation
+        .mutateAsync({ date, time, mealIndex })
+        .catch(() => undefined),
+    [removeMealMutation]
+  );
 
-    const dayWeekProps = {
-      currentDate,
-      mealPlans: mealPlansData?.mealPlans ?? [],
-      onMealRemove: timeMealRemove,
-    };
+  const viewProps = {
+    currentDate,
+    mealPlans: mealPlansData?.mealPlans ?? [],
+    onMealRemove,
+  };
 
-    const monthProps = {
-      currentDate,
-      mealPlans: mealPlansData?.mealPlans ?? [],
-      onMealRemove: timeMealRemove,
-    };
-
+  const renderView = () => {
     switch (view) {
       case "day":
-        return <HourlyDayView {...dayWeekProps} />;
+        return <HourlyDayView {...viewProps} />;
       case "week":
-        return <WeekView {...dayWeekProps} />;
+        return <WeekView {...viewProps} />;
       case "month":
-        return <MonthView {...monthProps} />;
+        return <MonthView {...viewProps} />;
       default:
-        return <WeekView {...dayWeekProps} />;
+        return <WeekView {...viewProps} />;
     }
-  }, [view, currentDate, mealPlansData?.mealPlans, removeMealMutation]);
+  };
 
   return (
     <DndContext

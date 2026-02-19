@@ -144,9 +144,6 @@ export const RecipeProvider: React.FC<{
   const onAddToCollection = React.useCallback(
     (recipeId: string) => {
       addToCollection(recipeId, {
-        onSuccess: (_data) => {
-          // Recipe successfully added/removed from collection
-        },
         onError: (error) => {
           console.error("Failed to update collection:", error);
         },
@@ -158,9 +155,6 @@ export const RecipeProvider: React.FC<{
   const onSaveRecipe = React.useCallback(
     (recipeId: string) => {
       saveRecipe(recipeId, {
-        onSuccess: (_data) => {
-          // Recipe saved/unsaved successfully
-        },
         onError: (error) => {
           console.error("Failed to save recipe:", error);
         },
