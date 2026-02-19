@@ -120,18 +120,6 @@ const RecipeHeaderComponent = () => {
     }
   }, [recipe?.createdAt]);
 
-  const handleAddToCollection = () => {
-    if (recipe?._id) {
-      onAddToCollection(recipe._id);
-    }
-  };
-
-  const handleSaveRecipe = () => {
-    if (recipe?._id) {
-      onSaveRecipe(recipe._id);
-    }
-  };
-
   const handleAiConvert = () => {
     if (isConverting || !editableData?.content) {
       return;
@@ -214,7 +202,7 @@ const RecipeHeaderComponent = () => {
                   appearance="transparent"
                   icon={isSaved ? <Heart20Filled /> : <Heart20Regular />}
                   shape="circular"
-                  onClick={handleSaveRecipe}
+                  onClick={() => recipe?._id && onSaveRecipe(recipe._id)}
                   className={styles.favoriteButton}
                 />
               </Tooltip>
@@ -225,7 +213,7 @@ const RecipeHeaderComponent = () => {
                   appearance="transparent"
                   icon={isLiked ? <Heart20Filled /> : <Heart20Regular />}
                   shape="circular"
-                  onClick={handleAddToCollection}
+                  onClick={() => recipe?._id && onAddToCollection(recipe._id)}
                   className={styles.favoriteButton}
                 />
               </Tooltip>

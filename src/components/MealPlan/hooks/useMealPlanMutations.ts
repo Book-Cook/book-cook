@@ -27,6 +27,24 @@ const cloneMealPlans = (mealPlans: MealPlan[]): MealPlan[] =>
     },
   }));
 
+const buildSharedHandlers = (
+  queryClient: ReturnType<typeof useQueryClient>,
+  queryKey: readonly [string, string, string]
+) => ({
+  onError: (
+    _err: unknown,
+    _variables: unknown,
+    context: { previousData?: MealPlanResponse } | undefined
+  ) => {
+    if (context?.previousData) {
+      queryClient.setQueryData(queryKey, context.previousData);
+    }
+  },
+  onSettled: () => {
+    void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
+  },
+});
+
 export const useMealPlanMutations = ({
   dateRange,
 }: UseMealPlanMutationsProps) => {
@@ -36,6 +54,8 @@ export const useMealPlanMutations = ({
     dateRange.startDate,
     dateRange.endDate,
   ] as const;
+
+  const shared = buildSharedHandlers(queryClient, queryKey);
 
   const addMealMutation = useMutation({
     mutationFn: async (payload: CreateMealPlanPayload) => {
@@ -128,14 +148,8 @@ export const useMealPlanMutations = ({
 
       return { previousData };
     },
-    onError: (_err, _newMeal, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKey, context.previousData);
-      }
-    },
-    onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
+    onError: shared.onError,
+    onSettled: shared.onSettled,
   });
 
   const removeMealMutation = useMutation({
@@ -200,14 +214,8 @@ export const useMealPlanMutations = ({
 
       return { previousData };
     },
-    onError: (_err, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKey, context.previousData);
-      }
-    },
-    onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
+    onError: shared.onError,
+    onSettled: shared.onSettled,
   });
 
   const reorderMealMutation = useMutation({
@@ -278,14 +286,8 @@ export const useMealPlanMutations = ({
 
       return { previousData };
     },
-    onError: (_err, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKey, context.previousData);
-      }
-    },
-    onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
+    onError: shared.onError,
+    onSettled: shared.onSettled,
   });
 
   const moveMealMutation = useMutation({
@@ -400,14 +402,8 @@ export const useMealPlanMutations = ({
 
       return { previousData };
     },
-    onError: (_err, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKey, context.previousData);
-      }
-    },
-    onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: ["mealPlans"] });
-    },
+    onError: shared.onError,
+    onSettled: shared.onSettled,
   });
 
   return {

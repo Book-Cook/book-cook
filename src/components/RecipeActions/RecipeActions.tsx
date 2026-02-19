@@ -211,7 +211,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       </Menu>
       {activeDialog === "title" && (
         <ChangeTitleDialog
-          isOpen={activeDialog === "title"}
+          isOpen
           currentTitle={editableData.title}
           onSave={handleSave("title")}
           onClose={closeDialog}
@@ -219,7 +219,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       )}
       {activeDialog === "tags" && (
         <ChangeTagsDialog
-          isOpen={activeDialog === "tags"}
+          isOpen
           currentTags={editableData.tags}
           onSave={handleSave("tags")}
           availableTags={availableTags}
@@ -228,7 +228,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       )}
       {activeDialog === "emoji" && (
         <ChangeEmojiDialog
-          isOpen={activeDialog === "emoji"}
+          isOpen
           currentEmoji={editableData.emoji}
           onSave={handleSave("emoji")}
           onClose={closeDialog}
@@ -236,7 +236,7 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
       )}
       {activeDialog === "isPublic" && (
         <ChangeSharedWithDialog
-          isOpen={activeDialog === "isPublic"}
+          isOpen
           isPublic={isPublic ?? false}
           onSave={handleVisibilitySave}
           onClose={closeDialog}
