@@ -14,7 +14,7 @@ export const RecipePage = () => {
 
   return (
     <RecipeProvider>
-      <FadeIn className={styles.pageContainer}>
+      <div className={styles.pageContainer}>
         <FadeIn up delay={0.2} className={styles.recipeCard}>
           <div className={styles.topSection}>
             <RecipeImage />
@@ -27,7 +27,7 @@ export const RecipePage = () => {
             <RecipeContent />
           </div>
         </FadeIn>
-      </FadeIn>
+      </div>
     </RecipeProvider>
   );
 };

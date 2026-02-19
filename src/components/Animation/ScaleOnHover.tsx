@@ -9,6 +9,9 @@ export type ScaleOnHoverProps = React.HTMLAttributes<HTMLDivElement> & {
 const useStyles = makeStyles({
   root: {
     transition: "transform 0.2s",
+    "&:hover": {
+      transform: "var(--scale-hover)",
+    },
   },
 });
 
@@ -19,13 +22,10 @@ export const ScaleOnHover: React.FC<ScaleOnHoverProps> = ({
   ...rest
 }) => {
   const styles = useStyles();
-  const [hovered, setHovered] = React.useState(false);
   return (
     <div
       className={mergeClasses(styles.root, className)}
-      style={{ transform: hovered ? `scale(${scale})` : undefined }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      style={{ "--scale-hover": `scale(${scale})` } as React.CSSProperties}
       {...rest}
     >
       {children}
