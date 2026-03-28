@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { RecipeCard } from "../../components/RecipeCard";
 import type { Recipe } from "../../clientToServer/types/recipes.types";
+import { RecipeCard } from "../../components/RecipeCard";
 
 const meta: Meta<typeof RecipeCard> = {
   title: "Components/RecipeCard",
