@@ -49,11 +49,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: ReactNode;
 
   /**
-   * FluentUI-compatible icon alias — same as startIcon.
-   */
-  icon?: ReactNode;
-
-  /**
    * Icon element to display after the text.
    */
   endIcon?: ReactNode;
