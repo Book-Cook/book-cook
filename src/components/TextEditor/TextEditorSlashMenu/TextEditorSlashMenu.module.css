@@ -1,0 +1,27 @@
+.menu {
+  background: var(--ui-Canvas);
+  border: 1px solid var(--ui-Border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  width: 180px;
+  padding: 4px;
+  z-index: 50;
+}
+
+.item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ui-TextPrimary);
+}
+
+.selected {
+  background: var(--ui-ControlHover);
+}
