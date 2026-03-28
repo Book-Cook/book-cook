@@ -1,0 +1,85 @@
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  --editor-menu-size: 24px;
+  --editor-menu-gap: 12px;
+  --editor-gutter: calc(var(--editor-menu-size) + var(--editor-menu-gap));
+}
+
+.editable {
+  --editor-text-padding-left: var(--editor-gutter);
+  --editor-text-padding-right: var(--editor-gutter);
+}
+
+.readOnly {
+  --editor-text-padding-left: 0px;
+  --editor-text-padding-right: 12px;
+}
+
+.input {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  min-width: 0;
+  overflow-x: hidden;
+  padding-left: var(--editor-text-padding-left, var(--editor-gutter));
+  padding-right: var(--editor-text-padding-right, 12px);
+  padding-top: 12px;
+  box-sizing: border-box;
+}
+
+.ol {
+  padding: 0;
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: decimal;
+}
+
+.ul {
+  padding: 0;
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.listItem {
+  margin: 6px 0;
+  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+
+.nestedListItem {
+  list-style-type: none;
+}
+
+/* ── Table ── */
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+.tableRow {
+  display: table-row;
+}
+
+.tableCell {
+  border: 1px solid var(--ui-Divider);
+  padding: 8px 12px;
+  vertical-align: top;
+  min-width: 80px;
+  color: var(--ui-TextPrimary);
+}
+
+.tableCellHeader {
+  background: var(--ui-ControlHover);
+  font-weight: 600;
+}
