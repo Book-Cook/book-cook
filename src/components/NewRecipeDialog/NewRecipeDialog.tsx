@@ -28,7 +28,7 @@ export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) =>
       return;
     }
     mutation.mutate(
-      { title: trimmed, data: "", tags: [], imageURL: "" },
+      { title: trimmed, data: "", tags: [], imageURL: "", emoji: "", isPublic: false },
       {
         onSuccess: (response) => {
           void router.push(`/recipes/${response.recipeId}`);
