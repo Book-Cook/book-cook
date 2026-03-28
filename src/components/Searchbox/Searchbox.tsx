@@ -1,8 +1,8 @@
 import * as React from "react";
 import cx from "clsx";
 
-import styles from "./SearchBox.module.css";
-import type { SearchBoxProps } from "./SearchBox.types";
+import styles from "./Searchbox.module.css";
+import type { SearchBoxProps } from "./Searchbox.types";
 
 export const SearchBox = React.forwardRef<HTMLInputElement, SearchBoxProps>(
   ({
