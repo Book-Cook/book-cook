@@ -1,5 +1,10 @@
 module.exports = {
   reactStrictMode: true,
+  experimental: {
+    reactCompiler: {
+      target: "18",
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -13,6 +18,10 @@ module.exports = {
       {
         protocol: "https",
         hostname: "therecipecritic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
       },
     ],
   },

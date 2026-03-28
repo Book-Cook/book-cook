@@ -10,7 +10,7 @@ export type Recipe = {
   imageURL: string;
 
   /**
-   *  The title of the recipe.
+   * The title of the recipe.
    */
   title: string;
 
@@ -28,6 +28,33 @@ export type Recipe = {
    * The list of tags for the recipe.
    */
   tags: string[];
+
+  /**
+   * Emoji fallback when no image is available.
+   */
+  emoji: string;
+
+  /**
+   * Owner user ID.
+   */
+  owner: string;
+
+  /**
+   * Whether the recipe is publicly visible.
+   */
+  isPublic: boolean;
+
+  savedCount?: number;
+  viewCount?: number;
+  publishedAt?: string;
+  creatorName?: string;
+};
+
+export type CreateRecipeInput = {
+  title: string;
+  data: string;
+  tags: string[];
+  imageURL?: string;
 };
 
 export type CreateRecipeResponse = {

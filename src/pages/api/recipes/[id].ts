@@ -8,6 +8,7 @@ type UpdateFields = {
   title?: string;
   data?: string;
   tags?: string[];
+  emoji?: string;
   imageURL?: string;
 };
 
@@ -71,12 +72,13 @@ export default async function handler(req: any, res: any) {
   } else if (req.method === "PUT") {
     // Update a specific recipe
     try {
-      const { title, data, tags, imageURL } = req.body;
+      const { title, data, tags, emoji, imageURL } = req.body;
       const updateFields: UpdateFields = {};
 
       if (title) updateFields.title = title;
       if (data) updateFields.data = data;
-      if (tags) updateFields.tags = tags;
+      if (tags !== undefined) updateFields.tags = tags;
+      if (emoji) updateFields.emoji = emoji;
       if (imageURL) updateFields.imageURL = imageURL;
 
       const result = await recipesCollection.updateOne(

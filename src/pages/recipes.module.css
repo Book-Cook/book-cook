@@ -1,0 +1,33 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 24px;
+  padding: 0 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 320px;
+}

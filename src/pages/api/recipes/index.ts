@@ -64,10 +64,10 @@ export default async function handler(req: any, res: any) {
       const { title, data, tags } = req.body;
 
       // Validate input data
-      if (!title || !data) {
+      if (!title) {
         return res
           .status(400)
-          .json({ message: "Title and data are required." });
+          .json({ message: "Title is required." });
       }
 
       const newRecipe = {

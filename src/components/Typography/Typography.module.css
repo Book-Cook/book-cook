@@ -1,0 +1,74 @@
+.recipeTitle {
+  font-family: var(--font-sans);
+  font-size: 1.875em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ui-TextPrimary);
+}
+
+.pageTitle {
+  font-family: var(--font-sans);
+  font-size: 1.875em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ui-TextPrimary);
+}
+
+.sectionHeading {
+  font-family: var(--font-sans);
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ui-TextPrimary);
+}
+
+.subsectionHeading {
+  font-family: var(--font-sans);
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ui-TextPrimary);
+}
+
+.focusStep {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--ui-TextPrimary);
+}
+
+.bodyText {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ui-TextSecondary);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.metaLabel {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ui-TextCaption);
+  font-variant-numeric: tabular-nums;
+}
+
+.bold {
+  font-weight: 600;
+  color: var(--ui-TextPrimary);
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--ui-TextCaption);
+}

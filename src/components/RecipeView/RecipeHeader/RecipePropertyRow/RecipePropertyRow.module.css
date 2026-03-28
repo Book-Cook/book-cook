@@ -1,0 +1,33 @@
+.propertyRow {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 0;
+  gap: 12px;
+}
+
+.propertyLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.propertyIcon {
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.propertyValue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+@media (max-width: 720px) {
+  .propertyLabel {
+    min-width: 96px;
+  }
+}

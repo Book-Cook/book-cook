@@ -4,8 +4,33 @@ import authOptions from "../auth/[...nextauth]";
 import type { Session } from "next-auth";
 
 export default async function handler(req: any, res: any) {
+  const session: Session | null = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  if (req.method === "DELETE") {
+    const client = await clientPromise;
+    const db = client.db("dev");
+    try {
+      await db
+        .collection("users")
+        .updateOne(
+          { email: session?.user?.email },
+          { $set: { recentlyViewedRecipes: [] } }
+        );
+      res.status(200).json({ message: "Cleared" });
+    } catch (error) {
+      console.error("Failed to clear recently viewed:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+    return;
+  }
+
   if (req.method !== "GET") {
-    res.setHeader("Allow", ["GET"]);
+    res.setHeader("Allow", ["GET", "DELETE"]);
     res.status(405).json({ message: `Method ${req.method} not allowed` });
     return;
   }
@@ -13,19 +38,7 @@ export default async function handler(req: any, res: any) {
   const client = await clientPromise;
   const db = client.db("dev");
 
-  // Retrieve all recipes that the user has viewed recently
   try {
-    const session: Session | null = await getServerSession(
-      req,
-      res,
-      authOptions
-    );
-
-    if (!session) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-
     // Find the user document and project only recentlyViewedRecipes.
     const userDoc = await db
       .collection("users")

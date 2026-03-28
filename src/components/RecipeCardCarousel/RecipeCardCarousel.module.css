@@ -1,0 +1,79 @@
+.carousel {
+  width: 100%;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 8px;
+}
+
+.title {
+  margin: 0;
+}
+
+.viewport {
+  overflow: hidden;
+  padding-inline: 4px;
+  touch-action: pan-y;
+}
+
+.viewport:focus-visible {
+  outline: 2px solid var(--brand-Primary);
+  outline-offset: 2px;
+}
+
+.track {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.item {
+  flex: 0 0 clamp(220px, 70vw, 280px);
+  width: clamp(220px, 70vw, 280px);
+  min-width: 0;
+  display: flex;
+}
+
+.item > * {
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controls :global(button) {
+    transition: none;
+  }
+}
+
+.skeletonCard {
+  width: 100%;
+  height: 240px;
+  border-radius: 8px;
+  background: var(--ui-Divider, #e6e8ee);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonCard {
+    animation: none;
+  }
+}

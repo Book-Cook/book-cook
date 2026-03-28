@@ -1,0 +1,102 @@
+.section {
+  user-select: none;
+}
+
+.sectionTrigger.sectionTrigger {
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: var(--ui-TextSecondary);
+  gap: 6px;
+  min-height: 30px;
+  padding-left: calc(6px + var(--sidebar-section-indent, 0px));
+  padding-right: 6px;
+}
+
+.sectionTrigger:hover {
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.sectionTrigger.sectionTrigger:focus-visible {
+  outline: none;
+  box-shadow: var(--sidebar-focus-ring, inset 0 0 0 1px var(--ui-ControlBorderHover));
+}
+
+.sectionTrigger:not(.sectionTriggerItem) > span {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: inherit;
+}
+
+.sectionTriggerItem.sectionTriggerItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: var(--ui-TextSecondary);
+  gap: 6px;
+  min-height: 30px;
+  text-align: left;
+  padding-left: calc(6px + var(--sidebar-section-indent, 0px));
+  padding-right: 6px;
+}
+
+.sectionTriggerItem.sectionTriggerItem:focus-visible {
+  outline: none;
+  box-shadow: var(--sidebar-focus-ring, inset 0 0 0 1px var(--ui-ControlBorderHover));
+}
+
+.sectionTriggerItem > span {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: inherit;
+}
+
+.sectionTrigger:not(.sectionTriggerItem) svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sectionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.sectionText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sectionEnd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.sectionTriggerItem > svg {
+  width: 14px;
+  height: 14px;
+  color: currentColor;
+  transform: none;
+}
+
+.sectionContent {
+  padding-left: var(--sidebar-section-indent, 0px);
+}
+
+.sectionContent > div {
+  padding: 4px 2px;
+  gap: 1px;
+}

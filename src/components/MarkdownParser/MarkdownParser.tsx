@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Body1, Display, LargeTitle } from "../Typography";
+import { BodyText, PageTitle, SectionHeading, Text } from "../Typography";
 import Markdown from "react-markdown";
 import { ListItemProps, MarkdownParserProps } from "./MarkdownParser.types";
 
@@ -9,13 +9,13 @@ export const MarkdownParser: React.FC<MarkdownParserProps> = (props) => {
   return (
     <Markdown
       components={{
-        p: ({ children }) => <Body1 as="p">{children}</Body1>,
-        title: ({ children }) => <Display as="h1">{children}</Display>,
-        h1: ({ children }) => <LargeTitle as="h1">{children}</LargeTitle>,
+        p: ({ children }) => <BodyText as="p">{children}</BodyText>,
+        title: ({ children }) => <PageTitle as="h1">{children}</PageTitle>,
+        h1: ({ children }) => <SectionHeading as="h1">{children}</SectionHeading>,
         strong: ({ children }) => (
-          <Body1 as="strong" weight="bold">
+          <Text variant="bodyText" as="strong" bold>
             {children}
-          </Body1>
+          </Text>
         ),
         li: ({ children, ...props }: ListItemProps) => (
           <li
@@ -24,9 +24,9 @@ export const MarkdownParser: React.FC<MarkdownParserProps> = (props) => {
               listStyleType: props.listStyleType || "inherit",
             }}
           >
-            <Body1 as="p" style={{ display: "block" }}>
+            <BodyText as="p" style={{ display: "block" }}>
               {children}
-            </Body1>
+            </BodyText>
           </li>
         ),
       }}

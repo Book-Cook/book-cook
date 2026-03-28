@@ -1,0 +1,85 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  background: transparent;
+}
+
+.item[data-disabled] {
+  opacity: 0.5;
+}
+
+.header {
+  margin: 0;
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ui-TextPrimary);
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.trigger:hover {
+  background: var(--ui-ControlHover);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ui-ControlBorderHover);
+  outline-offset: 2px;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+}
+
+.trigger:disabled:hover {
+  background: transparent;
+}
+
+.label {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--ui-TextPrimary);
+}
+
+.indicator {
+  color: var(--ui-TextCaption);
+  transition:
+    transform 0.12s ease,
+    color 0.12s ease;
+}
+
+.trigger[data-state="open"] .indicator {
+  transform: rotate(180deg);
+  color: var(--ui-TextPrimary);
+}
+
+.content {
+  overflow: hidden;
+  color: var(--ui-TextSecondary);
+}
+
+.contentInner {
+  padding: 0 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

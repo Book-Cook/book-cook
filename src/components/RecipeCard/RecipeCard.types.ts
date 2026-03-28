@@ -1,26 +1,26 @@
+import type { Recipe } from "../RecipeView/RecipeView.types";
+
 export type RecipeCardProps = {
   /**
-   * The title of the recipe
+   * Recipe data to display. Not required when isLoading is true.
    */
-  title: string;
-
+  recipe?: Recipe;
   /**
-   *  The image src to render for the recipe card.
+   * Optional click handler for interactive cards.
    */
-  imageSrc?: string;
-
+  onClick?: (recipe: Recipe) => void;
   /**
-   * The list of tags to render for the recipe card.
+   * Optional class names to customize the card.
    */
-  tags?: string[];
-
+  className?: string;
   /**
-   * The date the recipe was created
+   * Show the author and created date row.
+   * @default true
    */
-  createdDate: string;
-
+  showMeta?: boolean;
   /**
-   * The id of the recipe to navigate to
+   * Render the card as an animated skeleton placeholder.
+   * @default false
    */
-  id: string;
+  isLoading?: boolean;
 };

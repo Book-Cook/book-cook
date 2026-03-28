@@ -1,5 +1,7 @@
 {
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "outDir": "lib",
     "module": "esnext",
@@ -14,8 +16,14 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "jsx": "preserve",
-    "lib": ["esnext", "dom"],
-    "types": ["jest", "@types/jest"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "jest",
+      "@types/jest"
+    ],
     "baseUrl": ".",
     "allowJs": true,
     "noEmit": true,
