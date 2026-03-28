@@ -1,0 +1,62 @@
+.spinner {
+  --spinner-size: 20px;
+  --spinner-stroke: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--colorNeutralForeground2);
+  font-size: 14px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.indicator {
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 50%;
+  border: var(--spinner-stroke) solid var(--colorNeutralStroke3);
+  border-top-color: var(--colorBrandBackground);
+  border-right-color: var(--colorBrandBackground);
+  animation: spin 0.75s linear infinite;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.label {
+  color: var(--colorNeutralForeground2);
+}
+
+.tiny {
+  --spinner-size: 12px;
+  --spinner-stroke: 2px;
+  font-size: 12px;
+}
+
+.small {
+  --spinner-size: 16px;
+  --spinner-stroke: 2px;
+  font-size: 13px;
+}
+
+.medium {
+  --spinner-size: 20px;
+  --spinner-stroke: 3px;
+}
+
+.large {
+  --spinner-size: 28px;
+  --spinner-stroke: 3px;
+  font-size: 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    animation-duration: 1.2s;
+  }
+}

@@ -1,0 +1,12 @@
+.header {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--colorNeutralStroke1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.email {
+  display: block;
+  opacity: 0.8;
+}

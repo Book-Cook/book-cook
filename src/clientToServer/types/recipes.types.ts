@@ -10,7 +10,7 @@ export type Recipe = {
   imageURL: string;
 
   /**
-   * The title of the recipe.
+   *  The title of the recipe.
    */
   title: string;
 
@@ -30,34 +30,49 @@ export type Recipe = {
   tags: string[];
 
   /**
-   * Emoji fallback when no image is available.
+   * The emoji icon for the recipe. Used as a fallback for the image.
+   * If the image is not available, this emoji will be displayed.
    */
   emoji: string;
 
   /**
-   * Owner user ID.
+   * The owner of the recipe.
    */
   owner: string;
 
   /**
-   * Whether the recipe is publicly visible.
+   * Whether the recipe is public or not.
    */
   isPublic: boolean;
 
+  /**
+   * The number of times this recipe has been saved by users.
+   */
   savedCount?: number;
+
+  /**
+   * The number of times this recipe has been viewed.
+   */
   viewCount?: number;
+
+  /**
+   * The date when the recipe was made public.
+   */
   publishedAt?: string;
+
+  /**
+   * The display name of the recipe creator (for public recipes).
+   */
   creatorName?: string;
 };
 
-export type CreateRecipeInput = {
+export type UpdateRecipePayload = {
   title: string;
   data: string;
   tags: string[];
-  imageURL?: string;
+  imageURL: string;
+  emoji: string;
+  isPublic: boolean;
 };
 
-export type CreateRecipeResponse = {
-  message: string;
-  recipeId: string;
-};
+export type CreateRecipeResponse = { message: string; recipeId: string };

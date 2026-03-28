@@ -1,26 +1,67 @@
-import type { Recipe } from "../RecipeView/RecipeView.types";
+import type { CardProps } from "../Card";
 
-export type RecipeCardProps = {
+export type RecipeCardProps = Omit<CardProps, "onClick" | "children" | "title"> & {
   /**
-   * Recipe data to display. Not required when isLoading is true.
+   * The title of the recipe
    */
-  recipe?: Recipe;
+  title: string;
+
   /**
-   * Optional click handler for interactive cards.
+   *  The image src to render for the recipe card.
    */
-  onClick?: (recipe: Recipe) => void;
+  imageSrc?: string;
+
   /**
-   * Optional class names to customize the card.
+   * The list of tags to render for the recipe card.
+   */
+  tags?: string[];
+
+  /**
+   * The date the recipe was created
+   */
+  createdDate: string;
+
+  /**
+   * The id of the recipe to navigate to
+   */
+  id: string;
+
+  /**
+   * The emoji to render for the recipe card.
+   */
+  emoji: string;
+
+  /**
+   * Whether to render the card in a minimal style.
+   */
+  isMinimal?: boolean;
+
+  /**
+   * Whether the recipe card is public or not.
+   */
+  isPublic?: boolean;
+
+  /**
+   * Creator name for public recipes (shows instead of date)
+   */
+  creatorName?: string;
+
+  /**
+   * Number of saves for public recipes
+   */
+  savedCount?: number;
+
+  /**
+   * Whether to show the edit menu (hide for other users' public recipes)
+   */
+  showActions?: boolean;
+
+  /**
+   * Whether this recipe represents a past meal (for visual styling)
+   */
+  isPast?: boolean;
+  /**
+   * Optional className to add to the card root
    */
   className?: string;
-  /**
-   * Show the author and created date row.
-   * @default true
-   */
-  showMeta?: boolean;
-  /**
-   * Render the card as an animated skeleton placeholder.
-   * @default false
-   */
-  isLoading?: boolean;
 };

@@ -1,91 +1,206 @@
-import clientPromise from "../../../clients/mongo";
-import { ObjectId } from "mongodb";
+import type { Filter, SortDirection, Db, ObjectId } from "mongodb";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { Session } from "next-auth";
+import { getServerSession } from "next-auth";
 
-export default async function handler(req: any, res: any) {
-  if (req.method !== "GET" && req.method !== "POST") {
-    res.setHeader("Allow", ["GET", "POST"]);
+import { getDb } from "src/utils/db";
+import { authOptions } from "../auth/[...nextauth]";
+
+interface RecipeDocument {
+  _id: ObjectId | string;
+  owner: string;
+  isPublic: boolean;
+  title: string;
+  data: unknown;
+  tags: string[];
+  createdAt: Date;
+  emoji: string;
+  imageURL: string;
+}
+
+type VisibilityCondition =
+  | { isPublic: boolean }
+  | { owner: string }
+  | { owner: { $in: string[] } };
+
+const ALLOWED_METHODS = ["GET", "POST"];
+const VALID_SORT_PROPERTIES = ["createdAt", "title"];
+const VALID_SORT_DIRECTIONS = ["asc", "desc"];
+
+const handleGetRequest = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  db: Db,
+  session: Session | null
+) => {
+  try {
+    const {
+      search,
+      sortProperty = "createdAt",
+      sortDirection = "desc",
+      tags,
+      limit = "20",
+      offset = "0",
+    } = req.query;
+
+    // 1. Validate query parameters
+    if (
+      typeof sortProperty !== "string" ||
+      !VALID_SORT_PROPERTIES.includes(sortProperty) ||
+      typeof sortDirection !== "string" ||
+      !VALID_SORT_DIRECTIONS.includes(sortDirection)
+    ) {
+      return res.status(400).json({ message: "Invalid sorting parameters." });
+    }
+
+    const limitNum = parseInt(limit as string, 10);
+    const offsetNum = parseInt(offset as string, 10);
+
+    if (isNaN(limitNum) || isNaN(offsetNum) || limitNum < 1 || limitNum > 100) {
+      return res.status(400).json({ message: "Invalid pagination parameters." });
+    }
+
+    // 2. Define visibility conditions
+    const visibilityConditions: VisibilityCondition[] = [{ isPublic: true }];
+
+    if (session?.user?.id) {
+      try {
+        // Find all globally shared recipes
+        const sharedOwners = await db
+          .collection("users")
+          .find(
+            { sharedWithUsers: session.user.email },
+            { projection: { _id: 1 } }
+          )
+          .map((user) => user._id.toString())
+          .toArray();
+
+        // Find all recipes explicitly shared with the user
+        visibilityConditions.push(
+          { owner: session.user.id },
+          { owner: { $in: sharedOwners } }
+        );
+      } catch (dbError) {
+        console.error("Error fetching shared owners:", dbError);
+      }
+    }
+
+    let query: Filter<RecipeDocument> = { $or: visibilityConditions };
+    const projection = { data: 0 };
+
+    if (search && typeof search === "string" && search.trim()) {
+      const searchRegex = { $regex: search.trim(), $options: "i" };
+      query = {
+        $and: [query, { $or: [{ title: searchRegex }, { tags: searchRegex }] }],
+      };
+    }
+
+    if (tags) {
+      const tagsList = (Array.isArray(tags) ? tags : [tags]).filter(
+        (tag) => typeof tag === "string" && tag.trim()
+      );
+      if (tagsList.length > 0) {
+        query = { $and: [query, { tags: { $all: tagsList } }] };
+      }
+    }
+
+    const direction: SortDirection = sortDirection === "asc" ? 1 : -1;
+
+    const recipes = await db
+      .collection<RecipeDocument>("recipes")
+      .find(query, { projection })
+      .sort({ [sortProperty]: direction })
+      .skip(offsetNum)
+      .limit(limitNum)
+      .toArray();
+
+    // Get total count for pagination
+    const totalCount = await db
+      .collection<RecipeDocument>("recipes")
+      .countDocuments(query);
+
+    // Add caching headers for better performance
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+    res.status(200).json({
+      recipes,
+      totalCount,
+      hasMore: offsetNum + limitNum < totalCount,
+    });
+  } catch (error) {
+    console.error("Failed to fetch recipes:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const handlePostRequest = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  db: Db,
+  session: Session | null
+) => {
+  try {
+    if (!session?.user?.id) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized. Please log in to create a recipe." });
+    }
+
+    const { title, data, tags } = req.body;
+
+    if (!title || typeof title !== "string" || !title.trim()) {
+      return res.status(400).json({ message: "Title required." });
+    }
+
+    const newRecipe = {
+      owner: session.user.id,
+      isPublic: false,
+      title: title.trim(),
+      data: data ?? null,
+      tags: Array.isArray(tags)
+        ? tags.filter((t) => typeof t === "string")
+        : [],
+      createdAt: new Date(),
+      emoji: "🍽️",
+      imageURL: "",
+    };
+
+    const result = await db.collection("recipes").insertOne(newRecipe);
+
+    res.status(201).json({
+      message: "Recipe uploaded successfully.",
+      recipeId: result.insertedId,
+    });
+  } catch (error) {
+    console.error("Failed to upload recipe:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
+    res.setHeader("Allow", ALLOWED_METHODS);
     res.status(405).json({ message: `Method ${req.method} not allowed` });
     return;
   }
 
-  const client = await clientPromise;
-  const db = client.db("dev");
+  try {
+    const session: Session | null = await getServerSession(
+      req,
+      res,
+      authOptions
+    );
+    const db = await getDb();
 
-  if (req.method === "GET") {
-    // Retrieve all recipes that matches whatever is in the search bar
-    try {
-      const {
-        search,
-        sortProperty = "createdAt",
-        sortDirection = "desc",
-      } = req.query;
-
-      let query = {};
-      let projection = { data: 0 };
-
-      if (search) {
-        query = {
-          $or: [
-            { title: { $regex: search, $options: "i" } }, // Match title
-            { tags: { $regex: search, $options: "i" } }, // Match tags (array of strings)
-          ],
-        };
-      }
-
-      // Validate sorting inputs
-      const validProperties = ["createdAt", "title"];
-      const validDirections = ["asc", "desc"];
-
-      if (!validProperties.includes(sortProperty)) {
-        throw new Error(`Invalid sort property: ${sortProperty}`);
-      }
-
-      if (!validDirections.includes(sortDirection)) {
-        throw new Error(`Invalid sort direction: ${sortDirection}`);
-      }
-
-      // Determine sorting direction (1 for ascending, -1 for descending)
-      const direction = sortDirection === "asc" ? 1 : -1;
-
-      const recipes = await db
-        .collection("recipes")
-        .find(query, { projection })
-        .sort({ [sortProperty]: direction })
-        .toArray();
-
-      res.status(200).json(recipes);
-    } catch (error) {
-      console.error("Failed to fetch recipes:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    if (req.method === "GET") {
+      await handleGetRequest(req, res, db, session);
+    } else if (req.method === "POST") {
+      await handlePostRequest(req, res, db, session);
     }
-  } else if (req.method === "POST") {
-    // Create a new recipe
-    try {
-      const { title, data, tags } = req.body;
-
-      // Validate input data
-      if (!title) {
-        return res
-          .status(400)
-          .json({ message: "Title is required." });
-      }
-
-      const newRecipe = {
-        title,
-        data,
-        tags: tags || [],
-        createdAt: new Date(),
-      };
-
-      const result = await db.collection("recipes").insertOne(newRecipe);
-
-      res.status(201).json({
-        message: "Recipe uploaded successfully.",
-        recipeId: result.insertedId,
-      });
-    } catch (error) {
-      console.error("Failed to upload recipe:", error);
-      res.status(500).json({ message: "Internal Server Error" });
-    }
+  } catch (error) {
+    console.error("API handler main error:", error);
+    res.status(500).json({ message: "Internal Server Error." });
   }
 }
