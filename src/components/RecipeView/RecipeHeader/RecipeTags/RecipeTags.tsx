@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { XIcon } from "@phosphor-icons/react";
 
-import { Tag } from "../../../Tag";
 import styles from "./RecipeTags.module.css";
 import type { RecipeTagsProps } from "./RecipeTags.types";
+
+import { Tag } from "../../../Tag";
 
 export const RecipeTags = ({
   tags,
@@ -16,7 +17,7 @@ export const RecipeTags = ({
 
   const addTag = (raw: string) => {
     const tag = raw.trim().toLowerCase();
-    if (!tag || tags.includes(tag)) return;
+    if (!tag || tags.includes(tag)) {return;}
     onTagsChange?.([...tags, tag]);
     setInputValue("");
   };
@@ -67,7 +68,7 @@ export const RecipeTags = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        onBlur={() => { if (inputValue) addTag(inputValue); }}
+        onBlur={() => { if (inputValue) {addTag(inputValue);} }}
         placeholder={tags.length === 0 ? "Add tags…" : ""}
         size={Math.max(inputValue.length + 1, tags.length === 0 ? 10 : 2)}
       />

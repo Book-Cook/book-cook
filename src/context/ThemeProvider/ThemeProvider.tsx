@@ -19,7 +19,7 @@ import {
   createDynamicLightTheme,
   generateBrandVariants,
   createDynamicDarkTheme,
-} from "../../components/theme/theme";
+} from "../../components/Theme/theme";
 import { useThemeDetector } from "../../hooks";
 
 const ThemeContext = React.createContext<ThemeContextProps | undefined>(

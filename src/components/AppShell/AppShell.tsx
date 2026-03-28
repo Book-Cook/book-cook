@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { BookOpenIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { BookOpenIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 
 import styles from "./AppShell.module.css";
 import { AppSidebar } from "../Sidebar";
+
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export type AppShellProps = {
@@ -33,7 +34,7 @@ export const AppShell = ({ children }: AppShellProps) => {
   }, [drawerOpen]);
 
   if (!session) {
-    return <>{children}</>;
+    return children as React.ReactElement;
   }
 
   return (

@@ -23,7 +23,7 @@ export function SelectAllPlugin() {
         event.preventDefault();
         editor.update(() => {
           const selection = $getSelection();
-          if (!$isRangeSelection(selection)) return;
+          if (!$isRangeSelection(selection)) {return;}
           const anchor = selection.anchor.getNode();
           const element =
             $findMatchingParent(anchor, $isListItemNode) ??

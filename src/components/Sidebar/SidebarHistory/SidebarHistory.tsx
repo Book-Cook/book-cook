@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import styles from "./SidebarHistory.module.css";
+
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../../utils/groupRecipesByTime";
 

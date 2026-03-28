@@ -1,8 +1,9 @@
 import * as React from "react";
-import { AppShell } from "./AppShell";
-import { SearchBoxProvider } from "../context";
 import { SessionProvider } from "next-auth/react";
+
+import { AppShell } from "./AppShell";
 import { Toast } from "./Toast";
+import { SearchBoxProvider } from "../context";
 
 export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
   children,

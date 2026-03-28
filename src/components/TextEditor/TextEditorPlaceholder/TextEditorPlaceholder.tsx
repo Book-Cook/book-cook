@@ -19,13 +19,13 @@ export function TextEditorPlaceholder() {
           const element = selection.anchor.getNode().getTopLevelElement();
           if (element?.getType() === "paragraph") {
             const text = element.getTextContent();
-            if (text === "") current = { key: element.getKey(), type: "empty" };
-            if (text === "/") current = { key: element.getKey(), type: "slash" };
+            if (text === "") {current = { key: element.getKey(), type: "empty" };}
+            if (text === "/") {current = { key: element.getKey(), type: "slash" };}
           }
         }
 
         const prev = state.current;
-        if (current?.key === prev?.key && current?.type === prev?.type) return;
+        if (current?.key === prev?.key && current?.type === prev?.type) {return;}
 
         if (prev) {
           editor.getElementByKey(prev.key)?.classList.remove(styles.empty, styles.slash);

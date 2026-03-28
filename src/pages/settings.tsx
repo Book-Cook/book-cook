@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+
 import { LoadingScreen } from "../components/FallbackScreens";
 
 const SettingsPage = dynamic(

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 
-import { useCreateRecipe } from "../../clientToServer/post/useCreateRecipe";
+import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
 import { Button } from "../Button";
 import {
   Dialog,
@@ -14,7 +14,8 @@ import {
   DialogTitle,
 } from "../Dialog";
 import { Input } from "../Input";
-import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
+
+import { useCreateRecipe } from "../../clientToServer/post/useCreateRecipe";
 
 export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) => {
   const [title, setTitle] = useState("");
@@ -30,7 +31,7 @@ export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) =>
       { title: trimmed, data: "", tags: [], imageURL: "" },
       {
         onSuccess: (response) => {
-          router.push(`/recipes/${response.recipeId}`);
+          void router.push(`/recipes/${response.recipeId}`);
           onOpenChange(false);
         },
         onError: () => {

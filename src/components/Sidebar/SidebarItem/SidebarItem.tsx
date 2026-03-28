@@ -5,6 +5,7 @@ import { clsx } from "clsx";
 import styles from "./SidebarItem.module.css";
 import type { SidebarItemProps } from "./SidebarItem.types";
 import { useSidebarContext } from "../SidebarContext";
+
 import { Tooltip } from "../../Tooltip";
 import { BodyText } from "../../Typography";
 

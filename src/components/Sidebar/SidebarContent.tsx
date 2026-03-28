@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useRouter } from "next/router";
 import {
   BookOpenIcon,
   GridFourIcon,
@@ -7,6 +6,7 @@ import {
   PlusIcon,
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
 
 import { SidebarItem } from "./SidebarItem";
 

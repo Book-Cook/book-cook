@@ -1,10 +1,11 @@
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
 
 import styles from "./HomePage.module.css";
 import { RecipeCardCarousel } from "../RecipeCardCarousel";
+
 import { fetchAllRecipes } from "../../clientToServer/fetch/fetchAllRecipes";
 import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
 

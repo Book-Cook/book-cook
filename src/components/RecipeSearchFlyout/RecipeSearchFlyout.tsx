@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 import styles from "./RecipeSearchFlyout.module.css";
 import type { RecipeSearchFlyoutProps } from "./RecipeSearchFlyout.types";
+
 import { fetchAllRecipes } from "../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../utils/groupRecipesByTime";
 
@@ -41,7 +42,7 @@ export const RecipeSearchFlyout = ({
     if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
   }
   for (const r of allRecipes) {
-    if (defaultSource.length >= 30) break;
+    if (defaultSource.length >= 30) {break;}
     if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
   }
 
@@ -52,7 +53,7 @@ export const RecipeSearchFlyout = ({
   const groups = groupRecipesByTime(filtered);
 
   const navigate = (id: string) => {
-    router.push(`/recipes/${id}`);
+    void router.push(`/recipes/${id}`);
     onOpenChange(false);
   };
 
@@ -113,7 +114,7 @@ export const RecipeSearchFlyout = ({
                 ))}
               </div>
             )) : trimmed ? (
-              <p className={styles.empty}>No recipes found for "{query}"</p>
+              <p className={styles.empty}>No recipes found for &quot;{query}&quot;</p>
             ) : null}
           </div>
         </DialogPrimitive.Content>

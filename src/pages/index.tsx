@@ -1,7 +1,8 @@
 import * as React from "react";
 import dynamic from "next/dynamic";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
 import { LoadingScreen } from "../components/FallbackScreens";
 
 const LandingPage = dynamic(
@@ -18,7 +19,7 @@ export default function Index() {
   }
 
   if (session) {
-    router.replace("/recipes");
+    void router.replace("/recipes");
     return <LoadingScreen />;
   }
 

@@ -38,7 +38,7 @@ export function SlashMenu() {
     editor.update(() => {
       nodeToRemove?.remove();
       const selection = $getSelection();
-      if (!$isRangeSelection(selection)) return;
+      if (!$isRangeSelection(selection)) {return;}
       switch (selectedOption.tag) {
         case "h1":
           $setBlocksType(selection, () => $createHeadingNode("h1"));
@@ -60,7 +60,7 @@ export function SlashMenu() {
       triggerFn={checkForSlash}
       options={OPTIONS}
       menuRenderFn={(anchorRef, { selectedIndex, selectOptionAndCleanUp }) => {
-        if (anchorRef.current == null || queryString === null) return null;
+        if (anchorRef.current == null || queryString === null) {return null;}
         return ReactDOM.createPortal(
           <div className={styles.menu}>
             {OPTIONS.map((option, i) => (

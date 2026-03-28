@@ -20,7 +20,7 @@ export const RecipeEmoji = ({ emoji, hasCover, onEmojiChange }: RecipeEmojiProps
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {return;}
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);

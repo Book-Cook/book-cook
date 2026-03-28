@@ -8,7 +8,7 @@ export const Unauthorized: React.FC = () => {
 
   React.useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace("/");
+      void router.replace("/");
     }
   }, [status, router]);
 

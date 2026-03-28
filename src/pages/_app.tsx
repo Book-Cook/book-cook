@@ -1,17 +1,18 @@
 import * as React from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { QueryClientProvider } from "@tanstack/react-query";
+
+import { queryClient } from "../clients/react-query";
 import { AppContainer } from "../components";
 import { ThemeProvider } from "../components/Theme/ThemeProvider";
 import type { Theme } from "../components/Theme/ThemeProvider.types";
-import { queryClient } from "../clients/react-query";
 import "../styles/global.css";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const [theme, setTheme] = React.useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
+    if (typeof window === "undefined") {return "light";}
     return (localStorage.getItem("theme") as Theme) ?? "light";
   });
 

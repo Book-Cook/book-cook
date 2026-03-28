@@ -3,9 +3,9 @@ import { TagIcon } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 import { Command } from "cmdk";
 
-import { Tag } from "../Tag";
 import styles from "./MultiSelectMenu.module.css";
 import type { MultiSelectMenuProps } from "./MultiSelectMenu.types";
+import { Tag } from "../Tag";
 
 const MAX_VISIBLE = 2;
 

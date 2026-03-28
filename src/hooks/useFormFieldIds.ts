@@ -14,6 +14,6 @@ export const useFormFieldIds = (
   const describedBy = [ariaDescribedBy, descriptionId, errorId]
     .filter(Boolean)
     .join(" ");
-  const hasSupporting = Boolean(description || error);
+  const hasSupporting = Boolean(description) || Boolean(error);
   return { inputId, descriptionId, errorId, describedBy, hasSupporting };
 };

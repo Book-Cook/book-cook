@@ -6,7 +6,7 @@ export default function NewRecipe() {
   const router = useRouter();
 
   React.useEffect(() => {
-    router.push("/recipes");
+    void router.push("/recipes");
   }, [router]);
 
   return null;

@@ -14,6 +14,7 @@ import { RecipePropertyRow } from "./RecipePropertyRow";
 import { RecipeStats } from "./RecipeStats";
 import { RecipeTags } from "./RecipeTags";
 import { useRecipeViewSaveState } from "../RecipeViewSaveStateContext";
+
 import { formatDate } from "../../../utils/formatDate";
 import { RecipeTitle } from "../../Typography";
 
@@ -39,7 +40,7 @@ export const RecipeHeader = ({
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (!isEditable || !titleRef.current) return;
+    if (!isEditable || !titleRef.current) {return;}
     if (titleRef.current.textContent !== recipe.title) {
       titleRef.current.textContent = recipe.title;
     }
@@ -85,7 +86,7 @@ export const RecipeHeader = ({
           <RecipeTitle className={styles.title}>{recipe.title}</RecipeTitle>
         )}
         {(() => {
-          const hasLeftContent = recipe.creatorName || showTags;
+          const hasLeftContent = Boolean(recipe.creatorName) || showTags;
           const rightContent = (
             <>
               <RecipePropertyRow

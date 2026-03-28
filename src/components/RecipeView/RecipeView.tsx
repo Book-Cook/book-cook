@@ -6,7 +6,7 @@ import { TextEditor } from "../TextEditor";
 
 /** Strip legacy HTML content so it doesn't render as raw tags in the editor. */
 function normalizeData(data: string): string {
-  if (!data || !data.includes("<")) return data;
+  if (!data?.includes("<")) {return data;}
   return data
     .replace(/<\/p>\s*<p>/gi, "\n\n")
     .replace(/<br\s*\/?>/gi, "\n")

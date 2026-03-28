@@ -1,12 +1,12 @@
 import * as React from "react";
 import { signIn } from "next-auth/react";
-import { GoogleSignInButton } from "../Auth/GoogleSignInButton";
 
 import styles from "./LandingPage.module.css";
+import { GoogleSignInButton } from "../Auth/GoogleSignInButton";
 
 const LandingPage = () => {
   const handleGoogle = () => {
-    signIn("google");
+    void signIn("google");
   };
 
   return (

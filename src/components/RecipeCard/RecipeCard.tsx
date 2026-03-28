@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./RecipeCard.module.css";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { BodyText, MetaLabel } from "../Typography";
+
 import { formatDate } from "../../utils/formatDate";
 
 const SkeletonContent = () => (
@@ -67,7 +68,7 @@ export const RecipeCard = ({
           />
         ) : (
           <span className={styles.emoji} aria-hidden="true">
-            {recipe.emoji || "🍲"}
+            {recipe.emoji.length > 0 ? recipe.emoji : "🍲"}
           </span>
         )}
       </div>

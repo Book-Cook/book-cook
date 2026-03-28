@@ -1,17 +1,18 @@
 import * as React from "react";
 import { useRef, useState } from "react";
-import { useRouter } from "next/router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { $convertToMarkdownString } from "@lexical/markdown";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { LexicalEditor } from "lexical";
+import { useRouter } from "next/router";
 
-import { fetchRecipe } from "../../clientToServer";
-import { RecipeView } from "../RecipeView";
-import { RecipeViewSaveStateProvider, useRecipeViewSaveState } from "../RecipeView/RecipeViewSaveStateContext";
+import { LoadingScreen, ErrorScreen } from "../FallbackScreens";
 import { RecipeSaveBar } from "../RecipeSaveBar";
 import type { SaveBarStatus } from "../RecipeSaveBar/RecipeSaveBar.types";
-import { LoadingScreen, ErrorScreen } from "../FallbackScreens";
+import { RecipeView } from "../RecipeView";
+import { RecipeViewSaveStateProvider, useRecipeViewSaveState } from "../RecipeView/RecipeViewSaveStateContext";
 import { recipeTransformers } from "../TextEditor/textEditorConfig";
+
+import { fetchRecipe } from "../../clientToServer";
 
 type RecipePageInnerProps = {
   recipeId: string;
@@ -27,7 +28,7 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
   const { data: recipe, isLoading, error } = useQuery({
     queryKey: ["recipe", recipeId],
     queryFn: () => fetchRecipe(recipeId),
-    enabled: !!recipeId,
+    enabled: Boolean(recipeId),
   });
 
   const { mutateAsync } = useMutation({
@@ -37,17 +38,17 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, data, emoji, tags }),
       });
-      if (!response.ok) throw new Error("Failed to update recipe");
+      if (!response.ok) {throw new Error("Failed to update recipe");}
       return response.json();
     },
   });
 
-  if (isLoading) return <LoadingScreen />;
-  if (error || !recipe) return <ErrorScreen />;
+  if (isLoading) {return <LoadingScreen />;}
+  if (error || !recipe) {return <ErrorScreen />;}
 
   const onSave = () => {
     const editor = editorRef.current;
-    if (!editor) return;
+    if (!editor) {return;}
     const data = editor.read(() => $convertToMarkdownString(recipeTransformers));
     const title = saveState?.getTitle() ?? recipe.title;
     const emoji = saveState?.getEmoji() ?? recipe.emoji;
@@ -57,7 +58,7 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
     mutateAsync({ title, data, emoji, tags })
       .then(() => {
         // Update cache immediately so no second network round-trip is needed
-        queryClient.setQueryData(["recipe", recipeId], (old: any) => ({
+        queryClient.setQueryData(["recipe", recipeId], (old: Record<string, unknown>) => ({
           ...old,
           title,
           data,
@@ -97,7 +98,7 @@ export const RecipePage = () => {
   const { data: recipe } = useQuery({
     queryKey: ["recipe", recipeId],
     queryFn: () => fetchRecipe(recipeId),
-    enabled: !!recipeId,
+    enabled: Boolean(recipeId),
   });
 
   return (

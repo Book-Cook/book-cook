@@ -2,9 +2,12 @@
  * Custom Lexical markdown transformers for horizontal rules and tables.
  * @lexical/markdown v0.40 does not ship TABLE or HR transformers, so we provide them here.
  */
-import type { ElementNode, LexicalNode } from "lexical";
-import { $createParagraphNode, $createTextNode, $isElementNode } from "lexical";
 import type { MultilineElementTransformer, ElementTransformer } from "@lexical/markdown";
+import {
+  $createHorizontalRuleNode,
+  $isHorizontalRuleNode,
+  HorizontalRuleNode,
+} from "@lexical/react/LexicalHorizontalRuleNode";
 import {
   $createTableCellNode,
   $createTableNode,
@@ -17,11 +20,8 @@ import {
   TableNode,
   TableRowNode,
 } from "@lexical/table";
-import {
-  $createHorizontalRuleNode,
-  $isHorizontalRuleNode,
-  HorizontalRuleNode,
-} from "@lexical/react/LexicalHorizontalRuleNode";
+import type { ElementNode, LexicalNode } from "lexical";
+import { $createParagraphNode, $createTextNode, $isElementNode } from "lexical";
 
 // ── Horizontal Rule ──────────────────────────────────────────────────────────
 
@@ -63,13 +63,13 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
       i++;
     }
 
-    if (tableLines.length < 2) return null; // not a valid table
+    if (tableLines.length < 2) {return null;} // not a valid table
 
     const tableNode = $createTableNode();
 
     tableLines.forEach((line, rowIndex) => {
       const cells = parseCells(line);
-      if (isSeparatorRow(cells)) return; // skip the `| --- | --- |` row
+      if (isSeparatorRow(cells)) {return;} // skip the `| --- | --- |` row
 
       const isHeader = rowIndex === 0;
       const rowNode = $createTableRowNode();
@@ -94,13 +94,13 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
 
   // export converts a TableNode back to markdown
   export: (node: LexicalNode) => {
-    if (!$isTableNode(node)) return null;
+    if (!$isTableNode(node)) {return null;}
 
-    const rows = node.getChildren().filter($isTableRowNode) as TableRowNode[];
-    if (rows.length === 0) return null;
+    const rows = node.getChildren().filter($isTableRowNode);
+    if (rows.length === 0) {return null;}
 
     const markdownRows = rows.map((row) => {
-      const cells = row.getChildren().filter($isTableCellNode) as TableCellNode[];
+      const cells = row.getChildren().filter($isTableCellNode);
       const cellTexts = cells.map((cell) => {
         if ($isElementNode(cell)) {
           return cell.getTextContent().trim().replace(/\|/g, "\\|");
@@ -112,7 +112,7 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
 
     // Insert separator after header row
     const headerCells = (
-      rows[0].getChildren().filter($isTableCellNode) as TableCellNode[]
+      rows[0].getChildren().filter($isTableCellNode)
     ).length;
     const separator = `| ${Array(headerCells).fill("---").join(" | ")} |`;
     markdownRows.splice(1, 0, separator);

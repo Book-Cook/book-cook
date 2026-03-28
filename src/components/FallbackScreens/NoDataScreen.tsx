@@ -1,4 +1,5 @@
 import { ArchiveIcon } from "@phosphor-icons/react";
+
 import styles from "./FallbackScreens.module.css";
 
 export const NoDataScreen = () => {

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { $convertFromMarkdownString } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
+
 import { recipeTransformers } from "../textEditorConfig";
 
 function looksLikeMarkdown(text: string): boolean {
@@ -13,11 +14,11 @@ export function MarkdownPastePlugin() {
 
   useEffect(() => {
     const root = editor.getRootElement();
-    if (!root) return;
+    if (!root) {return;}
 
     const handler = (event: ClipboardEvent) => {
       const text = event.clipboardData?.getData("text/plain");
-      if (!text || !looksLikeMarkdown(text)) return;
+      if (!text || !looksLikeMarkdown(text)) {return;}
 
       event.preventDefault();
       event.stopPropagation();

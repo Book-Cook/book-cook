@@ -1,4 +1,10 @@
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
+import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import styles from "./recipes.module.css";
 import {
   FallbackScreen,
   Unauthorized,
@@ -14,14 +20,7 @@ import {
 import { MultiSelectMenu } from "../components/MultiSelectMenu";
 import { RecipeCardGallery } from "../components/RecipeCardGallery";
 import { PageTitle, BodyText } from "../components/Typography";
-
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
 import { useSearchBox } from "../context";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-
-import styles from "./recipes.module.css";
 
 export default function Recipes() {
   const { searchBoxValue } = useSearchBox();

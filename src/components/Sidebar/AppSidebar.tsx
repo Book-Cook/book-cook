@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { GearSixIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
+import styles from "./AppSidebar.module.css";
 import { Sidebar } from "./Sidebar";
 import { SidebarContent } from "./SidebarContent";
 import { SidebarItem } from "./SidebarItem";
-import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
 import { Avatar } from "../Avatar";
+import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
 import { NewRecipeDialog } from "../NewRecipeDialog";
 import { RecipeSearchFlyout } from "../RecipeSearchFlyout";
-import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
 
-import styles from "./AppSidebar.module.css";
+import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
 
 export const AppSidebar = ({ forceExpanded }: { forceExpanded?: boolean }) => {
   const { data: session } = useSession();

@@ -10,6 +10,7 @@ import { SidebarContext } from "./SidebarContext";
 import { SidebarItem } from "./SidebarItem";
 import { Avatar } from "../Avatar";
 import { BodyText } from "../Typography";
+
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { toCssSize } from "../../utils/toCssSize";
 

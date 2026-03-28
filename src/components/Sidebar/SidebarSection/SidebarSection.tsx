@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import styles from "./SidebarSection.module.css";
 import type { SidebarSectionProps } from "./SidebarSection.types";
 import { useSidebarContext } from "../SidebarContext";
+
 import { Accordion } from "../../Accordion";
 
 export const SidebarSection = ({

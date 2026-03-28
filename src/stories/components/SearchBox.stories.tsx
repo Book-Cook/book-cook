@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { SearchBox } from "../../components/SearchBox";
+import { SearchBox } from "../../components/Searchbox";
 
 const meta: Meta<typeof SearchBox> = {
   title: "Components/SearchBox",

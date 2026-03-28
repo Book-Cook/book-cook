@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as Accordion from "@radix-ui/react-accordion";
 import {
   PaintBrushIcon,
   ForkKnifeIcon,
@@ -7,12 +6,13 @@ import {
   UsersIcon,
   CaretDownIcon,
 } from "@phosphor-icons/react";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import * as Accordion from "@radix-ui/react-accordion";
+import { useSession , signOut } from "next-auth/react";
+
 
 import styles from "./Settings.module.css";
-import { useTheme } from "../Theme/ThemeProvider";
 import { Avatar } from "../Avatar";
+import { useTheme } from "../Theme/ThemeProvider";
 
 /* ── Helpers ────────────────────────────────────────────── */
 
@@ -145,7 +145,7 @@ function SharingSection() {
   const [isSharing, setIsSharing] = React.useState(false);
 
   const handleShare = async () => {
-    if (!shareEmail) return;
+    if (!shareEmail) {return;}
     setIsSharing(true);
     // TODO: wire up sharing API
     await new Promise((r) => setTimeout(r, 500));
@@ -209,7 +209,7 @@ function AccountSection() {
   const [isClearing, setIsClearing] = React.useState(false);
 
   const handleClearRecents = async () => {
-    if (!confirm("Clear your recently viewed recipes?")) return;
+    if (!confirm("Clear your recently viewed recipes?")) {return;}
     setIsClearing(true);
     try {
       await fetch("/api/recentlyViewed", { method: "DELETE" });

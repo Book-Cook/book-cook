@@ -1,8 +1,8 @@
 import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 import useEmblaCarousel from "embla-carousel-react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 
 import styles from "./RecipeCardCarousel.module.css";
 import type { RecipeCardCarouselProps } from "./RecipeCardCarousel.types";

@@ -2,20 +2,20 @@ import { useEffect, useRef } from "react";
 import type { MutableRefObject } from "react";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { $convertFromMarkdownString } from "@lexical/markdown";
-import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
-import { HorizontalRulePlugin } from "@lexical/react/LexicalHorizontalRulePlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
+import { HorizontalRulePlugin } from "@lexical/react/LexicalHorizontalRulePlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
-import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import type { LexicalEditor } from "lexical";
 
 import { SelectAllPlugin, MarkdownPastePlugin } from "./plugins";
@@ -76,7 +76,7 @@ export const TextEditor: React.FC<TextEditorProps> = (props) => {
           <OnChangePlugin
             ignoreSelectionChange
             onChange={() => {
-              if (dirtyRef.current) return;
+              if (dirtyRef.current) {return;}
               dirtyRef.current = true;
               onDirty();
             }}

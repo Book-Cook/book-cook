@@ -36,13 +36,13 @@ export const RecipeViewSaveStateProvider = ({
   };
 
   const updateTitle = (title: string) => {
-    if (current.current.title === title) return;
+    if (current.current.title === title) {return;}
     current.current.title = title;
     recompute();
   };
 
   const updateEmoji = (emoji: string) => {
-    if (current.current.emoji === emoji) return;
+    if (current.current.emoji === emoji) {return;}
     current.current.emoji = emoji;
     recompute();
   };
@@ -53,7 +53,7 @@ export const RecipeViewSaveStateProvider = ({
   };
 
   const markDataDirty = () => {
-    if (dataDirty.current) return;
+    if (dataDirty.current) {return;}
     dataDirty.current = true;
     setIsDirty(true);
   };
