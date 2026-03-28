@@ -1,2 +1,2 @@
-export { SearchBox } from "./SearchBox";
-export type { SearchBoxProps } from "./SearchBox.types";
+export { SearchBox } from "./Searchbox";
+export type { SearchBoxProps } from "./Searchbox.types";

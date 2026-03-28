@@ -32,7 +32,7 @@ export default async function handler(req: any, res: any) {
           { projection: { collections: 1, _id: 0 } }
         );
 
-      if (!userDoc || !userDoc.collections || userDoc.collections.length === 0) {
+      if (!userDoc?.collections || userDoc.collections.length === 0) {
         res.status(200).json([]);
         return;
       }

@@ -1,4 +1,4 @@
-import type React, { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 
 export type TagProps = {
   /**
@@ -24,7 +24,7 @@ export type TagProps = {
   /**
    * Handler for trailing icon clicks.
    */
-  onEndIconClick?: (event: React.MouseEvent<HTMLSpanElement>) => void;
+  onEndIconClick?: (event: MouseEvent<HTMLSpanElement>) => void;
   /**
    * Accessible label for the trailing icon.
    */
