@@ -230,16 +230,7 @@ export default function DiscoverPage() {
                 }
               >
                 <RecipeCard
-                  title={recipe.title}
-                  id={recipe._id}
-                  emoji={recipe.emoji || "🍽️"}
-                  imageSrc={recipe.imageURL}
-                  tags={recipe.tags}
-                  createdDate={recipe.createdAt}
-                  isPublic={true}
-                  creatorName={recipe.creatorName}
-                  savedCount={recipe.savedCount}
-                  showActions={false}
+                  recipe={recipe}
                 />
               </div>
             ))}

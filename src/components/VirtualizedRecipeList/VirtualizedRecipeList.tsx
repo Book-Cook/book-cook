@@ -135,16 +135,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
             } as React.CSSProperties}
           >
             <RecipeCard
-              title={recipe.title}
-              id={recipe._id}
-              emoji={recipe.emoji || '🍽️'}
-              imageSrc={recipe.imageURL}
-              tags={recipe.tags}
-              createdDate={recipe.createdAt}
-              isPublic={recipe.isPublic}
-              creatorName={recipe.creatorName}
-              savedCount={recipe.savedCount}
-              showActions={!recipe.creatorName}
+              recipe={recipe}
             />
           </div>
         ))}
