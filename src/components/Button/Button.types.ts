@@ -12,6 +12,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
 
   /**
+   * FluentUI-compatible appearance alias — maps to variant.
+   */
+  appearance?: "primary" | "secondary" | "outline" | "subtle" | "transparent";
+
+  /**
    * Size of the button affecting padding and font size.
    * @default "md"
    */
