@@ -75,4 +75,13 @@ export type UpdateRecipePayload = {
   isPublic: boolean;
 };
 
+export type CreateRecipeInput = {
+  title: string;
+  data: string;
+  tags: string[];
+  imageURL: string;
+  emoji: string;
+  isPublic: boolean;
+};
+
 export type CreateRecipeResponse = { message: string; recipeId: string };
