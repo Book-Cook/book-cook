@@ -19,9 +19,9 @@ import {
 } from "@lexical/table";
 import {
   $createHorizontalRuleNode,
+  $isHorizontalRuleNode,
   HorizontalRuleNode,
 } from "@lexical/react/LexicalHorizontalRuleNode";
-import { $isHorizontalRuleNode } from "@lexical/extension";
 
 // ── Horizontal Rule ──────────────────────────────────────────────────────────
 
