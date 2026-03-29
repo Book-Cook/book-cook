@@ -1,0 +1,19 @@
+.bar {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ui-PageBackground, #ffffff);
+  border: 1px solid var(--ui-ControlBorder, #e6e8ee);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 8px 12px;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger-Primary);
+}

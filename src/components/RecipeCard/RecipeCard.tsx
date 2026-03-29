@@ -1,187 +1,153 @@
-import * as React from "react";
-import { Card, CardHeader, Text, tokens } from "@fluentui/react-components";
-import { BookOpenRegular } from "@fluentui/react-icons";
-import { useRouter } from "next/router";
+import { clsx } from "clsx";
 import Image from "next/image";
-import { RecipeCardProps } from "./RecipeCard.types";
-import { makeStyles, shorthands } from "@griffel/react";
+import { useRouter } from "next/router";
 
-const useStyles = makeStyles({
-  card: {
-    width: "100%",
-    height: "360px",
-    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-    overflow: "hidden",
-    cursor: "pointer",
-    position: "relative",
-    ...shorthands.borderRadius("12px"),
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
+import styles from "./RecipeCard.module.css";
+import type { RecipeCardProps } from "./RecipeCard.types";
+import { BodyText, MetaLabel } from "../Typography";
 
-    ":hover": {
-      transform: "translateY(-2px)",
-      ...shorthands.borderColor(tokens.colorBrandStroke1),
-    },
-  },
-  cardInner: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  imageContainer: {
-    position: "relative",
-    height: "220px",
-    width: "100%",
-    overflow: "hidden",
-  },
-  image: {
-    objectFit: "cover",
-  },
-  placeholderImage: {
-    height: "100%",
-    width: "100%",
-    background: `linear-gradient(45deg, ${tokens.colorNeutralBackground3}, ${tokens.colorNeutralBackground2})`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  content: {
-    ...shorthands.padding("16px"),
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    background: tokens.colorNeutralBackground1,
-    borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
-  },
-  tagsContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "6px",
-    marginTop: "auto",
-  },
-  tag: {
-    ...shorthands.padding("4px", "10px"),
-    ...shorthands.borderRadius("16px"),
-    fontSize: "12px",
-    fontWeight: 500,
-    background: tokens.colorNeutralBackground3,
-    color: tokens.colorNeutralForeground2,
-    whiteSpace: "nowrap",
-  },
-  badgeNew: {
-    position: "absolute",
-    top: "12px",
-    right: "12px",
-    background: tokens.colorPaletteRedBackground2,
-    color: tokens.colorPaletteRedForeground2,
-    ...shorthands.padding("4px", "8px"),
-    ...shorthands.borderRadius("4px"),
-    fontSize: "11px",
-    fontWeight: 600,
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    zIndex: 1,
-  },
+import { formatDate } from "../../utils/formatDate";
 
-  moreTag: {
-    ...shorthands.padding("4px", "10px"),
-    ...shorthands.borderRadius("16px"),
-    fontSize: "12px",
-    fontWeight: 500,
-    background: tokens.colorBrandBackground2,
-    color: tokens.colorBrandForeground2,
-  },
-});
+const MAX_VISIBLE_TAGS = 3;
+const NEW_RECIPE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
-export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
-  const { title, createdDate, imageSrc, tags, id } = props;
+const SkeletonContent = () => (
+  <>
+    <div className={clsx(styles.skeletonBlock, styles.skeletonMedia)} />
+    <div className={styles.skeletonBody}>
+      <div className={clsx(styles.skeletonBlock, styles.skeletonTitle)} />
+      <div className={clsx(styles.skeletonBlock, styles.skeletonTitleSecond)} />
+      <div className={clsx(styles.skeletonBlock, styles.skeletonCreator)} />
+      <div className={clsx(styles.skeletonBlock, styles.skeletonMeta)} />
+    </div>
+  </>
+);
+
+export const RecipeCard = ({
+  recipe,
+  onClick,
+  className,
+  showMeta = true,
+  isLoading = false,
+  showActions = true,
+  isMinimal = false,
+}: RecipeCardProps) => {
   const router = useRouter();
-  const cardRef = React.useRef<HTMLDivElement>(null);
-  const styles = useStyles();
 
-  const onCardClick = () => {
-    router.push(`/recipes/${id}`);
+  if (isLoading) {
+    return (
+      <article
+        className={clsx(styles.card, className)}
+        aria-label="Loading recipe"
+        aria-busy="true"
+      >
+        <SkeletonContent />
+      </article>
+    );
+  }
+
+  if (!recipe) {
+    return null;
+  }
+
+  const creatorName = recipe.creatorName;
+  const savedCount = recipe.savedCount ?? 0;
+  const allTags = recipe.tags ?? [];
+  const visibleTags = allTags.slice(0, MAX_VISIBLE_TAGS);
+  const hiddenTagCount = allTags.length - visibleTags.length;
+  const hasImage = Boolean(recipe.imageURL);
+  const isNew =
+    Boolean(recipe.createdAt) &&
+    Date.now() - new Date(recipe.createdAt).getTime() < NEW_RECIPE_THRESHOLD_MS;
+
+  const handleClick = () => {
+    onClick?.(recipe);
+    if (recipe._id) {
+      void router.push(`/recipes/${recipe._id}`);
+    }
   };
 
-  // Format date to be more readable
-  const formattedDate = createdDate
-    ? new Date(createdDate).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "";
-
-  /**
-   * Check if the recipe is new (created within the last 24 hours)
-   * TODO: We should check if the user has already clicked the card in the future
-   */
-  const isNew = React.useMemo(() => {
-    if (!createdDate) return false;
-
-    const recipeDate = new Date(createdDate);
-    const currentDate = new Date();
-
-    // Calculate time difference in milliseconds
-    const timeDifference = currentDate.getTime() - recipeDate.getTime();
-
-    // Convert to hours (ms to hours)
-    const hoursDifference = timeDifference / (1000 * 60 * 60);
-
-    return hoursDifference <= 24;
-  }, [createdDate]);
-
-  return (
-    <Card ref={cardRef} onClick={onCardClick} className={styles.card}>
-      <div className={styles.cardInner}>
-        {isNew && <span className={styles.badgeNew}>NEW</span>}
-        <div className={styles.imageContainer}>
-          {imageSrc ? (
-            <Image
-              src={imageSrc}
-              alt={title}
-              fill
-              draggable={false}
-              className={styles.image}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className={styles.placeholderImage}>
-              <BookOpenRegular fontSize={48} style={{ opacity: 0.5 }} />
-            </div>
-          )}
-        </div>
-
-        <div className={styles.content}>
-          <CardHeader
-            header={
-              <Text weight="semibold" size={500} style={{ lineHeight: "1.3" }}>
-                {title}
-              </Text>
-            }
-            description={
-              <Text
-                size={200}
-                style={{ color: tokens.colorNeutralForeground3 }}
-              >
-                {formattedDate}
-              </Text>
-            }
-            style={{ padding: "0 0 12px 0" }}
+  const content = (
+    <>
+      <div
+        className={clsx(styles.media, !hasImage && styles.mediaFallback)}
+        role={!hasImage ? "img" : undefined}
+        aria-label={!hasImage ? `${recipe.title} placeholder emoji` : undefined}
+      >
+        {hasImage ? (
+          <Image
+            src={recipe.imageURL}
+            alt={recipe.title}
+            fill
+            sizes="(max-width: 720px) 100vw, 240px"
+            className={styles.mediaImage}
           />
-
-          {tags && tags.length > 0 && (
-            <div className={styles.tagsContainer}>
-              {tags.slice(0, 3).map((tag, i) => (
-                <span key={i} className={styles.tag}>
-                  {tag}
-                </span>
-              ))}
-              {tags.length > 3 && (
-                <span className={styles.moreTag}>+{tags.length - 3} more</span>
-              )}
-            </div>
-          )}
-        </div>
+        ) : (
+          <span className={styles.emoji} aria-hidden="true">
+            {recipe.emoji.length > 0 ? recipe.emoji : "🍲"}
+          </span>
+        )}
       </div>
-    </Card>
+      <div className={styles.body}>
+        {isNew && <span className={styles.newBadge}>NEW</span>}
+        <BodyText as="h3" className={styles.title}>
+          {recipe.title}
+        </BodyText>
+        {showMeta && creatorName ? (
+          <MetaLabel as="span" className={styles.creator}>
+            By {creatorName} • {savedCount} saves
+          </MetaLabel>
+        ) : (
+          showMeta && (
+            <div className={styles.metaRow}>
+              <MetaLabel as="span" className={styles.metaItem}>
+                {formatDate(recipe.createdAt)}
+              </MetaLabel>
+            </div>
+          )
+        )}
+        {showMeta && visibleTags.length > 0 && (
+          <div className={styles.tags}>
+            {visibleTags.map((tag) => (
+              <span key={tag} className={styles.tag}>
+                {tag}
+              </span>
+            ))}
+            {hiddenTagCount > 0 && (
+              <span className={styles.tagMore}>+{hiddenTagCount} more</span>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
+
+  const cardButton = (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label={recipe.title}
+      className={clsx(styles.card, styles.interactive, className)}
+    >
+      {content}
+    </button>
+  );
+
+  if (!isMinimal && showActions) {
+    return (
+      <div className={styles.cardWrapper}>
+        {cardButton}
+        <button
+          type="button"
+          aria-label="more options"
+          className={styles.actionsButton}
+          onClick={(e) => e.stopPropagation()}
+        >
+          ⋯
+        </button>
+      </div>
+    );
+  }
+
+  return cardButton;
 };

@@ -1,0 +1,37 @@
+.link {
+  color: var(--colorNeutralForeground1);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.muted {
+  color: var(--colorNeutralForeground2);
+}
+
+.underlineAlways {
+  text-decoration: underline;
+}
+
+.underlineHover:hover,
+.underlineHover:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+}
+
+.underlineNone {
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--colorBrandBackgroundHover);
+}
+
+.link:active {
+  color: var(--colorBrandBackgroundSelected);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--colorStrokeFocus2);
+  outline-offset: 2px;
+}

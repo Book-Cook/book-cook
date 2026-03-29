@@ -1,26 +1,42 @@
+import type { Recipe } from "../../clientToServer/types/recipes.types";
+
 export type RecipeCardProps = {
   /**
-   * The title of the recipe
+   * The recipe data to render.
    */
-  title: string;
+  recipe?: Recipe | null;
 
   /**
-   *  The image src to render for the recipe card.
+   * Callback when the card is clicked. Receives the recipe object.
    */
-  imageSrc?: string;
+  onClick?: (recipe: Recipe) => void;
 
   /**
-   * The list of tags to render for the recipe card.
+   * Optional className to add to the card root.
    */
-  tags?: string[];
+  className?: string;
 
   /**
-   * The date the recipe was created
+   * Whether to show meta information (date, tags, creator).
+   * @default true
    */
-  createdDate: string;
+  showMeta?: boolean;
 
   /**
-   * The id of the recipe to navigate to
+   * Whether the card is in a loading skeleton state.
+   * @default false
    */
-  id: string;
+  isLoading?: boolean;
+
+  /**
+   * Whether to show the actions (more options) button.
+   * @default true
+   */
+  showActions?: boolean;
+
+  /**
+   * Minimal display mode — hides the actions button.
+   * @default false
+   */
+  isMinimal?: boolean;
 };

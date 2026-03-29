@@ -1,26 +1,27 @@
 import * as React from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-// Dynamically import the landing page if the user is not authenticated
+import { LoadingScreen } from "../components/FallbackScreens";
+
 const LandingPage = dynamic(
   () => import("../components/LandingPage/LandingPage"),
-  {
-    loading: () => null,
-  }
+  { loading: () => <LoadingScreen /> }
 );
 
-// Dynamically import the home page if the user is authenticated
-const HomePage = dynamic(() => import("../components/HomePage/HomePage"), {
-  loading: () => null,
-});
-export default function Recipes() {
+export default function Index() {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   if (status === "loading") {
-    return null;
+    return <LoadingScreen />;
   }
 
-  // Render HomePage for authenticated users, LandingPage otherwise
-  return session ? <HomePage /> : <LandingPage />;
+  if (session) {
+    void router.replace("/recipes");
+    return <LoadingScreen />;
+  }
+
+  return <LandingPage />;
 }

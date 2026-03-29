@@ -1,0 +1,87 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: 8px 12px;
+  padding-right: 36px;
+  border: 1px solid var(--colorNeutralStroke1);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  background: var(--colorNeutralBackground1);
+  color: var(--colorNeutralForeground1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--colorNeutralForeground3);
+}
+
+.input:focus {
+  outline: 2px solid var(--colorStrokeFocus2);
+  outline-offset: 2px;
+  border-color: var(--colorStrokeFocus2);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.withContentBefore {
+  padding-left: 36px;
+}
+
+.contentBefore {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--colorNeutralForeground3);
+  pointer-events: none;
+}
+
+.contentAfter {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--colorNeutralForeground3);
+}
+
+.clearButton {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--colorNeutralForeground3);
+  border-radius: 4px;
+}
+
+.clearButton:hover {
+  color: var(--colorNeutralForeground2);
+}
+
+.clearButton:focus-visible {
+  outline: 2px solid var(--colorStrokeFocus2);
+  outline-offset: 2px;
+}

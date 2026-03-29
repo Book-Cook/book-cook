@@ -1,2 +1,3 @@
 export * from "./SearchBoxProvider";
-export * from "./RecipeProvider";
+export * from "./RecipeProvider/RecipeProvider";
+export type { EditableData, RecipeContextValue } from "./RecipeProvider/RecipeProvider.types";

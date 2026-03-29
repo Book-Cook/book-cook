@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { deleteRecipe } from "./deleteRecipe";
 
 export function useDeleteRecipe() {
@@ -6,8 +7,8 @@ export function useDeleteRecipe() {
 
   return useMutation({
     mutationFn: deleteRecipe,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["recipes"] });
     },
     onError: (error) => {
       if (error instanceof Error) {

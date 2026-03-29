@@ -1,0 +1,27 @@
+.stack {
+  display: flex;
+  min-width: 0;
+}
+
+/* Directions */
+.directionRow { flex-direction: row; }
+.directionColumn { flex-direction: column; }
+
+/* Wrapping */
+.wrap { flex-wrap: wrap; }
+.noWrap { flex-wrap: nowrap; }
+
+/* Alignment */
+.alignStart { align-items: flex-start; }
+.alignCenter { align-items: center; }
+.alignEnd { align-items: flex-end; }
+.alignStretch { align-items: stretch; }
+.alignBaseline { align-items: baseline; }
+
+/* Gaps */
+.gapXs { gap: 4px; }
+.gapSm { gap: 8px; }
+.gapMd { gap: 16px; }
+.gapLg { gap: 24px; }
+.gapXl { gap: 32px; }
+.gap2Xl { gap: 48px; }

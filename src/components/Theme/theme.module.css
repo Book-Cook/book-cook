@@ -1,0 +1,63 @@
+.light {
+  /* Brand Colors */
+  --brand-Primary: #7768ae;
+  --brand-Hover: #68599c;
+  --brand-Pressed: #594b8a;
+  --brand-Disabled: #d6d1e8;
+  --brand-BackgroundDisabled: #fbfbff;
+
+  /* Danger Colors*/
+  --danger-Primary: #eb5757;
+  --danger-Hover: #cf4545;
+  --danger-Pressed: #b33838;
+  --danger-Disabled: #f5bebe;
+  --danger-BackgroundDisabled: #fffbfb;
+
+  /* UI Colors */
+  --ui-Canvas: #fdfcff;
+  --ui-ControlHover: #f3f4f6;
+  --ui-ControlPressed: #e5e7eb;
+  --ui-ControlBackgroundDisabled: #f3f4f6;
+  --ui-ControlBorder: #6b7280;
+  --ui-ControlBorderHover: #4b5563;
+  --ui-ControlBorderPressed: #1f2937;
+  --ui-ControlDisabled: #9ca3af;
+  --ui-TextPrimary: #111111;
+  --ui-TextSecondary: #37352f;
+  --ui-TextLabel: #787774;
+  --ui-TextCaption: #9ea5b0;
+  --ui-PageBackground: #ffffff;
+  --ui-Divider: #e6e8ee;
+}
+
+.dark {
+  /* Brand Colors */
+  --brand-Primary: #b9aded;
+  --brand-Hover: #a396e4;
+  --brand-Pressed: #8d7fd9;
+  --brand-Disabled: #3d3855;
+  --brand-BackgroundDisabled: #141122;
+
+  /* Danger Colors*/
+  --danger-Primary: #eb5757;
+  --danger-Hover: #cf4545;
+  --danger-Pressed: #b33838;
+  --danger-Disabled: #7e3535;
+  --danger-BackgroundDisabled: #2b1f1f;
+
+  /* UI Colors */
+  --ui-Canvas: #0b0a0f;
+  --ui-ControlHover: #1f2937;
+  --ui-ControlPressed: #374151;
+  --ui-ControlBackgroundDisabled: #1f2937;
+  --ui-ControlBorder: #9ca3af;
+  --ui-ControlBorderHover: #d1d5db;
+  --ui-ControlBorderPressed: #f3f4f6;
+  --ui-ControlDisabled: #4b5563;
+  --ui-TextPrimary: #fdfcff;
+  --ui-TextSecondary: #e2e0ee;
+  --ui-TextLabel: #a7a2c4;
+  --ui-TextCaption: #7e799b;
+  --ui-PageBackground: #0b0a0f;
+  --ui-Divider: #1f2937;
+}

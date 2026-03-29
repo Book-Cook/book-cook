@@ -1,0 +1,36 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: min(520px, 100%);
+  padding: 20px;
+  border: 1px solid var(--ui-ControlBorder, #e6e8ee);
+  border-radius: 12px;
+  background: var(--ui-PageBackground, #ffffff);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 650;
+  margin: 0;
+  color: var(--ui-TextPrimary, #111827);
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: var(--ui-TextSecondary, #4b5563);
+  line-height: 1.5;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

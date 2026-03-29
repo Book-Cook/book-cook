@@ -1,0 +1,39 @@
+.gallery {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 8px;
+}
+
+.title {
+  margin: 0;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: stretch;
+  justify-content: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+}
+
+.item {
+  flex: 1 1 240px;
+  min-width: 220px;
+  max-width: 320px;
+  min-height: 0;
+  display: flex;
+}
+
+.item > * {
+  width: 100%;
+  height: 100%;
+}

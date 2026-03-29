@@ -1,0 +1,48 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--ui-ControlHover);
+  border: none;
+  cursor: default;
+  gap: 6px;
+  min-height: 24px;
+  white-space: nowrap;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  background: var(--ui-ControlPressed);
+}
+
+.text {
+  color: var(--ui-TextSecondary);
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.startIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-TextCaption);
+}
+
+.interactive:hover .text {
+  color: var(--ui-TextPrimary);
+}
+
+.endIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-TextCaption);
+}
+
+.endIcon:hover {
+  color: var(--danger-Primary);
+}

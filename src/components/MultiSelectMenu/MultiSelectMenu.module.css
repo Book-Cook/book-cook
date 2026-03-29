@@ -1,0 +1,126 @@
+.wrapper {
+  position: relative;
+}
+
+.command {
+  position: relative;
+  width: 100%;
+}
+
+/* Pill-box that holds selected Tag chips + the search input (single row) */
+.inputControl {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--ui-ControlBorder);
+  border-radius: 12px;
+  background: var(--ui-Canvas);
+  color: var(--ui-TextPrimary);
+  width: 100%;
+  cursor: text;
+  overflow: hidden;
+  transition:
+    background-color var(--motion-default),
+    border-color var(--motion-default),
+    box-shadow var(--motion-default);
+}
+
+
+.inputControl:focus-within {
+  border-color: var(--ui-ControlBorderPressed);
+  box-shadow:
+    0 0 0 2px var(--ui-Canvas),
+    0 0 0 4px var(--brand-Primary);
+}
+
+.inputIcon {
+  flex-shrink: 0;
+  color: var(--ui-TextCaption);
+}
+
+.overflow {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  color: var(--ui-TextCaption);
+  white-space: nowrap;
+}
+
+/* Inline search input — borderless, sits next to the Tag chips */
+.input {
+  flex: 1 1 80px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  min-width: 80px;
+  height: 24px;
+}
+
+.input::placeholder {
+  color: var(--ui-TextCaption);
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  background: var(--ui-Canvas);
+  border: 1px solid var(--ui-ControlBorder);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+  overflow: hidden;
+  padding: 6px;
+  display: grid;
+  gap: 2px;
+  animation: dropdownIn var(--motion-default);
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown {
+    animation: none;
+  }
+}
+
+.item {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.3;
+  cursor: pointer;
+  color: var(--ui-TextPrimary);
+  font-family: var(--font-sans);
+  user-select: none;
+  outline: none;
+  list-style: none;
+  transition: background-color var(--motion-default);
+}
+
+.item[aria-selected="true"] {
+  background: var(--ui-ControlHover);
+}
+
+.empty {
+  padding: 8px 10px;
+  font-size: 14px;
+  color: var(--ui-TextCaption);
+}

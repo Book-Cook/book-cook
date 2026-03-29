@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  gap: 16px;
+  padding: 40px 20px;
+}
+
+.icon {
+  color: var(--ui-TextSecondary, #574a77);
+  margin-bottom: 8px;
+}
+
+.actions {
+  margin-top: 24px;
+}
