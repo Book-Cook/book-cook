@@ -1,25 +1,18 @@
 import * as React from "react";
 import {
-  Button,
-  Tooltip,
-  Menu,
-  MenuTrigger,
-  MenuList,
-  MenuItem,
-  MenuPopover,
-  MenuDivider,
-} from "@fluentui/react-components";
-import {
-  DeleteRegular,
-  MoreHorizontalRegular,
-  TagRegular,
-  PeopleTeamRegular,
-} from "@fluentui/react-icons";
+  TrashIcon,
+  DotsThreeIcon,
+  TagIcon,
+  UsersIcon,
+} from "@phosphor-icons/react";
 import isEqual from "fast-deep-equal";
 import dynamic from "next/dynamic";
 
 import { useFetchAllTags } from "src/clientToServer";
 import type { RecipeActionsProps } from "./RecipeActions.types";
+import { Button } from "../Button";
+import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
+import { Tooltip } from "../Tooltip";
 
 import { useToggleRecipeVisibility } from "../../clientToServer/post/useToggleRecipeVisibility";
 import { useRecipe } from "../../context";
@@ -97,14 +90,6 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
     ]
   );
 
-  const openDialog = React.useCallback(
-    (type: DialogType) => (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setActiveDialog(type);
-    },
-    []
-  );
-
   const closeDialog = React.useCallback(() => {
     setActiveDialog(null);
   }, []);
@@ -167,47 +152,41 @@ export const RecipeActions: React.FC<RecipeActionsProps> = (props) => {
     [editableData, toggleVisibility, saveChanges, closeDialog]
   );
 
-  const handleDeleteClick = React.useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      deleteRecipe();
-    },
-    [deleteRecipe]
-  );
-
-  const menuContent = React.useMemo(
-    () => (
-      <MenuList onClick={(ev) => ev.stopPropagation()}>
-        <MenuItem icon={<PeopleTeamRegular />} onClick={openDialog("isPublic")}>
-          Visibility
-        </MenuItem>
-        <MenuItem icon={<TagRegular />} onClick={openDialog("tags")}>
-          Add Tags
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem icon={<DeleteRegular />} onClick={handleDeleteClick}>
-          Delete Recipe
-        </MenuItem>
-      </MenuList>
-    ),
-    [openDialog, handleDeleteClick]
-  );
-
   return (
     <>
       <Menu>
-        <MenuTrigger disableButtonEnhancement>
-          <Tooltip content="More options" relationship="label">
+        <MenuTrigger asChild>
+          <Tooltip content="More options">
             <Button
               aria-label="More options"
-              appearance="subtle"
-              icon={<MoreHorizontalRegular />}
-              shape="circular"
+              variant="ghost"
+              icon={<DotsThreeIcon />}
+              shape="square"
               onClick={handleMenuInteraction}
             />
           </Tooltip>
         </MenuTrigger>
-        <MenuPopover>{menuContent}</MenuPopover>
+        <MenuContent onClick={(ev) => ev.stopPropagation()}>
+          <MenuItem
+            startIcon={<UsersIcon />}
+            onSelect={() => { setActiveDialog("isPublic"); }}
+          >
+            Visibility
+          </MenuItem>
+          <MenuItem
+            startIcon={<TagIcon />}
+            onSelect={() => { setActiveDialog("tags"); }}
+          >
+            Add Tags
+          </MenuItem>
+          <MenuSeparator />
+          <MenuItem
+            startIcon={<TrashIcon />}
+            onSelect={() => deleteRecipe()}
+          >
+            Delete Recipe
+          </MenuItem>
+        </MenuContent>
       </Menu>
       {activeDialog === "title" && (
         <ChangeTitleDialog

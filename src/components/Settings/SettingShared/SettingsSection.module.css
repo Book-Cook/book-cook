@@ -1,0 +1,69 @@
+.accordionItem {
+  border-bottom: 1px solid var(--ui-Divider);
+}
+
+.accordionTrigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ui-TextPrimary);
+  font-family: inherit;
+}
+
+.accordionTrigger:hover {
+  opacity: 0.8;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--ui-TextSecondary);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ui-TextPrimary);
+  flex: 1;
+}
+
+.accordionContent {
+  overflow: hidden;
+}
+
+.accordionContent[data-state="open"] {
+  animation: slideDown 0.2s ease-out;
+}
+
+.accordionContent[data-state="closed"] {
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes slideUp {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px 0 24px 0;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--ui-Divider);
+  margin: 0;
+}

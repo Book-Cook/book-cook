@@ -1,16 +1,19 @@
 import * as React from "react";
-import { Dropdown, Option } from "@fluentui/react-components";
-import type {
-  SelectionEvents,
-  OptionOnSelectData,
-} from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import type { RecipesResponse } from "src/clientToServer/fetch/fetchAllRecipes";
-import { useStyles } from "./RecipeGallery.styles";
+import styles from "./RecipeGallery.module.css";
+import {
+  Dropdown,
+  DropdownCaret,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownValue,
+} from "../Dropdown";
 import { Text, Heading1 } from "../Text";
 import { SearchBar } from "../Toolbar/SearchBar";
 import { VirtualizedRecipeList } from "../VirtualizedRecipeList/VirtualizedRecipeList";
@@ -30,7 +33,6 @@ interface RecipeGalleryProps {
 export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
   initialPage,
 }) => {
-  const styles = useStyles();
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
   const router = useRouter();
@@ -83,15 +85,6 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
     }
   }, [router.query]);
 
-  const onSortOptionSelect = (
-    _ev: SelectionEvents,
-    data: OptionOnSelectData
-  ) => {
-    if (data.selectedOptions?.[0]) {
-      setSortOption(data.selectedOptions[0]);
-    }
-  };
-
   const handlePageChange = async (page: number) => {
     setCurrentPage(page);
     await router
@@ -130,18 +123,24 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
             <div className={styles.searchWrapper}>
               <SearchBar />
             </div>
-            <Dropdown
-              className={styles.sortDropdown}
-              appearance="outline"
-              onOptionSelect={onSortOptionSelect}
-              defaultSelectedOptions={["dateNewest"]}
-              defaultValue={"Sort by date (newest)"}
-            >
-              <Option value={"dateNewest"}>Sort by date (newest)</Option>
-              <Option value={"dateOldest"}>Sort by date (oldest)</Option>
-              <Option value={"ascTitle"}>Sort by title (asc)</Option>
-              <Option value={"descTitle"}>Sort by title (desc)</Option>
-            </Dropdown>
+            <div className={styles.sortDropdown}>
+              <Dropdown
+                value={sortOption}
+                onValueChange={(val) => setSortOption(val)}
+                defaultValue="dateNewest"
+              >
+                <DropdownTrigger fullWidth>
+                  <DropdownValue />
+                  <DropdownCaret />
+                </DropdownTrigger>
+                <DropdownContent>
+                  <DropdownItem value="dateNewest">Sort by date (newest)</DropdownItem>
+                  <DropdownItem value="dateOldest">Sort by date (oldest)</DropdownItem>
+                  <DropdownItem value="ascTitle">Sort by title (asc)</DropdownItem>
+                  <DropdownItem value="descTitle">Sort by title (desc)</DropdownItem>
+                </DropdownContent>
+              </Dropdown>
+            </div>
           </div>
         </div>
 

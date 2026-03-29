@@ -1,7 +1,7 @@
 import * as React from "react";
-import { mergeClasses, tokens } from "@fluentui/react-components";
+import { clsx } from "clsx";
 
-import { useCondensedWeekViewStyles } from "./CondensedWeekView.styles";
+import styles from "./CondensedWeekView.module.css";
 import type { CondensedWeekViewProps } from "./CondensedWeekView.types";
 import { WeekDayDropZone } from "../components/WeekDayDropZone";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
@@ -18,8 +18,6 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
   mealPlans,
   onMealRemove,
 }) => {
-  const styles = useCondensedWeekViewStyles();
-
   const weekDates = getWeekDates(currentDate);
   const today = new Date().toDateString();
 
@@ -34,16 +32,16 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
         return (
           <div
             key={date.toISOString()}
-            className={mergeClasses(styles.dayColumn, isPast && styles.pastDay)}
+            className={clsx(styles.dayColumn, isPast && styles.pastDay)}
           >
             <div
-              className={mergeClasses(
+              className={clsx(
                 styles.dayHeader,
                 isPast && styles.pastDayHeader
               )}
             >
               <Text
-                className={mergeClasses(
+                className={clsx(
                   styles.dayName,
                   isToday && styles.isToday
                 )}
@@ -51,7 +49,7 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
                 {dayNames[index]}
               </Text>
               <Text
-                className={mergeClasses(
+                className={clsx(
                   styles.dayDate,
                   isToday && styles.isToday
                 )}
@@ -69,14 +67,14 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
                 scheduledMeals.map((timeSlot, timeIndex) => (
                   <div
                     key={`${dateStr}-${timeSlot.time}-${timeIndex}`}
-                    style={{ marginBottom: tokens.spacingVerticalM }}
+                    style={{ marginBottom: '12px' }}
                   >
                     <Text
                       style={{
-                        fontSize: tokens.fontSizeBase100,
-                        color: tokens.colorNeutralForeground3,
-                        marginBottom: tokens.spacingVerticalXS,
-                        fontWeight: tokens.fontWeightSemibold,
+                        fontSize: '10px',
+                        color: 'var(--ui-TextLabel)',
+                        marginBottom: '4px',
+                        fontWeight: 600,
                         display: "block",
                       }}
                     >

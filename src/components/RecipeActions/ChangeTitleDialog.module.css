@@ -1,0 +1,26 @@
+.textArea {
+  width: 100%;
+  flex-grow: 1;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 80px;
+  resize: none;
+  padding: 8px 12px;
+  border: 1px solid var(--ui-Divider);
+  border-radius: 6px;
+  background: var(--ui-Canvas);
+  color: var(--ui-TextPrimary);
+  font-family: inherit;
+  outline: none;
+}
+
+.textArea:focus {
+  border-color: var(--brand-Primary);
+}
+
+.characterCount {
+  font-size: 12px;
+  color: var(--ui-TextLabel);
+  text-align: right;
+  margin-top: 4px;
+}

@@ -1,0 +1,64 @@
+.container {
+  padding: 8px;
+  background-color: var(--ui-Canvas);
+  border-radius: 6px;
+  border: 1px solid var(--ui-Divider);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.container:hover {
+  background-color: var(--ui-ControlHover);
+  border-color: var(--ui-ControlBorderHover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.isDragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  cursor: grabbing;
+}
+
+.overlay {
+  transform: rotate(5deg);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+  cursor: grabbing;
+}
+
+.emoji {
+  font-size: 24px;
+}
+
+.content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tag {
+  font-size: 10px;
+  padding: 1px 4px;
+  background-color: var(--ui-ControlPressed);
+  border-radius: 4px;
+  color: var(--ui-TextLabel);
+}

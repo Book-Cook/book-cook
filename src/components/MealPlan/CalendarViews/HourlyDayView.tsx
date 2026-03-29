@@ -1,65 +1,13 @@
 import * as React from "react";
-import { makeStyles, tokens, mergeClasses } from "@fluentui/react-components";
+import { clsx } from "clsx";
 
+import styles from "./HourlyDayView.module.css";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 import { formatDateString } from "../utils/formatDateString";
 
-import type {
-  MealPlanWithRecipes,
-  MealItem,
-} from "../../../clientToServer/types";
-import {
-  generateTimeSlots,
-  DEFAULT_TIME_CONFIG,
-  mealTypeToTime,
-} from "../../../utils/timeSlots";
+import type { MealItem, MealPlanWithRecipes } from "../../../clientToServer/types";
+import { DEFAULT_TIME_CONFIG, generateTimeSlots, mealTypeToTime } from "../../../utils/timeSlots";
 import { Text } from "../../Text";
-
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    overflow: "hidden",
-  },
-  header: {
-    padding: tokens.spacingVerticalM,
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-    backgroundColor: tokens.colorNeutralBackground2,
-    position: "sticky",
-    top: 0,
-    zIndex: 1,
-  },
-  dateTitle: {
-    fontSize: tokens.fontSizeBase400,
-    fontWeight: tokens.fontWeightSemibold,
-    textAlign: "center",
-  },
-  timeGrid: {
-    display: "grid",
-    gridTemplateColumns: "80px 1fr",
-    gap: tokens.spacingHorizontalS,
-    padding: tokens.spacingVerticalM,
-  },
-  timeLabel: {
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "flex-end",
-    paddingTop: tokens.spacingVerticalS,
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground2,
-    fontWeight: tokens.fontWeightSemibold,
-  },
-  timeSlotContainer: {
-    marginBottom: tokens.spacingVerticalS,
-  },
-  pastTime: {
-    opacity: 0.5,
-  },
-  pastTimeLabel: {
-    color: tokens.colorNeutralForeground3,
-  },
-});
 
 interface HourlyDayViewProps {
   currentDate: Date;
@@ -76,8 +24,6 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
   mealPlans,
   onMealRemove,
 }) => {
-  const styles = useStyles();
-
   const dateStr = formatDateString(currentDate);
   const timeSlots = generateTimeSlots(DEFAULT_TIME_CONFIG);
 
@@ -167,7 +113,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
           return (
             <React.Fragment key={time}>
               <div
-                className={mergeClasses(
+                className={clsx(
                   styles.timeLabel,
                   isPast && styles.pastTimeLabel
                 )}
@@ -175,7 +121,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
                 {time}
               </div>
               <div
-                className={mergeClasses(
+                className={clsx(
                   styles.timeSlotContainer,
                   isPast && styles.pastTime
                 )}

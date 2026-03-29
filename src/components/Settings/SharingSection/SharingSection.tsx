@@ -1,57 +1,22 @@
 import * as React from "react";
-import { Input, Button, tokens, Avatar, useToastController, Toast, ToastTitle, ToastBody, Toaster, useId } from "@fluentui/react-components";
-import {
-  PersonAddRegular,
-  PersonAdd24Regular,
-  PersonDeleteRegular,
-} from "@fluentui/react-icons";
-import { makeStyles, shorthands } from "@griffel/react";
+import { UserPlusIcon, UserMinusIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 
+import styles from "./SharingSection.module.css";
 import { sharingSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 
 import {
-  useShareWithUser,
   useDeleteSharedUser,
+  useShareWithUser,
   useSharedUsers,
 } from "../../../clientToServer";
+import { Avatar } from "../../Avatar";
+import { Button } from "../../Button";
+import { Input } from "../../Input";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
-
-const useStyles = makeStyles({
-  shareContainer: {
-    display: "flex",
-    gap: "8px",
-    width: "100%",
-  },
-  usersList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    marginTop: "16px",
-    width: "100%",
-  },
-  userItem: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    ...shorthands.padding("8px", "12px"),
-    ...shorthands.borderRadius("6px"),
-    backgroundColor: tokens.colorNeutralBackground2,
-  },
-  userInfo: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-  },
-  emptyState: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground3,
-    fontStyle: "italic",
-    ...shorthands.padding("8px", "0"),
-  },
-});
 
 // Define search keywords for each section
 const sectionKeywords = ["sharing", "share", "collaborate", "access"];
@@ -65,11 +30,7 @@ const shareUserKeywords = [
 ];
 
 export const SharingSection: React.FC = () => {
-  const styles = useStyles();
   const [shareEmail, setShareEmail] = React.useState("");
-
-  const toasterId = useId("sharing-toaster");
-  const { dispatchToast } = useToastController(toasterId);
 
   const { data: sharedUsers = [], isLoading } = useSharedUsers();
   const shareRecipeMutation = useShareWithUser();
@@ -90,29 +51,13 @@ export const SharingSection: React.FC = () => {
 
     try {
       await shareRecipeMutation.mutateAsync(shareEmail);
-
-      // Show success toast
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Success</ToastTitle>
-          <ToastBody>Book cook shared successfully!</ToastBody>
-        </Toast>,
-        { position: "bottom-end", intent: "success", timeout: 1000 }
-      );
-
+      toast.success("Book cook shared successfully!");
       setShareEmail("");
     } catch (error) {
-      // Show error toast
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Error</ToastTitle>
-          <ToastBody>
-            {error instanceof Error
-              ? error.message
-              : "Failed to share your book cook"}
-          </ToastBody>
-        </Toast>,
-        { position: "bottom-end", intent: "error", timeout: 2000 }
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to share your book cook"
       );
     }
   };
@@ -124,25 +69,10 @@ export const SharingSection: React.FC = () => {
 
     try {
       await removeAccessMutation.mutateAsync(email);
-
-      // Show success toast for removing access
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Access Removed</ToastTitle>
-          <ToastBody>{`Access for ${email} has been removed.`}</ToastBody>
-        </Toast>,
-        { position: "bottom-end", intent: "success", timeout: 1000 }
-      );
+      toast.success(`Access for ${email} has been removed.`);
     } catch (error) {
-      // Show error toast
-      dispatchToast(
-        <Toast>
-          <ToastTitle>Error</ToastTitle>
-          <ToastBody>
-            {error instanceof Error ? error.message : "Failed to remove access"}
-          </ToastBody>
-        </Toast>,
-        { position: "bottom-end", intent: "error", timeout: 2000 }
+      toast.error(
+        error instanceof Error ? error.message : "Failed to remove access"
       );
     }
   };
@@ -156,70 +86,65 @@ export const SharingSection: React.FC = () => {
   }
 
   return (
-    <>
-      <Toaster toasterId={toasterId} />
-      <SettingsSection
-        title="Sharing"
-        itemValue={sharingSectionId}
-        icon={<PersonAdd24Regular />}
-      >
-        {(!searchTerm || shareUserItemMatches || sectionMatches) && (
-          <SettingItem
-            label="Share with Another User"
-            description="Enter an email address to share your recipe book with another user."
-            fullWidth
-          >
-            <div className={styles.shareContainer}>
-              <Input
-                value={shareEmail}
-                onChange={(e) => setShareEmail(e.target.value)}
-                placeholder="user@example.com"
-                type="email"
-                disabled={isSharing}
-                style={{ flexGrow: 1 }}
-              />
-              <Button
-                icon={<PersonAddRegular />}
-                onClick={handleShareRecipeBook}
-                disabled={!shareEmail || isSharing}
-              >
-                {isSharing ? <Spinner size="tiny" /> : "Share"}
-              </Button>
-            </div>
-            <div className={styles.usersList}>
-              {isLoading ? (
-                <Spinner size="tiny" label="Loading shared users..." />
-              ) : sharedUsers.length === 0 ? (
-                <div className={styles.emptyState}>
-                  {`You haven't shared your recipes with anyone yet.`}
-                </div>
-              ) : (
-                sharedUsers.map((email) => (
-                  <div key={email} className={styles.userItem}>
-                    <div className={styles.userInfo}>
-                      <Avatar
-                        name={email.split("@")[0]}
-                        size={24}
-                        color="colorful"
-                      />
-                      <Text>{email}</Text>
-                    </div>
-                    <Button
-                      icon={<PersonDeleteRegular />}
-                      appearance="subtle"
-                      size="small"
-                      onClick={() => handleRemoveAccess(email)}
-                      title="Remove access"
-                      aria-label={`Remove ${email}'s access`}
-                      disabled={isSharing}
+    <SettingsSection
+      title="Sharing"
+      itemValue={sharingSectionId}
+      icon={<UserPlusIcon />}
+    >
+      {(!searchTerm || shareUserItemMatches || sectionMatches) && (
+        <SettingItem
+          label="Share with Another User"
+          description="Enter an email address to share your recipe book with another user."
+          fullWidth
+        >
+          <div className={styles.shareContainer}>
+            <Input
+              value={shareEmail}
+              onChange={(e) => setShareEmail(e.target.value)}
+              placeholder="user@example.com"
+              type="email"
+              disabled={isSharing}
+              fullWidth
+            />
+            <Button
+              icon={<UserPlusIcon />}
+              onClick={handleShareRecipeBook}
+              disabled={!shareEmail || isSharing}
+            >
+              {isSharing ? <Spinner size="tiny" /> : "Share"}
+            </Button>
+          </div>
+          <div className={styles.usersList}>
+            {isLoading ? (
+              <Spinner size="tiny" />
+            ) : sharedUsers.length === 0 ? (
+              <div className={styles.emptyState}>
+                {`You haven't shared your recipes with anyone yet.`}
+              </div>
+            ) : (
+              sharedUsers.map((email) => (
+                <div key={email} className={styles.userItem}>
+                  <div className={styles.userInfo}>
+                    <Avatar
+                      name={email.split("@")[0]}
+                      size="sm"
                     />
+                    <Text>{email}</Text>
                   </div>
-                ))
-              )}
-            </div>
-          </SettingItem>
-        )}
-      </SettingsSection>
-    </>
+                  <Button
+                    icon={<UserMinusIcon />}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveAccess(email)}
+                    aria-label={`Remove ${email}'s access`}
+                    disabled={isSharing}
+                  />
+                </div>
+              ))
+            )}
+          </div>
+        </SettingItem>
+      )}
+    </SettingsSection>
   );
 };

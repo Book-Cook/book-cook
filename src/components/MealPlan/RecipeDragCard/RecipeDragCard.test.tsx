@@ -95,7 +95,7 @@ describe('RecipeDragCard', () => {
     expect(screen.getByText('🍽️')).toBeInTheDocument();
   });
 
-  it('applies dragging styles when isDragging is true', () => {
+  it('applies dragging class when isDragging is true', () => {
     const { container } = render(
       <DndContext onDragEnd={() => {}}>
         <RecipeDragCard {...defaultProps} isDragging />
@@ -103,6 +103,6 @@ describe('RecipeDragCard', () => {
     );
 
     const cardElement = container.firstChild as HTMLElement;
-    expect(cardElement).toHaveStyle('opacity: 0.5');
+    expect(cardElement.className).toMatch(/isDragging/);
   });
 });

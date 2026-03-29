@@ -1,72 +1,12 @@
 import * as React from "react";
-import { makeStyles, tokens } from "@fluentui/react-components";
 import { useDraggable } from "@dnd-kit/core";
+import { clsx } from "clsx";
+
+import styles from "./RecipeDragCard.module.css";
 
 import { Text } from "../../Text";
 
 // Recipe drag card component
-
-const useStyles = makeStyles({
-  container: {
-    padding: tokens.spacingVerticalS,
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderRadius: tokens.borderRadiusMedium,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
-    cursor: "grab",
-    display: "flex",
-    alignItems: "center",
-    gap: tokens.spacingHorizontalS,
-    transition: "all 0.2s ease",
-    width: "100%",
-    minWidth: 0,
-    boxSizing: "border-box",
-    "&:hover": {
-      backgroundColor: tokens.colorNeutralBackground1Hover,
-      borderTopColor: tokens.colorNeutralStroke1Hover,
-      borderRightColor: tokens.colorNeutralStroke1Hover,
-      borderBottomColor: tokens.colorNeutralStroke1Hover,
-      borderLeftColor: tokens.colorNeutralStroke1Hover,
-      transform: "translateY(-1px)",
-      boxShadow: tokens.shadow8,
-    },
-  },
-  isDragging: {
-    opacity: 0.5,
-    transform: "rotate(5deg)",
-    cursor: "grabbing",
-  },
-  emoji: {
-    fontSize: "24px",
-  },
-  content: {
-    flex: 1,
-    overflow: "hidden",
-  },
-  title: {
-    fontSize: tokens.fontSizeBase200,
-    fontWeight: tokens.fontWeightSemibold,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-  tags: {
-    display: "flex",
-    gap: tokens.spacingHorizontalXS,
-    marginTop: tokens.spacingVerticalXS,
-  },
-  tag: {
-    fontSize: tokens.fontSizeBase100,
-    padding: `1px ${tokens.spacingHorizontalXS}`,
-    backgroundColor: tokens.colorNeutralBackground3,
-    borderRadius: tokens.borderRadiusSmall,
-    color: tokens.colorNeutralForeground3,
-  },
-  overlay: {
-    transform: "rotate(5deg)",
-    boxShadow: tokens.shadow16,
-    cursor: "grabbing",
-  },
-});
 
 interface RecipeDragCardProps {
   id: string;
@@ -83,8 +23,6 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
   tags,
   isDragging = false,
 }) => {
-  const styles = useStyles();
-  
   const { attributes, listeners, setNodeRef, isDragging: isActiveDrag } = useDraggable({
     id: `recipe-${id}`,
     data: {
@@ -97,9 +35,11 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
   // Only apply opacity when actively dragging
   const style = isActiveDrag ? { opacity: 0.5 } : undefined;
 
-  const containerClass = `${styles.container} ${
-    isDragging ? `${styles.isDragging} ${styles.overlay}` : ""
-  }`;
+  const containerClass = clsx(
+    styles.container,
+    isDragging && styles.isDragging,
+    isDragging && styles.overlay
+  );
   const displayEmoji = emoji && emoji.trim().length > 0 ? emoji : "🍽️";
 
   return (

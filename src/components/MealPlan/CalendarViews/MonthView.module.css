@@ -1,0 +1,26 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 24px repeat(6, 1fr);
+  height: 100%;
+  background-color: var(--ui-Canvas);
+  overflow: hidden;
+}
+
+.dayOfWeekHeader {
+  padding: 2px 4px;
+  text-align: left;
+  background-color: var(--ui-PageBackground);
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--ui-TextSecondary);
+  border-right: 1px solid var(--ui-Divider);
+  border-bottom: 1px solid var(--ui-Divider);
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.dayOfWeekHeader:last-child {
+  border-right: none;
+}
