@@ -2,10 +2,6 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import pwa from "@ducanh2912/next-pwa";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url);
-
 const enablePWA = process.env.DISABLE_PWA !== "true";
 
 const withPWA = enablePWA
@@ -95,14 +91,6 @@ const nextConfig = {
         "@radix-ui/react-dropdown-menu",
         "@radix-ui/react-tooltip",
       ];
-      // Use absolute paths for React to prevent multiple instances on Windows
-      // (case-sensitivity mismatch in Node.js module cache between C:\Code and c:\code paths)
-      const REACT_ABS_PATHS = {
-        "react": require.resolve("react"),
-        "react-dom": require.resolve("react-dom"),
-        "react/jsx-runtime": require.resolve("react/jsx-runtime"),
-        "react/jsx-dev-runtime": require.resolve("react/jsx-dev-runtime"),
-      };
       const existingExternals = Array.isArray(config.externals)
         ? config.externals
         : config.externals
@@ -110,9 +98,6 @@ const nextConfig = {
           : [];
       config.externals = [
         ({ request }, callback) => {
-          if (REACT_ABS_PATHS[request]) {
-            return callback(null, `commonjs ${REACT_ABS_PATHS[request]}`);
-          }
           if (FORCE_COMMONJS.includes(request)) {
             return callback(null, `commonjs ${request}`);
           }
