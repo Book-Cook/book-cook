@@ -83,6 +83,20 @@
   font-size: clamp(34px, 3.6vw, 44px);
 }
 
+@media (max-width: 480px) {
+  .media {
+    height: 160px;
+  }
+
+  .mediaFallback {
+    height: 130px;
+  }
+
+  .emoji {
+    font-size: 36px;
+  }
+}
+
 .body {
   display: flex;
   flex-direction: column;
@@ -209,6 +223,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .actionsButton {
+    opacity: 1;
+  }
+}
+
 .actionsButton:hover {
   background: var(--ui-ControlHover);
   color: var(--ui-TextPrimary);
@@ -292,5 +312,11 @@
 
   .skeletonBody {
     padding: 12px 12px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeletonMedia {
+    height: 160px;
   }
 }
