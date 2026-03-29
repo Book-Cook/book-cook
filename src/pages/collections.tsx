@@ -77,20 +77,7 @@ export default function CollectionsPage() {
                   }
                 >
                   <RecipeCard
-                    title={recipe?.title}
-                    id={recipe?._id}
-                    emoji={recipe?.emoji || ""}
-                    createdDate={
-                      recipe?.createdAt &&
-                      new Date(recipe?.createdAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }
-                    imageSrc={recipe?.imageURL}
-                    tags={recipe?.tags}
-                    isPublic={recipe?.isPublic}
+                    recipe={recipe}
                   />
                 </div>
               ))}
@@ -119,23 +106,7 @@ export default function CollectionsPage() {
                   }
                 >
                   <RecipeCard
-                    title={recipe?.title}
-                    id={recipe?._id}
-                    emoji={recipe?.emoji || ""}
-                    createdDate={
-                      recipe?.createdAt &&
-                      new Date(recipe?.createdAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }
-                    imageSrc={recipe?.imageURL}
-                    tags={recipe?.tags}
-                    isPublic={true}
-                    creatorName={recipe.creatorName}
-                    savedCount={0}
-                    showActions={false}
+                    recipe={recipe}
                   />
                 </div>
               ))}

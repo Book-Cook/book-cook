@@ -1,27 +1,30 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-/**
- * Custom hook to check if a media query matches.
- */
-export const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(() => {
+export const useMediaQuery = (query: string) => {
+  const getMatches = () => {
     if (typeof window === "undefined") {
       return false;
     }
     return window.matchMedia(query).matches;
-  });
+  };
+
+  const [matches, setMatches] = useState(getMatches);
 
   useEffect(() => {
     if (typeof window === "undefined") {
-      return;
+      return undefined;
     }
 
-    const media = window.matchMedia(query);
-    setMatches(media.matches);
+    const mediaQueryList = window.matchMedia(query);
+    const setMatchesIfNeeded = (next: boolean) => {
+      setMatches((prev) => (prev === next ? prev : next));
+    };
+    const handleChange = () => setMatchesIfNeeded(mediaQueryList.matches);
 
-    const listener = (event: MediaQueryListEvent) => setMatches(event.matches);
-    media.addEventListener("change", listener);
-    return () => media.removeEventListener("change", listener);
+    setMatchesIfNeeded(mediaQueryList.matches);
+
+    mediaQueryList.addEventListener("change", handleChange);
+    return () => mediaQueryList.removeEventListener("change", handleChange);
   }, [query]);
 
   return matches;

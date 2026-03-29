@@ -1,4 +1,4 @@
-import type { Recipe, UpdateRecipePayload } from "../../clientToServer";
+import type { Recipe } from "../../clientToServer/types";
 
 export type EditableData = {
   title: string;
@@ -6,23 +6,23 @@ export type EditableData = {
   tags: string[];
   imageURL: string;
   emoji: string;
+  isPublic: boolean;
   _id?: string;
-  isPublic?: boolean;
 };
 
-export type RecipeContextType = {
-  recipe: Recipe | undefined;
-  isAuthorized: boolean;
+export type RecipeContextValue = {
+  recipe: Recipe | null;
   isLoading: boolean;
+  isAuthorized: boolean;
   error: unknown;
-  hasEdits: boolean;
   editableData: EditableData;
-  updateEditableData: (patch: Partial<EditableData>) => void;
+  updateEditableData: (data: EditableData) => void;
   handleAddTag: (tag: string) => void;
   handleRemoveTag: (tag: string) => void;
-  saveChanges: (immediateUpdate?: Partial<UpdateRecipePayload>) => void;
+  saveChanges: (patch?: Partial<EditableData>) => void;
   cancelEditing: () => void;
   deleteRecipe: () => void;
-  onAddToCollection: (recipeId: string) => void;
-  onSaveRecipe: (recipeId: string) => void;
+  onAddToCollection?: () => void;
+  onSaveRecipe?: () => void;
+  hasEdits: boolean;
 };

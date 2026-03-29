@@ -1,83 +1,59 @@
 import * as React from "react";
-import { tokens } from "@fluentui/react-components";
-import { SSRProvider } from "@fluentui/react-utilities";
-import { RendererProvider, createDOMRenderer } from "@griffel/react";
-import { QueryClientProvider, hydrate } from "@tanstack/react-query";
-import type { DehydratedState } from "@tanstack/react-query";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
-import { queryClient } from "../clients/react-query";
-import { AppContainer } from "../components";
+import { AppContainer } from "../components/AppContainer";
+import { ThemeProvider } from "../components/Theme/ThemeProvider";
+import type { Theme } from "../components/Theme/ThemeProvider.types";
+import "../styles/global.css";
 
-const SITE_NAME = "Book Cook";
-const DEFAULT_DESCRIPTION =
-  "Discover, create, and store your favorite recipes with Book Cook. Your personal digital cookbook.";
+const queryClientOptions = {
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+    mutations: {
+      retry: 1,
+    },
+  },
+};
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
+  const [queryClient] = React.useState(() => new QueryClient(queryClientOptions));
+  const [theme, setTheme] = React.useState<Theme>(() => {
+    if (typeof window === "undefined") {return "light";}
+    return (localStorage.getItem("theme") as Theme) ?? "light";
+  });
 
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const handleSetTheme = (t: Theme) => {
+    localStorage.setItem("theme", t);
+    setTheme(t);
+  };
 
   return (
     <>
       <Head>
         <title>Book Cook</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="title" content={SITE_NAME} />
-        <meta name="description" content={DEFAULT_DESCRIPTION} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        <meta property="og:type" content="website" />
+        <meta name="title" content="Book Cook" />
+        <meta name="description" content="A site for storing recipes." />
         <link
           rel="icon"
           type="image/svg+xml"
           href="/image/Book-Cook-Logo.svg"
         />
       </Head>
-      <style>
-        {`
-          body {
-            background-color: ${tokens.colorNeutralBackground1};
-            padding: 0px;
-            margin: 0px;
-            height: 100%;
-          }
-          html {
-            height: 100%;
-          }
-          #__next {
-            height: 100%;
-          }
-        `}
-      </style>
-      {/* hydrate query client with server state if present */}
-      {(() => {
-        const dehydrated = (
-          pageProps as unknown as { dehydratedState?: DehydratedState }
-        ).dehydratedState;
-        if (dehydrated) {
-          hydrate(queryClient, dehydrated);
-        }
-        return null;
-      })()}
       <QueryClientProvider client={queryClient}>
-        <RendererProvider renderer={pageProps.renderer ?? createDOMRenderer()}>
-          <SSRProvider>
-            {isMounted && (
-              <AppContainer>
-                <Component {...pageProps} />
-                <Analytics />
-                <SpeedInsights />
-              </AppContainer>
-            )}
-          </SSRProvider>
-        </RendererProvider>
+        <ThemeProvider theme={theme} setTheme={handleSetTheme}>
+          <AppContainer>
+            <Component {...pageProps} />
+          </AppContainer>
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );

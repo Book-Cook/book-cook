@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import type { Recipe } from "../../clientToServer/types/recipes.types";
 import { RecipeCard } from "../../components/RecipeCard";
 
 const meta: Meta<typeof RecipeCard> = {
@@ -14,6 +15,42 @@ export default meta;
 
 type Story = StoryObj<typeof RecipeCard>;
 
+const sampleRecipes: Recipe[] = [
+  {
+    _id: "recipe-1",
+    title: "Creamy Tomato Soup",
+    emoji: "🍲",
+    tags: ["Vegetarian", "Dinner", "30 mins", "Comfort"],
+    createdAt: new Date().toISOString(),
+    imageURL: "",
+    data: "",
+    owner: "user-1",
+    isPublic: false,
+  },
+  {
+    _id: "recipe-2",
+    title: "Spicy Chickpea Curry",
+    emoji: "🌶️",
+    tags: ["Spicy", "High Protein", "Gluten Free", "Vegan Friendly"],
+    createdAt: new Date().toISOString(),
+    imageURL: "",
+    data: "",
+    owner: "user-1",
+    isPublic: false,
+  },
+  {
+    _id: "recipe-3",
+    title: "Lemon Blueberry Pancakes",
+    emoji: "🥞",
+    tags: ["Breakfast", "Sweet", "30 mins"],
+    createdAt: new Date().toISOString(),
+    imageURL: "",
+    data: "",
+    owner: "user-1",
+    isPublic: false,
+  },
+];
+
 export const Gallery: Story = {
   render: () => (
     <div
@@ -23,39 +60,8 @@ export const Gallery: Story = {
         gap: "16px",
       }}
     >
-      {[
-        {
-          id: "recipe-1",
-          title: "Creamy Tomato Soup",
-          emoji: "🍲",
-          tags: ["Vegetarian", "Dinner", "30 mins", "Comfort"],
-          createdDate: new Date().toISOString(),
-        },
-        {
-          id: "recipe-2",
-          title: "Spicy Chickpea Curry",
-          emoji: "🌶️",
-          tags: ["Spicy", "High Protein", "Gluten Free", "Vegan Friendly"],
-          createdDate: new Date().toISOString(),
-        },
-        {
-          id: "recipe-3",
-          title: "Lemon Blueberry Pancakes",
-          emoji: "🥞",
-          tags: ["Breakfast", "Sweet", "30 mins"],
-          createdDate: new Date().toISOString(),
-          isMinimal: true,
-        },
-        {
-          id: "recipe-4",
-          title: "Roasted Veggie Grain Bowl",
-          emoji: "🥗",
-          tags: ["Vegan", "Fiber", "Meal Prep"],
-          createdDate: "2023-01-01T00:00:00.000Z",
-          isPast: true,
-        },
-      ].map((card) => (
-        <RecipeCard key={card.id} {...card} showActions={false} />
+      {sampleRecipes.map((recipe) => (
+        <RecipeCard key={recipe._id} recipe={recipe} />
       ))}
     </div>
   ),

@@ -1,27 +1,60 @@
-import type * as React from "react";
+import type { ButtonHTMLAttributes, ElementType, ReactNode } from "react";
 
-export type ButtonAppearance =
-  | "primary"
-  | "subtle"
-  | "secondary"
-  | "transparent";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
+export type ButtonSize = "xs" | "sm" | "md" | "lg";
+export type ButtonShape = "default" | "pill" | "square";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
-   * The appearance of the button
+   * Visual hierarchy of the button.
+   * @default "primary"
    */
-  appearance?: ButtonAppearance;
+  variant?: ButtonVariant;
+
   /**
-   * Icon to display before the button text
+   * FluentUI-compatible appearance alias — maps to variant.
    */
-  icon?: React.ReactNode;
+  appearance?: "primary" | "secondary" | "outline" | "subtle" | "transparent";
+
   /**
-   * Children to render inside the button
+   * Size of the button affecting padding and font size.
+   * @default "md"
    */
-  children?: React.ReactNode;
+  size?: ButtonSize;
+
   /**
-   * Additional className to apply to the button
+   * Shape of the button. Use 'pill' for Action Chips.
+   * @default "default"
    */
-  className?: string;
+  shape?: ButtonShape;
+
+  /**
+   * Whether the button takes up the full width of its container.
+   */
+  fullWidth?: boolean;
+
+  /**
+   * Shows a loading state and disables interaction.
+   */
+  isLoading?: boolean;
+
+  /**
+   * FluentUI-compatible icon alias — same as startIcon.
+   */
+  icon?: ReactNode;
+
+  /**
+   * Icon element to display before the text.
+   */
+  startIcon?: ReactNode;
+
+  /**
+   * Icon element to display after the text.
+   */
+  endIcon?: ReactNode;
+
+  /**
+   * Polymorphic prop to render as a different element (e.g., 'a' tag).
+   */
+  as?: ElementType;
 }

@@ -1,3 +1,4 @@
+import type { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 
 const RecipePage = dynamic(
@@ -7,10 +8,15 @@ const RecipePage = dynamic(
     })),
   {
     loading: () => null,
-    ssr: true,
+    ssr: false,
   }
 );
 
 export default function Recipes() {
   return <RecipePage />;
 }
+
+// eslint-disable-next-line @typescript-eslint/require-await
+export const getServerSideProps: GetServerSideProps = async () => {
+  return { props: {} };
+};

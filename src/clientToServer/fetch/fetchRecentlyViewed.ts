@@ -1,6 +1,9 @@
-import { fetchJson } from "src/utils";
-import type { Recipe } from "../types";
+import type { Recipe } from "../../components/RecipeView/RecipeView.types";
 
 export const fetchRecentlyViewed = async (): Promise<Recipe[]> => {
-  return fetchJson(`/api/user/recentlyViewed`);
+  const response = await fetch("/api/user/recentlyViewed");
+  if (!response.ok) {
+    return [];
+  }
+  return response.json();
 };

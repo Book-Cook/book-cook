@@ -1,0 +1,28 @@
+:root {
+  /* Fonts */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Merriweather", "Georgia", serif;
+
+  /* Animation */
+  --motion-default: 0.2s ease;
+  --motion-spring: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--ui-PageBackground);
+  color: var(--ui-TextPrimary);
+}

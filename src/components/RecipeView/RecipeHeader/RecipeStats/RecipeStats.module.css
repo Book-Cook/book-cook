@@ -1,0 +1,5 @@
+.statsRow {
+  display: flex;
+  gap: 12px;
+  color: var(--ui-TextCaption);
+}

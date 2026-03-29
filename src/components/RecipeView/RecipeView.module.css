@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  --editor-menu-size: 24px;
+  --editor-menu-gap: 12px;
+  --editor-gutter: calc(var(--editor-menu-size) + var(--editor-menu-gap));
+}
+
+.content {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+@media (max-width: 720px) {
+  .content {
+    padding: 0 16px 40px;
+  }
+
+}

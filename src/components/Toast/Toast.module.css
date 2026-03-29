@@ -1,0 +1,120 @@
+.toaster {
+  font-family: var(--font-sans);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--ui-Canvas);
+  border: 1px solid var(--ui-ControlBorder);
+  border-left: 3px solid var(--brand-Primary);
+  border-radius: 10px;
+  color: var(--ui-TextPrimary);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.description {
+  color: var(--ui-TextSecondary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton,
+.cancelButton {
+  border-radius: 6px;
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-default),
+    border-color var(--motion-default),
+    color var(--motion-default);
+}
+
+.actionButton {
+  background: var(--brand-Primary);
+  color: #fff;
+}
+
+.actionButton:hover {
+  background: var(--brand-Hover);
+}
+
+.actionButton:focus-visible,
+.cancelButton:focus-visible,
+.closeButton:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--ui-Canvas),
+    0 0 0 4px var(--brand-Primary);
+}
+
+.cancelButton {
+  background: transparent;
+  border-color: var(--ui-ControlBorder);
+  color: var(--ui-TextSecondary);
+}
+
+.cancelButton:hover {
+  background: var(--ui-ControlHover);
+}
+
+.closeButton {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--ui-ControlBorder);
+  background: var(--ui-Canvas);
+  color: var(--ui-TextSecondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-default),
+    border-color var(--motion-default),
+    color var(--motion-default);
+}
+
+.closeButton:hover {
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.typeDefault,
+.typeSuccess {
+  --toast-accent: var(--brand-Primary);
+}
+
+.typeError {
+  --toast-accent: var(--danger-Primary);
+}
+
+.typeInfo,
+.typeWarning,
+.typeLoading {
+  --toast-accent: var(--ui-ControlBorder);
+}

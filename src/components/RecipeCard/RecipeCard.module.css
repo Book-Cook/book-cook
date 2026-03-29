@@ -1,149 +1,296 @@
 .card {
-  width: 100%;
-  height: 280px;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
-  position: relative;
-  border-radius: 12px;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  border-color: var(--colorBrandStroke1);
-}
-
-.cardInner {
-  height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.imageContainer {
-  position: relative;
-  height: 100%;
-  width: 100%;
+  background: var(--ui-Canvas);
+  border: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 20%, transparent);
+  border-radius: 14px;
   overflow: hidden;
+  text-align: left;
+  padding: 0;
+  min-width: 0;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  transition:
+    border-color var(--motion-default),
+    box-shadow var(--motion-default),
+    transform var(--motion-default);
 }
 
-.image {
-  object-fit: cover;
+.interactive {
+  cursor: pointer;
 }
 
-.placeholderImage {
-  height: 100%;
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    border-color: var(--ui-ControlBorderHover);
+    box-shadow:
+      0 10px 24px -20px color-mix(in srgb, var(--ui-ControlBorderPressed) 70%, transparent),
+      0 6px 16px -14px color-mix(in srgb, var(--ui-ControlBorderPressed) 40%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
+.interactive:active {
+  border-color: var(--ui-ControlBorder);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--ui-ControlBorder) 18%, transparent);
+  transform: translateY(0);
+}
+
+.interactive:focus {
+  outline: none;
+}
+
+.interactive:focus:not(:focus-visible) {
+  border-color: var(--ui-ControlHover);
+}
+
+.interactive:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--ui-Canvas),
+    0 0 0 4px var(--brand-Primary);
+}
+
+.media {
   width: 100%;
-  background: linear-gradient(
-    45deg,
-    var(--colorNeutralBackground3),
-    var(--colorNeutralBackground2)
-  );
+  height: clamp(140px, 18vw, 180px);
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ui-ControlHover);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.headerRoot {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-  width: 100%;
+.mediaFallback {
+  background:
+    radial-gradient(
+      120% 120% at 50% 8%,
+      color-mix(in srgb, var(--ui-Canvas) 88%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(135deg, var(--brand-BackgroundDisabled), var(--ui-ControlHover));
+  height: clamp(112px, 14vw, 144px);
 }
 
-.headerContent {
+.mediaImage {
+  object-fit: cover;
+}
+
+.emoji {
+  font-size: clamp(34px, 3.6vw, 44px);
+}
+
+.body {
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  flex-grow: 1;
-  flex-shrink: 1;
+  gap: 5px;
+  padding: 14px 14px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  background: var(--ui-Canvas);
 }
 
 .title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.3;
-  width: 100%;
-  overflow-wrap: break-word;
+  color: var(--ui-TextPrimary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.description {
-  margin-top: 2px;
-}
-
-.descriptionTint {
-  color: var(--colorNeutralForeground3);
-}
-
-.headerAction {
-  flex-shrink: 0;
-}
-
-.tagsContainer {
+.metaRow {
   display: flex;
+  align-items: center;
+  gap: 6px;
   flex-wrap: wrap;
+}
+
+.creator {
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 500;
+  color: var(--ui-TextSecondary);
+}
+
+.metaGroup {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
 }
 
-.content {
-  padding: 16px;
-  flex-grow: 1;
+.metaItem {
+  color: var(--ui-TextLabel);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.dot {
+  color: var(--ui-TextLabel);
+}
+
+.tags {
   display: flex;
-  flex-direction: column;
-  background: var(--colorNeutralBackground1);
-  border-top: 1px solid var(--colorNeutralStroke2);
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
 }
 
 .tag {
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 500;
-  background: var(--colorNeutralBackground3);
-  color: var(--colorNeutralForeground2);
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-family: var(--font-sans);
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextLabel);
   white-space: nowrap;
-  vertical-align: middle;
 }
 
-.badgeNew {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--colorPaletteRedBackground2);
-  color: var(--colorPaletteRedForeground2);
-  padding: 4px 8px;
-  border-radius: 4px;
+.tagMore {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
   font-size: 11px;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--ui-TextLabel);
+  white-space: nowrap;
+}
+
+.newBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  background: var(--brand-Primary);
+  color: #fff;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.cardWrapper {
+  position: relative;
+}
+
+.actionsButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--ui-TextSecondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity var(--motion-default), background-color var(--motion-default);
   z-index: 1;
 }
 
-.emojiFallback {
-  font-size: 48px;
-  line-height: 1;
+.cardWrapper:hover .actionsButton,
+.actionsButton:focus-visible {
+  opacity: 1;
 }
 
-.moreTag {
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  background: var(--colorBrandBackground2);
-  color: var(--colorBrandForeground2);
+.actionsButton:hover {
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+  opacity: 1;
 }
 
-.pastCard {
-  opacity: 0.5;
-  filter: grayscale(0.3);
+@media (max-width: 720px) {
+  .body {
+    padding: 12px 12px 10px;
+  }
+
+  .mediaFallback {
+    height: 120px;
+  }
 }
 
-.pastContent {
-  background: var(--colorNeutralBackground2);
+/* ── Skeleton ─────────────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeletonBlock {
+  background: linear-gradient(
+    90deg,
+    var(--ui-ControlHover) 25%,
+    color-mix(in srgb, var(--ui-ControlHover) 60%, var(--ui-Canvas)) 50%,
+    var(--ui-ControlHover) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+.skeletonMedia {
+  width: 100%;
+  height: clamp(140px, 18vw, 180px);
+  border-radius: 0;
+}
+
+.skeletonBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 14px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  background: var(--ui-Canvas);
+}
+
+.skeletonTitle {
+  height: 15px;
+  width: 85%;
+}
+
+.skeletonTitleSecond {
+  height: 15px;
+  width: 55%;
+}
+
+.skeletonCreator {
+  height: 13px;
+  width: 40%;
+  margin-top: 1px;
+}
+
+.skeletonMeta {
+  height: 11px;
+  width: 60%;
+  margin-top: 1px;
+}
+
+@media (max-width: 720px) {
+  .skeletonMedia {
+    height: clamp(140px, 18vw, 180px);
+  }
+
+  .skeletonBody {
+    padding: 12px 12px 10px;
+  }
 }

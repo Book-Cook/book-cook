@@ -47,7 +47,7 @@ export default async function handler(req: any, res: any) {
           { projection: { recentlyViewedRecipes: 1, _id: 0 } }
         );
 
-      if (!userDoc || !userDoc.recentlyViewedRecipes) {
+      if (!userDoc?.recentlyViewedRecipes) {
         res.status(404).json({ message: "Recently viewed recipes not found" });
         return;
       }

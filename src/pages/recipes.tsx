@@ -1,160 +1,114 @@
-import { QueryClient, dehydrate } from "@tanstack/react-query";
-import type { GetServerSideProps } from "next";
-import dynamic from "next/dynamic";
-import { getServerSession } from "next-auth";
+import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
-import { Spinner } from "src/components/Spinner";
-import { getDb } from "src/utils/db";
-import { authOptions } from "./api/auth/[...nextauth]";
+import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import styles from "./recipes.module.css";
+import {
+  FallbackScreen,
+  Unauthorized,
+} from "../components";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownValue,
+  DropdownContent,
+  DropdownItem,
+  DropdownCaret,
+} from "../components/Dropdown";
+import { MultiSelectMenu } from "../components/MultiSelectMenu";
+import { RecipeCardGallery } from "../components/RecipeCardGallery";
+import { PageTitle, BodyText } from "../components/Typography";
+import { useSearchBox } from "../context";
 
-const RecipeGallery = dynamic(
-  () =>
-    import("src/components/RecipeGallery/RecipeGallery").then((mod) => ({
-      default: mod.RecipeGallery,
-    })),
-  {
-    loading: () => <Spinner label="Loading recipes..." />,
-    ssr: true,
+export default function Recipes() {
+  const { searchBoxValue } = useSearchBox();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  const [sortOption, setSortOption] = React.useState("dateNewest");
+  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+  const [showLoadingIndicator, setShowLoadingIndicator] = React.useState(false);
+
+  const {
+    data: recipes,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["recipes", searchBoxValue, sortOption],
+    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  const availableTags = Array.from(new Set((recipes ?? []).flatMap((r) => r.tags ?? [])));
+
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isLoading) {
+      timer = setTimeout(() => setShowLoadingIndicator(true), 300);
+    } else {
+      setShowLoadingIndicator(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
+  if (status === "loading") {
+    return null;
   }
-);
 
-export default function Recipes(props: {
-  initialPage?: number;
-}) {
+  if (!session) {
+    return <Unauthorized />;
+  }
+
+  const filteredRecipes = selectedTags.length
+    ? (recipes ?? []).filter((r) => selectedTags.every((tag) => r.tags?.includes(tag)))
+    : (recipes ?? []);
+
+  const countLabel = `${filteredRecipes.length} recipe${filteredRecipes.length !== 1 ? "s" : ""}${
+    searchBoxValue ? ` matching "${searchBoxValue}"` : " in your collection"
+  }${selectedTags.length > 0 ? ` with tags: ${selectedTags.join(", ")}` : ""}`;
+
   return (
-    <RecipeGallery
-      initialPage={props.initialPage}
-    />
+    <div className={styles.pageContainer}>
+      <div className={styles.header}>
+        <div className={styles.titleSection}>
+          <PageTitle as="h1">My Recipes</PageTitle>
+          <BodyText>{countLabel}</BodyText>
+        </div>
+        <div className={styles.controls}>
+          <Dropdown value={sortOption} onValueChange={setSortOption}>
+            <DropdownTrigger>
+              <DropdownValue />
+              <DropdownCaret />
+            </DropdownTrigger>
+            <DropdownContent>
+              <DropdownItem value="dateNewest">Sort by date (newest)</DropdownItem>
+              <DropdownItem value="dateOldest">Sort by date (oldest)</DropdownItem>
+              <DropdownItem value="ascTitle">Sort by title (asc)</DropdownItem>
+              <DropdownItem value="descTitle">Sort by title (desc)</DropdownItem>
+            </DropdownContent>
+          </Dropdown>
+          <MultiSelectMenu
+            options={availableTags}
+            value={selectedTags}
+            onChange={setSelectedTags}
+            label="Filter by tags"
+          />
+        </div>
+      </div>
+      <FallbackScreen
+        isLoading={showLoadingIndicator}
+        isError={Boolean(error)}
+        dataLength={filteredRecipes.length}
+      >
+        <RecipeCardGallery
+          recipes={filteredRecipes}
+          isLoading={showLoadingIndicator}
+          onRecipeClick={(recipe) => router.push(`/recipes/${recipe._id}`)}
+        />
+      </FallbackScreen>
+    </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    const pageParam = context.query.page;
-    const page =
-      Number(
-        pageParam && typeof pageParam === "string" ? parseInt(pageParam, 10) : 1
-      ) || 1;
-    const pageSize = 20;
-
-    const offset = (page - 1) * pageSize;
-
-    const session = await getServerSession(
-      context.req,
-      context.res,
-      authOptions
-    );
-    const db = await getDb();
-
-    // Build visibility conditions (same as API)
-    const visibilityConditions: Array<Record<string, unknown>> = [
-      { isPublic: true },
-    ];
-    if (session?.user?.id) {
-      try {
-        const sharedOwners = await db
-          .collection("users")
-          .find(
-            { sharedWithUsers: session.user.email },
-            { projection: { _id: 1 } }
-          )
-          .map((user) => user._id.toString())
-          .toArray();
-
-        visibilityConditions.push(
-          { owner: session.user.id },
-          { owner: { $in: sharedOwners } }
-        );
-      } catch (err) {
-        console.error("Error fetching shared owners for SSR:", err);
-      }
-    }
-
-    const query = { $or: visibilityConditions };
-    const projection = { data: 0 };
-
-    // Default sort matches client default: dateNewest -> createdAt desc
-    const sortProperty = "createdAt";
-    const direction = -1;
-
-    const rawRecipes = await db
-      .collection("recipes")
-      .find(query, { projection })
-      .sort({ [sortProperty]: direction })
-      .skip(offset)
-      .limit(pageSize)
-      .toArray();
-
-    // Convert DB-specific types (ObjectId, Date) to serializable values
-    const recipes = rawRecipes.map((r) => {
-      const record = r as Record<string, unknown>;
-      const id = record._id;
-      let idStr: unknown = id;
-      if (id && typeof id === "object") {
-        const maybeId = id as {
-          toHexString?: () => string;
-          toString?: () => string;
-        };
-        if (typeof maybeId.toHexString === "function") {
-          idStr = maybeId.toHexString();
-        } else if (typeof maybeId.toString === "function") {
-          idStr = maybeId.toString();
-        }
-      }
-
-      const ownerRaw = record.owner;
-      let owner: unknown = ownerRaw;
-      if (ownerRaw && typeof ownerRaw === "object") {
-        const maybeOwner = ownerRaw as { toString?: () => string };
-        if (typeof maybeOwner.toString === "function") {
-          owner = maybeOwner.toString();
-        }
-      }
-
-      const createdAtRaw = record.createdAt;
-      const createdAt =
-        createdAtRaw instanceof Date
-          ? createdAtRaw.toISOString()
-          : (createdAtRaw ?? null);
-
-      const publishedAtRaw = record.publishedAt;
-      const publishedAt =
-        publishedAtRaw instanceof Date
-          ? publishedAtRaw.toISOString()
-          : (publishedAtRaw ?? null);
-
-      return {
-        ...record,
-        _id: idStr,
-        owner,
-        createdAt,
-        publishedAt,
-      } as Record<string, unknown>;
-    });
-
-    const totalCount = await db.collection("recipes").countDocuments(query);
-
-    const initialData = {
-      recipes,
-      totalCount,
-      hasMore: offset + pageSize < totalCount,
-    };
-
-    const queryClient = new QueryClient();
-    // match the queryKey used in RecipeGallery's useQuery
-    queryClient.setQueryData(
-      ["recipes", "", "dateNewest", page, pageSize],
-      initialData
-    );
-
-    return {
-      props: {
-        dehydratedState: dehydrate(queryClient),
-        initialPage: page
-      },
-    };
-  } catch (error) {
-    console.error("SSR error for /recipes:", error);
-    return { props: {} };
-  }
-};

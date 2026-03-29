@@ -1,28 +1,83 @@
-import * as React from "react";
-import cx from "clsx";
+import { forwardRef } from "react";
+import { clsx } from "clsx";
 
 import styles from "./Button.module.css";
 import type { ButtonProps } from "./Button.types";
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
+const variantStyles = {
+  primary: styles.variantPrimary,
+  secondary: styles.variantSecondary,
+  ghost: styles.variantGhost,
+  destructive: styles.variantDestructive,
+};
+
+const sizeStyles = {
+  xs: styles.sizeXs,
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
+};
+
+const shapeStyles = {
+  default: styles.shapeDefault,
+  pill: styles.shapePill,
+  square: styles.shapeSquare,
+};
+
+/**
+ * Core Button component for Book Cook.
+ * Supports "Notion-style" interactions and "Start Cooking" focus modes.
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const {
+      as: Component = "button",
       appearance = "secondary",
+      variant,
+      size = "md",
+      shape = "default",
+      fullWidth = false,
+      isLoading = false,
       icon,
-      children,
+      startIcon: startIconProp,
+      endIcon,
       className,
-      type = "button",
+      children,
+      disabled,
+      type,
       ...rest
-    },
-    ref
-  ): React.ReactElement => {
-    const buttonClassName = cx(styles.button, styles[appearance], className);
+    } = props;
+
+    const startIcon = icon ?? startIconProp;
+    const isDisabled = Boolean(disabled) || isLoading;
+    const resolvedType = type ?? (Component === "button" ? "button" : undefined);
 
     return (
-      <button ref={ref} className={buttonClassName} type={type} {...rest}>
-        {icon && <span className={styles.icon}>{icon}</span>}
-        {children && <span className={styles.content}>{children}</span>}
-      </button>
+      <Component
+        ref={ref}
+        type={resolvedType}
+        disabled={isDisabled}
+        className={clsx(
+          styles.button,
+          styles[appearance],
+          variant && variantStyles[variant],
+          sizeStyles[size],
+          shapeStyles[shape],
+          fullWidth && styles.fullWidth,
+          isDisabled && styles.disabled,
+          isLoading && styles.loading,
+          className
+        )}
+        {...rest}
+      >
+        {/* Loading Spinner */}
+        {isLoading && <span className={styles.spinner} aria-hidden="true" />}
+
+        {/* Content */}
+        {!isLoading && startIcon}
+        {!isLoading && <span>{children}</span>}
+        {!isLoading && endIcon}
+      </Component>
     );
   }
 );

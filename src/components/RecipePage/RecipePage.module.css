@@ -1,0 +1,55 @@
+.pageContainer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px 16px 40px;
+}
+
+.recipeCard {
+  max-width: 840px;
+  width: 100%;
+  margin-bottom: 100px;
+  padding: 0 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: var(--ui-Canvas);
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 8px 24px;
+  overflow: hidden;
+}
+
+.topSection {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .topSection {
+    flex-direction: column;
+  }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--ui-Divider, #e0e0e0);
+  margin: 0 36px;
+  opacity: 0.6;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 30px;
+  padding: 24px 36px;
+}
+
+@media (max-width: 768px) {
+  .contentContainer {
+    padding: 0 24px;
+  }
+}

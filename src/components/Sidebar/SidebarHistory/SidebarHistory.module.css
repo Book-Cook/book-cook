@@ -1,0 +1,52 @@
+.container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.groupLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-TextCaption);
+  padding: 10px 6px 2px;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item {
+  display: block;
+  width: 100%;
+  padding: 4px 6px;
+  border: none;
+  background: transparent;
+  color: var(--ui-TextSecondary);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    background var(--sidebar-motion, 0.12s ease),
+    color var(--sidebar-motion, 0.12s ease);
+}
+
+.item:hover {
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--sidebar-focus-ring, inset 0 0 0 1px var(--ui-ControlBorderHover));
+}
