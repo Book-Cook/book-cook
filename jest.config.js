@@ -22,14 +22,15 @@ const customJestConfig = {
     "!jest.setup.ts",
   ],
   testEnvironment: "jsdom",
-  testEnvironmentOptions: {
-    customExportConditions: [""],
-  },
   setupFiles: ["<rootDir>/jest.polyfills.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: [
-    "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http|until-async)/)",
+    "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http)/)",
   ],
+  moduleNameMapper: {
+    "^msw/node$": "<rootDir>/node_modules/msw/lib/node/index.js",
+    "^msw$": "<rootDir>/node_modules/msw/lib/core/index.js",
+  },
   moduleDirectories: ["node_modules", "<rootDir>/"],
   testPathIgnorePatterns: ["/node_modules/", "/.next/", "<rootDir>/tests/"],
 };
