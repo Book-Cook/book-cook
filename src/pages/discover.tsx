@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
-import { SearchBox } from "../components/Searchbox";
+import { SearchBox } from "../components/SearchBox";
 import { Text, Heading1 } from "../components/Text";
 
 interface PublicRecipe {
@@ -19,6 +19,8 @@ interface PublicRecipe {
   viewCount: number;
   creatorName: string;
   owner: string;
+  data: string;
+  isPublic: boolean;
 }
 
 interface PublicRecipesResponse {

@@ -6,8 +6,8 @@ import { useSession } from "next-auth/react";
 import styles from "./HomePage.module.css";
 import { RecipeCardCarousel } from "../RecipeCardCarousel";
 
-import { fetchAllRecipes } from "../../clientToServer/fetch/fetchAllRecipes";
 import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
+import { fetchRecipeCollections } from "../../clientToServer/fetch/fetchRecipeCollections";
 
 const sharedQueryOptions = {
   staleTime: 5 * 60 * 1000,
@@ -17,13 +17,15 @@ const sharedQueryOptions = {
   refetchOnMount: false,
 } as const;
 
+const EMPTY_MESSAGE = "You haven't viewed any recipes yet.";
+
 const HomePage = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const userKey = session?.user?.email;
   const hasSession = Boolean(session);
 
-  const { data: recentlyViewed } = useQuery({
+  const { data: recentlyViewed, isLoading: isRecentlyViewedLoading } = useQuery({
     queryKey: ["recentlyViewed", userKey],
     queryFn: fetchRecentlyViewed,
     enabled: hasSession,
@@ -31,17 +33,13 @@ const HomePage = () => {
     ...sharedQueryOptions,
   });
 
-  const { data: recentRecipes } = useQuery({
-    queryKey: ["recipes", "", "dateNewest"],
-    queryFn: () => fetchAllRecipes("", "dateNewest"),
+  const { data: favoriteRecipes, isLoading: isFavoriteLoading } = useQuery({
+    queryKey: ["collections", userKey],
+    queryFn: fetchRecipeCollections,
     enabled: hasSession,
     placeholderData: (previousData) => previousData,
-    select: (data) => data.slice(0, 15),
     ...sharedQueryOptions,
   });
-
-  const recentlyViewedList = recentlyViewed ?? [];
-  const recentRecipesList = recentRecipes ?? [];
 
   return (
     <div className={styles.container}>
@@ -49,14 +47,16 @@ const HomePage = () => {
         <div className={styles.sectionContainer}>
           <RecipeCardCarousel
             title="Recently Viewed Recipes"
-            recipes={recentlyViewedList}
-            isLoading={!recentlyViewed}
+            recipes={recentlyViewed ?? []}
+            isLoading={isRecentlyViewedLoading}
+            emptyMessage={EMPTY_MESSAGE}
             onRecipeClick={(recipe) => router.push(`/recipes/${recipe._id}`)}
           />
           <RecipeCardCarousel
-            title="Recent Recipes"
-            recipes={recentRecipesList}
-            isLoading={!recentRecipes}
+            title="Favorite Recipes"
+            recipes={favoriteRecipes ?? []}
+            isLoading={isFavoriteLoading}
+            emptyMessage={EMPTY_MESSAGE}
             onRecipeClick={(recipe) => router.push(`/recipes/${recipe._id}`)}
           />
         </div>

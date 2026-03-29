@@ -32,28 +32,35 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const {
       as: Component = "button",
-      variant = "primary",
+      appearance = "secondary",
+      variant,
       size = "md",
       shape = "default",
       fullWidth = false,
       isLoading = false,
-      startIcon,
+      icon,
+      startIcon: startIconProp,
       endIcon,
       className,
       children,
       disabled,
+      type,
       ...rest
     } = props;
 
+    const startIcon = icon ?? startIconProp;
     const isDisabled = Boolean(disabled) || isLoading;
+    const resolvedType = type ?? (Component === "button" ? "button" : undefined);
 
     return (
       <Component
         ref={ref}
+        type={resolvedType}
         disabled={isDisabled}
         className={clsx(
           styles.button,
-          variantStyles[variant],
+          styles[appearance],
+          variant && variantStyles[variant],
           sizeStyles[size],
           shapeStyles[shape],
           fullWidth && styles.fullWidth,

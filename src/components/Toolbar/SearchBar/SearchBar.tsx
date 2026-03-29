@@ -3,7 +3,7 @@ import * as React from "react";
 import type { SearchBarProps } from "./SearchBar.types";
 
 import { useSearchBox } from "../../../context";
-import { SearchBox } from "../../Searchbox";
+import { SearchBox } from "../../SearchBox";
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { searchBoxValue, onSearchBoxValueChange } = useSearchBox();

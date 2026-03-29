@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
-import { SearchBox } from "../../Searchbox";
+import { SearchBox } from "../../SearchBox";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 

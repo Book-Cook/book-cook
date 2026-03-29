@@ -23,6 +23,7 @@ export const RecipeCardCarousel = ({
   emblaOptions,
   isLoading = false,
   initialScrollIndex,
+  emptyMessage,
 }: RecipeCardCarouselProps) => {
   const hasRecipes = recipes.length > 0;
 
@@ -93,7 +94,17 @@ export const RecipeCardCarousel = ({
   const showHeader = Boolean(title) || controlsVisible;
 
   if (!isLoading && !hasRecipes) {
-    return null;
+    if (!emptyMessage) { return null; }
+    return (
+      <div className={clsx(styles.carousel, className)}>
+        {title && (
+          <div className={styles.header}>
+            <SubsectionHeading className={styles.title}>{title}</SubsectionHeading>
+          </div>
+        )}
+        <p className={styles.emptyMessage}>{emptyMessage}</p>
+      </div>
+    );
   }
 
   if (isLoading) {

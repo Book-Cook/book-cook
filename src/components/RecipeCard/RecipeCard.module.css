@@ -154,6 +154,67 @@
   white-space: nowrap;
 }
 
+.tagMore {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--ui-TextLabel);
+  white-space: nowrap;
+}
+
+.newBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  background: var(--brand-Primary);
+  color: #fff;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.cardWrapper {
+  position: relative;
+}
+
+.actionsButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--ui-TextSecondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity var(--motion-default), background-color var(--motion-default);
+  z-index: 1;
+}
+
+.cardWrapper:hover .actionsButton,
+.actionsButton:focus-visible {
+  opacity: 1;
+}
+
+.actionsButton:hover {
+  background: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+  opacity: 1;
+}
+
 @media (max-width: 720px) {
   .body {
     padding: 12px 12px 10px;

@@ -64,6 +64,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ["@phosphor-icons/react", "@tanstack/react-query", "@tanstack/query-core"],
   experimental: {
     reactCompiler: {
       target: "18",
@@ -81,17 +82,52 @@ const nextConfig = {
   webpack: (config, options) => {
     const { dev, isServer } = options;
 
+    if (isServer) {
+      // Force synchronous CJS externalization for ESM packages that otherwise become
+      // async webpack modules, breaking SSR pre-rendering in Pages Router.
+      const FORCE_COMMONJS = [
+        "@tanstack/react-query",
+        "@tanstack/query-core",
+        "clsx",
+        "sonner",
+        "dompurify",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-dropdown-menu",
+        "@radix-ui/react-tooltip",
+      ];
+      // Use absolute paths for React to prevent multiple instances on Windows
+      // (case-sensitivity mismatch in Node.js module cache between C:\Code and c:\code paths)
+      const REACT_ABS_PATHS = {
+        "react": require.resolve("react"),
+        "react-dom": require.resolve("react-dom"),
+        "react/jsx-runtime": require.resolve("react/jsx-runtime"),
+        "react/jsx-dev-runtime": require.resolve("react/jsx-dev-runtime"),
+      };
+      const existingExternals = Array.isArray(config.externals)
+        ? config.externals
+        : config.externals
+          ? [config.externals]
+          : [];
+      config.externals = [
+        ({ request }, callback) => {
+          if (REACT_ABS_PATHS[request]) {
+            return callback(null, `commonjs ${REACT_ABS_PATHS[request]}`);
+          }
+          if (FORCE_COMMONJS.includes(request)) {
+            return callback(null, `commonjs ${request}`);
+          }
+          callback();
+        },
+        ...existingExternals,
+      ];
+    }
+
     if (!dev) {
       config.optimization = {
         ...config.optimization,
         usedExports: true,
-        sideEffects: false,
         minimize: true,
       };
-    }
-
-    if (!dev) {
-      config.externals = config.externals || [];
     }
 
     if (!dev && !isServer && process.env.ANALYZE === "true") {

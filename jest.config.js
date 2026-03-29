@@ -28,6 +28,7 @@ const customJestConfig = {
     "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http)/)",
   ],
   moduleDirectories: ["node_modules", "<rootDir>/"],
+  testPathIgnorePatterns: ["/node_modules/", "/.next/", "<rootDir>/tests/"],
 };
 
 export default createJestConfig(customJestConfig);

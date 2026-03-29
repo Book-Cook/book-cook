@@ -1,11 +1,15 @@
 import { clsx } from "clsx";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import styles from "./RecipeCard.module.css";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { BodyText, MetaLabel } from "../Typography";
 
 import { formatDate } from "../../utils/formatDate";
+
+const MAX_VISIBLE_TAGS = 3;
+const NEW_RECIPE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
 const SkeletonContent = () => (
   <>
@@ -25,7 +29,11 @@ export const RecipeCard = ({
   className,
   showMeta = true,
   isLoading = false,
+  showActions = true,
+  isMinimal = false,
 }: RecipeCardProps) => {
+  const router = useRouter();
+
   if (isLoading) {
     return (
       <article
@@ -42,21 +50,29 @@ export const RecipeCard = ({
     return null;
   }
 
-  const isInteractive = Boolean(onClick);
   const creatorName = recipe.creatorName;
-  const tags = recipe.tags?.slice(0, 3) ?? [];
-
-  const metaParts = [
-    { key: "created", label: formatDate(recipe.createdAt) },
-  ] as { key: string; label: string }[];
+  const savedCount = recipe.savedCount ?? 0;
+  const allTags = recipe.tags ?? [];
+  const visibleTags = allTags.slice(0, MAX_VISIBLE_TAGS);
+  const hiddenTagCount = allTags.length - visibleTags.length;
   const hasImage = Boolean(recipe.imageURL);
+  const isNew =
+    Boolean(recipe.createdAt) &&
+    Date.now() - new Date(recipe.createdAt).getTime() < NEW_RECIPE_THRESHOLD_MS;
+
+  const handleClick = () => {
+    onClick?.(recipe);
+    if (recipe._id) {
+      void router.push(`/recipes/${recipe._id}`);
+    }
+  };
 
   const content = (
     <>
       <div
         className={clsx(styles.media, !hasImage && styles.mediaFallback)}
         role={!hasImage ? "img" : undefined}
-        aria-label={!hasImage ? recipe.title : undefined}
+        aria-label={!hasImage ? `${recipe.title} placeholder emoji` : undefined}
       >
         {hasImage ? (
           <Image
@@ -73,52 +89,65 @@ export const RecipeCard = ({
         )}
       </div>
       <div className={styles.body}>
+        {isNew && <span className={styles.newBadge}>NEW</span>}
         <BodyText as="h3" className={styles.title}>
           {recipe.title}
         </BodyText>
-        {showMeta && creatorName && (
+        {showMeta && creatorName ? (
           <MetaLabel as="span" className={styles.creator}>
-            {creatorName}
+            By {creatorName} • {savedCount} saves
           </MetaLabel>
+        ) : (
+          showMeta && (
+            <div className={styles.metaRow}>
+              <MetaLabel as="span" className={styles.metaItem}>
+                {formatDate(recipe.createdAt)}
+              </MetaLabel>
+            </div>
+          )
         )}
-        {showMeta && (
-          <div className={styles.metaRow}>
-            {metaParts.map((part, index) => (
-              <span key={part.key} className={styles.metaGroup}>
-                {index > 0 && (
-                  <span className={styles.dot} aria-hidden="true">
-                    •
-                  </span>
-                )}
-                <MetaLabel as="span" className={styles.metaItem}>
-                  {part.label}
-                </MetaLabel>
+        {showMeta && visibleTags.length > 0 && (
+          <div className={styles.tags}>
+            {visibleTags.map((tag) => (
+              <span key={tag} className={styles.tag}>
+                {tag}
               </span>
             ))}
-          </div>
-        )}
-        {showMeta && tags.length > 0 && (
-          <div className={styles.tags}>
-            {tags.map((tag) => (
-              <span key={tag} className={styles.tag}>{tag}</span>
-            ))}
+            {hiddenTagCount > 0 && (
+              <span className={styles.tagMore}>+{hiddenTagCount} more</span>
+            )}
           </div>
         )}
       </div>
     </>
   );
 
-  if (isInteractive) {
+  const cardButton = (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label={recipe.title}
+      className={clsx(styles.card, styles.interactive, className)}
+    >
+      {content}
+    </button>
+  );
+
+  if (!isMinimal && showActions) {
     return (
-      <button
-        type="button"
-        onClick={() => onClick?.(recipe)}
-        className={clsx(styles.card, styles.interactive, className)}
-      >
-        {content}
-      </button>
+      <div className={styles.cardWrapper}>
+        {cardButton}
+        <button
+          type="button"
+          aria-label="more options"
+          className={styles.actionsButton}
+          onClick={(e) => e.stopPropagation()}
+        >
+          ⋯
+        </button>
+      </div>
     );
   }
 
-  return <article className={clsx(styles.card, className)}>{content}</article>;
+  return cardButton;
 };

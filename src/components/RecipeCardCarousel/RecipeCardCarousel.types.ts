@@ -13,4 +13,5 @@ export type RecipeCardCarouselProps = {
   emblaOptions?: EmblaOptionsType;
   isLoading?: boolean;
   initialScrollIndex?: number;
+  emptyMessage?: string;
 };
