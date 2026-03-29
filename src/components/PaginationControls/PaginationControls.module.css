@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px;
+  gap: 8px;
+}
+
+.navButton {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ui-TextSecondary);
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageButtons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageButton {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  border: none;
+  background-color: transparent;
+  color: var(--ui-TextPrimary);
+  cursor: pointer;
+  position: relative;
+  padding: 0 6px;
+  font-family: inherit;
+  transition: background-color 0.1s ease;
+}
+
+.pageButton:hover {
+  background-color: var(--ui-ControlHover);
+}
+
+.pageButtonActive {
+  color: var(--brand-Primary);
+  font-weight: 600;
+  background-color: var(--brand-BackgroundSelected, color-mix(in srgb, var(--brand-Primary) 10%, transparent));
+}
+
+.pageButtonActive:hover {
+  background-color: var(--brand-BackgroundSelected, color-mix(in srgb, var(--brand-Primary) 10%, transparent));
+}
+
+.pageButtonActive::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background-color: var(--brand-Primary);
+  border-radius: 2px;
+}
+
+.ellipsis {
+  padding: 4px 4px;
+  color: var(--ui-TextSecondary);
+  font-size: 13px;
+}

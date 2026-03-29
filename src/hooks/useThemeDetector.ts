@@ -1,12 +1,10 @@
 import * as React from "react";
-import { useWindow } from "@fluentui/react-window-provider";
 
 export const useThemeDetector = () => {
-  const currentWindow = useWindow();
-
-  const darkThemeQuery = currentWindow?.matchMedia(
-    "(prefers-color-scheme: dark)"
-  );
+  const darkThemeQuery =
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-color-scheme: dark)")
+      : null;
 
   const [isDarkTheme, setIsDarkTheme] = React.useState(darkThemeQuery?.matches);
 
