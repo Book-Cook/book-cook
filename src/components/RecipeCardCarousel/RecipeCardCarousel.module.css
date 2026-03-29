@@ -40,8 +40,8 @@
 }
 
 .item {
-  flex: 0 0 clamp(220px, 70vw, 280px);
-  width: clamp(220px, 70vw, 280px);
+  flex: 0 0 min(288px, 74vw);
+  width: min(288px, 74vw);
   min-width: 0;
   display: flex;
 }
@@ -97,10 +97,5 @@
 
   .controls {
     flex-shrink: 0;
-  }
-
-  .item {
-    flex: 0 0 min(280px, calc(85vw));
-    width: min(280px, calc(85vw));
   }
 }

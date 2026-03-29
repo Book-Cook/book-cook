@@ -55,7 +55,7 @@
 
 .media {
   width: 100%;
-  height: clamp(140px, 18vw, 180px);
+  aspect-ratio: 3 / 2;
   position: relative;
   overflow: hidden;
   background-color: var(--ui-ControlHover);
@@ -72,7 +72,6 @@
       transparent 60%
     ),
     linear-gradient(135deg, var(--brand-BackgroundDisabled), var(--ui-ControlHover));
-  height: clamp(112px, 14vw, 144px);
 }
 
 .mediaImage {
@@ -80,21 +79,7 @@
 }
 
 .emoji {
-  font-size: clamp(34px, 3.6vw, 44px);
-}
-
-@media (max-width: 480px) {
-  .media {
-    height: 160px;
-  }
-
-  .mediaFallback {
-    height: 130px;
-  }
-
-  .emoji {
-    font-size: 36px;
-  }
+  font-size: 36px;
 }
 
 .body {
@@ -239,10 +224,6 @@
   .body {
     padding: 12px 12px 10px;
   }
-
-  .mediaFallback {
-    height: 120px;
-  }
 }
 
 /* ── Skeleton ─────────────────────────────────────────────────────────────── */
@@ -270,7 +251,7 @@
 
 .skeletonMedia {
   width: 100%;
-  height: clamp(140px, 18vw, 180px);
+  aspect-ratio: 3 / 2;
   border-radius: 0;
 }
 
@@ -306,17 +287,7 @@
 }
 
 @media (max-width: 720px) {
-  .skeletonMedia {
-    height: clamp(140px, 18vw, 180px);
-  }
-
   .skeletonBody {
     padding: 12px 12px 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .skeletonMedia {
-    height: 160px;
   }
 }
