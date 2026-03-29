@@ -1,24 +1,19 @@
 import * as React from "react";
-import type {
-  SelectionEvents} from "@fluentui/react-components";
-import {
-  Dropdown,
-  Option,
-  Switch,
-  Slider
-} from "@fluentui/react-components";
-import { Food24Regular } from "@fluentui/react-icons";
-import { makeStyles } from "@griffel/react";
+import { ForkKnifeIcon } from "@phosphor-icons/react";
 
+import styles from "./RecipePreferencesSection.module.css";
 import { recipePreferencesSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 
-const useStyles = makeStyles({
-  dropdown: {
-    width: "100%",
-  },
-});
+import {
+  Dropdown,
+  DropdownCaret,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownValue,
+} from "../../Dropdown";
 
 const sectionKeywords = [
   "recipe",
@@ -57,7 +52,6 @@ const conversionKeywords = [
 ];
 
 export const RecipePreferencesSection: React.FC = () => {
-  const styles = useStyles();
   const [defaultServings, setDefaultServings] = React.useState(4);
   const [measurementUnit, setMeasurementUnit] = React.useState("us");
   const [enableAutoConvert, setEnableAutoConvert] = React.useState(true);
@@ -81,15 +75,6 @@ export const RecipePreferencesSection: React.FC = () => {
   const conversionItemMatches =
     !searchTerm || conversionKeywords.some((k) => k.includes(searchTerm));
 
-  const handleMeasurementChange = (
-    _ev: SelectionEvents,
-    data: { selectedOptions: string[] }
-  ) => {
-    if (data.selectedOptions.length > 0) {
-      setMeasurementUnit(data.selectedOptions[0]);
-    }
-  };
-
   if (searchTerm && !isVisible) {
     return null;
   }
@@ -98,7 +83,7 @@ export const RecipePreferencesSection: React.FC = () => {
     <SettingsSection
       title="Recipe Preferences"
       itemValue={recipePreferencesSectionId}
-      icon={<Food24Regular />}
+      icon={<ForkKnifeIcon />}
     >
       {(!searchTerm || measurementItemMatches || sectionMatches) && (
         <SettingItem
@@ -106,13 +91,18 @@ export const RecipePreferencesSection: React.FC = () => {
           description="Choose your preferred measurement system for recipes."
         >
           <Dropdown
-            className={styles.dropdown}
-            selectedOptions={[measurementUnit]}
-            onOptionSelect={handleMeasurementChange}
+            value={measurementUnit}
+            onValueChange={(val) => setMeasurementUnit(val)}
           >
-            <Option value="us">US Customary (cups, ounces)</Option>
-            <Option value="metric">Metric (grams, milliliters)</Option>
-            <Option value="both">Show Both</Option>
+            <DropdownTrigger fullWidth className={styles.dropdown}>
+              <DropdownValue />
+              <DropdownCaret />
+            </DropdownTrigger>
+            <DropdownContent>
+              <DropdownItem value="us">US Customary (cups, ounces)</DropdownItem>
+              <DropdownItem value="metric">Metric (grams, milliliters)</DropdownItem>
+              <DropdownItem value="both">Show Both</DropdownItem>
+            </DropdownContent>
           </Dropdown>
         </SettingItem>
       )}
@@ -122,12 +112,14 @@ export const RecipePreferencesSection: React.FC = () => {
           label="Default Servings"
           description="Set the default number of servings for new recipes."
         >
-          <Slider
+          <input
+            type="range"
             min={1}
             max={12}
             step={1}
             value={defaultServings}
-            onChange={(_, data) => setDefaultServings(data.value)}
+            onChange={(e) => setDefaultServings(Number(e.target.value))}
+            aria-label="Default servings"
           />
         </SettingItem>
       )}
@@ -137,10 +129,14 @@ export const RecipePreferencesSection: React.FC = () => {
           label="Auto-Convert Measurements"
           description="Automatically convert measurements between systems when viewing recipes."
         >
-          <Switch
-            checked={enableAutoConvert}
-            onChange={(_, data) => setEnableAutoConvert(data.checked)}
-          />
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={enableAutoConvert}
+              onChange={(e) => setEnableAutoConvert(e.target.checked)}
+            />
+            {enableAutoConvert ? "Enabled" : "Disabled"}
+          </label>
         </SettingItem>
       )}
     </SettingsSection>

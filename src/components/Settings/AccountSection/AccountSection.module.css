@@ -1,0 +1,44 @@
+.profileInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.email {
+  color: var(--ui-TextSecondary);
+  font-size: 12px;
+}
+
+.dangerZone {
+  border-radius: 8px;
+  border: 1px solid var(--danger-Primary);
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.dangerTitle {
+  color: var(--danger-Primary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.dangerDescription {
+  color: var(--ui-TextSecondary);
+  font-size: 12px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--ui-Divider);
+  margin: 0;
+}

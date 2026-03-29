@@ -2,21 +2,21 @@
  * Meal plan settings section
  */
 import * as React from "react";
-import {
-  Button,
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogContent,
-  DialogBody,
-  DialogActions
-} from "@fluentui/react-components";
-import { Calendar24Regular } from "@fluentui/react-icons";
+import { CalendarIcon } from "@phosphor-icons/react";
 
 import { mealPlanSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 
+import { Button } from "../../Button";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../../Dialog";
 import { CalendarSubscription } from "../../MealPlan/CalendarSubscription/CalendarSubscription";
 
 const sectionKeywords = [
@@ -62,7 +62,7 @@ export const MealPlanSection: React.FC = () => {
     <SettingsSection
       title="Meal Planning"
       itemValue={mealPlanSectionId}
-      icon={<Calendar24Regular />}
+      icon={<CalendarIcon />}
     >
       {(!searchTerm || calendarItemMatches || sectionMatches) && (
         <SettingItem
@@ -70,33 +70,33 @@ export const MealPlanSection: React.FC = () => {
           description="Sync your meal plans with your favorite calendar app using iCal subscription."
         >
           <Button
-            appearance="subtle"
-            size="small"
+            variant="ghost"
+            size="sm"
             onClick={() => setShowCalendarDialog(true)}
           >
             Manage Subscription
           </Button>
-          
-          <Dialog 
-            open={showCalendarDialog} 
-            onOpenChange={(_, data) => setShowCalendarDialog(data.open)}
+
+          <Dialog
+            open={showCalendarDialog}
+            onOpenChange={(open) => setShowCalendarDialog(open)}
           >
-            <DialogSurface>
-              <DialogBody>
+            <DialogContent size="md">
+              <DialogHeader>
                 <DialogTitle>Calendar Subscription</DialogTitle>
-                <DialogContent>
-                  <CalendarSubscription />
-                </DialogContent>
-                <DialogActions>
-                  <Button 
-                    appearance="secondary" 
-                    onClick={() => setShowCalendarDialog(false)}
-                  >
-                    Close
-                  </Button>
-                </DialogActions>
+              </DialogHeader>
+              <DialogBody>
+                <CalendarSubscription />
               </DialogBody>
-            </DialogSurface>
+              <DialogFooter>
+                <Button
+                  appearance="secondary"
+                  onClick={() => setShowCalendarDialog(false)}
+                >
+                  Close
+                </Button>
+              </DialogFooter>
+            </DialogContent>
           </Dialog>
         </SettingItem>
       )}

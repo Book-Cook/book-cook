@@ -1,43 +1,7 @@
 import * as React from "react";
-import {
-  tokens,
-  AccordionItem,
-  AccordionPanel,
-  AccordionHeader,
-  Divider,
-} from "@fluentui/react-components";
-import { makeStyles } from "@griffel/react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 
-const useStyles = makeStyles({
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "24px",
-    padding: "8px 0px 24px 0px",
-  },
-  title: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1,
-    margin: 0,
-  },
-  settingGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  accordionHeader: {
-    fontSize: tokens.fontSizeBase600,
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1,
-    margin: 0,
-  },
-  settingItem: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-});
+import styles from "./SettingsSection.module.css";
 
 export interface SettingsSectionProps {
   title: string;
@@ -53,8 +17,6 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
   title,
   icon,
 }) => {
-  const styles = useStyles();
-
   // Process children to add dividers between them
   const childrenWithDividers = React.Children.toArray(children)
     .filter(Boolean)
@@ -62,21 +24,20 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
       if (index === array.length - 1) {
         return [child];
       }
-      return [child, <Divider key={`divider-${index}`} />];
+      return [child, <hr key={`divider-${index}`} className={styles.divider} />];
     });
 
   return (
-    <AccordionItem value={itemValue}>
-      <AccordionHeader
-        size="large"
-        icon={icon}
-        className={styles.accordionHeader}
-      >
-        {title}
-      </AccordionHeader>
-      <AccordionPanel>
+    <AccordionPrimitive.Item value={itemValue} className={styles.accordionItem}>
+      <AccordionPrimitive.Header>
+        <AccordionPrimitive.Trigger className={styles.accordionTrigger}>
+          <span className={styles.icon}>{icon}</span>
+          <span className={styles.title}>{title}</span>
+        </AccordionPrimitive.Trigger>
+      </AccordionPrimitive.Header>
+      <AccordionPrimitive.Content className={styles.accordionContent}>
         <section className={styles.section}>{childrenWithDividers}</section>
-      </AccordionPanel>
-    </AccordionItem>
+      </AccordionPrimitive.Content>
+    </AccordionPrimitive.Item>
   );
 };

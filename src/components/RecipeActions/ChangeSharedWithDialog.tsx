@@ -1,41 +1,8 @@
 import * as React from "react";
-import {
-  makeStyles,
-  Switch,
-  tokens,
-} from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
 import { Button } from "../Button";
 import { Spinner } from "../Spinner";
-
-const useStyles = makeStyles({
-  textArea: {
-    width: "100%",
-    flexGrow: 1,
-    fontSize: tokens.fontSizeBase300,
-    lineHeight: tokens.lineHeightBase300,
-    minHeight: "80px",
-    resize: "none",
-  },
-  primaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    },
-  },
-  secondaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": { transform: "translateY(-1px)" },
-  },
-  characterCount: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground3,
-    textAlign: "right",
-    marginTop: "4px",
-  },
-});
 
 export type ChangeTitleDialogProps = {
   /**
@@ -67,7 +34,6 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
   onClose,
   isLoading = false,
 }) => {
-  const styles = useStyles();
   const [newIsPublic, setNewIsPublic] = React.useState(isPublic);
 
   // Reset state when dialog opens or isPublic prop changes
@@ -91,16 +57,14 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
       actions={
         <>
           <Button
-            appearance="subtle"
+            appearance="secondary"
             onClick={handleCancelClick}
-            className={styles.secondaryButton}
           >
             Cancel
           </Button>
           <Button
             appearance="primary"
             onClick={handleSaveClick}
-            className={styles.primaryButton}
             disabled={isLoading}
             icon={isLoading ? <Spinner size="tiny" /> : undefined}
           >
@@ -109,18 +73,19 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
         </>
       }
     >
-      <Switch
-        checked={newIsPublic}
-        onChange={() => {
-          setNewIsPublic(!newIsPublic);
-        }}
-        label={
-          newIsPublic
-            ? "Public - Anyone can view this recipe"
-            : "Private - Only you can view this recipe"
-        }
-        disabled={isLoading}
-      />
+      <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+        <input
+          type="checkbox"
+          role="switch"
+          aria-checked={newIsPublic}
+          checked={newIsPublic}
+          onChange={() => setNewIsPublic(!newIsPublic)}
+          disabled={isLoading}
+        />
+        {newIsPublic
+          ? "Public - Anyone can view this recipe"
+          : "Private - Only you can view this recipe"}
+      </label>
     </ChangeDialog>
   );
 };

@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Dismiss12Regular } from "@fluentui/react-icons";
+import { XIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
-import { useMealCardStyles } from "./MealCard.styles";
+import styles from "./MealCard.module.css";
 import type { MealCardProps } from "./MealCard.types";
 
 import { Button } from "../../Button";
@@ -13,7 +13,6 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
     { id, recipeId, title, emoji, duration, position, onRemove },
     ref
   ): React.ReactElement => {
-    const styles = useMealCardStyles();
     const router = useRouter();
 
     const handleCardClick = React.useCallback(
@@ -64,8 +63,8 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
             </Text>
           </div>
           <Button
-            appearance="subtle"
-            icon={<Dismiss12Regular />}
+            appearance="ghost"
+            startIcon={<XIcon size={12} />}
             className={styles.removeButton}
             onClick={handleRemoveClick}
             aria-label="Remove meal"

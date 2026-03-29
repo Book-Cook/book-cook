@@ -2,12 +2,12 @@
  * Individual meal item component for time slots
  */
 import * as React from "react";
-import { mergeClasses } from "@fluentui/react-components";
-import { Dismiss12Regular } from "@fluentui/react-icons";
+import { XIcon } from "@phosphor-icons/react";
+import { clsx } from "clsx";
 import { useRouter } from "next/router";
 
 import type { MealItemProps } from "./MealItem.types";
-import { useTimeSlotStyles } from "../TimeSlot/TimeSlot.styles";
+import styles from "../TimeSlot/TimeSlot.module.css";
 
 import { Button } from "../../Button";
 import { Text } from "../../Text";
@@ -17,7 +17,6 @@ export const MealItem: React.FC<MealItemProps> = ({
   mealIndex,
   onRemove,
 }) => {
-  const styles = useTimeSlotStyles();
   const router = useRouter();
 
   const handleMealClick = () => {
@@ -31,7 +30,7 @@ export const MealItem: React.FC<MealItemProps> = ({
 
   return (
     <div
-      className={mergeClasses(styles.mealItem, styles.mealItemHover)}
+      className={clsx(styles.mealItem, styles.mealItemHover)}
       onClick={handleMealClick}
       title={`${(meal.recipe?.title as string) ?? "Recipe"} - Click to view recipe`}
     >
@@ -49,9 +48,9 @@ export const MealItem: React.FC<MealItemProps> = ({
         )}
       </div>
       <Button
-        appearance="subtle"
-        className={mergeClasses(styles.removeButton, "meal-remove-button")}
-        icon={<Dismiss12Regular />}
+        appearance="ghost"
+        className={clsx(styles.removeButton, "meal-remove-button")}
+        startIcon={<XIcon size={12} />}
         onClick={handleRemoveClick}
         title="Remove meal"
       />

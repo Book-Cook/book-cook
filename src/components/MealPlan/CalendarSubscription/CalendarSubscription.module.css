@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 500px;
+  color: var(--ui-TextPrimary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  flex-grow: 1;
+}
+
+.instructions {
+  padding: 8px;
+  background-color: var(--ui-ControlHover);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--ui-TextSecondary);
+}
+
+.instructionList {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--ui-TextSecondary);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteButton {
+  color: #c50f1f !important;
+}
+
+.deleteButton svg {
+  color: #c50f1f !important;
+}
+
+.deleteButton:hover {
+  background-color: #fde7e9;
+  color: #c50f1f !important;
+}
+
+.deleteButton:hover svg {
+  color: #c50f1f !important;
+}
+
+.deleteButtonPrimary {
+  background-color: #c50f1f;
+  color: #fff;
+  border: 1px solid #a4121a;
+}
+
+.deleteButtonPrimary:hover {
+  background-color: #a4262c;
+  color: #fff;
+}
+
+.deleteButtonPrimary:active {
+  background-color: #751d1f;
+  color: #fff;
+}
+
+.deleteButtonPrimary svg {
+  color: #fff;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.errorBar {
+  background-color: #fde7e9;
+  border: 1px solid #f1707b;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #c50f1f;
+  font-size: 14px;
+}

@@ -1,19 +1,19 @@
 import * as React from "react";
-import {
-  Textarea,
-  Dialog,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
-  DialogActions,
-  Button,
-} from "@fluentui/react-components";
 import { useRouter } from "next/router";
 
 import styles from "./NewRecipeDialog.module.css";
 import type { NewRecipeDialogProps } from "./NewRecipeDialog.types";
 
 import { useCreateRecipe } from "../../../clientToServer";
+import { Button } from "../../Button";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../../Dialog";
 import { Spinner } from "../../Spinner";
 
 export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
@@ -77,11 +77,8 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
     }
   };
 
-  const handleTextChange = (
-    _e: React.ChangeEvent<HTMLTextAreaElement>,
-    data: { value: string }
-  ) => {
-    setNewRecipeTitle(data.value.substring(0, 100));
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewRecipeTitle(e.target.value.substring(0, 100));
     if (errorMessage) {
       setErrorMessage(null);
     }
@@ -90,22 +87,18 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={(_, data) => {
-        if (!data.open) {
+      onOpenChange={(open) => {
+        if (!open) {
           onClose();
         }
       }}
-      modalType="modal"
-      surfaceMotion={null}
     >
-      <DialogSurface
-        className={styles.dialogSurface}
-        aria-describedby={undefined}
-        onClick={(ev) => ev.stopPropagation()}
-      >
-        <DialogTitle>New Recipe</DialogTitle>
+      <DialogContent size="sm" withCloseButton>
+        <DialogHeader>
+          <DialogTitle>New Recipe</DialogTitle>
+        </DialogHeader>
         <DialogBody className={styles.dialogBody}>
-          <Textarea
+          <textarea
             placeholder="Enter recipe title"
             value={newRecipeTitle}
             onChange={handleTextChange}
@@ -114,7 +107,6 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
             onKeyDown={handleKeyDown}
             maxLength={100}
             aria-label="Recipe title"
-            resize="none"
             disabled={isPending}
           />
           <div className={styles.characterCount}>
@@ -124,9 +116,9 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
             <div className={styles.errorMessage}>{errorMessage}</div>
           )}
         </DialogBody>
-        <DialogActions className={styles.dialogActions}>
+        <DialogFooter className={styles.dialogActions}>
           <Button
-            appearance="subtle"
+            variant="ghost"
             onClick={onClose}
             className={styles.secondaryButton}
             disabled={isPending}
@@ -146,8 +138,8 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
               </span>
             )}
           </Button>
-        </DialogActions>
-      </DialogSurface>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 };

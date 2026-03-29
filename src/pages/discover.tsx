@@ -1,10 +1,19 @@
 import * as React from "react";
-import { Button, Dropdown, Option, makeStyles, tokens } from "@fluentui/react-components";
-import { Search24Regular, Filter24Regular } from "@fluentui/react-icons";
+import { MagnifyingGlassIcon, FunnelIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 
+import discoverStyles from "./discover.module.css";
+import { Button } from "../components/Button";
+import {
+  Dropdown,
+  DropdownCaret,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownValue,
+} from "../components/Dropdown";
 import { RecipeCard } from "../components/RecipeCard";
-import { useStyles } from "../components/RecipeGallery/RecipeGallery.styles";
+import galleryStyles from "../components/RecipeGallery/RecipeGallery.module.css";
 import { SearchBox } from "../components/SearchBox";
 import { Text, Heading1 } from "../components/Text";
 
@@ -29,39 +38,6 @@ interface PublicRecipesResponse {
   hasMore: boolean;
 }
 
-const useDiscoverStyles = makeStyles({
-  searchAndFilters: {
-    display: "flex",
-    flexDirection: "column",
-    gap: tokens.spacingVerticalM,
-    marginBottom: tokens.spacingVerticalXL,
-  },
-  searchRow: {
-    display: "flex",
-    gap: tokens.spacingHorizontalM,
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  searchBox: {
-    flexGrow: 1,
-    minWidth: "300px",
-  },
-  filterRow: {
-    display: "flex",
-    gap: tokens.spacingHorizontalM,
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  filterItem: {
-    minWidth: "150px",
-  },
-  emptyState: {
-    textAlign: "center",
-    padding: tokens.spacingVerticalXXL,
-    color: tokens.colorNeutralForeground2,
-  },
-});
-
 const fetchPublicRecipes = async (params: {
   search?: string;
   tags?: string[];
@@ -71,7 +47,7 @@ const fetchPublicRecipes = async (params: {
   limit?: number;
 }): Promise<PublicRecipesResponse> => {
   const searchParams = new URLSearchParams();
-  
+
   if (params.search) {searchParams.append("search", params.search);}
   if (params.tags && params.tags.length > 0) {
     params.tags.forEach(tag => searchParams.append("tags", tag));
@@ -82,11 +58,11 @@ const fetchPublicRecipes = async (params: {
   if (params.limit) {searchParams.append("limit", params.limit.toString());}
 
   const response = await fetch(`/api/recipes/public?${searchParams.toString()}`);
-  
+
   if (!response.ok) {
     throw new Error("Failed to fetch public recipes");
   }
-  
+
   return response.json();
 };
 
@@ -109,9 +85,6 @@ export default function DiscoverPage() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  const styles = useStyles();
-  const discoverStyles = useDiscoverStyles();
-
   const recipes = recipesData?.recipes ?? [];
 
   // Common tags for filtering (could be fetched from API in the future)
@@ -122,122 +95,131 @@ export default function DiscoverPage() {
   ];
 
   const handleTagSelect = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
   };
 
+  const sortLabelMap: Record<string, string> = {
+    createdAt: "Newest",
+    savedCount: "Most Saved",
+    viewCount: "Most Viewed",
+    title: "Title",
+  };
+
   return (
-    <div className={styles.pageContainer}>
-        <div className={styles.header}>
-          <div className={styles.titleSection}>
-            <Heading1>Discover Recipes</Heading1>
-            <Text
-              size={200}
-              weight="medium"
-              style={{ color: "var(--colorNeutralForeground2)" }}
-            >
-              {recipes.length > 0 
-                ? `${recipes.length} recipes found${recipesData?.hasMore ? " (showing first 20)" : ""}`
-                : "Find amazing recipes from the community"
-              }
-            </Text>
-          </div>
+    <div className={galleryStyles.pageContainer}>
+      <div className={galleryStyles.header}>
+        <div className={galleryStyles.titleSection}>
+          <Heading1>Discover Recipes</Heading1>
+          <Text
+            size={200}
+            weight="medium"
+            style={{ color: "var(--colorNeutralForeground2)" }}
+          >
+            {recipes.length > 0
+              ? `${recipes.length} recipes found${recipesData?.hasMore ? " (showing first 20)" : ""}`
+              : "Find amazing recipes from the community"
+            }
+          </Text>
+        </div>
+      </div>
+
+      <div className={discoverStyles.searchAndFilters}>
+        <div className={discoverStyles.searchRow}>
+          <SearchBox
+            className={discoverStyles.searchBox}
+            placeholder="Search recipes, ingredients, or creators..."
+            value={search}
+            onChange={(_, value) => setSearch(value)}
+            contentBefore={<MagnifyingGlassIcon />}
+          />
         </div>
 
-        <div className={discoverStyles.searchAndFilters}>
-          <div className={discoverStyles.searchRow}>
-            <SearchBox
-              className={discoverStyles.searchBox}
-              placeholder="Search recipes, ingredients, or creators..."
-              value={search}
-              onChange={(_, value) => setSearch(value)}
-              contentBefore={<Search24Regular />}
-            />
-          </div>
-
-          <div className={discoverStyles.filterRow}>
+        <div className={discoverStyles.filterRow}>
+          <div className={discoverStyles.filterItem}>
             <Dropdown
-              className={discoverStyles.filterItem}
-              placeholder="Sort by"
-              value={sortBy === "createdAt" ? "Newest" : 
-                    sortBy === "savedCount" ? "Most Saved" : 
-                    sortBy === "viewCount" ? "Most Viewed" : "Title"}
-              onOptionSelect={(_, data) => {
-                const value = data.optionValue as string;
-                setSortBy(value === "Newest" ? "createdAt" : 
-                         value === "Most Saved" ? "savedCount" :
-                         value === "Most Viewed" ? "viewCount" : "title");
-              }}
+              value={sortBy}
+              onValueChange={(val) => setSortBy(val)}
+              defaultValue="createdAt"
             >
-              <Option value="Newest">Newest</Option>
-              <Option value="Most Saved">Most Saved</Option>
-              <Option value="Most Viewed">Most Viewed</Option>
-              <Option value="Title">Title</Option>
+              <DropdownTrigger fullWidth>
+                <DropdownValue placeholder="Sort by">
+                  {sortLabelMap[sortBy]}
+                </DropdownValue>
+                <DropdownCaret />
+              </DropdownTrigger>
+              <DropdownContent>
+                <DropdownItem value="createdAt">Newest</DropdownItem>
+                <DropdownItem value="savedCount">Most Saved</DropdownItem>
+                <DropdownItem value="viewCount">Most Viewed</DropdownItem>
+                <DropdownItem value="title">Title</DropdownItem>
+              </DropdownContent>
             </Dropdown>
-
-            <Button
-              appearance="subtle"
-              icon={<Filter24Regular />}
-              onClick={() => {
-                // Toggle between asc/desc
-                setSortDirection(prev => prev === "desc" ? "asc" : "desc");
-              }}
-            >
-              {sortDirection === "desc" ? "Newest First" : "Oldest First"}
-            </Button>
           </div>
 
-          {availableTags.length > 0 && (
-            <div className={discoverStyles.filterRow}>
-              <Text size={200} weight="medium">Filter by tags:</Text>
-              {availableTags.slice(0, 8).map(tag => (
-                <Button
-                  key={tag}
-                  size="small"
-                  appearance={selectedTags.includes(tag) ? "primary" : "subtle"}
-                  onClick={() => handleTagSelect(tag)}
-                >
-                  {tag}
-                </Button>
-              ))}
-            </div>
-          )}
+          <Button
+            variant="ghost"
+            icon={<FunnelIcon />}
+            onClick={() => {
+              // Toggle between asc/desc
+              setSortDirection(prev => prev === "desc" ? "asc" : "desc");
+            }}
+          >
+            {sortDirection === "desc" ? "Newest First" : "Oldest First"}
+          </Button>
         </div>
 
-        {isLoading ? (
-          <div className={discoverStyles.emptyState}>
-            <Text>Loading recipes...</Text>
-          </div>
-        ) : error ? (
-          <div className={discoverStyles.emptyState}>
-            <Text>Failed to load recipes. Please try again.</Text>
-          </div>
-        ) : recipes.length === 0 ? (
-          <div className={discoverStyles.emptyState}>
-            <Text>No recipes found. Try adjusting your search or filters.</Text>
-          </div>
-        ) : (
-          <div className={styles.grid}>
-            {recipes.map((recipe, index) => (
-              <div
-                key={recipe._id}
-                className={`${styles.fadeIn} ${styles.cardWrapper}`}
-                style={
-                  {
-                    "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
-                  } as React.CSSProperties
-                }
+        {availableTags.length > 0 && (
+          <div className={discoverStyles.filterRow}>
+            <Text size={200} weight="medium">Filter by tags:</Text>
+            {availableTags.slice(0, 8).map(tag => (
+              <Button
+                key={tag}
+                size="sm"
+                appearance={selectedTags.includes(tag) ? "primary" : "subtle"}
+                onClick={() => handleTagSelect(tag)}
               >
-                <RecipeCard
-                  recipe={recipe}
-                />
-              </div>
+                {tag}
+              </Button>
             ))}
           </div>
         )}
+      </div>
+
+      {isLoading ? (
+        <div className={discoverStyles.emptyState}>
+          <Text>Loading recipes...</Text>
+        </div>
+      ) : error ? (
+        <div className={discoverStyles.emptyState}>
+          <Text>Failed to load recipes. Please try again.</Text>
+        </div>
+      ) : recipes.length === 0 ? (
+        <div className={discoverStyles.emptyState}>
+          <Text>No recipes found. Try adjusting your search or filters.</Text>
+        </div>
+      ) : (
+        <div className={galleryStyles.grid}>
+          {recipes.map((recipe, index) => (
+            <div
+              key={recipe._id}
+              className={`${galleryStyles.fadeIn} ${galleryStyles.cardWrapper}`}
+              style={
+                {
+                  "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
+                } as React.CSSProperties
+              }
+            >
+              <RecipeCard
+                recipe={recipe}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

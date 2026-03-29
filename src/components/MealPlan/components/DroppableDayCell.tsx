@@ -2,13 +2,13 @@
  * Droppable day cell component for MonthView
  */
 import * as React from "react";
-import { mergeClasses } from "@fluentui/react-components";
-import { Dismiss12Regular } from "@fluentui/react-icons";
 import { useDroppable } from "@dnd-kit/core";
+import { XIcon } from "@phosphor-icons/react";
+import { clsx } from "clsx";
 import { useRouter } from "next/router";
 
 import type { DroppableDayCellProps } from "./DroppableDayCell.types";
-import { useMonthDayCellStyles } from "./MonthDayCell.styles";
+import styles from "./MonthDayCell.module.css";
 import { formatDateString } from "../utils/formatDateString";
 
 import type { MealType } from "../../../clientToServer/types";
@@ -25,7 +25,6 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
   children,
   onMealRemove,
 }) => {
-  const styles = useMonthDayCellStyles();
   const router = useRouter();
   const dateStr = formatDateString(date);
 
@@ -55,13 +54,15 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
     void onMealRemove(date, time, mealIndex);
   };
 
-  const cellClass = `${styles.dayCell} ${
-    !isCurrentMonth ? styles.otherMonth : ""
-  } ${isPast ? styles.pastDay : ""} ${isToday ? styles.isToday : ""} ${
-    isOver ? styles.isDraggingOver : ""
-  }`;
+  const cellClass = clsx(
+    styles.dayCell,
+    !isCurrentMonth && styles.otherMonth,
+    isPast && styles.pastDay,
+    isToday && styles.isToday,
+    isOver && styles.isDraggingOver
+  );
 
-  const headerClass = `${styles.dayHeader} ${isPast ? styles.pastDayHeader : ""}`;
+  const headerClass = clsx(styles.dayHeader, isPast && styles.pastDayHeader);
 
   return (
     <div ref={setNodeRef} className={cellClass}>
@@ -70,7 +71,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
           <div className={styles.isTodayNumber}>{date.getDate()}</div>
         ) : (
           <Text
-            className={mergeClasses(
+            className={clsx(
               styles.dayNumber,
               isToday && styles.isTodayText
             )}
@@ -108,12 +109,12 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                       </span>
                     </div>
                     <Button
-                      appearance="subtle"
-                      className={mergeClasses(
+                      appearance="ghost"
+                      className={clsx(
                         styles.removeButton,
                         "meal-remove-button"
                       )}
-                      icon={<Dismiss12Regular />}
+                      startIcon={<XIcon size={8} />}
                       onClick={(e) =>
                         handleRemoveClick(dateStr, slot.time, mealIndex, e)
                       }
@@ -145,12 +146,12 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                     </span>
                   </div>
                   <Button
-                    appearance="subtle"
-                    className={mergeClasses(
+                    appearance="ghost"
+                    className={clsx(
                       styles.removeButton,
                       "meal-remove-button"
                     )}
-                    icon={<Dismiss12Regular />}
+                    startIcon={<XIcon size={8} />}
                     onClick={(e) =>
                       handleRemoveClick(dateStr, mealTypeToTime(mealType), 0, e)
                     }

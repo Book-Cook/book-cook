@@ -1,0 +1,90 @@
+/* ============ WeekHeader ============ */
+.header {
+  display: grid;
+  background-color: var(--ui-PageBackground);
+  border-bottom: 1px solid var(--ui-Divider);
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    /* gridTemplateColumns set inline via style prop */
+  }
+}
+
+.headerTimeColumn {
+  border-right: 1px solid var(--ui-Divider);
+}
+
+.headerDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  border-right: 1px solid var(--ui-Divider);
+  height: 24px;
+}
+
+.headerDay:last-child {
+  border-right-width: 0;
+}
+
+.dayText {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ui-TextSecondary);
+}
+
+.todayHeader {
+  background-color: color-mix(in srgb, var(--brand-Primary) 10%, transparent);
+}
+
+.todayText {
+  color: var(--brand-Primary);
+  font-weight: 700;
+}
+
+/* ============ TimeColumn ============ */
+.timeColumn {
+  border-right: 1px solid var(--ui-Divider);
+  position: sticky;
+  left: 0;
+  background-color: var(--ui-Canvas);
+  z-index: 1;
+}
+
+.timeSlot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 4px 8px;
+}
+
+.timeLabel {
+  font-size: 10px;
+  color: var(--ui-TextLabel);
+  font-weight: 400;
+  transform: translateY(-50%);
+}
+
+/* ============ CurrentTimeLine ============ */
+.currentTimeLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #c50f1f;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.currentTimeLine::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #c50f1f;
+}

@@ -1,0 +1,61 @@
+.inputContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdownContainer {
+  position: relative;
+  width: 100%;
+}
+
+.suggestionsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--ui-Canvas);
+  border-radius: 4px;
+  border: 1px solid var(--ui-Divider);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.suggestionItem {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestionItem:hover {
+  background-color: var(--ui-ControlHover);
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+}
+
+.tag {
+  background-color: var(--ui-PageBackground);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.tag:hover {
+  background-color: var(--ui-ControlPressed);
+}
+
+.noTagsMessage {
+  color: var(--ui-TextLabel);
+  padding: 16px 0;
+  text-align: center;
+}
