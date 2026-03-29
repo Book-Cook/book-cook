@@ -48,7 +48,7 @@ export const MealItem: React.FC<MealItemProps> = ({
         )}
       </div>
       <Button
-        appearance="ghost"
+        appearance="subtle"
         className={clsx(styles.removeButton, "meal-remove-button")}
         startIcon={<XIcon size={12} />}
         onClick={handleRemoveClick}

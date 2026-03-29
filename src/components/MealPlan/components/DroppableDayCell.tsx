@@ -109,7 +109,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                       </span>
                     </div>
                     <Button
-                      appearance="ghost"
+                      appearance="subtle"
                       className={clsx(
                         styles.removeButton,
                         "meal-remove-button"
@@ -146,7 +146,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                     </span>
                   </div>
                   <Button
-                    appearance="ghost"
+                    appearance="subtle"
                     className={clsx(
                       styles.removeButton,
                       "meal-remove-button"

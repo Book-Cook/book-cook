@@ -58,21 +58,21 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = React.memo(
       <div className={styles.viewControls}>
         <div className={styles.viewButtons}>
           <Button
-            appearance={view === "day" ? "primary" : "ghost"}
+            appearance={view === "day" ? "primary" : "subtle"}
             className={styles.viewButton}
             onClick={() => onViewChange("day")}
           >
             Day
           </Button>
           <Button
-            appearance={view === "week" ? "primary" : "ghost"}
+            appearance={view === "week" ? "primary" : "subtle"}
             className={styles.viewButton}
             onClick={() => onViewChange("week")}
           >
             Week
           </Button>
           <Button
-            appearance={view === "month" ? "primary" : "ghost"}
+            appearance={view === "month" ? "primary" : "subtle"}
             className={styles.viewButton}
             onClick={() => onViewChange("month")}
           >
@@ -84,20 +84,20 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = React.memo(
 
         <div className={styles.navigationButtons}>
           <Button
-            appearance="ghost"
+            appearance="subtle"
             startIcon={<CaretLeftIcon size={16} />}
             onClick={onPrevious}
             title="Previous"
           />
           <Button
-            appearance="ghost"
+            appearance="subtle"
             startIcon={<CalendarCheckIcon size={16} />}
             onClick={onToday}
           >
             Today
           </Button>
           <Button
-            appearance="ghost"
+            appearance="subtle"
             startIcon={<CaretRightIcon size={16} />}
             onClick={onNext}
             title="Next"

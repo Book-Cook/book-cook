@@ -63,7 +63,7 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
             </Text>
           </div>
           <Button
-            appearance="ghost"
+            appearance="subtle"
             startIcon={<XIcon size={12} />}
             className={styles.removeButton}
             onClick={handleRemoveClick}

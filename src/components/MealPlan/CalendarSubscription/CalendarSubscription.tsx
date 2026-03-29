@@ -196,7 +196,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           <div className={styles.section}>
             <Button
               size="sm"
-              appearance="ghost"
+              appearance="subtle"
               onClick={() => setShowDeleteDialog(true)}
               disabled={loading}
               className={styles.deleteButton}
