@@ -1,6 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  width: 100%;
   background: var(--ui-Canvas);
   border: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 20%, transparent);
   border-radius: 14px;
