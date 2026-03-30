@@ -5,7 +5,6 @@ import {
   TagIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
-import isEqual from "fast-deep-equal";
 import dynamic from "next/dynamic";
 
 import { useFetchAllTags } from "src/clientToServer";
@@ -14,8 +13,10 @@ import { Button } from "../Button";
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
 import { Tooltip } from "../Tooltip";
 
+
 import { useToggleRecipeVisibility } from "../../clientToServer/post/useToggleRecipeVisibility";
 import { useRecipe } from "../../context";
+import { isEqual } from "../../utils/isEqual";
 
 type DialogType = "title" | "tags" | "emoji" | "isPublic" | null;
 

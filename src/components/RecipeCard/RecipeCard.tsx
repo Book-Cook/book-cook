@@ -90,8 +90,8 @@ export const RecipeCard = ({
       </div>
       <div className={styles.body}>
         {isNew && <span className={styles.newBadge}>NEW</span>}
-        <BodyText as="h3" className={styles.title}>
-          {recipe.title}
+        <BodyText as="h3" className={clsx(styles.title, !recipe.title && styles.untitled)}>
+          {recipe.title || "Untitled Recipe"}
         </BodyText>
         {showMeta && creatorName ? (
           <MetaLabel as="span" className={styles.creator}>
@@ -126,7 +126,7 @@ export const RecipeCard = ({
     <button
       type="button"
       onClick={handleClick}
-      aria-label={recipe.title}
+      aria-label={recipe.title || "Untitled Recipe"}
       className={clsx(styles.card, styles.interactive, className)}
     >
       {content}

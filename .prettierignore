@@ -1,3 +1,6 @@
+# GitHub templates (contain HTML comments — not valid YAML for Prettier)
+.github/
+
 # generated or imported files
 package-deps.json
 CHANGELOG.*

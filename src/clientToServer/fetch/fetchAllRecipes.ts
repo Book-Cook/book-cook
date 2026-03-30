@@ -1,5 +1,3 @@
-import DOMPurify from "dompurify";
-
 import { fetchJson } from "src/utils";
 import type { Recipe } from "../types";
 
@@ -44,12 +42,10 @@ export const fetchRecipesPaginated = async ({
   offset = 0,
   limit = 20,
 }: FetchRecipesParams): Promise<RecipesResponse> => {
-  const sanitized = DOMPurify.sanitize(searchBoxValue);
-
   const sortConfig =
     sortOptions[orderBy as keyof typeof sortOptions] || sortOptions.dateNewest;
 
-  let url = `/api/recipes?search=${encodeURIComponent(sanitized)}&sortProperty=${encodeURIComponent(
+  let url = `/api/recipes?search=${encodeURIComponent(searchBoxValue)}&sortProperty=${encodeURIComponent(
     sortConfig.property
   )}&sortDirection=${encodeURIComponent(sortConfig.direction)}`;
 

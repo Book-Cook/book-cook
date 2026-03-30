@@ -2,7 +2,8 @@ import { getServerSession } from "next-auth";
 import { createMocks } from "node-mocks-http";
 
 import { getDb } from "src/utils/db";
-import handler from "./index";
+
+import handler from "../../../../pages/api/user/saved-recipes/index";
 
 // Mock the database module completely
 jest.mock("src/utils/db", () => ({
@@ -24,7 +25,7 @@ jest.mock("next-auth", () => ({
 }));
 
 // Mock the auth options
-jest.mock("../../auth/[...nextauth]", () => ({
+jest.mock("../../../../pages/api/auth/[...nextauth]", () => ({
   authOptions: {},
 }));
 

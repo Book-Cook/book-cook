@@ -4,22 +4,23 @@ import { useSession } from "next-auth/react";
 
 import styles from "./SidebarHistory.module.css";
 
-import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
+import { fetchRecipesPaginated } from "../../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../../utils/groupRecipesByTime";
 
 export const SidebarHistory = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const { data: recipes = [] } = useQuery({
-    queryKey: ["recipes", "", "dateNewest"],
-    queryFn: () => fetchAllRecipes("", "dateNewest"),
+  const { data: result } = useQuery({
+    queryKey: ["recipes", "", "dateNewest", [], 1],
+    queryFn: () => fetchRecipesPaginated({ searchBoxValue: "", orderBy: "dateNewest", selectedTags: [], offset: 0, limit: 20 }),
     enabled: Boolean(session),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
+  const recipes = result?.recipes ?? [];
   const groups = groupRecipesByTime(recipes);
 
   if (groups.length === 0) {

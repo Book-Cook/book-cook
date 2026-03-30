@@ -2,6 +2,10 @@ import filterWebpackStats from "@bundle-stats/plugin-webpack-filter";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import pwa from "@ducanh2912/next-pwa";
 import { StatsWriterPlugin } from "webpack-stats-plugin";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const enablePWA = process.env.DISABLE_PWA !== "true";
 
 const withPWA = enablePWA
@@ -60,10 +64,10 @@ const withBundleAnalyzer = bundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["@phosphor-icons/react", "@tanstack/react-query", "@tanstack/query-core"],
+  serverExternalPackages: ["@tanstack/query-core"],
   experimental: {
     reactCompiler: {
-      target: "18",
+      target: "19",
     },
   },
   images: {
@@ -86,7 +90,6 @@ const nextConfig = {
         "@tanstack/query-core",
         "clsx",
         "sonner",
-        "dompurify",
         "@radix-ui/react-dialog",
         "@radix-ui/react-dropdown-menu",
         "@radix-ui/react-tooltip",
@@ -106,6 +109,14 @@ const nextConfig = {
         ...existingExternals,
       ];
     }
+
+    // Alias @lexical/code to a stub so PrismJS is not bundled.
+    // @lexical/markdown imports @lexical/code for its CODE transformer, but
+    // the app only uses HEADING, QUOTE, list and text-format transformers.
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@lexical/code": path.resolve(__dirname, "src/stubs/lexical-code-stub.js"),
+    };
 
     if (!dev) {
       config.optimization = {

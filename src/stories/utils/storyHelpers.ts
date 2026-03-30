@@ -2,7 +2,7 @@ import type { StoryObj } from "@storybook/nextjs";
 
 import { withStoryProviders } from "../decorators/withStoryProviders";
 
-type StoryDecorator = (Story: React.ComponentType) => JSX.Element;
+type StoryDecorator = (Story: React.ComponentType) => React.ReactElement;
 
 interface CreateStoryOptions {
   name: string;

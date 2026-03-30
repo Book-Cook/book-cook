@@ -9,7 +9,7 @@
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   display: grid;
   gap: 2px;
-  z-index: 30;
+  z-index: 300;
 }
 
 .content[data-state="open"] {

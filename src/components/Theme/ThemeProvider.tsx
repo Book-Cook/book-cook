@@ -13,8 +13,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
   const { children, theme, setTheme } = props;
 
   useEffect(() => {
-    const newClassName = theme === "dark" ? styles.dark : styles.light;
-    document.documentElement.className = newClassName;
+    if (theme === "system") {
+      const mq = window.matchMedia("(prefers-color-scheme: dark)");
+      const apply = (): void => {
+        document.documentElement.className = mq.matches ? styles.dark : styles.light;
+      };
+      apply();
+      mq.addEventListener("change", apply);
+      return () => mq.removeEventListener("change", apply);
+    }
+    document.documentElement.className = theme === "dark" ? styles.dark : styles.light;
   }, [theme]);
 
   return (

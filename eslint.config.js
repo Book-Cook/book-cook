@@ -25,6 +25,7 @@ export default config(
       ".eslintcache",
       "*.log",
       "logs/",
+      "src/stubs/",
     ],
   },
 

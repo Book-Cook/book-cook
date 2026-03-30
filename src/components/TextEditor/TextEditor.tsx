@@ -29,6 +29,7 @@ function EditorRefPlugin({ editorRef }: { editorRef: MutableRefObject<LexicalEdi
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     editorRef.current = editor;
+    return () => { editorRef.current = null; };
   }, [editor, editorRef]);
   return null;
 }
