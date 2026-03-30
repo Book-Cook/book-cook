@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import DOMPurify from "dompurify";
 
 import { fetchJson } from "src/utils";
 import type { UpdateRecipePayload } from "../types";
@@ -19,14 +18,14 @@ export function useUpdateRecipe(recipeId: string | undefined) {
         throw new Error("Recipe ID required for update.");
       }
 
-      const sanitizedData = {
-        title: DOMPurify.sanitize(String(updatedRecipeData.title || "")),
-        data: DOMPurify.sanitize(String(updatedRecipeData.data || "")),
+      const payload = {
+        title: String(updatedRecipeData.title ?? ""),
+        data: String(updatedRecipeData.data ?? ""),
         tags: Array.isArray(updatedRecipeData.tags)
-          ? updatedRecipeData.tags.map((tag) => DOMPurify.sanitize(String(tag)))
+          ? updatedRecipeData.tags.map((tag) => String(tag))
           : [],
-        imageURL: DOMPurify.sanitize(String(updatedRecipeData.imageURL || "")),
-        emoji: DOMPurify.sanitize(String(updatedRecipeData.emoji || "")),
+        imageURL: String(updatedRecipeData.imageURL ?? ""),
+        emoji: String(updatedRecipeData.emoji ?? ""),
         isPublic: Boolean(updatedRecipeData.isPublic),
       };
 
@@ -34,7 +33,7 @@ export function useUpdateRecipe(recipeId: string | undefined) {
         return await fetchJson(`/api/recipes/${recipeId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(sanitizedData),
+          body: JSON.stringify(payload),
         });
       } catch (error) {
         return error;

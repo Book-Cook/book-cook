@@ -19,6 +19,8 @@
   padding: 48px 16px;
   text-align: center;
   color: var(--ui-TextSecondary);
+  font-family: var(--font-sans);
+  gap: 6px;
 }
 
 .loadingState {
@@ -28,6 +30,7 @@
   justify-content: center;
   padding: 40px 16px;
   gap: 12px;
+  font-family: var(--font-sans);
 }
 
 .errorState {
@@ -38,6 +41,8 @@
   padding: 40px 16px;
   text-align: center;
   color: var(--ui-TextDanger, #c4314b);
+  font-family: var(--font-sans);
+  gap: 6px;
 }
 
 .cardWrapper {

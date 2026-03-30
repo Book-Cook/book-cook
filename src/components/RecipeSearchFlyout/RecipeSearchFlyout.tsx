@@ -76,6 +76,7 @@ export const RecipeSearchFlyout = ({
   const results = trimmed ? (searchData?.recipes ?? []) : defaultSource;
   const groups = groupRecipesByTime(results);
   const hasResults = groups.length > 0 || (isSearching && Boolean(trimmed));
+  const showResults = hasResults || Boolean(trimmed);
 
   const navigate = (id: string): void => {
     void router.push(`/recipes/${id}`);
@@ -96,7 +97,7 @@ export const RecipeSearchFlyout = ({
           <DialogPrimitive.Title className={styles.srOnly}>
             Search recipes
           </DialogPrimitive.Title>
-          <div className={cx(styles.searchRow, !hasResults && styles.searchRowNoResults)}>
+          <div className={cx(styles.searchRow, !showResults && styles.searchRowNoResults)}>
             <MagnifyingGlassIcon size={16} className={styles.searchIcon} aria-hidden="true" />
             <input
               ref={inputRef}
@@ -106,44 +107,41 @@ export const RecipeSearchFlyout = ({
               onChange={(e) => setQuery(e.target.value)}
               autoComplete="off"
             />
-            {query && (
-              <button
-                className={styles.iconBtn}
-                onClick={() => setQuery("")}
-                aria-label="Clear search"
-              >
-                <XIcon size={13} aria-hidden="true" />
-              </button>
-            )}
-            <DialogPrimitive.Close className={styles.iconBtn} aria-label="Close search">
+            <button
+              className={styles.iconBtn}
+              onClick={() => (query ? setQuery("") : onOpenChange(false))}
+              aria-label={query ? "Clear search" : "Close search"}
+            >
               <XIcon size={13} aria-hidden="true" />
-            </DialogPrimitive.Close>
+            </button>
           </div>
 
-          <div className={styles.results}>
-            {isSearching && trimmed ? (
-              <Text size={300} className={styles.empty}>Searching…</Text>
-            ) : groups.length > 0 ? groups.map((group) => (
-              <div key={group.label} className={styles.group}>
-                <div className={styles.groupLabel}>{group.label}</div>
-                {group.recipes.map((recipe) => (
-                  <button
-                    key={recipe._id}
-                    className={styles.recipeItem}
-                    onClick={() => navigate(recipe._id)}
-                    title={recipe.title}
-                  >
-                    <span className={styles.recipeEmoji} aria-hidden="true">
-                      {recipe.emoji ?? "🍴"}
-                    </span>
-                    <span className={styles.recipeTitle}>{recipe.title}</span>
-                  </button>
-                ))}
-              </div>
-            )) : trimmed ? (
-              <Text size={300} className={styles.empty}>No recipes found for &quot;{query}&quot;</Text>
-            ) : null}
-          </div>
+          {showResults && (
+            <div className={styles.results}>
+              {isSearching && trimmed ? (
+                <Text size={300} className={styles.empty}>Searching…</Text>
+              ) : groups.length > 0 ? groups.map((group) => (
+                <div key={group.label} className={styles.group}>
+                  <div className={styles.groupLabel}>{group.label}</div>
+                  {group.recipes.map((recipe) => (
+                    <button
+                      key={recipe._id}
+                      className={styles.recipeItem}
+                      onClick={() => navigate(recipe._id)}
+                      title={recipe.title}
+                    >
+                      <span className={styles.recipeEmoji} aria-hidden="true">
+                        {recipe.emoji ?? "🍴"}
+                      </span>
+                      <span className={styles.recipeTitle}>{recipe.title || "Untitled Recipe"}</span>
+                    </button>
+                  ))}
+                </div>
+              )) : trimmed ? (
+                <Text size={300} className={styles.empty}>No recipes found for &quot;{query}&quot;</Text>
+              ) : null}
+            </div>
+          )}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

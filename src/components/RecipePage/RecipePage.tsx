@@ -65,6 +65,7 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
           emoji,
           tags,
         }));
+        void queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "none" });
         // Reset dirty state immediately by remounting the save state provider
         onCancelReset();
         setStatus("saved");

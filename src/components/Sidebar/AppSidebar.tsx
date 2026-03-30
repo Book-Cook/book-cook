@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { GearSixIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -9,18 +8,17 @@ import { SidebarContent } from "./SidebarContent";
 import { SidebarItem } from "./SidebarItem";
 import { Avatar } from "../Avatar";
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
-import { NewRecipeDialog } from "../NewRecipeDialog";
 
 type AppSidebarProps = {
   forceExpanded?: boolean;
-  isMobile?: boolean;
+  onNewRecipe: () => void;
   onSearch: () => void;
+  onMenuOpenChange?: (open: boolean) => void;
 };
 
-export const AppSidebar = ({ forceExpanded, isMobile, onSearch }: AppSidebarProps): React.ReactElement => {
+export const AppSidebar = ({ forceExpanded, onNewRecipe, onSearch, onMenuOpenChange }: AppSidebarProps): React.ReactElement => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [isNewRecipeOpen, setIsNewRecipeOpen] = useState(false);
 
   const profileName = session?.user?.name ?? "Account";
   const profileEmail = session?.user?.email ?? undefined;
@@ -28,64 +26,39 @@ export const AppSidebar = ({ forceExpanded, isMobile, onSearch }: AppSidebarProp
 
   return (
     <Sidebar {...(forceExpanded ? { collapsed: false, showToggle: false } : {})}>
-      <NewRecipeDialog
-        open={isNewRecipeOpen}
-        onOpenChange={setIsNewRecipeOpen}
-      />
       <SidebarContent
-        onNewRecipe={() => setIsNewRecipeOpen(true)}
+        onNewRecipe={onNewRecipe}
         onSearch={onSearch}
         currentPath={router.pathname}
       />
       <div className={styles.profileFooter}>
-        {isMobile ? (
-          // On mobile the Radix dropdown conflicts with the drawer backdrop.
-          // Render Settings and Sign Out as plain sidebar items instead.
-          <>
+        <Menu onOpenChange={onMenuOpenChange}>
+          <MenuTrigger asChild>
             <SidebarItem
               icon={<Avatar name={profileName} imageURL={profileImage} size="sm" />}
               label={profileName}
             />
-            <SidebarItem
-              icon={<GearSixIcon size={18} />}
-              label="Settings"
-              onClick={() => router.push("/settings")}
-            />
-            <SidebarItem
-              icon={<SignOutIcon size={18} />}
-              label="Sign out"
-              onClick={() => signOut({ callbackUrl: "/" })}
-            />
-          </>
-        ) : (
-          <Menu>
-            <MenuTrigger asChild>
-              <SidebarItem
-                icon={<Avatar name={profileName} imageURL={profileImage} size="sm" />}
-                label={profileName}
-              />
-            </MenuTrigger>
-            <MenuContent side="top" align="end">
-              <div className={styles.menuHeader}>
-                <Avatar name={profileName} imageURL={profileImage} size="md" />
-                <div className={styles.menuHeaderText}>
-                  <span className={styles.menuHeaderName}>{profileName}</span>
-                  {profileEmail && (
-                    <span className={styles.menuHeaderMeta}>{profileEmail}</span>
-                  )}
-                </div>
+          </MenuTrigger>
+          <MenuContent side="top" align="end">
+            <div className={styles.menuHeader}>
+              <Avatar name={profileName} imageURL={profileImage} size="md" />
+              <div className={styles.menuHeaderText}>
+                <span className={styles.menuHeaderName}>{profileName}</span>
+                {profileEmail && (
+                  <span className={styles.menuHeaderMeta}>{profileEmail}</span>
+                )}
               </div>
-              <MenuSeparator />
-              <MenuItem startIcon={<GearSixIcon size={16} />} onSelect={() => router.push("/settings")}>Settings</MenuItem>
-              <MenuItem
-                startIcon={<SignOutIcon size={16} />}
-                onSelect={() => signOut({ callbackUrl: "/" })}
-              >
-                Sign out
-              </MenuItem>
-            </MenuContent>
-          </Menu>
-        )}
+            </div>
+            <MenuSeparator />
+            <MenuItem startIcon={<GearSixIcon size={16} />} onSelect={() => router.push("/settings")}>Settings</MenuItem>
+            <MenuItem
+              startIcon={<SignOutIcon size={16} />}
+              onSelect={() => signOut({ callbackUrl: "/" })}
+            >
+              Sign out
+            </MenuItem>
+          </MenuContent>
+        </Menu>
       </div>
     </Sidebar>
   );

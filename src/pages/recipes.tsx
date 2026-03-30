@@ -52,6 +52,7 @@ export default function Recipes() {
     }),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
+    refetchOnMount: true,
   });
 
   const recipes = data?.recipes ?? [];

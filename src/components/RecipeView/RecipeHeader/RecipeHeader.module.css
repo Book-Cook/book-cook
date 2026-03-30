@@ -65,6 +65,12 @@
   outline: none;
 }
 
+.editableTitle:empty::before {
+  content: "Untitled Recipe";
+  color: var(--ui-TextCaption);
+  pointer-events: none;
+}
+
 
 .editorAligned {
   --header-left-padding: calc(

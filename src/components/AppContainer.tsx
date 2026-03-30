@@ -2,8 +2,12 @@ import * as React from "react";
 import dynamic from "next/dynamic";
 import { SessionProvider } from "next-auth/react";
 
-import { Toast } from "./Toast";
 import { SearchBoxProvider } from "../context";
+
+const Toast = dynamic(
+  () => import("./Toast").then((m) => ({ default: m.Toast })),
+  { ssr: false, loading: () => null }
+);
 
 const AppShell = dynamic(
   () => import("./AppShell").then((m) => ({ default: m.AppShell })),
@@ -20,7 +24,7 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   return (
-    <SessionProvider>
+    <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
       <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
         <Toast />
         <AppShell>{children}</AppShell>

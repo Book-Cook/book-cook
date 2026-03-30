@@ -1,4 +1,4 @@
-jest.mock("../../auth/[...nextauth]", () => ({ authOptions: {} }));
+jest.mock("../../../../pages/api/auth/[...nextauth]", () => ({ authOptions: {} }));
 jest.mock("src/utils/db", () => ({ getDb: jest.fn() }));
 jest.mock("next-auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("mongodb", () => {
@@ -14,7 +14,8 @@ import { getServerSession } from "next-auth";
 import { createMocks } from "node-mocks-http";
 
 import { getDb } from "src/utils/db";
-import handler from "./visibility";
+
+import handler from "../../../../pages/api/recipes/[id]/visibility";
 
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
 const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;

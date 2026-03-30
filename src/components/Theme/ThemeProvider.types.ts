@@ -1,7 +1,7 @@
 /**
  * Defines the possible theme values for the application.
  */
-export type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "system";
 
 /**
  * Context type for the ThemeProvider, including the current theme and a function to set the theme.

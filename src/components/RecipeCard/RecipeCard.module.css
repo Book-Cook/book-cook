@@ -104,6 +104,11 @@
   overflow: hidden;
 }
 
+.untitled {
+  color: var(--ui-TextCaption);
+  font-style: italic;
+}
+
 .metaRow {
   display: flex;
   align-items: center;

@@ -10,6 +10,7 @@ import { RecipeSearchFlyout } from "../RecipeSearchFlyout";
 import { AppSidebar } from "../Sidebar";
 
 import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
+import { useCreateRecipe } from "../../clientToServer/post/useCreateRecipe";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export type AppShellProps = {
@@ -22,13 +23,15 @@ export const AppShell = ({ children }: AppShellProps) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const { mutate: createRecipe } = useCreateRecipe();
 
   const profileEmail = session?.user?.email ?? undefined;
 
   const { data: recentRecipes = [] } = useQuery({
     queryKey: ["recentlyViewed", profileEmail],
     queryFn: fetchRecentlyViewed,
-    enabled: Boolean(session),
+    enabled: Boolean(profileEmail),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -37,6 +40,14 @@ export const AppShell = ({ children }: AppShellProps) => {
   const handleSearch = (): void => {
     setDrawerOpen(false);
     setIsSearchOpen(true);
+  };
+
+  const handleNewRecipe = (): void => {
+    setDrawerOpen(false);
+    createRecipe(
+      { title: "", data: "", tags: [], imageURL: "", emoji: "", isPublic: false },
+      { onSuccess: (res) => { void router.push(`/recipes/${res.recipeId}`); } }
+    );
   };
 
   // Close drawer on route change
@@ -93,14 +104,14 @@ export const AppShell = ({ children }: AppShellProps) => {
       {/* Backdrop */}
       <div
         className={styles.backdrop}
-        data-open={drawerOpen ? "true" : "false"}
-        onClick={() => setDrawerOpen(false)}
+        data-open={drawerOpen && !profileMenuOpen ? "true" : "false"}
+        onClick={() => { if (!profileMenuOpen) { setDrawerOpen(false); } }}
         aria-hidden="true"
       />
 
       {/* Sidebar — normal on desktop, drawer on mobile */}
       <div className={styles.sidebarWrap} data-open={drawerOpen ? "true" : "false"}>
-        <AppSidebar forceExpanded={isMobile} isMobile={isMobile} onSearch={handleSearch} />
+        <AppSidebar forceExpanded={isMobile} onNewRecipe={handleNewRecipe} onSearch={handleSearch} onMenuOpenChange={setProfileMenuOpen} />
       </div>
 
       <main className={styles.main}>{children}</main>
