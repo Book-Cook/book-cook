@@ -9,12 +9,13 @@ import {
 import * as Accordion from "@radix-ui/react-accordion";
 import { useSession , signOut } from "next-auth/react";
 
-import { useDeleteSharedUser } from "../../clientToServer/delete/useDeleteSharedUser";
-import { useSharedUsers } from "../../clientToServer/fetch/useSharedUsers";
-import { useShareWithUser } from "../../clientToServer/post/useShareWithUser";
 import styles from "./Settings.module.css";
 import { Avatar } from "../Avatar";
 import { useTheme } from "../Theme/ThemeProvider";
+
+import { useDeleteSharedUser } from "../../clientToServer/delete/useDeleteSharedUser";
+import { useSharedUsers } from "../../clientToServer/fetch/useSharedUsers";
+import { useShareWithUser } from "../../clientToServer/post/useShareWithUser";
 
 /* ── Helpers ────────────────────────────────────────────── */
 

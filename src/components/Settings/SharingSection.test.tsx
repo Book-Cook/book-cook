@@ -22,10 +22,11 @@ jest.mock("../Theme/ThemeProvider", () => ({
   useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
 }));
 
+import { SettingsPage } from "./Settings";
+
 import { useDeleteSharedUser } from "../../clientToServer/delete/useDeleteSharedUser";
 import { useSharedUsers } from "../../clientToServer/fetch/useSharedUsers";
 import { useShareWithUser } from "../../clientToServer/post/useShareWithUser";
-import { SettingsPage } from "./Settings";
 
 const mockUseSharedUsers = useSharedUsers as jest.MockedFunction<typeof useSharedUsers>;
 const mockUseShareWithUser = useShareWithUser as jest.MockedFunction<typeof useShareWithUser>;

@@ -1,6 +1,6 @@
-import { createMocks } from "node-mocks-http";
-
+jest.mock("../../auth/[...nextauth]", () => ({ authOptions: {} }));
 jest.mock("src/utils/db", () => ({ getDb: jest.fn() }));
+jest.mock("next-auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("mongodb", () => {
   const oid = jest.fn().mockImplementation((id: string) => ({
     toString: () => id ?? "507f1f77bcf86cd799439011",
@@ -9,13 +9,11 @@ jest.mock("mongodb", () => {
   (oid as unknown as { isValid: () => boolean }).isValid = () => true;
   return { ObjectId: oid };
 });
-jest.mock("next-auth", () => ({ getServerSession: jest.fn() }));
-jest.mock("../../auth/[...nextauth]", () => ({ authOptions: {} }));
 
 import { getServerSession } from "next-auth";
+import { createMocks } from "node-mocks-http";
 
 import { getDb } from "src/utils/db";
-
 import handler from "./visibility";
 
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
