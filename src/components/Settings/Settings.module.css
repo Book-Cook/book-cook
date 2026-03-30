@@ -421,6 +421,13 @@
   padding: 4px 0;
 }
 
+.errorText {
+  font-size: 12px;
+  color: var(--ui-Destructive, #d93025);
+  margin-top: 4px;
+  font-family: var(--font-sans);
+}
+
 /* ── Slider ────────────────────────────────────── */
 
 .sliderRow {

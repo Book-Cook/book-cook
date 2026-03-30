@@ -1,0 +1,35 @@
+.searchAndFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.searchRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex-grow: 1;
+  min-width: 300px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterItem {
+  min-width: 150px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 24px;
+  color: var(--ui-TextSecondary);
+}

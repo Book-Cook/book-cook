@@ -2,8 +2,8 @@
  * Drop zone component for week day
  */
 import * as React from "react";
-import { mergeClasses, tokens } from "@fluentui/react-components";
 import { useDroppable } from "@dnd-kit/core";
+import { clsx } from "clsx";
 
 import { Text } from "../../Text";
 
@@ -22,12 +22,12 @@ export const WeekDayDropZone: React.FC<WeekDayDropZoneProps> = ({ dateStr, class
   });
 
   return (
-    <div 
+    <div
       ref={setNodeRef}
-      className={mergeClasses(className, isOver && 'dropping')}
+      className={clsx(className, isOver && 'dropping')}
       style={{
-        borderColor: isOver ? tokens.colorBrandStroke1 : undefined,
-        backgroundColor: isOver ? tokens.colorBrandBackground2 : undefined,
+        borderColor: isOver ? 'var(--brand-Primary)' : undefined,
+        backgroundColor: isOver ? 'color-mix(in srgb, var(--brand-Primary) 10%, transparent)' : undefined,
       }}
     >
       <Text>Drop recipe here</Text>

@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useDroppable } from "@dnd-kit/core";
+import { clsx } from "clsx";
 
-import { useTimeSlotStyles } from "./TimeSlot.styles";
+import styles from "./TimeSlot.module.css";
 import type { TimeSlotProps } from "./TimeSlot.types";
 import { MealItem as MealItemComponent } from "../components/MealItem";
 
@@ -15,8 +16,6 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
   onRemoveMeal,
   showTimeLabel = true,
 }) => {
-  const styles = useTimeSlotStyles();
-
   const { isOver, setNodeRef } = useDroppable({
     id: `${date}-${time}`,
     data: {
@@ -26,7 +25,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
     },
   });
 
-  const containerClass = `${styles.container} ${isOver ? styles.isDraggingOver : ""}`;
+  const containerClass = clsx(styles.container, isOver && styles.isDraggingOver);
 
   return (
     <div ref={setNodeRef} className={containerClass}>

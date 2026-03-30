@@ -1,0 +1,106 @@
+.container {
+  min-height: 80px;
+  background-color: var(--ui-Canvas);
+  border-radius: 6px;
+  border: 1px solid var(--ui-Divider);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.isDraggingOver {
+  border-color: var(--brand-Primary);
+  border-width: 2px;
+  background-color: color-mix(in srgb, var(--brand-Primary) 10%, transparent);
+}
+
+.timeLabel {
+  font-size: 10px;
+  color: var(--ui-TextLabel);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-TextLabel);
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+  flex: 1;
+}
+
+.mealsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.mealItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--ui-PageBackground);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mealItem:hover {
+  background-color: var(--ui-ControlHover);
+  transform: translateY(-1px);
+}
+
+.emoji {
+  font-size: 18px;
+}
+
+.mealContent {
+  flex: 1;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.servings {
+  font-size: 10px;
+  color: var(--ui-TextLabel);
+}
+
+.removeButton {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background-color: var(--ui-Canvas);
+  border-radius: 50%;
+  border: none;
+  color: var(--ui-TextSecondary);
+}
+
+.removeButton:hover {
+  opacity: 1;
+  background-color: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.mealItemHover:hover .meal-remove-button {
+  opacity: 0.8;
+}

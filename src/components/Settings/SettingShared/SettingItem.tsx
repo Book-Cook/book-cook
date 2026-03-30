@@ -1,49 +1,7 @@
 import * as React from "react";
-import { tokens, mergeClasses } from "@fluentui/react-components";
-import { makeStyles } from "@griffel/react";
+import { clsx } from "clsx";
 
-const useStyles = makeStyles({
-  setting: {
-    display: "flex",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "16px",
-  },
-  settingFullWidth: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  childrenFullWidth: {
-    width: "100%",
-  },
-  info: {
-    flex: "1 1 300px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-  },
-  infoFullWidth: {
-    flex: "1 1 auto",
-  },
-  label: {
-    fontSize: tokens.fontSizeBase300,
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1,
-  },
-  description: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground2,
-  },
-  control: {
-    width: "250px",
-    flexShrink: 0,
-    "@media (max-width: 710px)": {
-      width: "100%",
-    },
-  },
-});
+import styles from "./SettingItem.module.css";
 
 export interface SettingItemProps {
   label: string;
@@ -63,17 +21,15 @@ export const SettingItem: React.FC<SettingItemProps> = ({
   statusMessage,
   fullWidth = false,
 }) => {
-  const styles = useStyles();
-
   return (
     <div
-      className={mergeClasses(
+      className={clsx(
         styles.setting,
         fullWidth && styles.settingFullWidth
       )}
     >
       <div
-        className={mergeClasses(styles.info, fullWidth && styles.infoFullWidth)}
+        className={clsx(styles.info, fullWidth && styles.infoFullWidth)}
       >
         <div className={styles.label}>{label}</div>
         <div className={styles.description}>{description}</div>

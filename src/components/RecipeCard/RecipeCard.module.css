@@ -1,6 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  width: 100%;
   background: var(--ui-Canvas);
   border: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 20%, transparent);
   border-radius: 14px;
@@ -55,7 +56,7 @@
 
 .media {
   width: 100%;
-  height: clamp(140px, 18vw, 180px);
+  aspect-ratio: 3 / 2;
   position: relative;
   overflow: hidden;
   background-color: var(--ui-ControlHover);
@@ -72,7 +73,6 @@
       transparent 60%
     ),
     linear-gradient(135deg, var(--brand-BackgroundDisabled), var(--ui-ControlHover));
-  height: clamp(112px, 14vw, 144px);
 }
 
 .mediaImage {
@@ -80,7 +80,7 @@
 }
 
 .emoji {
-  font-size: clamp(34px, 3.6vw, 44px);
+  font-size: 36px;
 }
 
 .body {
@@ -209,6 +209,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .actionsButton {
+    opacity: 1;
+  }
+}
+
 .actionsButton:hover {
   background: var(--ui-ControlHover);
   color: var(--ui-TextPrimary);
@@ -218,10 +224,6 @@
 @media (max-width: 720px) {
   .body {
     padding: 12px 12px 10px;
-  }
-
-  .mediaFallback {
-    height: 120px;
   }
 }
 
@@ -250,7 +252,7 @@
 
 .skeletonMedia {
   width: 100%;
-  height: clamp(140px, 18vw, 180px);
+  aspect-ratio: 3 / 2;
   border-radius: 0;
 }
 
@@ -286,10 +288,6 @@
 }
 
 @media (max-width: 720px) {
-  .skeletonMedia {
-    height: clamp(140px, 18vw, 180px);
-  }
-
   .skeletonBody {
     padding: 12px 12px 10px;
   }

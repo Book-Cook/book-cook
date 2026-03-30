@@ -1,0 +1,97 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  padding: 12px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.weekHeader {
+  display: contents;
+}
+
+.dayColumn {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+}
+
+.dayHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: var(--ui-PageBackground);
+  border-radius: 6px;
+  border-bottom: 1px solid var(--ui-Divider);
+}
+
+.dayName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ui-TextPrimary);
+  line-height: 1;
+}
+
+.dayDate {
+  font-size: 12px;
+  color: var(--ui-TextSecondary);
+  line-height: 1;
+}
+
+.isToday {
+  color: var(--brand-Primary);
+  font-weight: 700;
+}
+
+.mealsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.emptyDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-TextLabel);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  border: 1px dashed var(--ui-Divider);
+  border-radius: 6px;
+}
+
+.addMealSlot {
+  min-height: 60px;
+  background-color: var(--ui-Canvas);
+  border: 2px dashed var(--ui-Divider);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-TextLabel);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+}
+
+.addMealSlot:hover {
+  border-color: var(--brand-Primary);
+  background-color: color-mix(in srgb, var(--brand-Primary) 10%, transparent);
+  color: var(--brand-Primary);
+}
+
+.pastDay {
+  opacity: 0.5;
+}
+
+.pastDayHeader {
+  background-color: var(--ui-ControlPressed);
+}

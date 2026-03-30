@@ -1,0 +1,29 @@
+.column {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.dropZone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropZone:hover {
+  background-color: var(--ui-PageBackground);
+}
+
+.dropZoneActive {
+  background-color: color-mix(in srgb, var(--brand-Primary) 10%, transparent);
+  border: 2px dashed var(--brand-Primary);
+}
+
+.hourSlot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--ui-Divider);
+}

@@ -1,0 +1,76 @@
+.viewControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: var(--ui-Canvas);
+  border-bottom: 1px solid var(--ui-Divider);
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .viewControls {
+    gap: 4px;
+    padding: 4px;
+    justify-content: flex-start;
+  }
+}
+
+.viewButtons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .viewButtons {
+    gap: 4px;
+  }
+}
+
+.viewButton {
+  min-width: 60px;
+}
+
+@media (max-width: 768px) {
+  .viewButton {
+    min-width: 50px;
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+.navigationButtons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .navigationButtons {
+    margin-left: auto;
+  }
+}
+
+.dateDisplay {
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .dateDisplay {
+    font-size: 14px;
+    flex: none;
+    text-align: left;
+    min-width: 0;
+    order: 3;
+    width: 100%;
+    margin-top: 4px;
+  }
+}

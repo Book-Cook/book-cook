@@ -1,17 +1,13 @@
 import * as React from "react";
-import { mergeClasses } from "@fluentui/react-components";
-import { PanelLeft24Regular } from "@fluentui/react-icons";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { SidebarSimpleIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
+import { clsx } from "clsx";
 
-import { useStyles } from "./MealPlanCalendar.styles";
-import type {
-  MealPlanCalendarProps,
-  CalendarView,
-  DraggedRecipe,
-} from "./MealPlanCalendar.types";
+import styles from "./MealPlanCalendar.module.css";
+import type { CalendarView, DraggedRecipe, MealPlanCalendarProps } from "./MealPlanCalendar.types";
 import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import { HourlyDayView } from "../CalendarViews/HourlyDayView";
 import { MonthView } from "../CalendarViews/MonthView";
@@ -30,7 +26,6 @@ import { Button } from "../../Button";
 export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
   initialView = "week",
 }) => {
-  const styles = useStyles();
   const [view, setView] = React.useState<CalendarView>(initialView);
   const [currentDate, setCurrentDate] = React.useState(new Date());
   const [draggedRecipe, setDraggedRecipe] =
@@ -353,7 +348,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         {/* Mobile floating button */}
         <Button
           appearance="primary"
-          icon={<PanelLeft24Regular />}
+          startIcon={<SidebarSimpleIcon size={16} />}
           className={styles.mobileFloatingButton}
           onClick={() => setSidebarOpen(!sidebarOpen)}
           style={{
@@ -372,7 +367,7 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
         )}
 
         <div
-          className={mergeClasses(
+          className={clsx(
             styles.sidebar,
             sidebarOpen && !draggedRecipe && styles.sidebarOpen,
             draggedRecipe ? styles.sidebarNoTransition : undefined

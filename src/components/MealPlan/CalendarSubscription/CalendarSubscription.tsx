@@ -1,113 +1,19 @@
 /**
  * Calendar subscription management component
  */
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Text,
-  Caption1,
-  Input,
-  MessageBar,
-  MessageBarBody,
-  Dialog,
-  DialogTrigger,
-  DialogSurface,
-  DialogTitle,
-  DialogContent,
-  DialogBody,
-  DialogActions,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
-import {
-  Copy24Regular,
-  Add24Regular,
-  CheckmarkCircle16Regular,
-} from "@fluentui/react-icons";
+import React, { useEffect, useState } from "react";
+import { CheckCircleIcon, CopyIcon, PlusIcon } from "@phosphor-icons/react";
 
-import type {
-  CalendarTokenData,
-  CalendarSubscriptionProps,
-} from "./CalendarSubscription.types";
+import styles from "./CalendarSubscription.module.css";
+import type { CalendarSubscriptionProps, CalendarTokenData } from "./CalendarSubscription.types";
 
+import { Button } from "../../Button";
+import { Dialog, DialogBody, DialogContent, DialogFooter, DialogTitle } from "../../Dialog";
+import { Input } from "../../Input";
 import { Spinner } from "../../Spinner";
-
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    gap: tokens.spacingVerticalM,
-    minWidth: "500px",
-    color: tokens.colorNeutralForeground1,
-  },
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    gap: tokens.spacingVerticalS,
-  },
-  inputGroup: {
-    display: "flex",
-    gap: tokens.spacingHorizontalS,
-    alignItems: "center",
-  },
-  input: {
-    flexGrow: 1,
-  },
-  instructions: {
-    padding: tokens.spacingVerticalS,
-    backgroundColor: tokens.colorNeutralBackground1Hover,
-    borderRadius: tokens.borderRadiusMedium,
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground2,
-  },
-  instructionList: {
-    margin: 0,
-    paddingLeft: tokens.spacingHorizontalL,
-    color: tokens.colorNeutralForeground2,
-  },
-  footer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  deleteButton: {
-    color: `${tokens.colorPaletteRedForeground1} !important`,
-    "& svg": {
-      color: `${tokens.colorPaletteRedForeground1} !important`,
-    },
-    ":hover": {
-      backgroundColor: tokens.colorPaletteRedBackground1,
-      color: `${tokens.colorPaletteRedForeground1} !important`,
-    },
-    ":hover svg": {
-      color: `${tokens.colorPaletteRedForeground1} !important`,
-    },
-  },
-  deleteButtonPrimary: {
-    backgroundColor: tokens.colorPaletteRedBackground3,
-    color: tokens.colorNeutralForegroundOnBrand,
-    border: `1px solid ${tokens.colorPaletteRedBorder2}`,
-    ":hover": {
-      backgroundColor: tokens.colorPaletteRedBackground2,
-      color: tokens.colorNeutralForegroundOnBrand,
-    },
-    ":active": {
-      backgroundColor: tokens.colorPaletteRedBackground1,
-      color: tokens.colorNeutralForegroundOnBrand,
-    },
-    "& svg": {
-      color: tokens.colorNeutralForegroundOnBrand,
-    },
-  },
-  loadingContainer: {
-    display: "flex",
-    justifyContent: "center",
-    padding: tokens.spacingVerticalXL,
-  },
-});
+import { Text } from "../../Text";
 
 export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
-  const styles = useStyles();
   const [tokenData, setTokenData] = useState<CalendarTokenData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -211,9 +117,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
   return (
     <div className={styles.container}>
       {error && (
-        <MessageBar intent="error">
-          <MessageBarBody>{error}</MessageBarBody>
-        </MessageBar>
+        <div className={styles.errorBar}>{error}</div>
       )}
 
       {!tokenData ? (
@@ -223,7 +127,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </Text>
           <Button
             appearance="primary"
-            icon={<Add24Regular />}
+            startIcon={<PlusIcon size={16} />}
             onClick={createToken}
             disabled={loading}
           >
@@ -233,21 +137,21 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
       ) : (
         <>
           <div className={styles.section}>
-            <Caption1>Subscription URL</Caption1>
+            <span>Subscription URL</span>
             <div className={styles.inputGroup}>
               <Input
                 className={styles.input}
                 value={tokenData.subscriptionUrl}
                 readOnly
-                size="small"
+                size="sm"
               />
               <Button
-                size="small"
-                icon={
+                size="sm"
+                startIcon={
                   copySuccess === "subscription" ? (
-                    <CheckmarkCircle16Regular />
+                    <CheckCircleIcon size={16} />
                   ) : (
-                    <Copy24Regular />
+                    <CopyIcon size={16} />
                   )
                 }
                 onClick={() =>
@@ -258,21 +162,21 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </div>
 
           <div className={styles.section}>
-            <Caption1>Webcal URL (iOS/macOS)</Caption1>
+            <span>Webcal URL (iOS/macOS)</span>
             <div className={styles.inputGroup}>
               <Input
                 className={styles.input}
                 value={tokenData.webcalUrl}
                 readOnly
-                size="small"
+                size="sm"
               />
               <Button
-                size="small"
-                icon={
+                size="sm"
+                startIcon={
                   copySuccess === "webcal" ? (
-                    <CheckmarkCircle16Regular />
+                    <CheckCircleIcon size={16} />
                   ) : (
-                    <Copy24Regular />
+                    <CopyIcon size={16} />
                   )
                 }
                 onClick={() => copyToClipboard(tokenData.webcalUrl, "webcal")}
@@ -281,7 +185,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </div>
 
           <div className={styles.instructions}>
-            <Caption1>Quick Setup:</Caption1>
+            <span>Quick Setup:</span>
             <ul className={styles.instructionList}>
               <li>Google Calendar: Settings → Add calendar → From URL</li>
               <li>Apple: Click the webcal URL or paste in Calendar app</li>
@@ -290,53 +194,53 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
           </div>
 
           <div className={styles.section}>
+            <Button
+              size="sm"
+              appearance="subtle"
+              onClick={() => setShowDeleteDialog(true)}
+              disabled={loading}
+              className={styles.deleteButton}
+            >
+              Delete Subscription
+            </Button>
+
             <Dialog
               open={showDeleteDialog}
-              onOpenChange={(_, data) => setShowDeleteDialog(data.open)}
+              onOpenChange={(open) => setShowDeleteDialog(open)}
             >
-              <DialogTrigger disableButtonEnhancement>
-                <Button
-                  size="small"
-                  appearance="subtle"
-                  onClick={() => setShowDeleteDialog(true)}
-                  disabled={loading}
-                  className={styles.deleteButton}
-                >
-                  Delete Subscription
-                </Button>
-              </DialogTrigger>
-              <DialogSurface>
+              <DialogContent withCloseButton={false}>
                 <DialogBody>
                   <DialogTitle>Delete Calendar Subscription</DialogTitle>
-                  <DialogContent>
-                    <Text>
-                      Are you sure you want to delete your calendar
-                      subscription? This will invalidate all existing calendar
-                      subscriptions and cannot be undone.
-                    </Text>
-                  </DialogContent>
-                  <DialogActions>
-                    <DialogTrigger disableButtonEnhancement>
-                      <Button appearance="secondary">Cancel</Button>
-                    </DialogTrigger>
-                    <Button
-                      appearance="primary"
-                      onClick={deleteToken}
-                      disabled={loading}
-                      className={styles.deleteButtonPrimary}
-                    >
-                      Delete Subscription
-                    </Button>
-                  </DialogActions>
+                  <Text>
+                    Are you sure you want to delete your calendar
+                    subscription? This will invalidate all existing calendar
+                    subscriptions and cannot be undone.
+                  </Text>
                 </DialogBody>
-              </DialogSurface>
+                <DialogFooter>
+                  <Button
+                    appearance="secondary"
+                    onClick={() => setShowDeleteDialog(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    appearance="primary"
+                    onClick={deleteToken}
+                    disabled={loading}
+                    className={styles.deleteButtonPrimary}
+                  >
+                    Delete Subscription
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
           </div>
 
           <div className={styles.footer}>
-            <Caption1>
+            <span>
               Created {new Date(tokenData.createdAt).toLocaleDateString()}
-            </Caption1>
+            </span>
           </div>
         </>
       )}

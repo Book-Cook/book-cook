@@ -1,0 +1,50 @@
+.setting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settingFullWidth {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.childrenFullWidth {
+  width: 100%;
+}
+
+.info {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoFullWidth {
+  flex: 1 1 auto;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ui-TextPrimary);
+}
+
+.description {
+  font-size: 12px;
+  color: var(--ui-TextSecondary);
+}
+
+.control {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 710px) {
+  .control {
+    width: 100%;
+  }
+}

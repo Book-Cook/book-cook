@@ -21,16 +21,12 @@ describe('PaginationControls', () => {
     expect(screen.getByText('5')).toBeInTheDocument();
   });
 
-  it('highlights current page with brand styling', () => {
+  it('highlights current page with active class', () => {
     render(<PaginationControls {...defaultProps} currentPage={2} />);
-    
+
     const currentPageButton = screen.getByRole('button', { name: '2' });
     expect(currentPageButton).toBeInTheDocument();
-    // Check for brand color styling
-    expect(currentPageButton).toHaveStyle({
-      color: 'var(--colorBrandForeground1)',
-      fontWeight: 'var(--fontWeightSemibold)'
-    });
+    expect(currentPageButton.className).toMatch(/pageButtonActive/);
   });
 
   it('disables previous button on first page', () => {
@@ -69,18 +65,11 @@ describe('PaginationControls', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
-  it('shows active page indicator element', () => {
+  it('shows active page indicator via CSS class', () => {
     render(<PaginationControls {...defaultProps} currentPage={2} />);
-    
+
     const currentPageButton = screen.getByRole('button', { name: '2' });
-    // Check that the underline indicator div exists
-    const indicator = currentPageButton.querySelector('div');
-    expect(indicator).toBeInTheDocument();
-    expect(indicator).toHaveStyle({
-      position: 'absolute',
-      backgroundColor: 'var(--colorBrandBackground)',
-      borderRadius: '2px'
-    });
+    expect(currentPageButton.className).toMatch(/pageButtonActive/);
   });
 
   it('does not render when totalPages is 1', () => {

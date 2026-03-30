@@ -1,5 +1,4 @@
 export * from "./AppContainer";
-export * from "./Animation";
 export * from "./Drawer";
 export * from "./Spinner";
 export * from "./FallbackScreens";
