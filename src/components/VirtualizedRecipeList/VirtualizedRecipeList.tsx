@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { makeStyles, tokens } from '@fluentui/react-components';
 
+import styles from './VirtualizedRecipeList.module.css';
 import { PaginationControls } from '../PaginationControls/PaginationControls';
 import { RecipeCard } from '../RecipeCard';
 import { Spinner } from "../Spinner";
@@ -21,56 +21,6 @@ export interface VirtualizedRecipeListProps {
   loadingMessage?: string;
 }
 
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: tokens.spacingVerticalL,
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: tokens.spacingHorizontalL,
-    padding: `0 ${tokens.spacingHorizontalM}`,
-  },
-  emptyState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: tokens.spacingVerticalXXXL,
-    textAlign: 'center',
-    color: tokens.colorNeutralForeground2,
-  },
-  loadingState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: tokens.spacingVerticalXXL,
-    gap: tokens.spacingVerticalM,
-  },
-  errorState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: tokens.spacingVerticalXXL,
-    textAlign: 'center',
-    color: tokens.colorPaletteRedForeground1,
-  },
-  fadeIn: {
-    opacity: 1,
-    transform: 'translateY(0)',
-  },
-  cardWrapper: {
-    transition: `transform ${tokens.durationNormal} ${tokens.curveEasyEase}`,
-    '&:hover': {
-      transform: 'translateY(-2px)',
-    },
-  },
-});
-
 export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
   recipes,
   totalCount,
@@ -83,9 +33,6 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
   emptyStateMessage = 'No recipes found.',
   loadingMessage = 'Loading recipes...',
 }) => {
-  const styles = useStyles();
-  
-  
   const totalPages = Math.ceil(totalCount / pageSize);
 
   if (isLoading) {
@@ -129,14 +76,10 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
         {recipes.map((recipe, index) => (
           <div
             key={recipe._id}
-            className={`${styles.fadeIn} ${styles.cardWrapper}`}
-            style={{
-              '--fadeInDelay': `${Math.min(index * 0.1, 0.3)}s`,
-            } as React.CSSProperties}
+            className={styles.cardWrapper}
+            style={{ '--fadeInDelay': `${Math.min(index * 0.1, 0.3)}s` } as React.CSSProperties}
           >
-            <RecipeCard
-              recipe={recipe}
-            />
+            <RecipeCard recipe={recipe} />
           </div>
         ))}
       </div>

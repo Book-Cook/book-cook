@@ -1,0 +1,95 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .controlsRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.searchWrapper {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.sortDropdown {
+  margin-left: auto;
+  margin-right: 0;
+  width: 180px;
+  flex-shrink: 0;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.sortDropdown button {
+  height: 36px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.cardWrapper {
+  display: flex;
+  justify-content: stretch;
+  height: 100%;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  animation-name: fadeInUp;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+  animation-delay: var(--fadeInDelay);
+  width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 32px;
+  min-height: 300px;
+}

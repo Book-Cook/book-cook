@@ -1,58 +1,15 @@
 import * as React from "react";
-import { Button, tokens, Avatar, Divider } from "@fluentui/react-components";
-import { PersonAccounts24Regular } from "@fluentui/react-icons";
-import { makeStyles, shorthands } from "@griffel/react";
+import { UserCircleIcon } from "@phosphor-icons/react";
 import { signOut, useSession } from "next-auth/react";
 
+import styles from "./AccountSection.module.css";
 import { accountSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
 
+import { Avatar } from "../../Avatar";
+import { Button } from "../../Button";
 import { Text } from "../../Text";
-
-const useStyles = makeStyles({
-  profileInfo: {
-    display: "flex",
-    alignItems: "center",
-    gap: "16px",
-  },
-  userDetails: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-  },
-  email: {
-    color: tokens.colorNeutralForeground2,
-    fontSize: tokens.fontSizeBase200,
-  },
-  dangerZone: {
-    ...shorthands.borderRadius("8px"),
-    ...shorthands.border("1px", "solid", tokens.colorPaletteRedBorder2),
-    ...shorthands.padding("16px"),
-    marginTop: "16px",
-  },
-  dangerTitle: {
-    color: tokens.colorPaletteRedForeground1,
-    fontSize: tokens.fontSizeBase300,
-    fontWeight: tokens.fontWeightSemibold,
-    marginBottom: "8px",
-  },
-  dangerDescription: {
-    color: tokens.colorNeutralForeground2,
-    fontSize: tokens.fontSizeBase200,
-    marginBottom: "16px",
-  },
-  dangerButton: {
-    backgroundColor: tokens.colorPaletteRedBackground3,
-    color: tokens.colorNeutralForegroundInverted,
-    "&:hover": {
-      backgroundColor: tokens.colorPaletteRedBackground3,
-    },
-    "&:active": {
-      backgroundColor: tokens.colorPaletteRedBackground3,
-    },
-  },
-});
 
 // Define search keywords for each section
 const sectionKeywords = ["account", "profile", "user", "settings"];
@@ -74,7 +31,6 @@ const recentsKeywords = [
 const dangerKeywords = ["delete", "remove", "account", "danger"];
 
 export const AccountSection: React.FC = () => {
-  const styles = useStyles();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -140,7 +96,7 @@ export const AccountSection: React.FC = () => {
     <SettingsSection
       itemValue={accountSectionId}
       title="Account"
-      icon={<PersonAccounts24Regular />}
+      icon={<UserCircleIcon />}
     >
       {(!searchTerm || profileItemMatches || sectionMatches) && (
         <SettingItem
@@ -151,9 +107,8 @@ export const AccountSection: React.FC = () => {
             <div className={styles.profileInfo}>
               <Avatar
                 name={user.name ?? undefined}
-                image={{ src: user.image ?? undefined }}
-                size={48}
-                color="colorful"
+                imageURL={user.image ?? undefined}
+                size="md"
               />
               <div className={styles.userDetails}>
                 <Text weight="semibold">{user.name}</Text>
@@ -169,7 +124,7 @@ export const AccountSection: React.FC = () => {
           label="Sign Out"
           description="Log out of your BookCook account."
         >
-          <Button onClick={handleSignOut}>Sign Out</Button>
+          <Button appearance="secondary" onClick={handleSignOut}>Sign Out</Button>
         </SettingItem>
       )}
 
@@ -178,7 +133,7 @@ export const AccountSection: React.FC = () => {
           label="Clear Recently Viewed"
           description="Remove all recipes from your recently viewed list."
         >
-          <Button onClick={clearRecents} disabled={isClearing}>
+          <Button appearance="secondary" onClick={clearRecents} disabled={isClearing}>
             {isClearing ? "Clearing..." : "Clear Recently Viewed"}
           </Button>
         </SettingItem>
@@ -191,10 +146,10 @@ export const AccountSection: React.FC = () => {
             These actions are destructive and cannot be reversed. Please proceed
             with caution.
           </Text>
-          <Divider />
+          <hr className={styles.divider} />
           <div style={{ marginTop: "16px" }}>
             <Button
-              className={styles.dangerButton}
+              variant="destructive"
               onClick={() => alert("This feature is not yet implemented")}
             >
               Delete Account

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dismiss24Regular } from "@fluentui/react-icons";
+import { XIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../components/Button";
@@ -48,7 +48,7 @@ const DrawerPreview: React.FC<{
               <Button
                 appearance="subtle"
                 aria-label="Close drawer"
-                icon={<Dismiss24Regular />}
+                icon={<XIcon />}
                 onClick={() => setOpen(false)}
               />
             }

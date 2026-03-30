@@ -1,4 +1,4 @@
-import { Add24Regular, Delete24Regular, Edit24Regular } from "@fluentui/react-icons";
+import { PlusIcon, TrashIcon, PencilIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../components/Button";
@@ -33,10 +33,10 @@ export const AllVariants: Story = {
       <div>
         <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>With Icons</h3>
         <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" icon={<Add24Regular />}>Add Item</Button>
-          <Button appearance="secondary" icon={<Edit24Regular />}>Edit</Button>
-          <Button appearance="subtle" icon={<Delete24Regular />}>Delete</Button>
-          <Button appearance="transparent" icon={<Add24Regular />}>Create</Button>
+          <Button appearance="primary" icon={<PlusIcon />}>Add Item</Button>
+          <Button appearance="secondary" icon={<PencilIcon />}>Edit</Button>
+          <Button appearance="subtle" icon={<TrashIcon />}>Delete</Button>
+          <Button appearance="transparent" icon={<PlusIcon />}>Create</Button>
         </div>
       </div>
 
@@ -44,10 +44,10 @@ export const AllVariants: Story = {
       <div>
         <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Icon Only</h3>
         <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" icon={<Add24Regular />} />
-          <Button appearance="secondary" icon={<Edit24Regular />} />
-          <Button appearance="subtle" icon={<Delete24Regular />} />
-          <Button appearance="transparent" icon={<Add24Regular />} />
+          <Button appearance="primary" icon={<PlusIcon />} />
+          <Button appearance="secondary" icon={<PencilIcon />} />
+          <Button appearance="subtle" icon={<TrashIcon />} />
+          <Button appearance="transparent" icon={<PlusIcon />} />
         </div>
       </div>
 
@@ -66,9 +66,9 @@ export const AllVariants: Story = {
       <div>
         <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Disabled with Icons</h3>
         <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" icon={<Add24Regular />} disabled>Add Item</Button>
-          <Button appearance="secondary" icon={<Edit24Regular />} disabled>Edit</Button>
-          <Button appearance="subtle" icon={<Delete24Regular />} disabled />
+          <Button appearance="primary" icon={<PlusIcon />} disabled>Add Item</Button>
+          <Button appearance="secondary" icon={<PencilIcon />} disabled>Edit</Button>
+          <Button appearance="subtle" icon={<TrashIcon />} disabled />
         </div>
       </div>
     </div>

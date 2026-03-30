@@ -13,6 +13,10 @@
 
 .title {
   margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .viewport {
@@ -36,8 +40,8 @@
 }
 
 .item {
-  flex: 0 0 clamp(220px, 70vw, 280px);
-  width: clamp(220px, 70vw, 280px);
+  flex: 0 0 min(288px, 74vw);
+  width: min(288px, 74vw);
   min-width: 0;
   display: flex;
 }
@@ -84,4 +88,14 @@
   font-size: 14px;
   padding: 16px 0;
   margin: 0;
+}
+
+@media (max-width: 480px) {
+  .header {
+    gap: 8px;
+  }
+
+  .controls {
+    flex-shrink: 0;
+  }
 }

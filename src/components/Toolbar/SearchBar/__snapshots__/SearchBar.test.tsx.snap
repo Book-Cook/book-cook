@@ -3,19 +3,14 @@
 exports[`renders correctly and matches snapshot 1`] = `
 <div>
   <div
-    class="fui-FluentProvider fui-FluentProviderr0 ___jdtuxv0_17k0bs4 f19n0e5 fxugw4r f1o700av fk6fouc fkhj508 figsok6 f1i3iumi"
-    dir="ltr"
+    class="root"
   >
-    <div
-      class="root"
-    >
-      <input
-        class="input"
-        placeholder="Search recipes or tags"
-        type="search"
-        value=""
-      />
-    </div>
+    <input
+      class="input"
+      placeholder="Search recipes or tags"
+      type="search"
+      value=""
+    />
   </div>
 </div>
 `;

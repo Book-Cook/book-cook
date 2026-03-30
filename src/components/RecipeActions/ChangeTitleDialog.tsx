@@ -1,40 +1,8 @@
 import * as React from "react";
-import {
-  Textarea,
-  Button,
-  makeStyles,
-  tokens,
-} from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
-
-const useStyles = makeStyles({
-  textArea: {
-    width: "100%",
-    flexGrow: 1,
-    fontSize: tokens.fontSizeBase300,
-    lineHeight: tokens.lineHeightBase300,
-    minHeight: "80px",
-    resize: "none",
-  },
-  primaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": {
-      transform: "translateY(-1px)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    },
-  },
-  secondaryButton: {
-    transition: "all 0.2s ease",
-    ":hover": { transform: "translateY(-1px)" },
-  },
-  characterCount: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground3,
-    textAlign: "right",
-    marginTop: "4px",
-  },
-});
+import styles from "./ChangeTitleDialog.module.css";
+import { Button } from "../Button";
 
 export type ChangeTitleDialogProps = {
   /**
@@ -67,7 +35,6 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
   onSave,
   onClose,
 }) => {
-  const styles = useStyles();
   const [newTitle, setNewTitle] = React.useState(currentTitle);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -109,16 +76,14 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
       actions={
         <>
           <Button
-            appearance="subtle"
+            appearance="secondary"
             onClick={handleCancelClick}
-            className={styles.secondaryButton}
           >
             Cancel
           </Button>
           <Button
             appearance="primary"
             onClick={handleSaveClick}
-            className={styles.primaryButton}
             disabled={!newTitle.trim()}
           >
             Save
@@ -126,16 +91,15 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
         </>
       }
     >
-      <Textarea
+      <textarea
         placeholder="Enter recipe title"
         value={newTitle}
-        onChange={(_e, data) => setNewTitle(data.value.substring(0, maxLength))}
+        onChange={(e) => setNewTitle(e.target.value.substring(0, maxLength))}
         className={styles.textArea}
         ref={textareaRef}
         onKeyDown={handleKeyDown}
         maxLength={maxLength}
         aria-label="Recipe title"
-        resize="none"
       />
       <div className={styles.characterCount}>
         {newTitle.length}/{maxLength}

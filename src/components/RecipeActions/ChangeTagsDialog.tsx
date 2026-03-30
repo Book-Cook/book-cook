@@ -1,59 +1,10 @@
 import * as React from "react";
-import {
-  Button,
-  Input,
-  makeStyles,
-  shorthands,
-  tokens,
-} from "@fluentui/react-components";
-import { AddRegular, DismissRegular } from "@fluentui/react-icons";
+import { PlusIcon, XIcon } from "@phosphor-icons/react";
 
 import { ChangeDialog } from "./ChangeDialog";
-
-const useStyles = makeStyles({
-  inputContainer: { display: "flex", alignItems: "center", gap: "8px" },
-  dropdownContainer: { position: "relative", width: "100%" },
-  suggestionsDropdown: {
-    position: "absolute",
-    top: "100%",
-    left: 0,
-    width: "100%",
-    backgroundColor: tokens.colorNeutralBackground1,
-    ...shorthands.borderRadius("4px"),
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
-    boxShadow: tokens.shadow8,
-    maxHeight: "200px",
-    overflowY: "auto",
-    zIndex: 100,
-  },
-  suggestionItem: {
-    ...shorthands.padding("8px"),
-    cursor: "pointer",
-    ":hover": { backgroundColor: tokens.colorNeutralBackground2 },
-  },
-  tagsContainer: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "8px",
-    minHeight: "40px",
-  },
-  tag: {
-    backgroundColor: tokens.colorNeutralBackground2,
-    padding: "4px 8px",
-    ...shorthands.borderRadius("4px"),
-    fontSize: tokens.fontSizeBase200,
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    cursor: "pointer",
-    ":hover": { backgroundColor: tokens.colorNeutralBackground3 },
-  },
-  noTagsMessage: {
-    color: tokens.colorNeutralForeground3,
-    padding: "16px 0",
-    textAlign: "center",
-  },
-});
+import styles from "./ChangeTagsDialog.module.css";
+import { Button } from "../Button";
+import { Input } from "../Input";
 
 export type ChangeTagsDialogProps = {
   isOpen: boolean;
@@ -72,7 +23,6 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
   onClose,
   availableTags = [],
 }) => {
-  const styles = useStyles();
   const [tags, setTags] = React.useState<string[]>(currentTags);
   const [newTag, setNewTag] = React.useState("");
   const [showSuggestions, setShowSuggestions] = React.useState(false);
@@ -146,7 +96,7 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
       onClose={onClose}
       actions={
         <>
-          <Button appearance="subtle" onClick={onClose}>
+          <Button appearance="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button appearance="primary" onClick={() => onSave(tags)}>
@@ -160,8 +110,8 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
           <Input
             placeholder="Add a new tag"
             value={newTag}
-            onChange={(_, data) => {
-              setNewTag(data.value.substring(0, maxTagLength).toLowerCase());
+            onChange={(e) => {
+              setNewTag(e.target.value.substring(0, maxTagLength).toLowerCase());
               setShowSuggestions(true);
             }}
             ref={inputRef}
@@ -191,7 +141,7 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
           )}
         </div>
         <Button
-          icon={<AddRegular />}
+          icon={<PlusIcon />}
           appearance="primary"
           onClick={handleAddTag}
           disabled={!newTag.trim() || tags.includes(newTag.trim())}
@@ -206,7 +156,7 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
               onClick={() => setTags(tags.filter((t) => t !== tag))}
             >
               <span>{tag}</span>
-              <DismissRegular fontSize={12} />
+              <XIcon size={12} />
             </div>
           ))
         ) : (

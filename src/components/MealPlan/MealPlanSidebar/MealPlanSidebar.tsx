@@ -1,7 +1,7 @@
 import * as React from "react";
-import { makeStyles, tokens } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
+import styles from "./MealPlanSidebar.module.css";
 import { RecipeDragCard } from "../RecipeDragCard/RecipeDragCard";
 
 import { fetchAllRecipes } from "../../../clientToServer/fetch/fetchAllRecipes";
@@ -9,65 +9,7 @@ import { SearchBox } from "../../SearchBox";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    overflowX: "hidden",
-    width: "100%",
-    scrollBehavior: "auto",
-    scrollSnapType: "none",
-  },
-  header: {
-    padding: tokens.spacingVerticalS,
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-    "@media (max-width: 768px)": {
-      padding: tokens.spacingVerticalXS,
-    },
-  },
-  searchBox: {
-    width: "100%",
-  },
-  content: {
-    flex: 1,
-    overflow: "hidden auto", // This is more specific than separate properties
-    padding: tokens.spacingVerticalS,
-    maxWidth: "100%",
-    minWidth: 0,
-    position: "relative",
-    contain: "layout style", // Prevents layout from affecting parent
-  },
-  recipeList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: tokens.spacingVerticalS,
-    width: "100%",
-    minWidth: 0,
-    overflowX: "hidden",
-  },
-  loadingState: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: tokens.spacingVerticalXXL,
-    flexDirection: "column",
-    gap: tokens.spacingVerticalM,
-  },
-  emptyState: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: tokens.spacingVerticalXXL,
-    flexDirection: "column",
-    gap: tokens.spacingVerticalS,
-    color: tokens.colorNeutralForeground3,
-    textAlign: "center",
-  },
-});
-
 export const MealPlanSidebar: React.FC = () => {
-  const styles = useStyles();
   const [searchQuery, setSearchQuery] = React.useState("");
 
   // Debounce search query

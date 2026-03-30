@@ -1,12 +1,8 @@
 import * as React from "react";
-import { SearchBox } from "@fluentui/react-components";
-import type {
-  InputOnChangeData,
-  SearchBoxChangeEvent,
-} from "@fluentui/react-components";
 
 import { ChangeDialog } from "./ChangeDialog";
 import styles from "./ChangeEmojiDialog.module.css";
+import { SearchBox } from "../SearchBox";
 
 import { searchFoodEmojis, getDefaultFoodEmojis } from "../../utils/foodEmojis";
 
@@ -54,8 +50,7 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     });
   }, [isOpen, currentEmoji]);
 
-  const handleChange = (_: SearchBoxChangeEvent, data: InputOnChangeData) => {
-    const value = data.value;
+  const handleChange = (_e: React.ChangeEvent<HTMLInputElement>, value: string) => {
     setQuery(value);
     const trimmed = value.trim().toLowerCase();
     setResults(trimmed ? searchFoodEmojis(trimmed) : SUGGESTIONS);
@@ -72,7 +67,6 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     <ChangeDialog isOpen={isOpen} title="Change Recipe Emoji" onClose={onClose}>
       <SearchBox
         placeholder="Search food or paste any emoji"
-        appearance="filled-darker"
         value={query}
         onChange={handleChange}
         maxLength={40}
