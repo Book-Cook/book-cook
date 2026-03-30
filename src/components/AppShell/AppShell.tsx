@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { BookOpenIcon, ListIcon, XIcon } from "@phosphor-icons/react";
+import { BookOpenIcon, ListIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import styles from "./AppShell.module.css";
+import { RecipeSearchFlyout } from "../RecipeSearchFlyout";
 import { AppSidebar } from "../Sidebar";
 
+import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export type AppShellProps = {
@@ -17,6 +20,23 @@ export const AppShell = ({ children }: AppShellProps) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const profileEmail = session?.user?.email ?? undefined;
+
+  const { data: recentRecipes = [] } = useQuery({
+    queryKey: ["recentlyViewed", profileEmail],
+    queryFn: fetchRecentlyViewed,
+    enabled: Boolean(session),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  const handleSearch = (): void => {
+    setDrawerOpen(false);
+    setIsSearchOpen(true);
+  };
 
   // Close drawer on route change
   useEffect(() => {
@@ -39,6 +59,12 @@ export const AppShell = ({ children }: AppShellProps) => {
 
   return (
     <div className={styles.shell}>
+      <RecipeSearchFlyout
+        open={isSearchOpen}
+        onOpenChange={setIsSearchOpen}
+        recentRecipes={recentRecipes}
+      />
+
       {/* Mobile top header — hidden on desktop via CSS */}
       <header className={styles.mobileHeader}>
         <button
@@ -54,7 +80,13 @@ export const AppShell = ({ children }: AppShellProps) => {
           </span>
           <span className={styles.mobileLogoText}>Book Cook</span>
         </div>
-        <div className={styles.mobileHeaderRight} />
+        <button
+          className={styles.mobileMenuBtn}
+          onClick={handleSearch}
+          aria-label="Search recipes"
+        >
+          <MagnifyingGlassIcon size={20} />
+        </button>
       </header>
 
       {/* Backdrop */}
@@ -67,7 +99,7 @@ export const AppShell = ({ children }: AppShellProps) => {
 
       {/* Sidebar — normal on desktop, drawer on mobile */}
       <div className={styles.sidebarWrap} data-open={drawerOpen ? "true" : "false"}>
-        <AppSidebar forceExpanded={isMobile} />
+        <AppSidebar forceExpanded={isMobile} onSearch={handleSearch} />
       </div>
 
       <main className={styles.main}>{children}</main>

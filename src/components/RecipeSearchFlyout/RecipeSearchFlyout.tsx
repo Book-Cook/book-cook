@@ -7,8 +7,10 @@ import { useRouter } from "next/router";
 import styles from "./RecipeSearchFlyout.module.css";
 import type { RecipeSearchFlyoutProps } from "./RecipeSearchFlyout.types";
 
-import { fetchAllRecipes } from "../../clientToServer/fetch/fetchAllRecipes";
+import { fetchAllRecipes, fetchRecipesPaginated } from "../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../utils/groupRecipesByTime";
+
+const SEARCH_LIMIT = 50;
 
 export const RecipeSearchFlyout = ({
   open,
@@ -16,19 +18,41 @@ export const RecipeSearchFlyout = ({
   recentRecipes,
 }: RecipeSearchFlyoutProps) => {
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: allRecipes = [] } = useQuery({
+  // Debounce query by 200ms to avoid hammering the API on every keystroke
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 200);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  // Default recipe list (up to 30 recent + recent from collection) shown before typing
+  const { data: defaultRecipes = [] } = useQuery({
     queryKey: ["recipes", "", "dateNewest"],
     queryFn: () => fetchAllRecipes("", "dateNewest"),
     enabled: open,
     staleTime: 5 * 60 * 1000,
   });
 
+  // Server-side search across ALL recipes when the user types
+  const { data: searchData, isFetching: isSearching } = useQuery({
+    queryKey: ["recipeSearch", debouncedQuery],
+    queryFn: () => fetchRecipesPaginated({
+      searchBoxValue: debouncedQuery,
+      orderBy: "dateNewest",
+      limit: SEARCH_LIMIT,
+      offset: 0,
+    }),
+    enabled: open && debouncedQuery.length > 0,
+    staleTime: 30 * 1000,
+  });
+
   useEffect(() => {
     if (open) {
       setQuery("");
+      setDebouncedQuery("");
       const t = setTimeout(() => inputRef.current?.focus(), 30);
       return () => clearTimeout(t);
     }
@@ -36,23 +60,21 @@ export const RecipeSearchFlyout = ({
 
   const trimmed = query.trim().toLowerCase();
 
+  // When no query: show recent recipes first, then fill from collection
   const seen = new Set<string>();
   const defaultSource = [];
   for (const r of recentRecipes) {
     if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
   }
-  for (const r of allRecipes) {
-    if (defaultSource.length >= 30) {break;}
+  for (const r of defaultRecipes) {
+    if (defaultSource.length >= 30) { break; }
     if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
   }
 
-  const filtered = trimmed
-    ? allRecipes.filter((r) => r.title.toLowerCase().includes(trimmed))
-    : defaultSource;
+  const results = trimmed ? (searchData?.recipes ?? []) : defaultSource;
+  const groups = groupRecipesByTime(results);
 
-  const groups = groupRecipesByTime(filtered);
-
-  const navigate = (id: string) => {
+  const navigate = (id: string): void => {
     void router.push(`/recipes/${id}`);
     onOpenChange(false);
   };
@@ -96,7 +118,9 @@ export const RecipeSearchFlyout = ({
           </div>
 
           <div className={styles.results}>
-            {groups.length > 0 ? groups.map((group) => (
+            {isSearching && trimmed ? (
+              <p className={styles.empty}>Searching…</p>
+            ) : groups.length > 0 ? groups.map((group) => (
               <div key={group.label} className={styles.group}>
                 <div className={styles.groupLabel}>{group.label}</div>
                 {group.recipes.map((recipe) => (

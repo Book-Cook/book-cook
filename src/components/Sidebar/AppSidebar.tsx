@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { GearSixIcon, SignOutIcon } from "@phosphor-icons/react";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 
@@ -11,29 +10,20 @@ import { SidebarItem } from "./SidebarItem";
 import { Avatar } from "../Avatar";
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
 import { NewRecipeDialog } from "../NewRecipeDialog";
-import { RecipeSearchFlyout } from "../RecipeSearchFlyout";
 
-import { fetchRecentlyViewed } from "../../clientToServer/fetch/fetchRecentlyViewed";
+type AppSidebarProps = {
+  forceExpanded?: boolean;
+  onSearch: () => void;
+};
 
-export const AppSidebar = ({ forceExpanded }: { forceExpanded?: boolean }) => {
+export const AppSidebar = ({ forceExpanded, onSearch }: AppSidebarProps): React.ReactElement => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isNewRecipeOpen, setIsNewRecipeOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
 
   const profileName = session?.user?.name ?? "Account";
   const profileEmail = session?.user?.email ?? undefined;
   const profileImage = session?.user?.image ?? undefined;
-
-  const { data: recentRecipes = [] } = useQuery({
-    queryKey: ["recentlyViewed", profileEmail],
-    queryFn: fetchRecentlyViewed,
-    enabled: Boolean(session),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
 
   return (
     <Sidebar {...(forceExpanded ? { collapsed: false, showToggle: false } : {})}>
@@ -41,14 +31,9 @@ export const AppSidebar = ({ forceExpanded }: { forceExpanded?: boolean }) => {
         open={isNewRecipeOpen}
         onOpenChange={setIsNewRecipeOpen}
       />
-      <RecipeSearchFlyout
-        open={isSearchOpen}
-        onOpenChange={setIsSearchOpen}
-        recentRecipes={recentRecipes}
-      />
       <SidebarContent
         onNewRecipe={() => setIsNewRecipeOpen(true)}
-        onSearch={() => setIsSearchOpen(true)}
+        onSearch={onSearch}
         currentPath={router.pathname}
       />
       <div className={styles.profileFooter}>
