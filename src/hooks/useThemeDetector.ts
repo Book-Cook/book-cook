@@ -1,22 +1,25 @@
-import * as React from "react";
+/**
+ * useThemeDetector — returns whether the OS dark mode preference is active.
+ * Uses a stable listener (no stale closure) by keeping the handler inside
+ * the effect so it only registers once.
+ */
+import { useState, useEffect } from "react";
 
-export const useThemeDetector = () => {
-  const darkThemeQuery =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-color-scheme: dark)")
-      : null;
+export const useThemeDetector = (): boolean => {
+  const [isDarkTheme, setIsDarkTheme] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 
-  const [isDarkTheme, setIsDarkTheme] = React.useState(darkThemeQuery?.matches);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const themeListener = (ev: any) => {
-    setIsDarkTheme(ev.matches);
-  };
-
-  React.useEffect(() => {
-    darkThemeQuery?.addEventListener("change", themeListener);
-    return () => darkThemeQuery?.removeEventListener("change", themeListener);
-  }, [darkThemeQuery]);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = (ev: MediaQueryListEvent): void => {
+      setIsDarkTheme(ev.matches);
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []); // mount once — handler is defined inside effect, no stale closure
 
   return isDarkTheme;
 };
