@@ -60,12 +60,19 @@ const handleGetRequest = async (
       return res.status(400).json({ message: "Invalid pagination parameters." });
     }
 
-    // 2. Define visibility conditions
-    const visibilityConditions: VisibilityCondition[] = [{ isPublic: true }];
+    // 2. Define visibility conditions.
+    // My Recipes shows only recipes the user owns or that have been
+    // explicitly shared with them — public recipes belong on the Discover page.
+    const visibilityConditions: VisibilityCondition[] = [];
 
     if (session?.user?.id) {
+      // Always include the user's own recipes, even if the shared-owners
+      // lookup below fails.
+      visibilityConditions.push({ owner: session.user.id });
+
       try {
-        // Find all globally shared recipes
+        // Find users who have explicitly shared their collection with the
+        // current user (their document has currentUserEmail in sharedWithUsers).
         const sharedOwners = await db
           .collection("users")
           .find(
@@ -75,17 +82,26 @@ const handleGetRequest = async (
           .map((user) => user._id.toString())
           .toArray();
 
-        // Find all recipes explicitly shared with the user
-        visibilityConditions.push(
-          { owner: session.user.id },
-          { owner: { $in: sharedOwners } }
-        );
+        if (sharedOwners.length > 0) {
+          visibilityConditions.push({ owner: { $in: sharedOwners } });
+        }
       } catch (dbError) {
         console.error("Error fetching shared owners:", dbError);
+        // Own recipes already added above; shared ones are skipped on error.
       }
     }
 
-    let query: Filter<RecipeDocument> = { $or: visibilityConditions };
+    // Unauthenticated users have no visibility — return empty rather than
+    // passing an invalid `$or: []` to MongoDB.
+    if (visibilityConditions.length === 0) {
+      return res.status(200).json({ recipes: [], totalCount: 0, hasMore: false });
+    }
+
+    // Avoid wrapping a single condition in $or (minor query optimization).
+    let query: Filter<RecipeDocument> =
+      visibilityConditions.length === 1
+        ? visibilityConditions[0]
+        : { $or: visibilityConditions };
     const projection = { data: 0 };
 
     if (search && typeof search === "string" && search.trim()) {
