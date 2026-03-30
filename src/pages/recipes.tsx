@@ -1,12 +1,10 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes";
+import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import styles from "./recipes.module.css";
 import {
-  FallbackScreen,
   Unauthorized,
 } from "../components";
 import {
@@ -18,41 +16,48 @@ import {
   DropdownCaret,
 } from "../components/Dropdown";
 import { MultiSelectMenu } from "../components/MultiSelectMenu";
-import { RecipeCardGallery } from "../components/RecipeCardGallery";
 import { PageTitle, BodyText } from "../components/Typography";
+import { VirtualizedRecipeList } from "../components/VirtualizedRecipeList/VirtualizedRecipeList";
 import { useSearchBox } from "../context";
+
+const PAGE_SIZE = 20;
 
 export default function Recipes() {
   const { searchBoxValue } = useSearchBox();
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  const [showLoadingIndicator, setShowLoadingIndicator] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  // Reset to page 1 whenever search/sort/tags change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchBoxValue, sortOption, selectedTags]);
+
+  const offset = (currentPage - 1) * PAGE_SIZE;
 
   const {
-    data: recipes,
+    data,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption],
-    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption),
+    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage],
+    queryFn: () => fetchRecipesPaginated({
+      searchBoxValue,
+      orderBy: sortOption,
+      selectedTags,
+      offset,
+      limit: PAGE_SIZE,
+    }),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });
 
-  const availableTags = Array.from(new Set((recipes ?? []).flatMap((r) => r.tags ?? [])));
+  const recipes = data?.recipes ?? [];
+  const totalCount = data?.totalCount ?? 0;
 
-  React.useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isLoading) {
-      timer = setTimeout(() => setShowLoadingIndicator(true), 300);
-    } else {
-      setShowLoadingIndicator(false);
-    }
-    return () => clearTimeout(timer);
-  }, [isLoading]);
+  const availableTags = Array.from(new Set(recipes.flatMap((r) => r.tags ?? [])));
 
   if (status === "loading") {
     return null;
@@ -62,11 +67,7 @@ export default function Recipes() {
     return <Unauthorized />;
   }
 
-  const filteredRecipes = selectedTags.length
-    ? (recipes ?? []).filter((r) => selectedTags.every((tag) => r.tags?.includes(tag)))
-    : (recipes ?? []);
-
-  const countLabel = `${filteredRecipes.length} recipe${filteredRecipes.length !== 1 ? "s" : ""}${
+  const countLabel = `${totalCount} recipe${totalCount !== 1 ? "s" : ""}${
     searchBoxValue ? ` matching "${searchBoxValue}"` : " in your collection"
   }${selectedTags.length > 0 ? ` with tags: ${selectedTags.join(", ")}` : ""}`;
 
@@ -98,17 +99,16 @@ export default function Recipes() {
           />
         </div>
       </div>
-      <FallbackScreen
-        isLoading={showLoadingIndicator}
-        isError={Boolean(error)}
-        dataLength={filteredRecipes.length}
-      >
-        <RecipeCardGallery
-          recipes={filteredRecipes}
-          isLoading={showLoadingIndicator}
-          onRecipeClick={(recipe) => router.push(`/recipes/${recipe._id}`)}
-        />
-      </FallbackScreen>
+      <VirtualizedRecipeList
+        recipes={recipes}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={PAGE_SIZE}
+        isLoading={isLoading}
+        error={error}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={() => undefined}
+      />
     </div>
   );
 }
