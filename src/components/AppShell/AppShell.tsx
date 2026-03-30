@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BookOpenIcon, ListIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -74,12 +75,12 @@ export const AppShell = ({ children }: AppShellProps) => {
         >
           {drawerOpen ? <XIcon size={20} /> : <ListIcon size={20} />}
         </button>
-        <div className={styles.mobileLogo}>
+        <Link href="/recipes" className={styles.mobileLogo}>
           <span className={styles.mobileLogoIcon}>
             <BookOpenIcon size={14} weight="fill" />
           </span>
           <span className={styles.mobileLogoText}>Book Cook</span>
-        </div>
+        </Link>
         <button
           className={styles.mobileMenuBtn}
           onClick={handleSearch}
@@ -99,7 +100,7 @@ export const AppShell = ({ children }: AppShellProps) => {
 
       {/* Sidebar — normal on desktop, drawer on mobile */}
       <div className={styles.sidebarWrap} data-open={drawerOpen ? "true" : "false"}>
-        <AppSidebar forceExpanded={isMobile} onSearch={handleSearch} />
+        <AppSidebar forceExpanded={isMobile} isMobile={isMobile} onSearch={handleSearch} />
       </div>
 
       <main className={styles.main}>{children}</main>

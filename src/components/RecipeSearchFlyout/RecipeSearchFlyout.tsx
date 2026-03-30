@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
+import cx from "clsx";
 import { useRouter } from "next/router";
 
 import styles from "./RecipeSearchFlyout.module.css";
 import type { RecipeSearchFlyoutProps } from "./RecipeSearchFlyout.types";
+import { Text } from "../Text";
 
 import { fetchAllRecipes, fetchRecipesPaginated } from "../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../utils/groupRecipesByTime";
@@ -73,6 +75,7 @@ export const RecipeSearchFlyout = ({
 
   const results = trimmed ? (searchData?.recipes ?? []) : defaultSource;
   const groups = groupRecipesByTime(results);
+  const hasResults = groups.length > 0 || (isSearching && Boolean(trimmed));
 
   const navigate = (id: string): void => {
     void router.push(`/recipes/${id}`);
@@ -93,7 +96,7 @@ export const RecipeSearchFlyout = ({
           <DialogPrimitive.Title className={styles.srOnly}>
             Search recipes
           </DialogPrimitive.Title>
-          <div className={styles.searchRow}>
+          <div className={cx(styles.searchRow, !hasResults && styles.searchRowNoResults)}>
             <MagnifyingGlassIcon size={16} className={styles.searchIcon} aria-hidden="true" />
             <input
               ref={inputRef}
@@ -119,7 +122,7 @@ export const RecipeSearchFlyout = ({
 
           <div className={styles.results}>
             {isSearching && trimmed ? (
-              <p className={styles.empty}>Searching…</p>
+              <Text size={300} className={styles.empty}>Searching…</Text>
             ) : groups.length > 0 ? groups.map((group) => (
               <div key={group.label} className={styles.group}>
                 <div className={styles.groupLabel}>{group.label}</div>
@@ -138,7 +141,7 @@ export const RecipeSearchFlyout = ({
                 ))}
               </div>
             )) : trimmed ? (
-              <p className={styles.empty}>No recipes found for &quot;{query}&quot;</p>
+              <Text size={300} className={styles.empty}>No recipes found for &quot;{query}&quot;</Text>
             ) : null}
           </div>
         </DialogPrimitive.Content>

@@ -13,10 +13,11 @@ import { NewRecipeDialog } from "../NewRecipeDialog";
 
 type AppSidebarProps = {
   forceExpanded?: boolean;
+  isMobile?: boolean;
   onSearch: () => void;
 };
 
-export const AppSidebar = ({ forceExpanded, onSearch }: AppSidebarProps): React.ReactElement => {
+export const AppSidebar = ({ forceExpanded, isMobile, onSearch }: AppSidebarProps): React.ReactElement => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isNewRecipeOpen, setIsNewRecipeOpen] = useState(false);
@@ -37,33 +38,54 @@ export const AppSidebar = ({ forceExpanded, onSearch }: AppSidebarProps): React.
         currentPath={router.pathname}
       />
       <div className={styles.profileFooter}>
-        <Menu>
-          <MenuTrigger asChild>
+        {isMobile ? (
+          // On mobile the Radix dropdown conflicts with the drawer backdrop.
+          // Render Settings and Sign Out as plain sidebar items instead.
+          <>
             <SidebarItem
               icon={<Avatar name={profileName} imageURL={profileImage} size="sm" />}
               label={profileName}
             />
-          </MenuTrigger>
-          <MenuContent side="top" align="end">
-            <div className={styles.menuHeader}>
-              <Avatar name={profileName} imageURL={profileImage} size="md" />
-              <div className={styles.menuHeaderText}>
-                <span className={styles.menuHeaderName}>{profileName}</span>
-                {profileEmail && (
-                  <span className={styles.menuHeaderMeta}>{profileEmail}</span>
-                )}
+            <SidebarItem
+              icon={<GearSixIcon size={18} />}
+              label="Settings"
+              onClick={() => router.push("/settings")}
+            />
+            <SidebarItem
+              icon={<SignOutIcon size={18} />}
+              label="Sign out"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            />
+          </>
+        ) : (
+          <Menu>
+            <MenuTrigger asChild>
+              <SidebarItem
+                icon={<Avatar name={profileName} imageURL={profileImage} size="sm" />}
+                label={profileName}
+              />
+            </MenuTrigger>
+            <MenuContent side="top" align="end">
+              <div className={styles.menuHeader}>
+                <Avatar name={profileName} imageURL={profileImage} size="md" />
+                <div className={styles.menuHeaderText}>
+                  <span className={styles.menuHeaderName}>{profileName}</span>
+                  {profileEmail && (
+                    <span className={styles.menuHeaderMeta}>{profileEmail}</span>
+                  )}
+                </div>
               </div>
-            </div>
-            <MenuSeparator />
-            <MenuItem startIcon={<GearSixIcon size={16} />} onSelect={() => router.push("/settings")}>Settings</MenuItem>
-            <MenuItem
-              startIcon={<SignOutIcon size={16} />}
-              onSelect={() => signOut({ callbackUrl: "/" })}
-            >
-              Sign out
-            </MenuItem>
-          </MenuContent>
-        </Menu>
+              <MenuSeparator />
+              <MenuItem startIcon={<GearSixIcon size={16} />} onSelect={() => router.push("/settings")}>Settings</MenuItem>
+              <MenuItem
+                startIcon={<SignOutIcon size={16} />}
+                onSelect={() => signOut({ callbackUrl: "/" })}
+              >
+                Sign out
+              </MenuItem>
+            </MenuContent>
+          </Menu>
+        )}
       </div>
     </Sidebar>
   );
