@@ -5,7 +5,7 @@ import Head from "next/head";
 
 import { AppContainer } from "../components/AppContainer";
 import { ThemeProvider } from "../components/Theme/ThemeProvider";
-import type { Theme } from "../components/Theme/ThemeProvider.types";
+import { useAppTheme } from "../hooks/useAppTheme";
 import "../styles/global.css";
 
 const queryClientOptions = {
@@ -23,18 +23,10 @@ const queryClientOptions = {
   },
 };
 
-export default function App(props: AppProps) {
+export default function App(props: AppProps): React.ReactElement {
   const { Component, pageProps } = props;
   const [queryClient] = React.useState(() => new QueryClient(queryClientOptions));
-  const [theme, setTheme] = React.useState<Theme>(() => {
-    if (typeof window === "undefined") {return "light";}
-    return (localStorage.getItem("theme") as Theme) ?? "light";
-  });
-
-  const handleSetTheme = (t: Theme) => {
-    localStorage.setItem("theme", t);
-    setTheme(t);
-  };
+  const { theme, setTheme } = useAppTheme();
 
   return (
     <>
@@ -49,7 +41,7 @@ export default function App(props: AppProps) {
         />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme} setTheme={handleSetTheme}>
+        <ThemeProvider theme={theme} setTheme={setTheme}>
           <AppContainer>
             <Component {...pageProps} />
           </AppContainer>
