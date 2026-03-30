@@ -40,22 +40,25 @@ const handlePatchRequest = async (
       });
     }
 
-    // Prepare update data
-    const updateData: { isPublic: boolean; publishedAt?: Date; $unset?: { publishedAt: string } } = { isPublic };
-    
+    // Build a valid MongoDB update document using operators only.
+    // Mixing bare field keys with operators (e.g. { isPublic, $unset }) is
+    // invalid and causes MongoDB to throw "Unknown update operator".
+    const $set: { isPublic: boolean; publishedAt?: Date } = { isPublic };
+    const updateDoc: { $set: typeof $set; $unset?: { publishedAt: string } } = { $set };
+
     // Set publishedAt when making public for the first time
     if (isPublic && !recipe.publishedAt) {
-      updateData.publishedAt = new Date();
+      $set.publishedAt = new Date();
     }
-    
+
     // Remove publishedAt when making private
     if (!isPublic && recipe.publishedAt) {
-      updateData.$unset = { publishedAt: "" };
+      updateDoc.$unset = { publishedAt: "" };
     }
 
     const result = await db.collection("recipes").updateOne(
       { _id: new ObjectId(recipeId), owner: session.user.id },
-      updateData.$unset ? updateData : { $set: updateData }
+      updateDoc
     );
 
     if (result.matchedCount === 0) {

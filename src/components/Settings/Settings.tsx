@@ -9,7 +9,9 @@ import {
 import * as Accordion from "@radix-ui/react-accordion";
 import { useSession , signOut } from "next-auth/react";
 
-
+import { useDeleteSharedUser } from "../../clientToServer/delete/useDeleteSharedUser";
+import { useSharedUsers } from "../../clientToServer/fetch/useSharedUsers";
+import { useShareWithUser } from "../../clientToServer/post/useShareWithUser";
 import styles from "./Settings.module.css";
 import { Avatar } from "../Avatar";
 import { useTheme } from "../Theme/ThemeProvider";
@@ -139,18 +141,52 @@ function RecipePreferencesSection() {
 
 /* ── Sharing Section ────────────────────────────────────── */
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function SharingSection() {
   const [shareEmail, setShareEmail] = React.useState("");
-  const [sharedUsers] = React.useState<string[]>([]);
-  const [isSharing, setIsSharing] = React.useState(false);
+  const [emailError, setEmailError] = React.useState("");
+  const [shareError, setShareError] = React.useState("");
 
-  const handleShare = async () => {
-    if (!shareEmail) {return;}
-    setIsSharing(true);
-    // TODO: wire up sharing API
-    await new Promise((r) => setTimeout(r, 500));
-    setIsSharing(false);
-    setShareEmail("");
+  const { data: sharedUsers = [], isLoading: isLoadingUsers } = useSharedUsers();
+  const { mutate: addUser, isPending: isAdding } = useShareWithUser();
+  const { mutate: removeUser, isPending: isRemoving } = useDeleteSharedUser();
+
+  const handleShare = () => {
+    setEmailError("");
+    setShareError("");
+
+    if (!shareEmail) {
+      return;
+    }
+
+    if (!EMAIL_RE.test(shareEmail)) {
+      setEmailError("Enter a valid email address.");
+      return;
+    }
+
+    addUser(shareEmail, {
+      onSuccess: () => {
+        setShareEmail("");
+      },
+      onError: (err) => {
+        setShareError(err instanceof Error ? err.message : "Failed to share. Please try again.");
+      },
+    });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleShare();
+    }
+  };
+
+  const handleRemove = (email: string) => {
+    removeUser(email, {
+      onError: (err) => {
+        setShareError(err instanceof Error ? err.message : "Failed to remove access. Please try again.");
+      },
+    });
   };
 
   return (
@@ -166,19 +202,25 @@ function SharingSection() {
             type="email"
             placeholder="user@example.com"
             value={shareEmail}
-            onChange={(e) => setShareEmail(e.target.value)}
-            disabled={isSharing}
+            onChange={(e) => { setShareEmail(e.target.value); setEmailError(""); setShareError(""); }}
+            onKeyDown={handleKeyDown}
+            disabled={isAdding}
+            aria-invalid={Boolean(emailError)}
           />
           <button
             className={styles.btn}
             onClick={handleShare}
-            disabled={!shareEmail || isSharing}
+            disabled={!shareEmail || isAdding}
           >
-            {isSharing ? "Sharing…" : "Share"}
+            {isAdding ? "Sharing…" : "Share"}
           </button>
         </div>
+        {emailError && <div className={styles.errorText}>{emailError}</div>}
+        {shareError && <div className={styles.errorText}>{shareError}</div>}
         <div className={styles.sharedUsersList}>
-          {sharedUsers.length === 0 ? (
+          {isLoadingUsers ? (
+            <div className={styles.emptyState}>Loading…</div>
+          ) : sharedUsers.length === 0 ? (
             <div className={styles.emptyState}>
               {"You haven't shared your recipes with anyone yet."}
             </div>
@@ -189,7 +231,11 @@ function SharingSection() {
                   <Avatar name={email.split("@")[0]} size="sm" />
                   {email}
                 </div>
-                <button className={`${styles.btn} ${styles.btnDanger}`}>
+                <button
+                  className={`${styles.btn} ${styles.btnDanger}`}
+                  onClick={() => handleRemove(email)}
+                  disabled={isRemoving}
+                >
                   Remove
                 </button>
               </div>
