@@ -1,5 +1,5 @@
 import React from 'react';
-import type { StoryFn, StoryContext } from '@storybook/react';
+import type { StoryContext } from '@storybook/react';
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -14,7 +14,7 @@ const mockSession: Session = {
   expires: "2099-12-31",
 };
 
-const StoryWrapper: React.FC<{ Story: StoryFn }> = ({ Story }) => {
+const StoryWrapper: React.FC<{ Story: React.ComponentType }> = ({ Story }) => {
   const [searchBoxValue, setSearchBoxValue] = React.useState("");
   const onSearchBoxValueChange = (incomingValue: string) => {
     setSearchBoxValue(incomingValue);
@@ -29,7 +29,7 @@ const StoryWrapper: React.FC<{ Story: StoryFn }> = ({ Story }) => {
   );
 };
 
-export const withGlobalProviders = (Story: StoryFn, _context: StoryContext) => (
+export const withGlobalProviders = (Story: React.ComponentType, _context: StoryContext) => (
   <SessionProvider session={mockSession}>
     <StoryWrapper Story={Story} />
   </SessionProvider>

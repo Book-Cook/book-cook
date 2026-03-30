@@ -2,9 +2,19 @@ import type { Filter, SortDirection, Db, ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
 
 import { getDb } from "src/utils/db";
 import { authOptions } from "../auth/[...nextauth]";
+
+const getQuerySchema = z.object({
+  search: z.string().max(500).optional(),
+  sortProperty: z.enum(["createdAt", "title"]).optional(),
+  sortDirection: z.enum(["asc", "desc"]).optional(),
+  tags: z.union([z.string(), z.array(z.string())]).optional(),
+  limit: z.string().regex(/^\d+$/).optional(),
+  offset: z.string().regex(/^\d+$/).optional(),
+});
 
 interface RecipeDocument {
   _id: ObjectId | string;
@@ -24,8 +34,6 @@ type VisibilityCondition =
   | { owner: { $in: string[] } };
 
 const ALLOWED_METHODS = ["GET", "POST"];
-const VALID_SORT_PROPERTIES = ["createdAt", "title"];
-const VALID_SORT_DIRECTIONS = ["asc", "desc"];
 
 const handleGetRequest = async (
   req: NextApiRequest,
@@ -34,6 +42,11 @@ const handleGetRequest = async (
   session: Session | null
 ) => {
   try {
+    const parsed = getQuerySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Invalid query parameters." });
+    }
+
     const {
       search,
       sortProperty = "createdAt",
@@ -41,20 +54,10 @@ const handleGetRequest = async (
       tags,
       limit = "20",
       offset = "0",
-    } = req.query;
+    } = parsed.data;
 
-    // 1. Validate query parameters
-    if (
-      typeof sortProperty !== "string" ||
-      !VALID_SORT_PROPERTIES.includes(sortProperty) ||
-      typeof sortDirection !== "string" ||
-      !VALID_SORT_DIRECTIONS.includes(sortDirection)
-    ) {
-      return res.status(400).json({ message: "Invalid sorting parameters." });
-    }
-
-    const limitNum = parseInt(limit as string, 10);
-    const offsetNum = parseInt(offset as string, 10);
+    const limitNum = parseInt(limit, 10);
+    const offsetNum = parseInt(offset, 10);
 
     if (isNaN(limitNum) || isNaN(offsetNum) || limitNum < 1 || limitNum > 100) {
       return res.status(400).json({ message: "Invalid pagination parameters." });
@@ -163,14 +166,10 @@ const handlePostRequest = async (
 
     const { title, data, tags } = req.body;
 
-    if (!title || typeof title !== "string" || !title.trim()) {
-      return res.status(400).json({ message: "Title required." });
-    }
-
     const newRecipe = {
       owner: session.user.id,
       isPublic: false,
-      title: title.trim(),
+      title: typeof title === "string" ? title.trim() : "",
       data: data ?? null,
       tags: Array.isArray(tags)
         ? tags.filter((t) => typeof t === "string")

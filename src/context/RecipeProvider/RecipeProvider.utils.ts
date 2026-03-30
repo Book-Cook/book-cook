@@ -1,8 +1,7 @@
-import isEqual from "fast-deep-equal";
-
 import type { EditableData } from "./RecipeProvider.types";
 
 import type { Recipe, UpdateRecipePayload } from "../../clientToServer";
+import { isEqual } from "../../utils/isEqual";
 
 export const toEditableData = (recipe?: Recipe | null): EditableData => ({
   title: recipe?.title ?? "",

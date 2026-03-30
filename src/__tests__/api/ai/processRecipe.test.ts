@@ -1,7 +1,6 @@
 /** @jest-environment node */
 
-import handler from "./processRecipe";
-
+import handler from "../../../pages/api/ai/processRecipe";
 import { processWithAI } from "../../../server";
 
 jest.mock("../../../server", () => ({

@@ -15,7 +15,8 @@ jest.mock("mongodb", () => ({
 }));
 
 import { getDb } from "src/utils/db";
-import handler from "./public";
+
+import handler from "../../../pages/api/recipes/public";
 
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
 

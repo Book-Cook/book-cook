@@ -45,6 +45,10 @@
   flex-shrink: 0;
 }
 
+.searchRowNoResults {
+  border-bottom: none;
+}
+
 .searchInput {
   flex: 1;
   border: none;

@@ -1,13 +1,14 @@
 /** @jest-environment node */
 
-jest.mock("../auth/[...nextauth]", () => ({ authOptions: {} }));
+jest.mock("../../../pages/api/auth/[...nextauth]", () => ({ authOptions: {} }));
 jest.mock("src/utils/db", () => ({ getDb: jest.fn() }));
 jest.mock("next-auth", () => ({ getServerSession: jest.fn() }));
 
 import { getServerSession } from "next-auth";
 
 import { getDb } from "src/utils/db";
-import handler from "./index";
+
+import handler from "../../../pages/api/recipes/index";
 
 const mockRes = () => {
   const res = {
@@ -167,7 +168,7 @@ describe("/api/recipes", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Invalid sorting parameters.",
+      message: "Invalid query parameters.",
     });
   });
 

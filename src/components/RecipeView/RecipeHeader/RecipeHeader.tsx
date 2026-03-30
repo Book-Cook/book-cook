@@ -46,6 +46,14 @@ export const RecipeHeader = ({
     }
   }, [recipe.title, isEditable]);
 
+  // Auto-focus the title on new (untitled) recipes so the user can start typing immediately
+  useEffect(() => {
+    if (isEditable && !recipe.title && titleRef.current) {
+      titleRef.current.focus();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEmojiChange = (emoji: string) => {
     setLocalEmoji(emoji);
     saveState?.updateEmoji(emoji);

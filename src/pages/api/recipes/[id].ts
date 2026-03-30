@@ -2,9 +2,19 @@ import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Session } from "next-auth";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
 
 import type { Recipe } from "src/clientToServer";
 import { authOptions } from "../auth/[...nextauth]";
+
+const putBodySchema = z.object({
+  title: z.string().max(500).optional(),
+  data: z.string().optional(),
+  tags: z.array(z.string().max(200)).optional(),
+  imageURL: z.string().max(2000).optional(),
+  emoji: z.string().max(10).optional(),
+  isPublic: z.boolean().optional(),
+});
 
 import { getDb } from "../../../utils/db";
 
@@ -162,7 +172,12 @@ export default async function handler(
         return;
       }
 
-      const { title, data, tags, imageURL, emoji, isPublic } = req.body;
+      const parsed = putBodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Invalid request body." });
+      }
+
+      const { title, data, tags, imageURL, emoji, isPublic } = parsed.data;
       const setFields: UpdateFields = {};
       const addToSetFields: UpdateFields = {};
 

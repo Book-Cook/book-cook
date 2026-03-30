@@ -82,7 +82,7 @@ function AppearanceSection() {
         description="Choose the application theme."
       >
         <div className={styles.radioGroup}>
-          {(["light", "dark"] as const).map((t) => (
+          {(["light", "dark", "system"] as const).map((t) => (
             <button
               key={t}
               className={`${styles.radioBtn} ${theme === t ? styles.radioBtnActive : ""}`}
