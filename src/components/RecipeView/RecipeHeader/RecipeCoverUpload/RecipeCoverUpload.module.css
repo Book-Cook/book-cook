@@ -25,8 +25,7 @@
 .overlay {
   position: absolute;
   bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 16px;
   opacity: 0;
   transition: opacity 0.15s ease;
 
