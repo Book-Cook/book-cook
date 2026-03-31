@@ -1,16 +1,20 @@
-import { useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import { CameraIcon, TrashIcon } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { clsx } from "clsx";
 import { toast } from "sonner";
 
 import { Button } from "src/components/Button";
+import {
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
+} from "src/components/Menu";
 
 import styles from "./RecipeCoverUpload.module.css";
-import type {
-  RecipeCoverUploadProps,
-  UploadState,
-} from "./RecipeCoverUpload.types";
+import type { RecipeCoverUploadProps, UploadState } from "./RecipeCoverUpload.types";
 
 const ALLOWED_TYPES = new Set([
   "image/jpeg",
@@ -55,8 +59,11 @@ async function compressToWebP(file: File): Promise<Blob> {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(
         (blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error("Image compression failed"));
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error("Image compression failed"));
+          }
         },
         "image/webp",
         0.85,
@@ -80,7 +87,9 @@ function uploadWithProgress(
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.upload.addEventListener("progress", (e) => {
-      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+      if (e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
+      }
     });
     xhr.addEventListener("load", () => {
       if (xhr.status >= 200 && xhr.status < 300) {
@@ -89,7 +98,9 @@ function uploadWithProgress(
         reject(new Error(`Upload failed with status ${xhr.status}`));
       }
     });
-    xhr.addEventListener("error", () => reject(new Error("Network error during upload")));
+    xhr.addEventListener("error", () =>
+      reject(new Error("Network error during upload")),
+    );
     xhr.addEventListener("abort", () => reject(new Error("Upload cancelled")));
     xhr.open("PUT", url);
     xhr.setRequestHeader("Content-Type", "image/webp");
@@ -97,12 +108,14 @@ function uploadWithProgress(
   });
 }
 
-export const RecipeCoverUpload = ({
-  recipeId,
-  imageURL,
-}: RecipeCoverUploadProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadState, setUploadState] = useState<UploadState>({ status: "idle" });
+export const RecipeCoverUpload = forwardRef<
+  HTMLInputElement,
+  RecipeCoverUploadProps
+>(({ recipeId, imageURL }, externalRef) => {
+  const internalRef = useRef<HTMLInputElement>(null);
+  const [uploadState, setUploadState] = useState<UploadState>({
+    status: "idle",
+  });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -110,14 +123,17 @@ export const RecipeCoverUpload = ({
   const displayUrl = previewUrl ?? imageURL;
   const hasImage = Boolean(displayUrl);
 
-  const uploadingLabel =
-    uploadState.status === "compressing" || uploadState.status === "requesting"
-      ? "Preparing…"
-      : uploadState.status === "confirming"
-        ? "Saving…"
-        : uploadState.status === "uploading"
-          ? `Uploading ${uploadState.progress}%…`
-          : undefined;
+  const setInputRef = useCallback(
+    (el: HTMLInputElement | null) => {
+      internalRef.current = el;
+      if (typeof externalRef === "function") {
+        externalRef(el);
+      } else if (externalRef) {
+        externalRef.current = el;
+      }
+    },
+    [externalRef],
+  );
 
   const handleFileSelect = async (file: File) => {
     setUploadState({ status: "idle" });
@@ -146,13 +162,20 @@ export const RecipeCoverUpload = ({
       const presignRes = await fetch("/api/upload/presign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fileName: file.name, fileType: "image/webp", fileSize: compressed.size }),
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: "image/webp",
+          fileSize: compressed.size,
+        }),
       });
       if (!presignRes.ok) {
         const { error } = (await presignRes.json()) as { error: string };
         throw new Error(error ?? "Failed to get upload URL");
       }
-      const { uploadUrl, key } = (await presignRes.json()) as { uploadUrl: string; key: string };
+      const { uploadUrl, key } = (await presignRes.json()) as {
+        uploadUrl: string;
+        key: string;
+      };
 
       setUploadState({ status: "uploading", progress: 0 });
       await uploadWithProgress(compressed, uploadUrl, (pct) =>
@@ -173,9 +196,13 @@ export const RecipeCoverUpload = ({
 
       queryClient.setQueryData(
         ["recipe", recipeId],
-        (old: Record<string, unknown> | undefined) => (old ? { ...old, imageURL: url } : old),
+        (old: Record<string, unknown> | undefined) =>
+          old ? { ...old, imageURL: url } : old,
       );
-      void queryClient.invalidateQueries({ queryKey: ["recipe", recipeId], refetchType: "all" });
+      void queryClient.invalidateQueries({
+        queryKey: ["recipe", recipeId],
+        refetchType: "all",
+      });
 
       URL.revokeObjectURL(preview);
       setPreviewUrl(null);
@@ -195,24 +222,32 @@ export const RecipeCoverUpload = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageURL: "" }),
       });
-      if (!res.ok) throw new Error("Failed to remove cover");
+      if (!res.ok) {
+        throw new Error("Failed to remove cover");
+      }
 
       queryClient.setQueryData(
         ["recipe", recipeId],
-        (old: Record<string, unknown> | undefined) => (old ? { ...old, imageURL: "" } : old),
+        (old: Record<string, unknown> | undefined) =>
+          old ? { ...old, imageURL: "" } : old,
       );
-      void queryClient.invalidateQueries({ queryKey: ["recipe", recipeId], refetchType: "all" });
+      void queryClient.invalidateQueries({
+        queryKey: ["recipe", recipeId],
+        refetchType: "all",
+      });
       setUploadState({ status: "idle" });
     } catch (err) {
       setUploadState({ status: "idle" });
-      toast.error(err instanceof Error ? err.message : "Failed to remove cover");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to remove cover",
+      );
     }
   };
 
   return (
     <div className={clsx(styles.root, hasImage && styles.hasCover)}>
       <input
-        ref={fileInputRef}
+        ref={setInputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif"
         className={styles.hiddenInput}
@@ -220,7 +255,9 @@ export const RecipeCoverUpload = ({
         tabIndex={-1}
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) void handleFileSelect(file);
+          if (file) {
+            void handleFileSelect(file);
+          }
           e.target.value = "";
         }}
       />
@@ -236,42 +273,58 @@ export const RecipeCoverUpload = ({
 
       {uploadState.status === "uploading" && (
         <div className={styles.progressBar}>
-          <div className={styles.progressFill} style={{ width: `${uploadState.progress}%` }} />
+          <div
+            className={styles.progressFill}
+            style={{ width: `${uploadState.progress}%` }}
+          />
         </div>
       )}
 
-      {/* Controls: bottom-center on cover, static below empty area */}
-      <div className={styles.controls}>
-        {isUploading ? (
-          <Button variant="ghost" size="sm" isLoading disabled>
-            {uploadingLabel}
-          </Button>
-        ) : (
-          <>
+      {/* Overlay: only shown when a cover image is present */}
+      {hasImage && (
+        <div className={styles.overlay}>
+          {isUploading ? (
             <Button
               variant="ghost"
               size="sm"
-              startIcon={<CameraIcon size={14} weight="bold" />}
-              onClick={() => fileInputRef.current?.click()}
-              aria-label={hasImage ? "Change cover photo" : "Add cover photo"}
-            >
-              {hasImage ? "Change cover" : "Add cover"}
-            </Button>
-
-            {hasImage && (
-              <Button
-                variant="destructive"
-                size="sm"
-                startIcon={<TrashIcon size={14} weight="bold" />}
-                onClick={() => void handleRemoveCover()}
-                aria-label="Remove cover photo"
-              >
-                Remove
-              </Button>
-            )}
-          </>
-        )}
-      </div>
+              shape="square"
+              isLoading
+              disabled
+              aria-label="Uploading cover"
+            />
+          ) : (
+            <Menu>
+              <MenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  shape="square"
+                  startIcon={<CameraIcon size={16} weight="bold" />}
+                  aria-label="Cover photo options"
+                />
+              </MenuTrigger>
+              <MenuContent align="center">
+                <MenuItem
+                  startIcon={<CameraIcon size={14} />}
+                  onSelect={() => internalRef.current?.click()}
+                >
+                  Change cover
+                </MenuItem>
+                <MenuSeparator />
+                <MenuItem
+                  startIcon={<TrashIcon size={14} />}
+                  onSelect={() => void handleRemoveCover()}
+                  style={{ color: "var(--danger-Primary)" }}
+                >
+                  Remove cover
+                </MenuItem>
+              </MenuContent>
+            </Menu>
+          )}
+        </div>
+      )}
     </div>
   );
-};
+});
+
+RecipeCoverUpload.displayName = "RecipeCoverUpload";

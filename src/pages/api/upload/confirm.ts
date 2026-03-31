@@ -71,10 +71,12 @@ export default async function handler(
   const db = await getDb();
   const imageURL = `${R2_PUBLIC_URL}/${publicKey}`;
 
-  const result = await db.collection("recipes").updateOne(
-    { _id: new ObjectId(recipeId), owner: session.user.id },
-    { $set: { imageURL } },
-  );
+  const result = await db
+    .collection("recipes")
+    .updateOne(
+      { _id: new ObjectId(recipeId), owner: session.user.id },
+      { $set: { imageURL } },
+    );
 
   if (result.matchedCount === 0) {
     // File already moved to public/ — log for manual cleanup if needed

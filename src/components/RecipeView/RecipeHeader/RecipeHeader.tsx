@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import {
   CalendarBlankIcon,
+  CameraIcon,
   ChartBarIcon,
   TagIcon,
   UserIcon,
 } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 
+import { Button } from "../../Button";
 import { RecipeCoverUpload } from "./RecipeCoverUpload";
 import { RecipeEmoji } from "./RecipeEmoji";
 import styles from "./RecipeHeader.module.css";
@@ -26,6 +28,7 @@ export const RecipeHeader = ({
 }: RecipeHeaderProps) => {
   const isEditable = viewingMode === "editor";
   const saveState = useRecipeViewSaveState();
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [localEmoji, setLocalEmoji] = useState(recipe.emoji ?? "🍲");
   const [localTags, setLocalTags] = useState(recipe.tags ?? []);
@@ -70,7 +73,11 @@ export const RecipeHeader = ({
   return (
     <header className={styles.header}>
       {isEditable ? (
-        <RecipeCoverUpload recipeId={recipe._id} imageURL={recipe.imageURL} />
+        <RecipeCoverUpload
+          ref={coverInputRef}
+          recipeId={recipe._id}
+          imageURL={recipe.imageURL}
+        />
       ) : recipe.imageURL ? (
         <div
           className={styles.cover}
@@ -79,7 +86,24 @@ export const RecipeHeader = ({
           aria-label={recipe.title}
         />
       ) : null}
-      <div className={clsx(styles.main, isEditable && styles.editorAligned, recipe.imageURL && styles.mainHasCover)}>
+      <div
+        className={clsx(
+          styles.main,
+          isEditable && styles.editorAligned,
+          recipe.imageURL && styles.mainHasCover,
+        )}
+      >
+        {isEditable && !recipe.imageURL && (
+          <Button
+            variant="ghost"
+            size="sm"
+            startIcon={<CameraIcon size={14} weight="bold" />}
+            onClick={() => coverInputRef.current?.click()}
+            className={styles.addCoverBtn}
+          >
+            Add cover
+          </Button>
+        )}
         {!recipe.imageURL && (
           <RecipeEmoji
             emoji={localEmoji}

@@ -21,42 +21,31 @@
   display: none;
 }
 
-/* Controls: static below the empty area when no cover */
-.controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 0;
-}
-
-/* Controls: absolute bottom-center overlay when cover exists */
-.hasCover .controls {
+/* Overlay: camera icon button shown on hover when cover exists */
+.overlay {
   position: absolute;
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 4px 10px;
   opacity: 0;
   transition: opacity 0.15s ease;
-  white-space: nowrap;
 
-  /* Dark translucent backdrop so buttons are readable over any image */
+  /* Dark frosted-glass backdrop */
   background: rgba(0, 0, 0, 0.48);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 8px;
+  padding: 4px;
 
-  /* Override design tokens so Button children render in light colors */
+  /* Override design tokens so Button renders in light colors on dark backdrop */
   --ui-TextSecondary: rgba(255, 255, 255, 0.85);
   --ui-TextPrimary: #ffffff;
   --ui-ControlHover: rgba(255, 255, 255, 0.15);
   --ui-ControlPressed: rgba(255, 255, 255, 0.22);
-  --danger-Primary: #ff8080;
-  --danger-Hover: rgba(255, 100, 100, 0.25);
 }
 
-.root.hasCover:hover .controls,
-.root.hasCover:focus-within .controls {
+.root.hasCover:hover .overlay,
+.root.hasCover:focus-within .overlay {
   opacity: 1;
 }
 

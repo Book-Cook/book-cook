@@ -23,9 +23,28 @@ jest.mock("@phosphor-icons/react", () => ({
   ),
 }));
 
+// Mock Menu so items render inline (no Radix portal/pointer-event complexity)
+jest.mock("src/components/Menu", () => ({
+  Menu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  MenuTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  MenuContent: ({ children }: { children: React.ReactNode }) => (
+    <div role="menu">{children}</div>
+  ),
+  MenuItem: ({
+    children,
+    onSelect,
+  }: {
+    children: React.ReactNode;
+    onSelect?: () => void;
+  }) => (
+    <button role="menuitem" onClick={onSelect}>
+      {children}
+    </button>
+  ),
+  MenuSeparator: () => <hr />,
+}));
+
 // Polyfill Blob.prototype.arrayBuffer for jsdom — returns JPEG magic bytes.
-// Safe because all tests that reach magic-byte validation use JPEG files;
-// invalid-type and oversized tests fail before reaching that code path.
 Object.defineProperty(Blob.prototype, "arrayBuffer", {
   configurable: true,
   writable: true,
@@ -85,7 +104,6 @@ function makeWrapper() {
 }
 
 function makeJpegFile(sizeBytes = 500 * 1024): File {
-  // Include real JPEG magic bytes (FF D8 FF) so validateMagicBytes passes
   const data = new Uint8Array(sizeBytes);
   data[0] = 0xff;
   data[1] = 0xd8;
@@ -99,16 +117,15 @@ describe("RecipeCoverUpload", () => {
     jest.clearAllMocks();
   });
 
-  it("shows Add cover button when no image", () => {
+  it("renders no interactive controls when no image", () => {
     render(<RecipeCoverUpload recipeId={RECIPE_ID} imageURL="" />, {
       wrapper: makeWrapper(),
     });
-    expect(
-      screen.getByRole("button", { name: /add cover photo/i }),
-    ).toBeInTheDocument();
+    // With no image, only the hidden file input is rendered — no buttons
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it("shows Change and Remove buttons when image exists", () => {
+  it("shows a cover photo options button when image exists", () => {
     render(
       <RecipeCoverUpload
         recipeId={RECIPE_ID}
@@ -117,19 +134,16 @@ describe("RecipeCoverUpload", () => {
       { wrapper: makeWrapper() },
     );
     expect(
-      screen.getByRole("button", { name: /change cover photo/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /remove cover photo/i }),
+      screen.getByRole("button", { name: /cover photo options/i }),
     ).toBeInTheDocument();
   });
 
-  it("does not show Remove button when no image", () => {
+  it("shows no overlay controls when no image", () => {
     render(<RecipeCoverUpload recipeId={RECIPE_ID} imageURL="" />, {
       wrapper: makeWrapper(),
     });
     expect(
-      screen.queryByRole("button", { name: /remove/i }),
+      screen.queryByRole("button", { name: /cover photo options/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -176,7 +190,7 @@ describe("RecipeCoverUpload", () => {
     });
   });
 
-  it("completes the upload flow and returns to idle without errors", async () => {
+  it("completes the upload flow without calling toast.error", async () => {
     server.use(
       http.post("/api/upload/presign", () =>
         HttpResponse.json({ uploadUrl: PRESIGN_URL, key: PENDING_KEY }),
@@ -196,13 +210,13 @@ describe("RecipeCoverUpload", () => {
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { files: [makeJpegFile()] } });
 
-    // Success: idle state (Add cover button) with no error alert
+    // Upload completes: no error toast, no loading button visible
     await waitFor(
       () => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(toast.error).not.toHaveBeenCalled();
         expect(
-          screen.getByRole("button", { name: /add cover photo/i }),
-        ).toBeInTheDocument();
+          screen.queryByRole("button", { name: /uploading/i }),
+        ).not.toBeInTheDocument();
       },
       { timeout: 5000 },
     );
@@ -257,10 +271,15 @@ describe("RecipeCoverUpload", () => {
       { wrapper: makeWrapper() },
     );
 
-    const removeBtn = screen.getByRole("button", {
-      name: /remove cover photo/i,
+    // Open the cover options menu
+    const optionsBtn = screen.getByRole("button", {
+      name: /cover photo options/i,
     });
-    fireEvent.click(removeBtn);
+    fireEvent.click(optionsBtn);
+
+    // Click Remove cover in the open menu
+    const removeItem = await screen.findByText(/remove cover/i);
+    fireEvent.click(removeItem);
 
     await waitFor(() => {
       expect(removeSpy).toHaveBeenCalledWith(

@@ -17,7 +17,9 @@ jest.mock("@aws-sdk/client-s3", () => ({
   PutObjectCommand: jest.fn().mockImplementation((input) => ({ input })),
 }));
 jest.mock("@aws-sdk/s3-request-presigner", () => ({
-  getSignedUrl: jest.fn().mockResolvedValue("https://r2.example.com/signed-url"),
+  getSignedUrl: jest
+    .fn()
+    .mockResolvedValue("https://r2.example.com/signed-url"),
 }));
 
 import { getServerSession } from "next-auth";
@@ -31,9 +33,7 @@ const mockGetDb = getDb as jest.Mock;
 
 const mockSession = { user: { id: "user123", email: "test@test.com" } };
 
-function makeReq(
-  overrides: Partial<NextApiRequest> = {},
-): NextApiRequest {
+function makeReq(overrides: Partial<NextApiRequest> = {}): NextApiRequest {
   return {
     method: "POST",
     body: {
@@ -45,7 +45,11 @@ function makeReq(
   } as unknown as NextApiRequest;
 }
 
-function makeRes(): { res: NextApiResponse; json: jest.Mock; status: jest.Mock } {
+function makeRes(): {
+  res: NextApiResponse;
+  json: jest.Mock;
+  status: jest.Mock;
+} {
   const json = jest.fn();
   const status = jest.fn().mockReturnValue({ json });
   const res = { status, json } as unknown as NextApiResponse;
@@ -83,14 +87,29 @@ describe("POST /api/upload/presign", () => {
 
   it("rejects disallowed file types", async () => {
     const { res, status } = makeRes();
-    await handler(makeReq({ body: { fileName: "doc.pdf", fileType: "application/pdf", fileSize: 1000 } }), res);
+    await handler(
+      makeReq({
+        body: {
+          fileName: "doc.pdf",
+          fileType: "application/pdf",
+          fileSize: 1000,
+        },
+      }),
+      res,
+    );
     expect(status).toHaveBeenCalledWith(400);
   });
 
   it("rejects files over 10 MB", async () => {
     const { res, status } = makeRes();
     await handler(
-      makeReq({ body: { fileName: "big.jpg", fileType: "image/jpeg", fileSize: 11 * 1024 * 1024 } }),
+      makeReq({
+        body: {
+          fileName: "big.jpg",
+          fileType: "image/jpeg",
+          fileSize: 11 * 1024 * 1024,
+        },
+      }),
       res,
     );
     expect(status).toHaveBeenCalledWith(400);
@@ -137,9 +156,17 @@ describe("POST /api/upload/presign", () => {
   });
 
   it("accepts all supported image types", async () => {
-    for (const fileType of ["image/jpeg", "image/png", "image/webp", "image/gif"]) {
+    for (const fileType of [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ]) {
       const { res, status } = makeRes();
-      await handler(makeReq({ body: { fileName: "img.jpg", fileType, fileSize: 1000 } }), res);
+      await handler(
+        makeReq({ body: { fileName: "img.jpg", fileType, fileSize: 1000 } }),
+        res,
+      );
       expect(status).toHaveBeenCalledWith(200);
     }
   });

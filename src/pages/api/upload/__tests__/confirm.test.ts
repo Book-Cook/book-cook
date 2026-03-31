@@ -13,9 +13,15 @@ jest.mock("src/lib/r2", () => ({
   R2_PUBLIC_URL: "https://pub-abc.r2.dev",
 }));
 jest.mock("@aws-sdk/client-s3", () => ({
-  HeadObjectCommand: jest.fn().mockImplementation((i) => ({ _type: "HeadObject", ...i })),
-  CopyObjectCommand: jest.fn().mockImplementation((i) => ({ _type: "CopyObject", ...i })),
-  DeleteObjectCommand: jest.fn().mockImplementation((i) => ({ _type: "DeleteObject", ...i })),
+  HeadObjectCommand: jest
+    .fn()
+    .mockImplementation((i) => ({ _type: "HeadObject", ...i })),
+  CopyObjectCommand: jest
+    .fn()
+    .mockImplementation((i) => ({ _type: "CopyObject", ...i })),
+  DeleteObjectCommand: jest
+    .fn()
+    .mockImplementation((i) => ({ _type: "DeleteObject", ...i })),
 }));
 
 import { getServerSession } from "next-auth";
@@ -85,7 +91,12 @@ describe("POST /api/upload/confirm", () => {
   it("rejects keys not belonging to the authenticated user", async () => {
     const { res, status } = makeRes();
     await handler(
-      makeReq({ body: { key: "uploads/pending/otheruser/file.jpg", recipeId: validRecipeId } }),
+      makeReq({
+        body: {
+          key: "uploads/pending/otheruser/file.jpg",
+          recipeId: validRecipeId,
+        },
+      }),
       res,
     );
     expect(status).toHaveBeenCalledWith(403);
@@ -93,7 +104,10 @@ describe("POST /api/upload/confirm", () => {
 
   it("rejects invalid recipe ID format", async () => {
     const { res, status } = makeRes();
-    await handler(makeReq({ body: { key: validKey, recipeId: "not-an-object-id" } }), res);
+    await handler(
+      makeReq({ body: { key: validKey, recipeId: "not-an-object-id" } }),
+      res,
+    );
     expect(status).toHaveBeenCalledWith(400);
   });
 
@@ -149,7 +163,11 @@ describe("POST /api/upload/confirm", () => {
     const collection = db.collection("recipes");
     expect(collection.updateOne).toHaveBeenCalledWith(
       expect.objectContaining({ owner: "user123" }),
-      expect.objectContaining({ $set: expect.objectContaining({ imageURL: expect.stringContaining("uploads/public/") }) }),
+      expect.objectContaining({
+        $set: expect.objectContaining({
+          imageURL: expect.stringContaining("uploads/public/"),
+        }),
+      }),
     );
   });
 });
