@@ -8,98 +8,35 @@
   height: clamp(160px, 26vw, 280px);
   background-size: cover;
   background-position: center;
-  background-color: var(--ui-ControlHover);
-}
-
-.emptyArea {
-  width: 100%;
-  height: 56px; /* Enough to show the overlay without a full cover */
 }
 
 .hiddenInput {
   display: none;
 }
 
-/* Controls overlay — visible on hover or while uploading */
-.overlay {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
+/* Controls: static below the empty area when no cover */
+.controls {
   display: flex;
   gap: 8px;
   align-items: center;
+  padding: 8px 0;
+}
+
+/* Controls: absolute bottom-center overlay when cover exists */
+.hasCover .controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0;
   opacity: 0;
   transition: opacity 0.15s ease;
+  white-space: nowrap;
 }
 
-.root:hover .overlay,
-.root:focus-within .overlay {
+.root.hasCover:hover .controls,
+.root.hasCover:focus-within .controls {
   opacity: 1;
-}
-
-/* Always show overlay when no image so user discovers the feature */
-.root:not(.hasCover) .overlay {
-  opacity: 1;
-  position: static;
-  padding: 0 0 8px 0;
-}
-
-.controlButton {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  transition: background 0.1s ease;
-}
-
-.controlButton:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-.controlButton:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.removeButton {
-  background: rgba(180, 40, 40, 0.55);
-  border-color: rgba(255, 100, 100, 0.3);
-}
-
-.removeButton:hover:not(:disabled) {
-  background: rgba(180, 40, 40, 0.8);
-}
-
-/* No-cover state: use theme-appropriate button style */
-.root:not(.hasCover) .controlButton {
-  background: var(--ui-ControlHover);
-  border-color: var(--ui-Border, rgba(0, 0, 0, 0.12));
-  color: var(--ui-TextSecondary);
-  backdrop-filter: none;
-}
-
-.root:not(.hasCover) .controlButton:hover:not(:disabled) {
-  background: var(--ui-ControlPressed);
-}
-
-.statusText {
-  padding: 6px 12px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  backdrop-filter: blur(4px);
 }
 
 /* Progress bar */
@@ -116,31 +53,6 @@
   height: 100%;
   background: var(--ui-Brand, #0066ff);
   transition: width 0.1s ease;
-}
-
-/* Error banner */
-.errorBanner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 12px;
-  background: var(--ui-BackgroundDanger, #fff0f0);
-  color: var(--ui-TextDanger, #c4314b);
-  border-top: 1px solid var(--ui-BorderDanger, #f5c2c7);
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-}
-
-.errorDismiss {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: inherit;
-  font-size: 0.875rem;
-  padding: 0 4px;
-  line-height: 1;
-  flex-shrink: 0;
 }
 
 @media (max-width: 720px) {

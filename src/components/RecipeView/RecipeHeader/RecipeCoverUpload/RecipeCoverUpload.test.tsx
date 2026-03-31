@@ -1,9 +1,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
+import { toast } from "sonner";
 
 import { server } from "src/mocks/server";
 import { RecipeCoverUpload } from "./RecipeCoverUpload";
+
+jest.mock("sonner", () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+  },
+}));
 
 // Mock phosphor icons
 jest.mock("@phosphor-icons/react", () => ({
@@ -35,10 +43,11 @@ Object.defineProperty(Blob.prototype, "arrayBuffer", {
 HTMLCanvasElement.prototype.getContext = jest.fn().mockReturnValue({
   drawImage: jest.fn(),
 });
-HTMLCanvasElement.prototype.toBlob = jest.fn().mockImplementation(
-  (callback: BlobCallback) =>
+HTMLCanvasElement.prototype.toBlob = jest
+  .fn()
+  .mockImplementation((callback: BlobCallback) =>
     callback(new Blob(["fake-webp-data"], { type: "image/webp" })),
-);
+  );
 
 // Mock URL.createObjectURL / revokeObjectURL
 global.URL.createObjectURL = jest.fn().mockReturnValue("blob:mock-preview-url");
@@ -86,6 +95,10 @@ function makeJpegFile(sizeBytes = 500 * 1024): File {
 
 // ----- tests -----
 describe("RecipeCoverUpload", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("shows Add cover button when no image", () => {
     render(<RecipeCoverUpload recipeId={RECIPE_ID} imageURL="" />, {
       wrapper: makeWrapper(),
@@ -134,9 +147,11 @@ describe("RecipeCoverUpload", () => {
 
     fireEvent.change(input, { target: { files: [badFile] } });
 
-    expect(
-      await screen.findByText(/only jpeg, png, webp, and gif/i),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringMatching(/only jpeg, png, webp, and gif/i),
+      );
+    });
   });
 
   it("shows error for files over 10 MB", async () => {
@@ -154,29 +169,11 @@ describe("RecipeCoverUpload", () => {
 
     fireEvent.change(input, { target: { files: [bigFile] } });
 
-    expect(await screen.findByText(/under 10 mb/i)).toBeInTheDocument();
-  });
-
-  it("dismisses error when dismiss button is clicked", async () => {
-    render(<RecipeCoverUpload recipeId={RECIPE_ID} imageURL="" />, {
-      wrapper: makeWrapper(),
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringMatching(/under 10 mb/i),
+      );
     });
-
-    const input = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-    const badFile = new File([""], "doc.pdf", { type: "application/pdf" });
-
-    fireEvent.change(input, { target: { files: [badFile] } });
-
-    const dismissBtn = await screen.findByRole("button", {
-      name: /dismiss error/i,
-    });
-    fireEvent.click(dismissBtn);
-
-    expect(
-      screen.queryByText(/only jpeg, png, webp, and gif/i),
-    ).not.toBeInTheDocument();
   });
 
   it("completes the upload flow and returns to idle without errors", async () => {
@@ -231,9 +228,14 @@ describe("RecipeCoverUpload", () => {
 
     fireEvent.change(input, { target: { files: [makeJpegFile()] } });
 
-    expect(
-      await screen.findByText(/too many uploads/i, {}, { timeout: 5000 }),
-    ).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(toast.error).toHaveBeenCalledWith(
+          expect.stringMatching(/too many uploads/i),
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it("removes cover by calling PUT /api/recipes/:id with empty imageURL", async () => {
@@ -255,7 +257,9 @@ describe("RecipeCoverUpload", () => {
       { wrapper: makeWrapper() },
     );
 
-    const removeBtn = screen.getByRole("button", { name: /remove cover photo/i });
+    const removeBtn = screen.getByRole("button", {
+      name: /remove cover photo/i,
+    });
     fireEvent.click(removeBtn);
 
     await waitFor(() => {

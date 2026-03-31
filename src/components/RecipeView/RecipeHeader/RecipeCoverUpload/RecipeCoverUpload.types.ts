@@ -8,5 +8,4 @@ export type UploadState =
   | { status: "compressing" }
   | { status: "requesting" }
   | { status: "uploading"; progress: number }
-  | { status: "confirming" }
-  | { status: "error"; message: string };
+  | { status: "confirming" };
