@@ -29,8 +29,6 @@ export const RecipeCard = ({
   className,
   showMeta = true,
   isLoading = false,
-  showActions = true,
-  isMinimal = false,
 }: RecipeCardProps) => {
   const router = useRouter();
 
@@ -87,9 +85,9 @@ export const RecipeCard = ({
             {recipe.emoji.length > 0 ? recipe.emoji : "🍲"}
           </span>
         )}
+        {isNew && <span className={styles.newBadge}>NEW</span>}
       </div>
       <div className={styles.body}>
-        {isNew && <span className={styles.newBadge}>NEW</span>}
         <BodyText as="h3" className={clsx(styles.title, !recipe.title && styles.untitled)}>
           {recipe.title || "Untitled Recipe"}
         </BodyText>
@@ -106,7 +104,7 @@ export const RecipeCard = ({
             </div>
           )
         )}
-        {showMeta && visibleTags.length > 0 && (
+        {showMeta && (
           <div className={styles.tags}>
             {visibleTags.map((tag) => (
               <span key={tag} className={styles.tag}>
@@ -122,7 +120,7 @@ export const RecipeCard = ({
     </>
   );
 
-  const cardButton = (
+  return (
     <button
       type="button"
       onClick={handleClick}
@@ -132,22 +130,4 @@ export const RecipeCard = ({
       {content}
     </button>
   );
-
-  if (!isMinimal && showActions) {
-    return (
-      <div className={styles.cardWrapper}>
-        {cardButton}
-        <button
-          type="button"
-          aria-label="more options"
-          className={styles.actionsButton}
-          onClick={(e) => e.stopPropagation()}
-        >
-          ⋯
-        </button>
-      </div>
-    );
-  }
-
-  return cardButton;
 };

@@ -154,49 +154,10 @@ describe("RecipeCard", () => {
     expect(screen.getByText("By Jane Doe • 0 saves")).toBeInTheDocument();
   });
 
-  it("shows actions menu when showActions is true", () => {
-    render(
-      <RecipeWrapper>
-        <RecipeCard
-          recipe={mockRecipe}
-          showActions={true}
-        />
-      </RecipeWrapper>
-    );
-
-    expect(screen.getByRole("button", { name: /more options/i })).toBeInTheDocument();
-  });
-
-  it("hides actions menu when showActions is false", () => {
-    render(
-      <RecipeWrapper>
-        <RecipeCard
-          recipe={mockRecipe}
-          showActions={false}
-        />
-      </RecipeWrapper>
-    );
-
-    expect(screen.queryByRole("button", { name: /more options/i })).not.toBeInTheDocument();
-  });
-
-  it("shows actions menu by default when showActions is not specified", () => {
+  it("does not render a more options button", () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
-    );
-
-    expect(screen.getByRole("button", { name: /more options/i })).toBeInTheDocument();
-  });
-
-  it("hides actions menu in minimal mode", () => {
-    render(
-      <RecipeWrapper>
-        <RecipeCard
-          recipe={mockRecipe}
-          isMinimal={true}
-        />
       </RecipeWrapper>
     );
 
