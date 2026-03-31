@@ -46,6 +46,7 @@
 }
 
 .cardWrapper {
+  display: flex;
   transition: transform 0.15s ease;
 }
 

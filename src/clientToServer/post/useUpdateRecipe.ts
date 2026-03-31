@@ -48,13 +48,13 @@ export function useUpdateRecipe(recipeId: string | undefined) {
         queryKey: ["recipe", recipeId],
         refetchType: "all",
       });
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["recipes"],
-        refetchType: "all",
+        refetchType: "none",
       });
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["allTags"],
-        refetchType: "all",
+        refetchType: "none",
       });
     },
   });
