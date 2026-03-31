@@ -23,8 +23,8 @@
 /* Controls overlay — visible on hover or while uploading */
 .overlay {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  bottom: 8px;
+  left: 8px;
   display: flex;
   gap: 8px;
   align-items: center;
@@ -41,7 +41,7 @@
 .root:not(.hasCover) .overlay {
   opacity: 1;
   position: static;
-  padding: 8px 0 8px 0;
+  padding: 0 0 8px 0;
 }
 
 .controlButton {
