@@ -188,7 +188,7 @@ export default async function handler(
       if (data) {
         setFields.data = data;
       }
-      if (imageURL) {
+      if (imageURL !== undefined) {
         setFields.imageURL = imageURL;
       }
       if (emoji) {

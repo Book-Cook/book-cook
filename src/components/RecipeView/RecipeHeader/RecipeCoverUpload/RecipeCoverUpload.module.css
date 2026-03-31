@@ -1,0 +1,71 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+/* Full-bleed: break out of AppShell padding when a cover exists */
+.root.hasCover {
+  margin-inline: calc(-1 * var(--page-x-padding, 40px));
+  margin-top: calc(-1 * var(--page-y-padding, 32px));
+  width: calc(100% + 2 * var(--page-x-padding, 40px));
+}
+
+.cover {
+  width: 100%;
+  height: clamp(280px, 38vh, 440px);
+  background-size: cover;
+  background-position: center;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Overlay: camera icon button shown on hover when cover exists */
+.overlay {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  /* Dark frosted-glass backdrop */
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  padding: 4px;
+
+  /* Override design tokens so Button renders in light colors on dark backdrop */
+  --ui-TextSecondary: rgba(255, 255, 255, 0.85);
+  --ui-TextPrimary: #ffffff;
+  --ui-ControlHover: rgba(255, 255, 255, 0.15);
+  --ui-ControlPressed: rgba(255, 255, 255, 0.22);
+}
+
+.root.hasCover:hover .overlay,
+.root.hasCover:focus-within .overlay {
+  opacity: 1;
+}
+
+/* Progress bar */
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--ui-Brand, #0066ff);
+  transition: width 0.1s ease;
+}
+
+@media (max-width: 720px) {
+  .cover {
+    height: 220px;
+  }
+}

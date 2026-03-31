@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import {
   CalendarBlankIcon,
+  CameraIcon,
   ChartBarIcon,
   TagIcon,
   UserIcon,
 } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 
+import { Button } from "../../Button";
+import { RecipeCoverUpload } from "./RecipeCoverUpload";
 import { RecipeEmoji } from "./RecipeEmoji";
 import styles from "./RecipeHeader.module.css";
 import type { RecipeHeaderProps } from "./RecipeHeader.types";
@@ -25,6 +28,7 @@ export const RecipeHeader = ({
 }: RecipeHeaderProps) => {
   const isEditable = viewingMode === "editor";
   const saveState = useRecipeViewSaveState();
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [localEmoji, setLocalEmoji] = useState(recipe.emoji ?? "🍲");
   const [localTags, setLocalTags] = useState(recipe.tags ?? []);
@@ -40,7 +44,9 @@ export const RecipeHeader = ({
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (!isEditable || !titleRef.current) {return;}
+    if (!isEditable || !titleRef.current) {
+      return;
+    }
     if (titleRef.current.textContent !== recipe.title) {
       titleRef.current.textContent = recipe.title;
     }
@@ -51,7 +57,7 @@ export const RecipeHeader = ({
     if (isEditable && !recipe.title && titleRef.current) {
       titleRef.current.focus();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEmojiChange = (emoji: string) => {
@@ -66,20 +72,45 @@ export const RecipeHeader = ({
 
   return (
     <header className={styles.header}>
-      {recipe.imageURL && (
+      {isEditable ? (
+        <RecipeCoverUpload
+          ref={coverInputRef}
+          recipeId={recipe._id}
+          imageURL={recipe.imageURL}
+        />
+      ) : recipe.imageURL ? (
         <div
           className={styles.cover}
           style={{ backgroundImage: `url(${recipe.imageURL})` }}
           role="img"
           aria-label={recipe.title}
         />
-      )}
-      <div className={clsx(styles.main, isEditable && styles.editorAligned)}>
-        <RecipeEmoji
-          emoji={localEmoji}
-          hasCover={Boolean(recipe.imageURL)}
-          onEmojiChange={isEditable ? handleEmojiChange : undefined}
-        />
+      ) : null}
+      <div
+        className={clsx(
+          styles.main,
+          isEditable && styles.editorAligned,
+          recipe.imageURL && styles.mainHasCover,
+        )}
+      >
+        {isEditable && !recipe.imageURL && (
+          <Button
+            variant="ghost"
+            size="sm"
+            startIcon={<CameraIcon size={14} weight="bold" />}
+            onClick={() => coverInputRef.current?.click()}
+            className={styles.addCoverBtn}
+          >
+            Add cover
+          </Button>
+        )}
+        {!recipe.imageURL && (
+          <RecipeEmoji
+            emoji={localEmoji}
+            hasCover={false}
+            onEmojiChange={isEditable ? handleEmojiChange : undefined}
+          />
+        )}
         {isEditable ? (
           <h1
             ref={titleRef}
@@ -126,7 +157,9 @@ export const RecipeHeader = ({
               <div>
                 {recipe.creatorName && (
                   <RecipePropertyRow icon={<UserIcon size={14} />} label="Chef">
-                    <span className={styles.linkText}>{recipe.creatorName}</span>
+                    <span className={styles.linkText}>
+                      {recipe.creatorName}
+                    </span>
                   </RecipePropertyRow>
                 )}
                 {showTags && (

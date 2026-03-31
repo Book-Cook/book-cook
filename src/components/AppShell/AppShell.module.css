@@ -8,7 +8,9 @@
 .main {
   flex: 1;
   min-width: 0;
-  padding: 32px 40px;
+  --page-x-padding: 40px;
+  --page-y-padding: 32px;
+  padding: var(--page-y-padding) var(--page-x-padding);
   overflow-y: auto;
   background: var(--ui-PageBackground);
 }
@@ -27,7 +29,9 @@
 
 @media (max-width: 900px) {
   .main {
-    padding: 24px 20px;
+    --page-x-padding: 20px;
+    --page-y-padding: 24px;
+    padding: var(--page-y-padding) var(--page-x-padding);
   }
 }
 
@@ -136,6 +140,8 @@
 
   /* Main takes full width on mobile */
   .main {
-    padding: 16px;
+    --page-x-padding: 16px;
+    --page-y-padding: 16px;
+    padding: var(--page-y-padding) var(--page-x-padding);
   }
 }
