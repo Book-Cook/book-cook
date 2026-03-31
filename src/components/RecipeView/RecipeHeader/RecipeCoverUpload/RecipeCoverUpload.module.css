@@ -3,9 +3,16 @@
   width: 100%;
 }
 
+/* Full-bleed: break out of AppShell padding when a cover exists */
+.root.hasCover {
+  margin-inline: calc(-1 * var(--page-x-padding, 40px));
+  margin-top: calc(-1 * var(--page-y-padding, 32px));
+  width: calc(100% + 2 * var(--page-x-padding, 40px));
+}
+
 .cover {
   width: 100%;
-  height: clamp(160px, 26vw, 280px);
+  height: clamp(280px, 38vh, 440px);
   background-size: cover;
   background-position: center;
 }
@@ -25,13 +32,27 @@
 /* Controls: absolute bottom-center overlay when cover exists */
 .hasCover .controls {
   position: absolute;
-  bottom: 12px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0;
+  padding: 4px 10px;
   opacity: 0;
   transition: opacity 0.15s ease;
   white-space: nowrap;
+
+  /* Dark translucent backdrop so buttons are readable over any image */
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+
+  /* Override design tokens so Button children render in light colors */
+  --ui-TextSecondary: rgba(255, 255, 255, 0.85);
+  --ui-TextPrimary: #ffffff;
+  --ui-ControlHover: rgba(255, 255, 255, 0.15);
+  --ui-ControlPressed: rgba(255, 255, 255, 0.22);
+  --danger-Primary: #ff8080;
+  --danger-Hover: rgba(255, 100, 100, 0.25);
 }
 
 .root.hasCover:hover .controls,
@@ -57,6 +78,6 @@
 
 @media (max-width: 720px) {
   .cover {
-    height: 180px;
+    height: 220px;
   }
 }
