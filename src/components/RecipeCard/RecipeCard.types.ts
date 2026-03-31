@@ -28,15 +28,4 @@ export type RecipeCardProps = {
    */
   isLoading?: boolean;
 
-  /**
-   * Whether to show the actions (more options) button.
-   * @default true
-   */
-  showActions?: boolean;
-
-  /**
-   * Minimal display mode — hides the actions button.
-   * @default false
-   */
-  isMinimal?: boolean;
 };
