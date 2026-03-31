@@ -7,6 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 
+import { RecipeCoverUpload } from "./RecipeCoverUpload";
 import { RecipeEmoji } from "./RecipeEmoji";
 import styles from "./RecipeHeader.module.css";
 import type { RecipeHeaderProps } from "./RecipeHeader.types";
@@ -66,14 +67,16 @@ export const RecipeHeader = ({
 
   return (
     <header className={styles.header}>
-      {recipe.imageURL && (
+      {isEditable ? (
+        <RecipeCoverUpload recipeId={recipe._id} imageURL={recipe.imageURL} />
+      ) : recipe.imageURL ? (
         <div
           className={styles.cover}
           style={{ backgroundImage: `url(${recipe.imageURL})` }}
           role="img"
           aria-label={recipe.title}
         />
-      )}
+      ) : null}
       <div className={clsx(styles.main, isEditable && styles.editorAligned)}>
         <RecipeEmoji
           emoji={localEmoji}

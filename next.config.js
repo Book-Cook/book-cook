@@ -76,6 +76,8 @@ const nextConfig = {
       { protocol: "https", hostname: "beyondfrosting.com" },
       { protocol: "https", hostname: "therecipecritic.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      // Cloudflare R2 public bucket (recipe cover photos)
+      { protocol: "https", hostname: "pub-*.r2.dev" },
     ],
   },
 
