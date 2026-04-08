@@ -1,5 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-
 jest.mock("next-auth", () => ({
   __esModule: true,
   default: jest.fn().mockReturnValue(jest.fn()),
@@ -24,11 +22,11 @@ jest.mock("@aws-sdk/client-s3", () => ({
     .mockImplementation((i) => ({ _type: "DeleteObject", ...i })),
 }));
 
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import { r2 } from "src/lib/r2";
 import { getDb } from "src/utils/db";
-
 import handler from "../confirm";
 
 const mockGetServerSession = getServerSession as jest.Mock;

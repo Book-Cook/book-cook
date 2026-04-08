@@ -5,7 +5,7 @@ export const useFormFieldIds = (
   description: string | undefined,
   error: string | undefined,
   ariaDescribedBy: string | undefined,
-  prefix = "field"
+  prefix = "field",
 ) => {
   const generatedId = useId();
   const inputId = id ?? `${prefix}-${generatedId}`;

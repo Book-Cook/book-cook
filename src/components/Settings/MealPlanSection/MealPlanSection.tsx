@@ -25,7 +25,7 @@ const sectionKeywords = [
   "planning",
   "calendar",
   "schedule",
-  "food"
+  "food",
 ];
 
 const calendarKeywords = [
@@ -35,7 +35,7 @@ const calendarKeywords = [
   "ical",
   "integration",
   "export",
-  "subscribe"
+  "subscribe",
 ];
 
 export const MealPlanSection: React.FC = () => {
@@ -43,12 +43,12 @@ export const MealPlanSection: React.FC = () => {
 
   const { searchTerm, isVisible: sectionMatches } = useSettingsSection(
     mealPlanSectionId,
-    sectionKeywords
+    sectionKeywords,
   );
 
   const calendarItemMatches = searchTerm
     ? calendarKeywords.some((keyword) =>
-        keyword.toLowerCase().includes(searchTerm.toLowerCase())
+        keyword.toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : true;
 

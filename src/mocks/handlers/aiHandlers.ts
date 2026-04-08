@@ -12,7 +12,7 @@ export const createAIHandlers = () => [
       if (!htmlContent || typeof htmlContent !== "string") {
         return HttpResponse.json(
           { message: "Missing or invalid htmlContent in request body" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -20,19 +20,19 @@ export const createAIHandlers = () => [
       const processedContent = htmlContent
         .replace(
           /\b(\d+(?:\.\d+)?)\s*cups?\b/gi,
-          (match, num) => `${Math.round(parseFloat(num) * 240)}ml`
+          (match, num) => `${Math.round(parseFloat(num) * 240)}ml`,
         )
         .replace(
           /\b(\d+(?:\.\d+)?)\s*tbsp\b/gi,
-          (match, num) => `${Math.round(parseFloat(num) * 15)}ml`
+          (match, num) => `${Math.round(parseFloat(num) * 15)}ml`,
         )
         .replace(
           /\b(\d+(?:\.\d+)?)\s*tsp\b/gi,
-          (match, num) => `${Math.round(parseFloat(num) * 5)}ml`
+          (match, num) => `${Math.round(parseFloat(num) * 5)}ml`,
         )
         .replace(
           /\b(\d+(?:\.\d+)?)\s*oz\b/gi,
-          (match, num) => `${Math.round(parseFloat(num) * 28)}g`
+          (match, num) => `${Math.round(parseFloat(num) * 28)}g`,
         );
 
       return HttpResponse.json({ processedContent });
@@ -42,7 +42,7 @@ export const createAIHandlers = () => [
           message:
             "Error processing recipe: Server error during recipe conversion",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),

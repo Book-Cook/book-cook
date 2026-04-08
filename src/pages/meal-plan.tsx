@@ -8,12 +8,12 @@ import { Unauthorized } from "../components/FallbackScreens";
 const MealPlanCalendar = dynamic(
   () =>
     import("../components/MealPlan/MealPlanCalendar/MealPlanCalendar").then(
-      (mod) => mod.MealPlanCalendar
+      (mod) => mod.MealPlanCalendar,
     ),
   {
     loading: () => null,
     ssr: false,
-  }
+  },
 );
 
 export default function MealPlanPage() {

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { CaretLeft, CaretRight } from '@phosphor-icons/react';
+import * as React from "react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 
-import styles from './PaginationControls.module.css';
+import styles from "./PaginationControls.module.css";
 
 export interface PaginationControlsProps {
   currentPage: number;
@@ -14,18 +14,21 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   totalPages,
   onPageChange,
 }) => {
-
   const getVisiblePageNumbers = () => {
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
-    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
       range.push(i);
     }
 
     if (currentPage - delta > 2) {
-      rangeWithDots.push(1, '...');
+      rangeWithDots.push(1, "...");
     } else {
       rangeWithDots.push(1);
     }
@@ -33,7 +36,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
     rangeWithDots.push(...range);
 
     if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push('...', totalPages);
+      rangeWithDots.push("...", totalPages);
     } else if (totalPages > 1) {
       rangeWithDots.push(totalPages);
     }
@@ -59,7 +62,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
 
       <div className={styles.pageButtons}>
         {getVisiblePageNumbers().map((page, index) => {
-          if (page === '...') {
+          if (page === "...") {
             return (
               <span key={`ellipsis-${index}`} className={styles.ellipsis}>
                 ...
@@ -72,7 +75,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
             <button
               key={page}
               type="button"
-              className={`${styles.pageButton}${isActive ? ` ${styles.pageButtonActive}` : ''}`}
+              className={`${styles.pageButton}${isActive ? ` ${styles.pageButtonActive}` : ""}`}
               onClick={() => onPageChange(page as number)}
             >
               {page}

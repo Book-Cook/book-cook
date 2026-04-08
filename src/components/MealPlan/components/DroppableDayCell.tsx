@@ -48,7 +48,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
     date: string,
     time: string,
     mealIndex: number,
-    event: React.MouseEvent
+    event: React.MouseEvent,
   ) => {
     event.stopPropagation();
     void onMealRemove(date, time, mealIndex);
@@ -59,7 +59,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
     !isCurrentMonth && styles.otherMonth,
     isPast && styles.pastDay,
     isToday && styles.isToday,
-    isOver && styles.isDraggingOver
+    isOver && styles.isDraggingOver,
   );
 
   const headerClass = clsx(styles.dayHeader, isPast && styles.pastDayHeader);
@@ -71,10 +71,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
           <div className={styles.isTodayNumber}>{date.getDate()}</div>
         ) : (
           <Text
-            className={clsx(
-              styles.dayNumber,
-              isToday && styles.isTodayText
-            )}
+            className={clsx(styles.dayNumber, isToday && styles.isTodayText)}
           >
             {date.getDate()}
           </Text>
@@ -112,7 +109,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                       appearance="subtle"
                       className={clsx(
                         styles.removeButton,
-                        "meal-remove-button"
+                        "meal-remove-button",
                       )}
                       startIcon={<XIcon size={8} />}
                       onClick={(e) =>
@@ -147,10 +144,7 @@ export const DroppableDayCell: React.FC<DroppableDayCellProps> = ({
                   </div>
                   <Button
                     appearance="subtle"
-                    className={clsx(
-                      styles.removeButton,
-                      "meal-remove-button"
-                    )}
+                    className={clsx(styles.removeButton, "meal-remove-button")}
                     startIcon={<XIcon size={8} />}
                     onClick={(e) =>
                       handleRemoveClick(dateStr, mealTypeToTime(mealType), 0, e)

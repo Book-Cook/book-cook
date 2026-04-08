@@ -19,7 +19,7 @@ const handlePatchRequest = async (
   res: NextApiResponse,
   db: Db,
   session: Session,
-  recipeId: string
+  recipeId: string,
 ) => {
   try {
     const { isPublic }: VisibilityRequest = req.body;
@@ -35,8 +35,8 @@ const handlePatchRequest = async (
     });
 
     if (!recipe) {
-      return res.status(404).json({ 
-        message: "Recipe not found or you don't have permission to modify it." 
+      return res.status(404).json({
+        message: "Recipe not found or you don't have permission to modify it.",
       });
     }
 
@@ -44,7 +44,9 @@ const handlePatchRequest = async (
     // Mixing bare field keys with operators (e.g. { isPublic, $unset }) is
     // invalid and causes MongoDB to throw "Unknown update operator".
     const $set: { isPublic: boolean; publishedAt?: Date } = { isPublic };
-    const updateDoc: { $set: typeof $set; $unset?: { publishedAt: string } } = { $set };
+    const updateDoc: { $set: typeof $set; $unset?: { publishedAt: string } } = {
+      $set,
+    };
 
     // Set publishedAt when making public for the first time
     if (isPublic && !recipe.publishedAt) {
@@ -56,14 +58,16 @@ const handlePatchRequest = async (
       updateDoc.$unset = { publishedAt: "" };
     }
 
-    const result = await db.collection("recipes").updateOne(
-      { _id: new ObjectId(recipeId), owner: session.user.id },
-      updateDoc
-    );
+    const result = await db
+      .collection("recipes")
+      .updateOne(
+        { _id: new ObjectId(recipeId), owner: session.user.id },
+        updateDoc,
+      );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ 
-        message: "Recipe not found or you don't have permission to modify it." 
+      return res.status(404).json({
+        message: "Recipe not found or you don't have permission to modify it.",
       });
     }
 
@@ -80,7 +84,7 @@ const handlePatchRequest = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
     res.setHeader("Allow", ALLOWED_METHODS);
@@ -92,17 +96,17 @@ export default async function handler(
     const session: Session | null = await getServerSession(
       req,
       res,
-      authOptions
+      authOptions,
     );
 
     if (!session?.user?.id) {
-      return res.status(401).json({ 
-        message: "Unauthorized. Please log in to modify recipe visibility." 
+      return res.status(401).json({
+        message: "Unauthorized. Please log in to modify recipe visibility.",
       });
     }
 
     const { id } = req.query;
-    
+
     if (!id || typeof id !== "string") {
       return res.status(400).json({ message: "Recipe ID is required." });
     }

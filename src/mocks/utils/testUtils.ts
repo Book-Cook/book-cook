@@ -34,11 +34,9 @@ export class TestUtils {
   static mockResponse(
     method: "get" | "post" | "put" | "delete",
     path: string,
-    response: Record<string, unknown>
+    response: Record<string, unknown>,
   ) {
-    server.use(
-      http[method](path, () => HttpResponse.json(response))
-    );
+    server.use(http[method](path, () => HttpResponse.json(response)));
   }
 
   /**
@@ -48,10 +46,10 @@ export class TestUtils {
     method: "get" | "post" | "put" | "delete",
     path: string,
     status = 500,
-    message = "Internal Server Error"
+    message = "Internal Server Error",
   ) {
     server.use(
-      http[method](path, () => HttpResponse.json({ message }, { status }))
+      http[method](path, () => HttpResponse.json({ message }, { status })),
     );
   }
 
@@ -62,13 +60,13 @@ export class TestUtils {
     method: "get" | "post" | "put" | "delete",
     path: string,
     delay: number,
-    response: Record<string, unknown> = {}
+    response: Record<string, unknown> = {},
   ) {
     server.use(
       http[method](path, async () => {
         await new Promise((resolve) => setTimeout(resolve, delay));
         return HttpResponse.json(response);
-      })
+      }),
     );
   }
 
@@ -78,8 +76,8 @@ export class TestUtils {
   static mockUnauthenticated() {
     server.use(
       http.get("/api/*", () =>
-        HttpResponse.json({ message: "Unauthorized" }, { status: 401 })
-      )
+        HttpResponse.json({ message: "Unauthorized" }, { status: 401 }),
+      ),
     );
   }
 }

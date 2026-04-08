@@ -8,7 +8,6 @@ import {
 } from "@phosphor-icons/react";
 import { clsx } from "clsx";
 
-import { Button } from "../../Button";
 import { RecipeCoverUpload } from "./RecipeCoverUpload";
 import { RecipeEmoji } from "./RecipeEmoji";
 import styles from "./RecipeHeader.module.css";
@@ -19,6 +18,7 @@ import { RecipeTags } from "./RecipeTags";
 import { useRecipeViewSaveState } from "../RecipeViewSaveStateContext";
 
 import { formatDate } from "../../../utils/formatDate";
+import { Button } from "../../Button";
 import { RecipeTitle } from "../../Typography";
 
 export const RecipeHeader = ({

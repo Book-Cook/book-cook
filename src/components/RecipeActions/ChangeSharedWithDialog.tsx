@@ -56,10 +56,7 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
       title={isPublic ? "Make Recipe Private" : "Make Recipe Public"}
       actions={
         <>
-          <Button
-            appearance="secondary"
-            onClick={handleCancelClick}
-          >
+          <Button appearance="secondary" onClick={handleCancelClick}>
             Cancel
           </Button>
           <Button
@@ -73,7 +70,14 @@ const ChangeSharedWithDialog: React.FC<ChangeTitleDialogProps> = ({
         </>
       }
     >
-      <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+      <label
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          cursor: "pointer",
+        }}
+      >
         <input
           type="checkbox"
           role="switch"

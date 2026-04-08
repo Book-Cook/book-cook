@@ -14,11 +14,15 @@ export function MarkdownPastePlugin() {
 
   useEffect(() => {
     const root = editor.getRootElement();
-    if (!root) {return;}
+    if (!root) {
+      return;
+    }
 
     const handler = (event: ClipboardEvent) => {
       const text = event.clipboardData?.getData("text/plain");
-      if (!text || !looksLikeMarkdown(text)) {return;}
+      if (!text || !looksLikeMarkdown(text)) {
+        return;
+      }
 
       event.preventDefault();
       event.stopPropagation();

@@ -21,15 +21,26 @@ import type { LexicalEditor } from "lexical";
 import { SelectAllPlugin, MarkdownPastePlugin } from "./plugins";
 import styles from "./TextEditor.module.css";
 import type { TextEditorProps } from "./TextEditor.types";
-import { editorTheme, recipeTransformers, recipeShortcutTransformers, hashMarkdownKey } from "./textEditorConfig";
+import {
+  editorTheme,
+  recipeTransformers,
+  recipeShortcutTransformers,
+  hashMarkdownKey,
+} from "./textEditorConfig";
 import { TextEditorPlaceholder } from "./TextEditorPlaceholder/TextEditorPlaceholder";
 import { SlashMenu } from "./TextEditorSlashMenu/TextEditorSlashMenu";
 
-function EditorRefPlugin({ editorRef }: { editorRef: MutableRefObject<LexicalEditor | null> }) {
+function EditorRefPlugin({
+  editorRef,
+}: {
+  editorRef: MutableRefObject<LexicalEditor | null>;
+}) {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     editorRef.current = editor;
-    return () => { editorRef.current = null; };
+    return () => {
+      editorRef.current = null;
+    };
   }, [editor, editorRef]);
   return null;
 }
@@ -46,7 +57,16 @@ export const TextEditor: React.FC<TextEditorProps> = (props) => {
 
   const initialConfig = {
     namespace: "RecipeEditor",
-    nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, HorizontalRuleNode, TableNode, TableCellNode, TableRowNode],
+    nodes: [
+      HeadingNode,
+      QuoteNode,
+      ListNode,
+      ListItemNode,
+      HorizontalRuleNode,
+      TableNode,
+      TableCellNode,
+      TableRowNode,
+    ],
     theme: editorTheme,
     editable: isEditable,
     editorState: () => {
@@ -57,7 +77,9 @@ export const TextEditor: React.FC<TextEditorProps> = (props) => {
 
   return (
     <LexicalComposer key={composerKey} initialConfig={initialConfig}>
-      <div className={`${styles.container} ${isEditable ? styles.editable : styles.readOnly}`}>
+      <div
+        className={`${styles.container} ${isEditable ? styles.editable : styles.readOnly}`}
+      >
         {isEditable && <SelectAllPlugin />}
         {isEditable && <MarkdownPastePlugin />}
         {isEditable && <TextEditorPlaceholder />}
@@ -77,13 +99,17 @@ export const TextEditor: React.FC<TextEditorProps> = (props) => {
           <OnChangePlugin
             ignoreSelectionChange
             onChange={() => {
-              if (dirtyRef.current) {return;}
+              if (dirtyRef.current) {
+                return;
+              }
               dirtyRef.current = true;
               onDirty();
             }}
           />
         )}
-        {isEditable && <MarkdownShortcutPlugin transformers={recipeShortcutTransformers} />}
+        {isEditable && (
+          <MarkdownShortcutPlugin transformers={recipeShortcutTransformers} />
+        )}
       </div>
     </LexicalComposer>
   );

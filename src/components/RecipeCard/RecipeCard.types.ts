@@ -27,5 +27,4 @@ export type RecipeCardProps = {
    * @default false
    */
   isLoading?: boolean;
-
 };

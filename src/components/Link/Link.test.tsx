@@ -15,7 +15,7 @@ describe("Link", () => {
     render(
       <Link href="https://example.com" target="_blank">
         External
-      </Link>
+      </Link>,
     );
 
     const anchor = screen.getByRole("link", { name: "External" });
@@ -27,7 +27,7 @@ describe("Link", () => {
     render(
       <Link href="https://example.com" target="_blank" rel="nofollow">
         External
-      </Link>
+      </Link>,
     );
 
     const anchor = screen.getByRole("link", { name: "External" });
@@ -47,7 +47,7 @@ describe("Link", () => {
         <Link href="/c" underline="none">
           None
         </Link>
-      </>
+      </>,
     );
 
     const hover = screen.getByRole("link", { name: "Hover" });
@@ -66,11 +66,11 @@ describe("Link", () => {
     render(
       <Link href="/muted" tone="muted">
         Muted
-      </Link>
+      </Link>,
     );
 
     expect(screen.getByRole("link", { name: "Muted" }).className).toMatch(
-      /muted/
+      /muted/,
     );
   });
 });

@@ -80,7 +80,7 @@ export const RecipeTemplates = {
  */
 export class UserFactory {
   static create(
-    overrides: Partial<{ id: string; email: string; name: string }> = {}
+    overrides: Partial<{ id: string; email: string; name: string }> = {},
   ) {
     const id = `user_${Math.random().toString(36).substr(2, 9)}`;
     return {

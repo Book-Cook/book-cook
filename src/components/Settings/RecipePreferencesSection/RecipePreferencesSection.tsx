@@ -63,7 +63,7 @@ export const RecipePreferencesSection: React.FC = () => {
       ...measurementKeywords,
       ...servingsKeywords,
       ...conversionKeywords,
-    ]
+    ],
   );
 
   const sectionMatches =
@@ -99,8 +99,12 @@ export const RecipePreferencesSection: React.FC = () => {
               <DropdownCaret />
             </DropdownTrigger>
             <DropdownContent>
-              <DropdownItem value="us">US Customary (cups, ounces)</DropdownItem>
-              <DropdownItem value="metric">Metric (grams, milliliters)</DropdownItem>
+              <DropdownItem value="us">
+                US Customary (cups, ounces)
+              </DropdownItem>
+              <DropdownItem value="metric">
+                Metric (grams, milliliters)
+              </DropdownItem>
               <DropdownItem value="both">Show Both</DropdownItem>
             </DropdownContent>
           </Dropdown>
@@ -129,7 +133,14 @@ export const RecipePreferencesSection: React.FC = () => {
           label="Auto-Convert Measurements"
           description="Automatically convert measurements between systems when viewing recipes."
         >
-          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              cursor: "pointer",
+            }}
+          >
             <input
               type="checkbox"
               checked={enableAutoConvert}

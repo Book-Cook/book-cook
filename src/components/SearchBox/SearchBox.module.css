@@ -15,7 +15,9 @@
   line-height: 20px;
   background: var(--colorNeutralBackground1);
   color: var(--colorNeutralForeground1);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .input::placeholder {

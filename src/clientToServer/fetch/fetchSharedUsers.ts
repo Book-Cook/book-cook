@@ -5,7 +5,7 @@ export async function fetchSharedUsers(): Promise<string[]> {
     "/api/user/sharing",
     {
       method: "GET",
-    }
+    },
   );
   return data.sharedWithUsers ?? [];
 }

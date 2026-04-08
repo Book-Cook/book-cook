@@ -25,7 +25,10 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({
     },
   });
 
-  const containerClass = clsx(styles.container, isOver && styles.isDraggingOver);
+  const containerClass = clsx(
+    styles.container,
+    isOver && styles.isDraggingOver,
+  );
 
   return (
     <div ref={setNodeRef} className={containerClass}>

@@ -24,7 +24,7 @@ const handleGetRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
   db: Db,
-  session: Session
+  session: Session,
 ) => {
   try {
     // Get saved recipes with full recipe details
@@ -95,7 +95,7 @@ const handlePostRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
   db: Db,
-  session: Session
+  session: Session,
 ) => {
   try {
     const { recipeId }: SavedRecipeRequest = req.body;
@@ -111,15 +111,15 @@ const handlePostRequest = async (
     });
 
     if (!recipe) {
-      return res.status(404).json({ 
-        message: "Recipe not found or is not public." 
+      return res.status(404).json({
+        message: "Recipe not found or is not public.",
       });
     }
 
     // Check if user is trying to save their own recipe
     if (recipe.owner === session.user.id) {
-      return res.status(400).json({ 
-        message: "You cannot save your own recipe." 
+      return res.status(400).json({
+        message: "You cannot save your own recipe.",
       });
     }
 
@@ -128,20 +128,24 @@ const handlePostRequest = async (
       userId: session.user.id,
     });
 
-    const isAlreadySaved = existingSavedRecipes?.savedRecipes?.includes(recipeId);
+    const isAlreadySaved =
+      existingSavedRecipes?.savedRecipes?.includes(recipeId);
 
     if (isAlreadySaved) {
       // Remove from saved recipes
-      await db.collection("savedRecipes").updateOne(
-        { userId: session.user.id },
-        { $pull: { savedRecipes: recipeId } } as Document
-      );
+      await db
+        .collection("savedRecipes")
+        .updateOne({ userId: session.user.id }, {
+          $pull: { savedRecipes: recipeId },
+        } as Document);
 
       // Decrement saved count on recipe
-      await db.collection("recipes").updateOne(
-        { _id: new ObjectId(recipeId) },
-        { $inc: { savedCount: -1 } }
-      );
+      await db
+        .collection("recipes")
+        .updateOne(
+          { _id: new ObjectId(recipeId) },
+          { $inc: { savedCount: -1 } },
+        );
 
       const response: SavedRecipeResponse = {
         success: true,
@@ -152,17 +156,21 @@ const handlePostRequest = async (
       res.status(200).json(response);
     } else {
       // Add to saved recipes
-      await db.collection("savedRecipes").updateOne(
-        { userId: session.user.id },
-        { $addToSet: { savedRecipes: recipeId } },
-        { upsert: true }
-      );
+      await db
+        .collection("savedRecipes")
+        .updateOne(
+          { userId: session.user.id },
+          { $addToSet: { savedRecipes: recipeId } },
+          { upsert: true },
+        );
 
       // Increment saved count on recipe
-      await db.collection("recipes").updateOne(
-        { _id: new ObjectId(recipeId) },
-        { $inc: { savedCount: 1 } }
-      );
+      await db
+        .collection("recipes")
+        .updateOne(
+          { _id: new ObjectId(recipeId) },
+          { $inc: { savedCount: 1 } },
+        );
 
       const response: SavedRecipeResponse = {
         success: true,
@@ -180,7 +188,7 @@ const handlePostRequest = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
     res.setHeader("Allow", ALLOWED_METHODS);
@@ -192,12 +200,12 @@ export default async function handler(
     const session: Session | null = await getServerSession(
       req,
       res,
-      authOptions
+      authOptions,
     );
 
     if (!session?.user?.id) {
-      return res.status(401).json({ 
-        message: "Unauthorized. Please log in to save recipes." 
+      return res.status(401).json({
+        message: "Unauthorized. Please log in to save recipes.",
       });
     }
 

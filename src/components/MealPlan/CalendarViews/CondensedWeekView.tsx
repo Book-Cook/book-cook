@@ -35,25 +35,12 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
             className={clsx(styles.dayColumn, isPast && styles.pastDay)}
           >
             <div
-              className={clsx(
-                styles.dayHeader,
-                isPast && styles.pastDayHeader
-              )}
+              className={clsx(styles.dayHeader, isPast && styles.pastDayHeader)}
             >
-              <Text
-                className={clsx(
-                  styles.dayName,
-                  isToday && styles.isToday
-                )}
-              >
+              <Text className={clsx(styles.dayName, isToday && styles.isToday)}>
                 {dayNames[index]}
               </Text>
-              <Text
-                className={clsx(
-                  styles.dayDate,
-                  isToday && styles.isToday
-                )}
-              >
+              <Text className={clsx(styles.dayDate, isToday && styles.isToday)}>
                 {date.getDate()}
               </Text>
             </div>
@@ -67,13 +54,13 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
                 scheduledMeals.map((timeSlot, timeIndex) => (
                   <div
                     key={`${dateStr}-${timeSlot.time}-${timeIndex}`}
-                    style={{ marginBottom: '12px' }}
+                    style={{ marginBottom: "12px" }}
                   >
                     <Text
                       style={{
-                        fontSize: '10px',
-                        color: 'var(--ui-TextLabel)',
-                        marginBottom: '4px',
+                        fontSize: "10px",
+                        color: "var(--ui-TextLabel)",
+                        marginBottom: "4px",
                         fontWeight: 600,
                         display: "block",
                       }}

@@ -9,4 +9,9 @@ export {
   Body2,
   Caption,
 } from "./Text";
-export type { TextProps, TextSize, TextWeight, TextVariant } from "./Text.types";
+export type {
+  TextProps,
+  TextSize,
+  TextWeight,
+  TextVariant,
+} from "./Text.types";

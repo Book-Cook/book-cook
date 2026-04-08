@@ -1,6 +1,9 @@
 import * as React from "react";
 import { useDroppable } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { clsx } from "clsx";
 
 import { HOUR_HEIGHT, HOURS, MIN_HOUR, getTimePosition } from "./constants";
@@ -26,7 +29,7 @@ interface DropZoneProps {
 }
 
 const DropZone: React.FC<DropZoneProps> = ({ date, hour, isActive }) => {
-  const time = `${hour.toString().padStart(2, '0')}:00`;
+  const time = `${hour.toString().padStart(2, "0")}:00`;
 
   const { setNodeRef, isOver } = useDroppable({
     id: `drop-${date}-${time}`,
@@ -40,7 +43,10 @@ const DropZone: React.FC<DropZoneProps> = ({ date, hour, isActive }) => {
   return (
     <div
       ref={setNodeRef}
-      className={clsx(styles.dropZone, (isOver || isActive) && styles.dropZoneActive)}
+      className={clsx(
+        styles.dropZone,
+        (isOver || isActive) && styles.dropZoneActive,
+      )}
       style={{
         top: `${(hour - MIN_HOUR) * HOUR_HEIGHT}px`,
         height: `${HOUR_HEIGHT}px`,
@@ -50,92 +56,93 @@ const DropZone: React.FC<DropZoneProps> = ({ date, hour, isActive }) => {
   );
 };
 
-export const DayColumn: React.FC<DayColumnProps> = React.memo(({
-  date,
-  meals,
-  onRemoveMeal,
-  isPast = false,
-}) => {
-  const [activeDropHour, _setActiveDropHour] = React.useState<number | null>(null);
+export const DayColumn: React.FC<DayColumnProps> = React.memo(
+  ({ date, meals, onRemoveMeal, isPast = false }) => {
+    const [activeDropHour, _setActiveDropHour] = React.useState<number | null>(
+      null,
+    );
 
-  // Flatten meals for display
-  const allMeals = React.useMemo(() => {
-    const flattened: Array<{
-      id: string;
-      meal: MealItem & { recipe?: Record<string, unknown> };
-      time: string;
-      index: number
-    }> = [];
+    // Flatten meals for display
+    const allMeals = React.useMemo(() => {
+      const flattened: Array<{
+        id: string;
+        meal: MealItem & { recipe?: Record<string, unknown> };
+        time: string;
+        index: number;
+      }> = [];
 
-    meals.forEach(timeSlot => {
-      timeSlot.meals.forEach((meal, index) => {
-        flattened.push({
-          id: `${date}-${timeSlot.time}-${index}`,
-          meal,
-          time: timeSlot.time,
-          index,
+      meals.forEach((timeSlot) => {
+        timeSlot.meals.forEach((meal, index) => {
+          flattened.push({
+            id: `${date}-${timeSlot.time}-${index}`,
+            meal,
+            time: timeSlot.time,
+            index,
+          });
         });
       });
-    });
 
-    return flattened;
-  }, [meals, date]);
+      return flattened;
+    }, [meals, date]);
 
-  return (
-    <div
-      className={styles.column}
-      data-day={date}
-      style={{ opacity: isPast ? 0.6 : 1 }}
-    >
-      {/* Hour grid lines */}
-      {HOURS.map(hour => (
-        <div
-          key={hour}
-          className={styles.hourSlot}
-          style={{
-            top: `${(hour - MIN_HOUR) * HOUR_HEIGHT}px`,
-            height: `${HOUR_HEIGHT}px`,
-          }}
-        />
-      ))}
-
-      {/* Drop zones for each hour */}
-      {HOURS.map(hour => (
-        <DropZone
-          key={`drop-${hour}`}
-          date={date}
-          hour={hour}
-          isActive={activeDropHour === hour}
-        />
-      ))}
-
-      {/* Sortable meal cards */}
-      <SortableContext
-        items={allMeals.map(meal => meal.id)}
-        strategy={verticalListSortingStrategy}
+    return (
+      <div
+        className={styles.column}
+        data-day={date}
+        style={{ opacity: isPast ? 0.6 : 1 }}
       >
-        {allMeals.map(({ id, meal, time, index }) => {
-          const recipe = meal.recipe as { title?: string; emoji?: string } | undefined;
+        {/* Hour grid lines */}
+        {HOURS.map((hour) => (
+          <div
+            key={hour}
+            className={styles.hourSlot}
+            style={{
+              top: `${(hour - MIN_HOUR) * HOUR_HEIGHT}px`,
+              height: `${HOUR_HEIGHT}px`,
+            }}
+          />
+        ))}
 
-          return (
-            <MealCard
-              key={id}
-              id={id}
-              recipeId={meal.recipeId}
-              title={recipe?.title ?? 'Unknown Recipe'}
-              emoji={recipe?.emoji}
-              time={time}
-              duration={meal.duration ?? 60}
-              position={getTimePosition(time)}
-              onRemove={() => onRemoveMeal(time, index)}
-              date={date}
-              mealIndex={index}
-            />
-          );
-        })}
-      </SortableContext>
-    </div>
-  );
-});
+        {/* Drop zones for each hour */}
+        {HOURS.map((hour) => (
+          <DropZone
+            key={`drop-${hour}`}
+            date={date}
+            hour={hour}
+            isActive={activeDropHour === hour}
+          />
+        ))}
 
-DayColumn.displayName = 'DayColumn';
+        {/* Sortable meal cards */}
+        <SortableContext
+          items={allMeals.map((meal) => meal.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {allMeals.map(({ id, meal, time, index }) => {
+            const recipe = meal.recipe as
+              | { title?: string; emoji?: string }
+              | undefined;
+
+            return (
+              <MealCard
+                key={id}
+                id={id}
+                recipeId={meal.recipeId}
+                title={recipe?.title ?? "Unknown Recipe"}
+                emoji={recipe?.emoji}
+                time={time}
+                duration={meal.duration ?? 60}
+                position={getTimePosition(time)}
+                onRemove={() => onRemoveMeal(time, index)}
+                date={date}
+                mealIndex={index}
+              />
+            );
+          })}
+        </SortableContext>
+      </div>
+    );
+  },
+);
+
+DayColumn.displayName = "DayColumn";

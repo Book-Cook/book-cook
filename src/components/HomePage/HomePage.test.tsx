@@ -6,7 +6,11 @@ import { SessionProvider } from "next-auth/react";
 import HomePage from "./HomePage";
 
 import { generateMealPlanResponse } from "../../mocks/data/mealPlans";
-import { caesarSalad, chocolateChipCookies, thaiGreenCurry } from "../../mocks/data/recipes";
+import {
+  caesarSalad,
+  chocolateChipCookies,
+  thaiGreenCurry,
+} from "../../mocks/data/recipes";
 import { GetRecentlyViewedResponses } from "../../mocks/responses/user/getRecentlyViewed";
 import { GetUserCollectionsResponses } from "../../mocks/responses/user/getUserCollections";
 import { mockUtils } from "../../mocks/utils/testUtils";
@@ -47,7 +51,7 @@ describe("HomePage Component", () => {
     mockUtils.mockResponse(
       "get",
       "/api/meal-plans",
-      generateMealPlanResponse()
+      generateMealPlanResponse(),
     );
   });
 
@@ -58,19 +62,19 @@ describe("HomePage Component", () => {
         "get",
         "/api/user/recentlyViewed",
         1000,
-        GetRecentlyViewedResponses.success.empty
+        GetRecentlyViewedResponses.success.empty,
       );
       mockUtils.mockDelay(
         "get",
         "/api/user/collections",
         1000,
-        GetUserCollectionsResponses.success.empty
+        GetUserCollectionsResponses.success.empty,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Should show skeleton loading states
@@ -85,19 +89,19 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockDelay(
         "get",
         "/api/user/collections",
         1000,
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Recently viewed should load quickly
@@ -115,18 +119,18 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.empty
+        GetUserCollectionsResponses.success.empty,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Wait for recipes to load
@@ -134,7 +138,7 @@ describe("HomePage Component", () => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
         expect(screen.getByText(caesarSalad.title)).toBeInTheDocument();
         expect(
-          screen.getByText(chocolateChipCookies.title)
+          screen.getByText(chocolateChipCookies.title),
         ).toBeInTheDocument();
       });
     });
@@ -143,25 +147,25 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.empty
+        GetRecentlyViewedResponses.success.empty,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Wait for collections to load
       await waitFor(() => {
         expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
-          screen.getByText(chocolateChipCookies.title)
+          screen.getByText(chocolateChipCookies.title),
         ).toBeInTheDocument();
         expect(screen.getByText(thaiGreenCurry.title)).toBeInTheDocument();
       });
@@ -171,18 +175,18 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -202,24 +206,24 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.empty
+        GetRecentlyViewedResponses.success.empty,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
         expect(screen.getByText("Recently Viewed Recipes")).toBeInTheDocument();
         expect(
-          screen.getByText("You haven't viewed any recipes yet.")
+          screen.getByText("You haven't viewed any recipes yet."),
         ).toBeInTheDocument();
       });
     });
@@ -228,24 +232,24 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.empty
+        GetUserCollectionsResponses.success.empty,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
         expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
-          screen.getByText("You haven't viewed any recipes yet.")
+          screen.getByText("You haven't viewed any recipes yet."),
         ).toBeInTheDocument();
       });
     });
@@ -254,18 +258,18 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.empty
+        GetRecentlyViewedResponses.success.empty,
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.empty
+        GetUserCollectionsResponses.success.empty,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -274,7 +278,7 @@ describe("HomePage Component", () => {
 
         // Should show empty state messages
         const emptyMessages = screen.getAllByText(
-          "You haven't viewed any recipes yet."
+          "You haven't viewed any recipes yet.",
         );
         expect(emptyMessages.length).toBe(2);
       });
@@ -284,24 +288,26 @@ describe("HomePage Component", () => {
   describe("Error Handling", () => {
     it("should handle recently viewed API errors gracefully", async () => {
       // Suppress expected console errors during this test
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       mockUtils.mockError(
         "get",
         "/api/user/recentlyViewed",
         500,
-        "Internal Server Error"
+        "Internal Server Error",
       );
       mockUtils.mockResponse(
         "get",
         "/api/user/collections",
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -311,7 +317,7 @@ describe("HomePage Component", () => {
         // Collections should work fine
         expect(screen.getByText("Favorite Recipes")).toBeInTheDocument();
         expect(
-          screen.getByText(chocolateChipCookies.title)
+          screen.getByText(chocolateChipCookies.title),
         ).toBeInTheDocument();
       });
 
@@ -320,24 +326,26 @@ describe("HomePage Component", () => {
 
     it("should handle collections API errors gracefully", async () => {
       // Suppress expected console errors during this test
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockError(
         "get",
         "/api/user/collections",
         500,
-        "Internal Server Error"
+        "Internal Server Error",
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -354,25 +362,27 @@ describe("HomePage Component", () => {
 
     it("should handle both APIs failing", async () => {
       // Suppress expected console errors during this test
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       mockUtils.mockError(
         "get",
         "/api/user/recentlyViewed",
         500,
-        "Internal Server Error"
+        "Internal Server Error",
       );
       mockUtils.mockError(
         "get",
         "/api/user/collections",
         500,
-        "Internal Server Error"
+        "Internal Server Error",
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -407,7 +417,7 @@ describe("HomePage Component", () => {
       render(
         <TestWrapperNoSession>
           <HomePage />
-        </TestWrapperNoSession>
+        </TestWrapperNoSession>,
       );
 
       // Should still render structure but not make API calls
@@ -421,7 +431,7 @@ describe("HomePage Component", () => {
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Wait for the component to render
@@ -441,7 +451,7 @@ describe("HomePage Component", () => {
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       await waitFor(() => {
@@ -452,7 +462,9 @@ describe("HomePage Component", () => {
 
       // Verify that both RecipesCarousel components are rendered
       // The exact recipe content depends on React Query + MSW integration working
-      const carouselTitles = screen.getAllByText(/Recently Viewed Recipes|Favorite Recipes/);
+      const carouselTitles = screen.getAllByText(
+        /Recently Viewed Recipes|Favorite Recipes/,
+      );
       expect(carouselTitles).toHaveLength(2);
     });
 
@@ -461,19 +473,19 @@ describe("HomePage Component", () => {
       mockUtils.mockResponse(
         "get",
         "/api/user/recentlyViewed",
-        GetRecentlyViewedResponses.success.withRecipes
+        GetRecentlyViewedResponses.success.withRecipes,
       );
       mockUtils.mockDelay(
         "get",
         "/api/user/collections",
         1000,
-        GetUserCollectionsResponses.success.withRecipes
+        GetUserCollectionsResponses.success.withRecipes,
       );
 
       render(
         <TestWrapper>
           <HomePage />
-        </TestWrapper>
+        </TestWrapper>,
       );
 
       // Recently viewed should load first

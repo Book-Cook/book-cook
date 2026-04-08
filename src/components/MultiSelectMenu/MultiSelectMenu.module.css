@@ -28,7 +28,6 @@
     box-shadow var(--motion-default);
 }
 
-
 .inputControl:focus-within {
   border-color: var(--ui-ControlBorderPressed);
   box-shadow:

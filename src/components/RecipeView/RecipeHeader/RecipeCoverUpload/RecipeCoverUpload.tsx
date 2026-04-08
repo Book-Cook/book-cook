@@ -1,8 +1,6 @@
-import { forwardRef, useCallback, useRef, useState } from "react";
+import { forwardRef } from "react";
 import { CameraIcon, TrashIcon } from "@phosphor-icons/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { clsx } from "clsx";
-import { toast } from "sonner";
 
 import { Button } from "src/components/Button";
 import {
@@ -12,237 +10,24 @@ import {
   MenuSeparator,
   MenuTrigger,
 } from "src/components/Menu";
-
 import styles from "./RecipeCoverUpload.module.css";
-import type { RecipeCoverUploadProps, UploadState } from "./RecipeCoverUpload.types";
-
-const ALLOWED_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
-const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
-
-const MAGIC_SIGNATURES: { type: string; bytes: number[] }[] = [
-  { type: "image/jpeg", bytes: [0xff, 0xd8, 0xff] },
-  { type: "image/png", bytes: [0x89, 0x50, 0x4e, 0x47] },
-  { type: "image/webp", bytes: [0x52, 0x49, 0x46, 0x46] },
-  { type: "image/gif", bytes: [0x47, 0x49, 0x46, 0x38] },
-];
-
-async function validateMagicBytes(file: File): Promise<boolean> {
-  const buffer = await file.slice(0, 8).arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  return MAGIC_SIGNATURES.some(({ bytes: sig }) =>
-    sig.every((byte, i) => bytes[i] === byte),
-  );
-}
-
-async function compressToWebP(file: File): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const objectUrl = URL.createObjectURL(file);
-
-    img.onload = () => {
-      URL.revokeObjectURL(objectUrl);
-      const MAX_WIDTH = 1920;
-      const scale = Math.min(1, MAX_WIDTH / img.width);
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        reject(new Error("Canvas context unavailable"));
-        return;
-      }
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("Image compression failed"));
-          }
-        },
-        "image/webp",
-        0.85,
-      );
-    };
-
-    img.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      reject(new Error("Failed to load image for compression"));
-    };
-
-    img.src = objectUrl;
-  });
-}
-
-function uploadWithProgress(
-  blob: Blob,
-  url: string,
-  onProgress: (pct: number) => void,
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.upload.addEventListener("progress", (e) => {
-      if (e.lengthComputable) {
-        onProgress(Math.round((e.loaded / e.total) * 100));
-      }
-    });
-    xhr.addEventListener("load", () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve();
-      } else {
-        reject(new Error(`Upload failed with status ${xhr.status}`));
-      }
-    });
-    xhr.addEventListener("error", () =>
-      reject(new Error("Network error during upload")),
-    );
-    xhr.addEventListener("abort", () => reject(new Error("Upload cancelled")));
-    xhr.open("PUT", url);
-    xhr.setRequestHeader("Content-Type", "image/webp");
-    xhr.send(blob);
-  });
-}
+import type { RecipeCoverUploadProps } from "./RecipeCoverUpload.types";
+import { useCoverUpload } from "./useCoverUpload";
 
 export const RecipeCoverUpload = forwardRef<
   HTMLInputElement,
   RecipeCoverUploadProps
 >(({ recipeId, imageURL }, externalRef) => {
-  const internalRef = useRef<HTMLInputElement>(null);
-  const [uploadState, setUploadState] = useState<UploadState>({
-    status: "idle",
-  });
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const queryClient = useQueryClient();
-
-  const isUploading = uploadState.status !== "idle";
-  const displayUrl = previewUrl ?? imageURL;
-  const hasImage = Boolean(displayUrl);
-
-  const setInputRef = useCallback(
-    (el: HTMLInputElement | null) => {
-      internalRef.current = el;
-      if (typeof externalRef === "function") {
-        externalRef(el);
-      } else if (externalRef) {
-        externalRef.current = el;
-      }
-    },
-    [externalRef],
-  );
-
-  const handleFileSelect = async (file: File) => {
-    setUploadState({ status: "idle" });
-    setPreviewUrl(null);
-
-    if (!ALLOWED_TYPES.has(file.type)) {
-      toast.error("Only JPEG, PNG, WebP, and GIF images are allowed.");
-      return;
-    }
-    if (file.size > MAX_SIZE_BYTES) {
-      toast.error("Image must be under 10 MB.");
-      return;
-    }
-    if (!(await validateMagicBytes(file))) {
-      toast.error("File does not appear to be a valid image.");
-      return;
-    }
-
-    try {
-      setUploadState({ status: "compressing" });
-      const compressed = await compressToWebP(file);
-      const preview = URL.createObjectURL(compressed);
-      setPreviewUrl(preview);
-
-      setUploadState({ status: "requesting" });
-      const presignRes = await fetch("/api/upload/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: "image/webp",
-          fileSize: compressed.size,
-        }),
-      });
-      if (!presignRes.ok) {
-        const { error } = (await presignRes.json()) as { error: string };
-        throw new Error(error ?? "Failed to get upload URL");
-      }
-      const { uploadUrl, key } = (await presignRes.json()) as {
-        uploadUrl: string;
-        key: string;
-      };
-
-      setUploadState({ status: "uploading", progress: 0 });
-      await uploadWithProgress(compressed, uploadUrl, (pct) =>
-        setUploadState({ status: "uploading", progress: pct }),
-      );
-
-      setUploadState({ status: "confirming" });
-      const confirmRes = await fetch("/api/upload/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, recipeId }),
-      });
-      if (!confirmRes.ok) {
-        const { error } = (await confirmRes.json()) as { error: string };
-        throw new Error(error ?? "Failed to save image");
-      }
-      const { url } = (await confirmRes.json()) as { url: string };
-
-      queryClient.setQueryData(
-        ["recipe", recipeId],
-        (old: Record<string, unknown> | undefined) =>
-          old ? { ...old, imageURL: url } : old,
-      );
-      void queryClient.invalidateQueries({
-        queryKey: ["recipe", recipeId],
-        refetchType: "all",
-      });
-
-      URL.revokeObjectURL(preview);
-      setPreviewUrl(null);
-      setUploadState({ status: "idle" });
-    } catch (err) {
-      setPreviewUrl(null);
-      setUploadState({ status: "idle" });
-      toast.error(err instanceof Error ? err.message : "Upload failed");
-    }
-  };
-
-  const handleRemoveCover = async () => {
-    setUploadState({ status: "confirming" });
-    try {
-      const res = await fetch(`/api/recipes/${recipeId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageURL: "" }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to remove cover");
-      }
-
-      queryClient.setQueryData(
-        ["recipe", recipeId],
-        (old: Record<string, unknown> | undefined) =>
-          old ? { ...old, imageURL: "" } : old,
-      );
-      void queryClient.invalidateQueries({
-        queryKey: ["recipe", recipeId],
-        refetchType: "all",
-      });
-      setUploadState({ status: "idle" });
-    } catch (err) {
-      setUploadState({ status: "idle" });
-      toast.error(
-        err instanceof Error ? err.message : "Failed to remove cover",
-      );
-    }
-  };
+  const {
+    uploadState,
+    isUploading,
+    displayUrl,
+    hasImage,
+    setInputRef,
+    handleFileSelect,
+    handleRemoveCover,
+    internalRef,
+  } = useCoverUpload({ recipeId, imageURL, externalRef });
 
   return (
     <div className={clsx(styles.root, hasImage && styles.hasCover)}>

@@ -41,7 +41,7 @@ export function generateEventUID(
   date: string,
   time: string,
   recipeId: string,
-  index: number
+  index: number,
 ): string {
   return `meal-${date}-${time.replace(":", "")}-${recipeId}-${index}@book-cook.app`;
 }
@@ -50,7 +50,7 @@ export function generateEventUID(
  * Convert meal plan data to iCal events
  */
 export function mealPlansToICalEvents(
-  mealPlans: MealPlanWithRecipes[]
+  mealPlans: MealPlanWithRecipes[],
 ): ICalEvent[] {
   const events: ICalEvent[] = [];
 
@@ -63,7 +63,7 @@ export function mealPlansToICalEvents(
         slot.meals.forEach((meal, index) => {
           const startDate = parseTimeToDate(date, slot.time);
           const endDate = new Date(
-            startDate.getTime() + (meal.duration ?? 60) * 60 * 1000
+            startDate.getTime() + (meal.duration ?? 60) * 60 * 1000,
           );
 
           const recipe = meal.recipe;
@@ -94,7 +94,7 @@ export function mealPlansToICalEvents(
         const defaultTime = mealTypeToTime(mealType);
         const startDate = parseTimeToDate(date, defaultTime);
         const endDate = new Date(
-          startDate.getTime() + (meal.duration ?? 60) * 60 * 1000
+          startDate.getTime() + (meal.duration ?? 60) * 60 * 1000,
         );
 
         const recipe = meal.recipe;
@@ -124,7 +124,7 @@ export function mealPlansToICalEvents(
  */
 export function generateICalContent(
   events: ICalEvent[],
-  calendarName = "Book Cook Meal Plan"
+  calendarName = "Book Cook Meal Plan",
 ): string {
   const lines = [
     "BEGIN:VCALENDAR",
@@ -146,7 +146,7 @@ export function generateICalContent(
       `SUMMARY:${event.summary}`,
       `CREATED:${formatICalDate(new Date())}`,
       `LAST-MODIFIED:${formatICalDate(new Date())}`,
-      `DTSTAMP:${formatICalDate(new Date())}`
+      `DTSTAMP:${formatICalDate(new Date())}`,
     );
 
     if (event.description) {

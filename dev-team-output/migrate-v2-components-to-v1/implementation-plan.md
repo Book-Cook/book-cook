@@ -5,6 +5,7 @@
 ### Files read
 
 **v1 (target)**
+
 - `src/pages/_app.tsx` — bootstraps app with `RendererProvider`, `SSRProvider`, `isMounted` gate, `QueryClientProvider`, and `AppContainer`
 - `src/components/AppContainer.tsx` — wraps every page in `FluentProvider` with hand-crafted `BrandVariants` theme; also owns `SearchBoxProvider`, `Toolbar`, and the page `<main>` wrapper; contains `SessionProvider`
 - `src/components/Toolbar/Toolbar.tsx` — top nav bar using Fluent `Toolbar`, `Button`, `Link`; nav links: /recipes, /collections, /explore; "New Recipe" button pushes to `/newRecipe`; contains `SearchBar` and `UserProfile` slots
@@ -39,6 +40,7 @@
 - `next.config.js` — no CSS modules config needed; standard Next.js Pages Router
 
 **v2 (source)**
+
 - `src/app/Providers.tsx` — `QueryClientProvider` + `ThemeProvider` only; no `RendererProvider`, no `SSRProvider`, no `isMounted`
 - `src/app/global.css` — `:root` font and motion variables; `box-sizing: border-box` reset; `html, body { height: 100%; margin: 0; padding: 0 }`
 - `src/components/Theme/ThemeProvider.tsx` — reads `theme` prop, writes CSS class to `document.documentElement` via `useEffect`; exports `useTheme`
@@ -82,6 +84,7 @@
 ### Patterns and conventions observed
 
 **v1 patterns:**
+
 - Pages Router (`src/pages/`); no `@/` alias; imports use `../` relative paths or `src/` absolute prefix
 - Griffel `makeStyles` / `shorthands` for all component styles (to be removed)
 - Fluent `(_ev, data) => data.value` callback pattern in all controlled inputs
@@ -91,6 +94,7 @@
 - No `"use client"` directives (Pages Router server-renders by default; no App Router)
 
 **v2 patterns:**
+
 - CSS modules for all styles; CSS custom properties for design tokens
 - Standard React `ChangeEvent<HTMLInputElement>` onChange on all inputs
 - `clsx` for conditional class names
@@ -138,6 +142,7 @@ v2's `RecipeGalleryPage` uses Supabase-backed `useRecipes` with infinite paginat
 **Modify**
 
 Add to `dependencies`:
+
 ```
 "@lexical/react": "^0.40.0"
 "@phosphor-icons/react": "^2.1.10"
@@ -152,6 +157,7 @@ Add to `dependencies`:
 ```
 
 Remove from `dependencies` (Phase 5, but document here):
+
 ```
 "@fluentui/react-components"
 "@fluentui/react-context-selector"
@@ -165,16 +171,18 @@ Remove from `dependencies` (Phase 5, but document here):
 **Modify**
 
 Add `paths` under `compilerOptions` to enable the `src/` alias used in internal imports after copying:
+
 ```json
 "paths": {
   "src/*": ["./src/*"]
 }
 ```
+
 This is already how v1 references modules (`import { fetchAllRecipes } from "src/clientToServer/fetch/fetchAllRecipes"`). No additional alias is needed — v2 files copied into v1 must have their `@/` imports converted to relative paths during copy.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/styles/global.css` *(new file)*
+**File:** `C:/code/Personal/book-cook/src/styles/global.css` _(new file)_
 **Create**
 
 Copy from `C:/code/Personal/book-cook2/src/app/global.css` verbatim. This replaces the inline `<style jsx global>` in `_app.tsx`.
@@ -192,6 +200,7 @@ Copy from `C:/code/Personal/book-cook2/src/components/Theme/theme.module.css` ve
 **Create**
 
 Copy from `C:/code/Personal/book-cook2/src/components/Theme/ThemeProvider.tsx`.
+
 - Remove `"use client"` directive (not valid in Pages Router)
 - Replace `import styles from "./theme.module.css"` — path is already relative, no change needed
 
@@ -216,13 +225,14 @@ Copy from `C:/code/Personal/book-cook2/src/components/Theme/index.ts` verbatim.
 For each component folder below, copy the entire folder from `C:/code/Personal/book-cook2/src/components/<Name>/` to `C:/code/Personal/book-cook/src/components/<Name>/`. After copying, apply the diff rules listed for each.
 
 **Diff rules that apply to ALL copied components:**
+
 1. Remove `"use client"` directives
 2. Replace any `@/` import prefixes with relative paths (e.g. `@/hooks/useFormFieldIds` becomes `../../hooks/useFormFieldIds`)
 3. Remove Storybook (`*.stories.tsx`) and test (`*.test.tsx`) files — these are out of scope
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Button/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Button/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Button/`
 
 Files to copy: `Button.tsx`, `Button.module.css`, `Button.types.ts`, `index.ts`
@@ -230,7 +240,7 @@ No import path changes needed (Button has no internal cross-component imports).
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Input/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Input/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Input/`
 
 Files to copy: `Input.tsx`, `Input.module.css`, `Input.types.ts`, `index.ts`
@@ -238,7 +248,7 @@ In `Input.tsx`: replace `import { useFormFieldIds } from "@/hooks/useFormFieldId
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Searchbox/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Searchbox/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Searchbox/`
 
 Files to copy: `Searchbox.tsx`, `Searchbox.module.css`, `Searchbox.types.ts`, `index.ts`
@@ -246,7 +256,7 @@ In `Searchbox.tsx`: replace `import { useFormFieldIds } from "@/hooks/useFormFie
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Typography/` *(replace existing folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Typography/` _(replace existing folder)_
 **Modify — replace contents with v2 version**
 
 Delete existing files: `components/Body1/`, `components/Display/`, `components/LargeTitle/`, `utils/createText.tsx`, `utils/index.ts`, `components/index.ts`
@@ -255,7 +265,7 @@ No import path changes needed.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Tag/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Tag/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Tag/`
 
 Files to copy: `Tag.tsx`, `Tag.module.css`, `Tag.types.ts`, `index.ts`
@@ -263,7 +273,7 @@ No import path changes needed.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Avatar/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Avatar/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Avatar/`
 
 Files to copy: `Avatar.tsx`, `Avatar.module.css`, `Avatar.types.ts`, `index.ts`, `getAvatarColors.ts` (if co-located)
@@ -271,7 +281,7 @@ In `Avatar.tsx`: check for `@/` imports and convert to relative.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Tooltip/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Tooltip/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Tooltip/`
 
 Files to copy: `Tooltip.tsx`, `Tooltip.module.css`, `Tooltip.types.ts`, `index.ts`
@@ -279,7 +289,7 @@ No import path changes needed.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Stack/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Stack/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Stack/`
 
 Files to copy: `Stack.tsx`, `Stack.module.css`, `Stack.types.ts`, `index.ts`
@@ -287,7 +297,7 @@ No import path changes needed.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Toast/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Toast/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Toast/`
 
 Files to copy: `Toast.tsx`, `Toast.module.css`, `Toast.types.ts`, `index.ts`
@@ -341,7 +351,7 @@ Copy from `C:/code/Personal/book-cook2/public/google-logo.svg`. Required by `Goo
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Dialog/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Dialog/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Dialog/`
 
 Files to copy: `Dialog.tsx`, `Dialog.module.css`, `Dialog.types.ts`, `index.ts`
@@ -349,7 +359,7 @@ Remove `"use client"`.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Menu/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Menu/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Menu/`
 
 Files to copy: `Menu.tsx`, `MenuItems.tsx`, `Menu.module.css`, `Menu.types.ts`, `index.ts`
@@ -357,7 +367,7 @@ Remove `"use client"`.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Dropdown/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Dropdown/` _(entire folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Dropdown/`
 
 Files to copy: `Dropdown.tsx`, `Dropdown.module.css`, `Dropdown.types.ts`, `index.ts`
@@ -365,7 +375,7 @@ Remove `"use client"`.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipeCard/` *(replace existing)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipeCard/` _(replace existing)_
 **Modify — replace with v2 version**
 
 Delete existing: `RecipeCard.tsx`, `RecipeCard.types.ts` (v1 props were `title`, `id`, `createdDate`, `imageSrc`, `tags`)
@@ -375,7 +385,7 @@ In `RecipeCard.tsx`: replace `@/` imports with relative paths. No `next/navigati
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipeCardGallery/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipeCardGallery/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/RecipeCardGallery/`
 
 Files to copy: `RecipeCardGallery.tsx`, `RecipeCardGallery.module.css`, `RecipeCardGallery.types.ts`, `index.ts`
@@ -383,7 +393,7 @@ In `RecipeCardGallery.tsx`: replace `import { RecipeCard } from "../RecipeCard"`
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipeCardCarousel/` *(replace existing `RecipeCarousel`)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipeCardCarousel/` _(replace existing `RecipeCarousel`)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/RecipeCardCarousel/`
 
 The existing `src/components/RecipeCarousel/` folder is **deleted** after the new folder is in place.
@@ -392,7 +402,7 @@ Remove `"use client"`. Convert `@/` imports.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/MultiSelectMenu/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/MultiSelectMenu/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/MultiSelectMenu/`
 
 Files to copy: `MultiSelectMenu.tsx`, `MultiSelectMenu.module.css`, `MultiSelectMenu.types.ts`, `index.ts`
@@ -400,7 +410,7 @@ Remove `"use client"`. Convert `@/` imports to relative.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Auth/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Auth/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Auth/`
 
 Files to copy: `GoogleSignInButton.tsx`, `GoogleSignInButton.module.css`, `GoogleSignInButton.types.ts`, `index.ts`
@@ -408,7 +418,7 @@ Remove `"use client"`. `GoogleSignInButton` imports from `../Button` — already
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/AppShell/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/AppShell/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/AppShell/`
 
 Files to copy: `AppShell.tsx`, `AppShell.module.css`, `AppShell.types.ts` (if exists), `index.ts`
@@ -416,10 +426,11 @@ In `AppShell.tsx`: replace `import { AppSidebar } from "../Sidebar"` with the v1
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Sidebar/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Sidebar/` _(new folder)_
 **Create — partial copy + adapt**
 
 Copy from v2:
+
 - `Sidebar.tsx` — remove `"use client"`; replace `@/hooks/useMediaQuery` with `../../hooks/useMediaQuery`; replace `@/utils/toCssSize` with `../../utils/toCssSize`
 - `Sidebar.module.css` — copy verbatim
 - `Sidebar.types.ts` — copy verbatim
@@ -431,6 +442,7 @@ Copy from v2:
 
 **`AppSidebar.tsx` — rewrite for v1** (do NOT copy v2 version):
 Replace Supabase hooks with v1 equivalents:
+
 ```tsx
 // v2 uses: useAuthSession, useAuthSignOut, next/navigation useRouter
 // v1 uses: next-auth useSession, signOut, next/router useRouter
@@ -438,26 +450,33 @@ Replace Supabase hooks with v1 equivalents:
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 ```
+
 Replace `getAuthUserProfile(user)` with inline derivation:
+
 ```tsx
 const { data: session } = useSession();
 const userName = session?.user?.name ?? session?.user?.email ?? "";
 const userImage = session?.user?.image ?? undefined;
 ```
+
 Replace `useAuthSignOut` mutation with direct `signOut()` call:
+
 ```tsx
 const handleSignOut = () => {
   signOut();
 };
 ```
+
 Keep the rest of the JSX structure (Sidebar, SidebarContent, Menu, MenuContent, MenuItem, Avatar) identical to v2.
 
 **`SidebarContent.tsx` — rewrite for v1** (do NOT copy v2 version):
 Replace `useSearchParams` from `next/navigation` with the v1 `SearchBoxProvider` context:
+
 ```tsx
 import { useRouter } from "next/router";
 import { useSearchBox } from "../../context/SearchBoxProvider/SearchBoxProvider";
 ```
+
 The "Search" sidebar item opens `SidebarSearchDialog`, which on submit calls `onSearchBoxValueChange` (from `SearchBoxProvider`) and navigates to `/recipes` via `useRouter`.
 The "New recipe" sidebar item opens `NewRecipeDialog`.
 The "Recipes" sidebar item navigates to `/recipes` via `router.push`.
@@ -468,10 +487,11 @@ Replace `onSubmit` callback signature to call `onSearchBoxValueChange` instead o
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipeView/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipeView/` _(new folder)_
 **Create — copy + adapt**
 
 Copy the entire `RecipeView` tree from v2:
+
 - `RecipeView.tsx`
 - `RecipeView.module.css`
 - `RecipeView.types.ts`
@@ -502,7 +522,7 @@ v2's `Recipe` type has additional fields (`emoji`, `viewCount`, `savedCount`, `c
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipeSaveBar/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipeSaveBar/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/RecipeSaveBar/`
 
 Files to copy: `RecipeSaveBar.tsx`, `RecipeSaveBar.module.css`, `RecipeSaveBar.types.ts`, `index.ts`
@@ -510,7 +530,7 @@ Remove `"use client"`. Replace `@/components/Button` with `../Button`. Replace `
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/NewRecipeDialog/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/NewRecipeDialog/` _(new folder)_
 **Create — copy + adapt from** `C:/code/Personal/book-cook2/src/components/NewRecipeDialog/`
 
 Files to copy: `NewRecipeDialog.tsx`, `NewRecipeDialog.module.css` (if exists), `NewRecipeDialog.types.ts`, `index.ts`
@@ -518,6 +538,7 @@ Remove `"use client"`.
 Replace `import { useRouter } from "next/navigation"` with `import { useRouter } from "next/router"`.
 Replace `@/` imports with relative paths.
 **Critical mutation shape adaptation:** v2's `useCreateRecipe` returns `{ id }` but v1's returns `{ recipeId }`. Replace:
+
 ```tsx
 // v2:
 mutation.mutate(trimmed, {
@@ -529,11 +550,12 @@ mutation.mutate(
   { onSuccess: (data) => { router.push(`/recipes/${data.recipeId}`); ...} }
 )
 ```
+
 The v1 mutation takes the full recipe object, not just a title string. The dialog creates the recipe with empty `data`, `tags`, and `imageURL` (matching the current `newRecipe.tsx` pattern).
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/TextEditor/` *(new folder)*
+**File:** `C:/code/Personal/book-cook/src/components/TextEditor/` _(new folder)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/TextEditor/`
 
 Copy the entire `TextEditor` folder including `plugins/`, `TextEditorPlaceholder/`, `TextEditorSideMenu/`, `TextEditorSlashMenu/`, config files, and `index.ts`.
@@ -541,7 +563,7 @@ Remove `"use client"` from all files. Convert all `@/` imports to relative. This
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Accordion/` *(new folder — available primitive, no page wiring required)*
+**File:** `C:/code/Personal/book-cook/src/components/Accordion/` _(new folder — available primitive, no page wiring required)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Accordion/`
 
 Files to copy: `Accordion.tsx`, `Accordion.module.css`, `Accordion.types.ts`, `index.ts`
@@ -549,7 +571,7 @@ Remove `"use client"`. Convert `@/` imports.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Checkbox/` *(new folder — available primitive)*
+**File:** `C:/code/Personal/book-cook/src/components/Checkbox/` _(new folder — available primitive)_
 **Create — copy from** `C:/code/Personal/book-cook2/src/components/Checkbox/`
 
 Files to copy: `Checkbox.tsx`, `Checkbox.module.css`, `Checkbox.types.ts`, `index.ts`
@@ -565,6 +587,7 @@ Remove `"use client"`. Convert `@/` imports.
 **Modify**
 
 Remove:
+
 - `import { tokens } from "@fluentui/react-components"`
 - `import { SSRProvider } from "@fluentui/react-utilities"`
 - `import { RendererProvider, createDOMRenderer } from "@griffel/react"`
@@ -573,11 +596,13 @@ Remove:
 - The inline `<style jsx global>` block
 
 Add:
+
 - `import "../styles/global.css"` — new global stylesheet
 - `import { ThemeProvider } from "../components/Theme"`
 - `import { Toaster } from "../components/Toast"` (the `sonner` Toaster host)
 
 New provider tree:
+
 ```tsx
 <QueryClientProvider client={queryClient}>
   <ThemeProvider theme="light">
@@ -597,6 +622,7 @@ Keep `Head` block unchanged.
 **Modify**
 
 Remove:
+
 - All `@fluentui/react-components` imports (`FluentProvider`, `createDarkTheme`, `createLightTheme`, `webLightTheme`, `BrandVariants`, `Theme`, `tokens`)
 - The `appBrandVariants` object
 - The `customLightTheme` object
@@ -604,10 +630,12 @@ Remove:
 - The `<FluentProvider>` wrapper
 
 Keep:
+
 - `SessionProvider` from `next-auth/react`
 - `SearchBoxProvider` context wiring (`searchBoxValue`, `onSearchBoxValueChange` state)
 
 Replace `<Toolbar />` with `<AppShell>` wrapping:
+
 ```tsx
 import { AppShell } from "./AppShell";
 
@@ -633,7 +661,7 @@ The `<main>` wrapper that was previously here is now owned by `AppShell.tsx`.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/Toolbar/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/Toolbar/` _(entire folder)_
 **Delete**
 
 Remove `Toolbar.tsx`, `SearchBar/`, `UserProfile/`, `Logo/`, and all associated `index.ts`, `*.styles.ts` files. The barrel in `src/components/index.ts` must also be updated to remove the `Toolbar` export.
@@ -644,16 +672,18 @@ Remove `Toolbar.tsx`, `SearchBar/`, `UserProfile/`, `Logo/`, and all associated 
 **Modify**
 
 Remove:
+
 ```ts
-export * from "./AppContainer";    // AppContainer still exists but no longer barrel-exported
-export * from "./Typography";      // keep — now points to v2 Typography
-export * from "./Toolbar";         // remove — deleted
-export * from "./TagPicker";       // remove — deleted
-export * from "./LandingPage";     // remove — replaced inline
-export * from "./HomePage";        // remove — replaced inline
+export * from "./AppContainer"; // AppContainer still exists but no longer barrel-exported
+export * from "./Typography"; // keep — now points to v2 Typography
+export * from "./Toolbar"; // remove — deleted
+export * from "./TagPicker"; // remove — deleted
+export * from "./LandingPage"; // remove — replaced inline
+export * from "./HomePage"; // remove — replaced inline
 ```
 
 Add:
+
 ```ts
 export * from "./AppShell";
 export * from "./Sidebar";
@@ -686,7 +716,7 @@ export * from "./MarkdownParser";
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/TagPicker/` *(entire folder)*
+**File:** `C:/code/Personal/book-cook/src/components/TagPicker/` _(entire folder)_
 **Delete**
 
 Remove `TagPicker.tsx`, `TagPicker.styles.ts`, `TagPicker.types.ts`, `index.ts`. No file imports this after the migration (the import in `recipes.tsx` is already commented out).
@@ -751,6 +781,7 @@ Delete `LandingPage.styles.ts` (already handled above — this is a different st
 
 Remove `import { Spinner } from "@fluentui/react-components"`.
 Replace `<Spinner />` with a CSS-animated spinner element:
+
 ```tsx
 import styles from "./LoadingScreen.module.css";
 
@@ -758,6 +789,7 @@ export const LoadingScreen = () => (
   <div className={styles.spinner} role="status" aria-label="Loading" />
 );
 ```
+
 Create `LoadingScreen.module.css` with a simple `@keyframes` spin animation using CSS custom properties from `theme.module.css` for the color.
 
 ---
@@ -767,6 +799,7 @@ Create `LoadingScreen.module.css` with a simple `@keyframes` spin animation usin
 
 Remove all `@fluentui/react-components` and `@fluentui/react-icons` imports. Remove `makeStyles`/`shorthands`.
 Replace with v2 primitives:
+
 ```tsx
 import { Button } from "../Button";
 import { PageTitle, BodyText } from "../Typography";
@@ -778,10 +811,13 @@ export const Unauthorized: React.FC = () => (
     <LockSimpleIcon size={48} />
     <PageTitle>Access Restricted</PageTitle>
     <BodyText>You need to be signed in to view your recipes</BodyText>
-    <Button variant="primary" onClick={() => signIn()}>Sign In</Button>
+    <Button variant="primary" onClick={() => signIn()}>
+      Sign In
+    </Button>
   </div>
 );
 ```
+
 Create `Unathorized.module.css` (keeping the original filename spelling) with the container styles using CSS custom properties.
 
 ---
@@ -790,6 +826,7 @@ Create `Unathorized.module.css` (keeping the original filename spelling) with th
 **Modify**
 
 Remove:
+
 - All `@griffel/react` imports and `makeStyles` call
 - All `@fluentui/react-components` imports (`Text`, `Title3`, `Dropdown`, `Option`, `SelectionEvents`, `OptionOnSelectData`)
 - The `onSortOptionSelect` function (Fluent event signature)
@@ -797,9 +834,11 @@ Remove:
 - `TagFilter` import (already commented out; remove the comment block too)
 
 Add:
+
 - `import { PageTitle, BodyText, Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownCaret, DropdownValue, RecipeCardGallery, MultiSelectMenu } from "../components"`
 
 Replace sort control: the Fluent `<Dropdown onOptionSelect>` is replaced with the v2 `Dropdown` compound component:
+
 ```tsx
 <Dropdown value={sortOption} onValueChange={setSortOption}>
   <DropdownTrigger>
@@ -817,6 +856,7 @@ Replace sort control: the Fluent `<Dropdown onOptionSelect>` is replaced with th
 ```
 
 Replace `TagFilter` comment block with:
+
 ```tsx
 <MultiSelectMenu
   label="Tags"
@@ -827,6 +867,7 @@ Replace `TagFilter` comment block with:
 ```
 
 Replace the `styles.grid` div + card mapping with:
+
 ```tsx
 <RecipeCardGallery
   recipes={recipes ?? []}
@@ -838,6 +879,7 @@ Replace the `styles.grid` div + card mapping with:
 **Important:** v2 `RecipeCard` and `RecipeCardGallery` expect `recipe: Recipe` (the v2 `Recipe` type). v1's `fetchAllRecipes` returns the v1 `Recipe` type. Since the shapes overlap (`_id`, `title`, `tags`, `imageURL`, `createdAt`, `data`), no adapter is needed — just ensure the response type from `fetchAllRecipes` includes `data` and passes the v2 type check. The fields `emoji`, `viewCount`, `savedCount`, `creatorName`, `owner` are optional in the adapted v2 types, so they do not need to be present.
 
 Replace Fluent `Title3` / `Text` header with:
+
 ```tsx
 <PageTitle as="h1">My Recipes</PageTitle>
 <BodyText>{recipes?.length} recipes {searchBoxValue ? `matching "${searchBoxValue}"` : "in your collection"}</BodyText>
@@ -851,6 +893,7 @@ Replace Griffel `makeStyles` page layout styles with a `recipes.module.css` file
 **Modify — replace with redirect**
 
 The `/newRecipe` page route must not be deleted outright (bookmarks may exist). Replace the file with a permanent redirect:
+
 ```tsx
 import { GetServerSideProps } from "next";
 
@@ -862,11 +905,12 @@ export default function NewRecipe() {
   return null;
 }
 ```
+
 This satisfies requirement 40 (route no longer renders the old form) while preserving bookmarks.
 
 ---
 
-**File:** `C:/code/Personal/book-cook/src/components/RecipePage/` *(folder)*
+**File:** `C:/code/Personal/book-cook/src/components/RecipePage/` _(folder)_
 **Modify — replace with RecipeView wiring**
 
 The folder is repurposed: all existing files inside it are replaced.
@@ -884,9 +928,11 @@ const RecipePageInner = () => {
   if (isLoading) return <LoadingScreen />;
   if (error || !recipe) return <ErrorScreen />;
 
-  return isEditing
-    ? <RecipeEditor recipe={recipe} />
-    : <RecipeView recipe={recipe} viewingMode="viewer" />;
+  return isEditing ? (
+    <RecipeEditor recipe={recipe} />
+  ) : (
+    <RecipeView recipe={recipe} viewingMode="viewer" />
+  );
 };
 
 export const RecipePage = () => (
@@ -896,7 +942,7 @@ export const RecipePage = () => (
 );
 ```
 
-**`RecipeEditor.tsx`** *(new file inside RecipePage/)* — analogous to v2's `RecipeEditor.tsx` but using `useRecipe()` context for save:
+**`RecipeEditor.tsx`** _(new file inside RecipePage/)_ — analogous to v2's `RecipeEditor.tsx` but using `useRecipe()` context for save:
 
 ```tsx
 import { useRef, useState } from "react";
@@ -930,11 +976,13 @@ Update to only export `RecipePage` (remove sub-component exports that no longer 
 **Modify (minor)**
 
 The `RecipeProvider` context is kept. Replace `alert()` calls with `toast()` from sonner:
+
 ```tsx
 import { toast } from "sonner";
 // Replace: alert(`Failed to update recipe: ${error.message}`)
 // With:    toast.error(`Failed to update recipe: ${error.message}`)
 ```
+
 No Fluent imports exist in this file — the only change is the `alert()` replacements.
 
 ---
@@ -950,6 +998,7 @@ Extend `RecipeContextType` to expose `isUpdating: boolean` (from `updateMutation
 **Modify**
 
 Add optional v2-only fields to `Recipe` so the v2 `RecipeView`/`RecipeHeader` components type-check without error:
+
 ```ts
 emoji?: string;
 viewCount?: number;
@@ -963,6 +1012,7 @@ owner?: string;
 ## Implementation Sequence
 
 ### Phase 1: Dependencies and theming infrastructure
+
 **Reason:** All other work depends on the new packages being installed and the CSS token system being in place before any component can be written or tested.
 
 1. Install new npm dependencies: `@phosphor-icons/react`, `@radix-ui/*` (dialog, dropdown-menu, select, tooltip), `clsx`, `cmdk`, `embla-carousel-react`, `sonner`, `@lexical/react`
@@ -974,6 +1024,7 @@ owner?: string;
 7. Modify `src/pages/_app.tsx` — remove Fluent/Griffel providers, add `ThemeProvider`, import `global.css`, add `Toaster`
 
 ### Phase 2a: Copy primitive components from v2
+
 **Reason:** Composite components depend on primitives. All primitives can be copied in parallel.
 
 - Button
@@ -987,6 +1038,7 @@ owner?: string;
 - Toast
 
 ### Phase 2b: Copy composite components from v2
+
 **Reason:** Can run in parallel with Phase 2a for independent composites; composites that depend on primitives must wait for 2a.
 
 - Dialog (depends on Button)
@@ -1001,6 +1053,7 @@ owner?: string;
 - Checkbox
 
 ### Phase 3: Copy and adapt complex composite components
+
 **Reason:** These have cross-cutting dependencies that require primitives and composites to be in place, and some require v1-specific adaptations (not pure copies).
 
 1. `TextEditor` folder — copy and convert all `@/` imports
@@ -1011,6 +1064,7 @@ owner?: string;
 6. `AppShell` — copy; update import of `AppSidebar` to point to v1 version
 
 ### Phase 4: Update pages and app shell
+
 **Reason:** Pages import components; must come after all components exist. Items within this phase are partially parallelizable.
 
 1. `AppContainer.tsx` — remove FluentProvider/BrandVariants; swap Toolbar for AppShell; keep SearchBoxProvider and SessionProvider
@@ -1026,6 +1080,7 @@ owner?: string;
 11. Delete: `components/Toolbar/`, `components/TagPicker/`, `components/RecipeCarousel/`; all `*.styles.ts` Griffel files across the deleted components
 
 ### Phase 5: Remove Fluent packages and verify
+
 **Reason:** Must come last; verify zero Fluent imports remain before uninstalling.
 
 1. Run `grep -r "@fluentui" src/` — must return zero results
@@ -1040,46 +1095,57 @@ owner?: string;
 ## Technical Risks and Constraints
 
 ### 1. v1 has no `@/` path alias; all copied v2 files must be updated
+
 v2 uses `@/` throughout (e.g. `@/hooks/useFormFieldIds`, `@/components/Button`). v1's `tsconfig.json` has `baseUrl: "."` but no `paths` entry for `@/`. Every `@/` import in copied files must be converted to a relative path before the build will pass. This is the most error-prone mechanical step.
 
 ### 2. `CreateRecipeResponse.recipeId` vs `id`
+
 v1's `useCreateRecipe` returns `{ message: string; recipeId: string }`. v2's hook returns `{ id: string }` (Supabase shape). `NewRecipeDialog.tsx` calls `router.push("/recipes/${id}")` — this must be changed to `data.recipeId`. If this is missed, post-creation navigation silently routes to `/recipes/undefined`.
 
 ### 3. `RecipeProvider` context is retained but `RecipeView` expects props
+
 The v2 `RecipeView` component receives `recipe` as a prop and reads `RecipeViewSaveStateContext` for dirty tracking. The v1 `RecipeProvider` context owns the same data but exposes it differently (via `useRecipe()`). The `RecipePage` wrapper must bridge these two patterns: read from `RecipeProvider`, pass as props to `RecipeView`, and wrap the editor in `RecipeViewSaveStateProvider`. This is the most architecturally delicate adaptation.
 
 ### 4. Pages Router vs App Router differences in Sidebar components
+
 `SidebarContent.tsx` (v2) uses `useSearchParams` from `next/navigation` (App Router). In Pages Router, this hook does not exist. The v1 adaptation must use `useRouter` from `next/router` and the `SearchBoxProvider` context. If `useSearchParams` is left in place, the build will fail at runtime with a module resolution error.
 
 ### 5. `"use client"` directives must be removed
+
 All v2 files have `"use client"` because they were written for App Router. Pages Router does not use this directive — it is meaningless in Pages Router but will not cause a build error by itself. However, it is a signal that the component was written with App Router semantics and may use hooks (`useSearchParams`, `useRouter` from `next/navigation`) that do not exist in Pages Router. Each `"use client"` removal should trigger a review of the component's router/navigation imports.
 
 ### 6. TypeScript version mismatch
+
 v1 uses TypeScript 4.6; v2 uses TypeScript 5.9. Some v2 component files may use TypeScript 5.x syntax (e.g. `const` type parameters, template literal types, `satisfies`). If any v2 files use these features, the developer must downgrade the syntax or upgrade v1's TypeScript version as a prerequisite.
 
 ### 7. React version mismatch
+
 v1 uses React 18; v2 uses React 19. The Radix UI and other packages in v2's `package.json` specify React 19 peer deps. The developer should verify that the React 18 versions of these packages are available as older `@radix-ui` releases, or upgrade v1 to React 18-compatible versions.
 
 ### 8. TextEditor (Lexical) complexity
+
 `TextEditor` is the most complex component in the tree — it includes a slash-command menu, side menu, multiple plugins, and markdown transformers. The v2 implementation was built and tested against v2's data layer (Supabase). In v1, the recipe content is stored as markdown text in MongoDB. The Lexical editor's `text` prop receives this markdown string and renders it. Verify that `$convertToMarkdownString` and `recipeTransformers` produce output compatible with v1's existing recipe `data` field format.
 
 ### 9. RecipeCard type shape mismatch
+
 v1's recipe gallery passes individual props (`title`, `id`, `createdDate`, `imageSrc`, `tags`) to the old `RecipeCard`. The v2 `RecipeCard` expects a single `recipe` object with `_id` (not `id`) and `createdAt` (not `createdDate`). The `recipes.tsx` page must pass the whole recipe object, not destructured props. The carousel in `HomePage.tsx` uses mock data that also needs its shape updated.
 
 ### 10. CSS module naming conflicts
+
 v1 has existing CSS files that are `.styles.ts` Griffel files rather than `.module.css` files. Some component folders will have both old Griffel files and new CSS module files during the transition. Ensure all old `*.styles.ts` files are deleted as part of each component's migration to avoid stale imports.
 
 ### 11. `next.config.js` does not allow remote image patterns for avatar URLs
+
 v2's `Avatar` uses `next/image` with a user's profile photo URL from Google OAuth. v1's `next.config.js` only permits specific `remotePatterns` hosts. The developer must add `lh3.googleusercontent.com` (Google profile image CDN) to `remotePatterns` in `next.config.js`, or replace the `next/image` in `Avatar` with a plain `<img>` tag for the MVP.
 
 ---
 
 ## Developer Team
 
-| Specialist | Responsibility | Order |
-|---|---|---|
-| `developer` | Install new deps (`@phosphor-icons/react`, `@radix-ui/*`, `clsx`, `cmdk`, `embla-carousel-react`, `sonner`, `@lexical/react`) and set up theming infrastructure: copy `global.css`, copy `Theme/` folder, copy shared hooks (`useMediaQuery`, `useFormFieldIds`) and utils (`toCssSize`, `formatDate`, `formatCount`), copy `google-logo.svg`, and update `_app.tsx` | 1 |
-| `developer` | Copy and adapt primitive components from v2: Button, Input, Searchbox, Typography (replace existing), Tag, Avatar, Tooltip, Stack, Toast, Accordion, Checkbox — all in `src/components/`; remove `"use client"`, convert `@/` imports | 2 |
-| `developer` | Copy and adapt composite components from v2: Dialog, Menu, Dropdown, RecipeCard (replace existing), RecipeCardGallery, RecipeCardCarousel, MultiSelectMenu, GoogleSignInButton, AppShell, Sidebar (copy generic components; rewrite `AppSidebar.tsx` and `SidebarContent.tsx` for next-auth + Pages Router), TextEditor, RecipeView tree, RecipeSaveBar, NewRecipeDialog (adapt mutation shape) | 2 |
-| `developer` | Update pages and feature components: `AppContainer.tsx` (remove Fluent, add AppShell), `LandingPage` (replace with v2 minimal card + next-auth signIn), `HomePage` (remove Fluent/framer-motion), `FallbackScreens/LoadingScreen` and `Unauthorized` (remove Fluent), `pages/recipes.tsx` (replace Fluent Dropdown + grid + TagFilter with v2 equivalents), `pages/newRecipe.tsx` (redirect), `RecipePage` tree (wire RecipeView to RecipeProvider), update `src/components/index.ts`, delete `Toolbar/`, `TagPicker/`, `RecipeCarousel/`, all `*.styles.ts` Griffel files | 3 |
-| `developer` | Remove Fluent packages from `package.json` (`@fluentui/react-components`, `@fluentui/react-context-selector`, `@fluentui/react-window-provider`, `framer-motion`), run `grep -r "@fluentui" src/` and `grep -r "@griffel" src/` and `grep -r "framer-motion" src/` to verify zero results, run `next build` to confirm type-clean build, add `lh3.googleusercontent.com` to `next.config.js` remote image patterns | 4 |
+| Specialist  | Responsibility                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Order |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `developer` | Install new deps (`@phosphor-icons/react`, `@radix-ui/*`, `clsx`, `cmdk`, `embla-carousel-react`, `sonner`, `@lexical/react`) and set up theming infrastructure: copy `global.css`, copy `Theme/` folder, copy shared hooks (`useMediaQuery`, `useFormFieldIds`) and utils (`toCssSize`, `formatDate`, `formatCount`), copy `google-logo.svg`, and update `_app.tsx`                                                                                                                                                                                                       | 1     |
+| `developer` | Copy and adapt primitive components from v2: Button, Input, Searchbox, Typography (replace existing), Tag, Avatar, Tooltip, Stack, Toast, Accordion, Checkbox — all in `src/components/`; remove `"use client"`, convert `@/` imports                                                                                                                                                                                                                                                                                                                                      | 2     |
+| `developer` | Copy and adapt composite components from v2: Dialog, Menu, Dropdown, RecipeCard (replace existing), RecipeCardGallery, RecipeCardCarousel, MultiSelectMenu, GoogleSignInButton, AppShell, Sidebar (copy generic components; rewrite `AppSidebar.tsx` and `SidebarContent.tsx` for next-auth + Pages Router), TextEditor, RecipeView tree, RecipeSaveBar, NewRecipeDialog (adapt mutation shape)                                                                                                                                                                            | 2     |
+| `developer` | Update pages and feature components: `AppContainer.tsx` (remove Fluent, add AppShell), `LandingPage` (replace with v2 minimal card + next-auth signIn), `HomePage` (remove Fluent/framer-motion), `FallbackScreens/LoadingScreen` and `Unauthorized` (remove Fluent), `pages/recipes.tsx` (replace Fluent Dropdown + grid + TagFilter with v2 equivalents), `pages/newRecipe.tsx` (redirect), `RecipePage` tree (wire RecipeView to RecipeProvider), update `src/components/index.ts`, delete `Toolbar/`, `TagPicker/`, `RecipeCarousel/`, all `*.styles.ts` Griffel files | 3     |
+| `developer` | Remove Fluent packages from `package.json` (`@fluentui/react-components`, `@fluentui/react-context-selector`, `@fluentui/react-window-provider`, `framer-motion`), run `grep -r "@fluentui" src/` and `grep -r "@griffel" src/` and `grep -r "framer-motion" src/` to verify zero results, run `next build` to confirm type-clean build, add `lh3.googleusercontent.com` to `next.config.js` remote image patterns                                                                                                                                                         | 4     |

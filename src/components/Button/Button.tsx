@@ -50,7 +50,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const startIcon = icon ?? startIconProp;
     const isDisabled = Boolean(disabled) || isLoading;
-    const resolvedType = type ?? (Component === "button" ? "button" : undefined);
+    const resolvedType =
+      type ?? (Component === "button" ? "button" : undefined);
 
     return (
       <Component
@@ -66,7 +67,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           fullWidth && styles.fullWidth,
           isDisabled && styles.disabled,
           isLoading && styles.loading,
-          className
+          className,
         )}
         {...rest}
       >
@@ -79,7 +80,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {!isLoading && endIcon}
       </Component>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

@@ -5,24 +5,105 @@ import styles from "./RecipeEmoji.module.css";
 import type { RecipeEmojiProps } from "./RecipeEmoji.types";
 
 const FOOD_EMOJIS = [
-  "🍕","🍔","🌮","🌯","🥗","🍜","🍝","🍲","🍛","🍣",
-  "🍱","🥘","🫕","🥙","🧆","🥚","🍳","🧇","🥞","🧈",
-  "🍞","🥐","🥨","🥯","🧀","🥦","🥕","🌽","🫑","🍅",
-  "🥑","🫐","🍓","🍇","🍊","🍋","🍎","🍐","🍑","🍒",
-  "🍰","🎂","🧁","🍩","🍪","🍫","🍬","🍭","🍦","🍨",
-  "☕","🧃","🍵","🧋","🍺","🍷","🥂","🫖","🥤","🍹",
-  "🥩","🍗","🍖","🌭","🥓","🦀","🦞","🦐","🦑","🍤",
-  "🫙","🥫","🧂","🫒","🌶️","🧄","🧅","🥜","🫘","🌰",
+  "🍕",
+  "🍔",
+  "🌮",
+  "🌯",
+  "🥗",
+  "🍜",
+  "🍝",
+  "🍲",
+  "🍛",
+  "🍣",
+  "🍱",
+  "🥘",
+  "🫕",
+  "🥙",
+  "🧆",
+  "🥚",
+  "🍳",
+  "🧇",
+  "🥞",
+  "🧈",
+  "🍞",
+  "🥐",
+  "🥨",
+  "🥯",
+  "🧀",
+  "🥦",
+  "🥕",
+  "🌽",
+  "🫑",
+  "🍅",
+  "🥑",
+  "🫐",
+  "🍓",
+  "🍇",
+  "🍊",
+  "🍋",
+  "🍎",
+  "🍐",
+  "🍑",
+  "🍒",
+  "🍰",
+  "🎂",
+  "🧁",
+  "🍩",
+  "🍪",
+  "🍫",
+  "🍬",
+  "🍭",
+  "🍦",
+  "🍨",
+  "☕",
+  "🧃",
+  "🍵",
+  "🧋",
+  "🍺",
+  "🍷",
+  "🥂",
+  "🫖",
+  "🥤",
+  "🍹",
+  "🥩",
+  "🍗",
+  "🍖",
+  "🌭",
+  "🥓",
+  "🦀",
+  "🦞",
+  "🦐",
+  "🦑",
+  "🍤",
+  "🫙",
+  "🥫",
+  "🧂",
+  "🫒",
+  "🌶️",
+  "🧄",
+  "🧅",
+  "🥜",
+  "🫘",
+  "🌰",
 ];
 
-export const RecipeEmoji = ({ emoji, hasCover, onEmojiChange }: RecipeEmojiProps) => {
+export const RecipeEmoji = ({
+  emoji,
+  hasCover,
+  onEmojiChange,
+}: RecipeEmojiProps) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open) {return;}
+    if (!open) {
+      return;
+    }
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -57,7 +138,10 @@ export const RecipeEmoji = ({ emoji, hasCover, onEmojiChange }: RecipeEmojiProps
             <button
               key={e}
               type="button"
-              className={clsx(styles.pickerItem, e === emoji && styles.pickerItemActive)}
+              className={clsx(
+                styles.pickerItem,
+                e === emoji && styles.pickerItemActive,
+              )}
               onClick={() => {
                 onEmojiChange(e);
                 setOpen(false);

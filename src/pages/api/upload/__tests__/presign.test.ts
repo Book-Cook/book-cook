@@ -1,5 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-
 // Mock dependencies before importing the handler
 jest.mock("next-auth", () => ({
   __esModule: true,
@@ -22,10 +20,10 @@ jest.mock("@aws-sdk/s3-request-presigner", () => ({
     .mockResolvedValue("https://r2.example.com/signed-url"),
 }));
 
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import { getDb } from "src/utils/db";
-
 import handler from "../presign";
 
 const mockGetServerSession = getServerSession as jest.Mock;

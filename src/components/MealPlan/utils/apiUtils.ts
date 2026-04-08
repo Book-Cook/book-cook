@@ -8,20 +8,20 @@ import type { ApiPayload, MealMovePayload, MealReorderPayload } from "../types";
  */
 async function apiCall<T = unknown>(
   endpoint: string,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
-  payload?: Record<string, unknown>
+  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  payload?: Record<string, unknown>,
 ): Promise<T> {
   const options: RequestInit = {
     method,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   };
 
-  if (payload && method !== 'GET') {
+  if (payload && method !== "GET") {
     options.body = JSON.stringify(payload);
   }
 
   const response = await fetch(endpoint, options);
-  
+
   if (!response.ok) {
     throw new Error(`API call failed: ${response.statusText}`);
   }
@@ -33,14 +33,14 @@ async function apiCall<T = unknown>(
  * Add meal to meal plan
  */
 export function addMeal(payload: ApiPayload) {
-  return apiCall('/api/meal-plans', 'POST', payload);
+  return apiCall("/api/meal-plans", "POST", payload);
 }
 
 /**
  * Remove meal from meal plan
  */
 export function removeMeal(date: string, time: string, mealIndex: number) {
-  return apiCall(`/api/meal-plans/${date}/${time}/${mealIndex}`, 'DELETE');
+  return apiCall(`/api/meal-plans/${date}/${time}/${mealIndex}`, "DELETE");
 }
 
 /**
@@ -48,7 +48,7 @@ export function removeMeal(date: string, time: string, mealIndex: number) {
  */
 export function moveMeal(payload: MealMovePayload) {
   const { date, time } = payload;
-  return apiCall(`/api/meal-plans/${date}/${time}/move`, 'POST', payload);
+  return apiCall(`/api/meal-plans/${date}/${time}/move`, "POST", payload);
 }
 
 /**
@@ -56,15 +56,17 @@ export function moveMeal(payload: MealMovePayload) {
  */
 export function reorderMeal(payload: MealReorderPayload) {
   const { date, time } = payload;
-  return apiCall(`/api/meal-plans/${date}/${time}/reorder`, 'POST', payload);
+  return apiCall(`/api/meal-plans/${date}/${time}/reorder`, "POST", payload);
 }
 
 /**
  * Batch operations for multiple meal changes
  */
-export function batchMealOperations(operations: Array<{
-  type: 'add' | 'remove' | 'move' | 'reorder';
-  payload: Record<string, unknown>;
-}>) {
-  return apiCall('/api/meal-plans/batch', 'POST', { operations });
+export function batchMealOperations(
+  operations: Array<{
+    type: "add" | "remove" | "move" | "reorder";
+    payload: Record<string, unknown>;
+  }>,
+) {
+  return apiCall("/api/meal-plans/batch", "POST", { operations });
 }

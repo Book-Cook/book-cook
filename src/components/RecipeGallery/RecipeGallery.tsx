@@ -39,7 +39,7 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [currentPage, setCurrentPage] = React.useState<number>(
-    initialPage ?? 1
+    initialPage ?? 1,
   );
   const pageSize = 20;
 
@@ -93,7 +93,7 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
           query: { ...router.query, page: page.toString() },
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       )
       .catch(console.error);
   };
@@ -134,10 +134,18 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
                   <DropdownCaret />
                 </DropdownTrigger>
                 <DropdownContent>
-                  <DropdownItem value="dateNewest">Sort by date (newest)</DropdownItem>
-                  <DropdownItem value="dateOldest">Sort by date (oldest)</DropdownItem>
-                  <DropdownItem value="ascTitle">Sort by title (asc)</DropdownItem>
-                  <DropdownItem value="descTitle">Sort by title (desc)</DropdownItem>
+                  <DropdownItem value="dateNewest">
+                    Sort by date (newest)
+                  </DropdownItem>
+                  <DropdownItem value="dateOldest">
+                    Sort by date (oldest)
+                  </DropdownItem>
+                  <DropdownItem value="ascTitle">
+                    Sort by title (asc)
+                  </DropdownItem>
+                  <DropdownItem value="descTitle">
+                    Sort by title (desc)
+                  </DropdownItem>
                 </DropdownContent>
               </Dropdown>
             </div>

@@ -48,7 +48,11 @@ export const Gallery: Story = {
         <Text variant="body1" italic>
           Italic body
         </Text>
-        <Text variant="body2" truncate style={{ maxWidth: 200, border: "1px dashed #ccc", padding: 4 }}>
+        <Text
+          variant="body2"
+          truncate
+          style={{ maxWidth: 200, border: "1px dashed #ccc", padding: 4 }}
+        >
           Truncated long line of text that will not wrap when space is limited
         </Text>
         <Text variant="body1" block>

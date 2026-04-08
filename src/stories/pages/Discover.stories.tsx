@@ -9,7 +9,7 @@ const meta: Meta<typeof DiscoverPage> = {
   title: "Pages/Discover",
   component: DiscoverPage,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -21,12 +21,22 @@ type Story = StoryObj<typeof DiscoverPage>;
 const { create } = createStorySet<typeof DiscoverPage>();
 
 // Story definitions - super clean!
-export const Default: Story = create("Default", [publicRecipeVariants.default()]);
+export const Default: Story = create("Default", [
+  publicRecipeVariants.default(),
+]);
 
-export const EmptyState: Story = create("Empty State", [publicRecipeVariants.empty()]);
+export const EmptyState: Story = create("Empty State", [
+  publicRecipeVariants.empty(),
+]);
 
-export const LoadingState: Story = create("Loading State", [publicRecipeVariants.loading()]);
+export const LoadingState: Story = create("Loading State", [
+  publicRecipeVariants.loading(),
+]);
 
-export const ErrorState: Story = create("Error State", [publicRecipeVariants.error()]);
+export const ErrorState: Story = create("Error State", [
+  publicRecipeVariants.error(),
+]);
 
-export const ManyRecipes: Story = create("Many Recipes", [publicRecipeVariants.many()]);
+export const ManyRecipes: Story = create("Many Recipes", [
+  publicRecipeVariants.many(),
+]);

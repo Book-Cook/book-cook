@@ -2,9 +2,19 @@ import * as React from "react";
 
 import styles from "./TimePicker.module.css";
 
-import { generateTimeSlots, DEFAULT_TIME_CONFIG, formatTimeForDisplay } from "../../../utils/timeSlots";
+import {
+  generateTimeSlots,
+  DEFAULT_TIME_CONFIG,
+  formatTimeForDisplay,
+} from "../../../utils/timeSlots";
 import { Button } from "../../Button";
-import { Dialog, DialogBody, DialogContent, DialogFooter, DialogTitle } from "../../Dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from "../../Dialog";
 
 interface TimePickerProps {
   isOpen: boolean;
@@ -23,10 +33,22 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   // Generate common meal times
   const commonTimes = [
-    "07:00", "07:30", "08:00", "08:30", // Breakfast
-    "12:00", "12:30", "13:00", "13:30", // Lunch
-    "15:00", "15:30", // Snack
-    "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", // Dinner
+    "07:00",
+    "07:30",
+    "08:00",
+    "08:30", // Breakfast
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30", // Lunch
+    "15:00",
+    "15:30", // Snack
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00", // Dinner
   ];
 
   const allTimeSlots = generateTimeSlots(DEFAULT_TIME_CONFIG);
@@ -51,9 +73,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         <DialogBody>
           <DialogTitle>Choose a time for your meal</DialogTitle>
           <div>
-            <label className={styles.fieldLabel}>Quick select common times:</label>
+            <label className={styles.fieldLabel}>
+              Quick select common times:
+            </label>
             <div className={styles.timeGrid}>
-              {commonTimes.map(time => (
+              {commonTimes.map((time) => (
                 <Button
                   key={time}
                   appearance={selectedTime === time ? "primary" : "secondary"}
@@ -73,7 +97,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
             >
-              {allTimeSlots.map(time => (
+              {allTimeSlots.map((time) => (
                 <option key={time} value={time}>
                   {formatTimeForDisplay(time)}
                 </option>

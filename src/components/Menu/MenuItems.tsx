@@ -98,10 +98,7 @@ export const MenuLabel = ({
   />
 );
 
-export const MenuSeparator = ({
-  className,
-  ...props
-}: MenuSeparatorProps) => (
+export const MenuSeparator = ({ className, ...props }: MenuSeparatorProps) => (
   <DropdownMenu.Separator
     className={clsx(styles.separator, className)}
     {...props}

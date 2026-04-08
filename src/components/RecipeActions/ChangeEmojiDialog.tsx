@@ -42,7 +42,7 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     setResults(
       looksLikeEmoji(currentEmoji) && !SUGGESTIONS.includes(currentEmoji)
         ? [currentEmoji, ...SUGGESTIONS]
-        : SUGGESTIONS
+        : SUGGESTIONS,
     );
     requestAnimationFrame(() => {
       inputRef.current?.focus();
@@ -50,7 +50,10 @@ const ChangeEmojiDialog: React.FC<ChangeEmojiDialogProps> = ({
     });
   }, [isOpen, currentEmoji]);
 
-  const handleChange = (_e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+  const handleChange = (
+    _e: React.ChangeEvent<HTMLInputElement>,
+    value: string,
+  ) => {
     setQuery(value);
     const trimmed = value.trim().toLowerCase();
     setResults(trimmed ? searchFoodEmojis(trimmed) : SUGGESTIONS);

@@ -25,7 +25,9 @@ const queryClientOptions = {
 
 export default function App(props: AppProps): React.ReactElement {
   const { Component, pageProps } = props;
-  const [queryClient] = React.useState(() => new QueryClient(queryClientOptions));
+  const [queryClient] = React.useState(
+    () => new QueryClient(queryClientOptions),
+  );
   const { theme, setTheme } = useAppTheme();
 
   return (

@@ -22,8 +22,7 @@ export const MultiSelectMenu = ({
 
   const filtered = options.filter(
     (opt) =>
-      !value.includes(opt) &&
-      opt.toLowerCase().includes(search.toLowerCase())
+      !value.includes(opt) && opt.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleAdd = (option: string) => {

@@ -28,7 +28,7 @@ export default async function handler(req: any, res: any) {
         .collection("users")
         .updateOne(
           { email: session.user?.email },
-          { $set: { recentlyViewedRecipes: [] } }
+          { $set: { recentlyViewedRecipes: [] } },
         );
 
       if (!result.matchedCount) {
@@ -44,7 +44,7 @@ export default async function handler(req: any, res: any) {
         .collection("users")
         .findOne(
           { email: session?.user?.email },
-          { projection: { recentlyViewedRecipes: 1, _id: 0 } }
+          { projection: { recentlyViewedRecipes: 1, _id: 0 } },
         );
 
       if (!userDoc?.recentlyViewedRecipes) {
@@ -61,14 +61,14 @@ export default async function handler(req: any, res: any) {
       const orderedRecipes = userDoc.recentlyViewedRecipes
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((id: any) =>
-          recipes.find((recipe) => recipe._id.toString() === id.toString())
+          recipes.find((recipe) => recipe._id.toString() === id.toString()),
         )
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((recipe: any) => recipe) // remove any null/undefined
         .reverse();
 
       // Add caching headers for better performance
-      res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=180');
+      res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=180");
       res.status(200).json(orderedRecipes);
     }
   } catch (error) {

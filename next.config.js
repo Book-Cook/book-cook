@@ -117,7 +117,10 @@ const nextConfig = {
     // the app only uses HEADING, QUOTE, list and text-format transformers.
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@lexical/code": path.resolve(__dirname, "src/stubs/lexical-code-stub.js"),
+      "@lexical/code": path.resolve(
+        __dirname,
+        "src/stubs/lexical-code-stub.js",
+      ),
     };
 
     if (!dev) {
@@ -144,7 +147,7 @@ const nextConfig = {
             const filteredSource = filterWebpackStats(webpackStats);
             return JSON.stringify(filteredSource);
           },
-        })
+        }),
       );
     }
     return config;

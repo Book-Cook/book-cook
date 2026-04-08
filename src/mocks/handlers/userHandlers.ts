@@ -21,7 +21,7 @@ export const createUserHandlers = (store: DataStore) => [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -36,7 +36,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (!recipeId) {
         return HttpResponse.json(
           { message: "Recipe ID is required" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -44,7 +44,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (!recipe) {
         return HttpResponse.json(
           { message: "Recipe not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -52,12 +52,12 @@ export const createUserHandlers = (store: DataStore) => [
 
       return HttpResponse.json(
         { message: "Recipe added to collection" },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -77,7 +77,7 @@ export const createUserHandlers = (store: DataStore) => [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -113,7 +113,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (!shareWithEmail) {
         return HttpResponse.json(
           { message: "Email is required" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -122,7 +122,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (!emailRegex.test(shareWithEmail)) {
         return HttpResponse.json(
           { message: "Invalid email format" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -130,7 +130,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (shareWithEmail.toLowerCase() === user.email.toLowerCase()) {
         return HttpResponse.json(
           { message: "Cannot share with yourself" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -142,7 +142,7 @@ export const createUserHandlers = (store: DataStore) => [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -161,7 +161,7 @@ export const createUserHandlers = (store: DataStore) => [
       if (!removed) {
         return HttpResponse.json(
           { message: "User not in your shared list" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -171,7 +171,7 @@ export const createUserHandlers = (store: DataStore) => [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),

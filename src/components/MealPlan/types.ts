@@ -3,7 +3,7 @@
  */
 import type { MealItem } from "../../clientToServer/types";
 
-export type CalendarView = 'day' | 'week' | 'month';
+export type CalendarView = "day" | "week" | "month";
 
 export type DateRange = {
   startDate: string;
@@ -58,6 +58,9 @@ export type MealDragDropHandlers = {
     mutate: (payload: Record<string, unknown>) => void;
   };
   reorderMealMutation: {
+    mutate: (payload: Record<string, unknown>) => void;
+  };
+  moveMealMutation: {
     mutate: (payload: Record<string, unknown>) => void;
   };
   setPendingMeal: (meal: PendingMeal | null) => void;

@@ -19,7 +19,10 @@
 
 .sectionTrigger.sectionTrigger:focus-visible {
   outline: none;
-  box-shadow: var(--sidebar-focus-ring, inset 0 0 0 1px var(--ui-ControlBorderHover));
+  box-shadow: var(
+    --sidebar-focus-ring,
+    inset 0 0 0 1px var(--ui-ControlBorderHover)
+  );
 }
 
 .sectionTrigger:not(.sectionTriggerItem) > span {
@@ -46,7 +49,10 @@
 
 .sectionTriggerItem.sectionTriggerItem:focus-visible {
   outline: none;
-  box-shadow: var(--sidebar-focus-ring, inset 0 0 0 1px var(--ui-ControlBorderHover));
+  box-shadow: var(
+    --sidebar-focus-ring,
+    inset 0 0 0 1px var(--ui-ControlBorderHover)
+  );
 }
 
 .sectionTriggerItem > span {

@@ -6,7 +6,7 @@ export interface MealItem {
 }
 
 // Legacy support - keeping for backward compatibility
-export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
 
 // New time-based structure
 export interface TimeSlot {
@@ -20,7 +20,7 @@ export interface DayMeals {
   lunch?: MealItem;
   dinner?: MealItem;
   snack?: MealItem;
-  
+
   // New time-based format
   timeSlots?: TimeSlot[];
 }
@@ -35,14 +35,14 @@ export interface MealPlan {
   updatedAt: string;
 }
 
-export interface MealPlanWithRecipes extends Omit<MealPlan, 'meals'> {
+export interface MealPlanWithRecipes extends Omit<MealPlan, "meals"> {
   meals: {
     // Legacy meal types
     breakfast?: MealItem & { recipe?: Record<string, unknown> };
     lunch?: MealItem & { recipe?: Record<string, unknown> };
     dinner?: MealItem & { recipe?: Record<string, unknown> };
     snack?: MealItem & { recipe?: Record<string, unknown> };
-    
+
     // New time-based slots
     timeSlots?: Array<{
       time: string;
@@ -57,7 +57,7 @@ export interface CreateMealPlanPayload {
   recipeId: string;
   servings?: number;
   duration?: number; // Duration in minutes
-  
+
   // Legacy support
   mealType?: MealType;
 }
@@ -75,7 +75,7 @@ export interface BatchUpdateMealPlanPayload {
     recipeId: string | null;
     servings?: number;
     duration?: number;
-    
+
     // Legacy support
     mealType?: MealType;
   }>;
@@ -96,7 +96,7 @@ export interface MealPlanResponseWithRecipes {
   totalCount: number;
 }
 
-import type { Recipe } from './recipes.types';
+import type { Recipe } from "./recipes.types";
 
 export interface UpcomingMealsResult {
   meals: Array<Recipe & { isPast?: boolean }>;

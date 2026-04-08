@@ -10,7 +10,10 @@ const AccordionItems = ({
   itemClassName,
   triggerClassName,
   contentClassName,
-}: Pick<AccordionProps, "items" | "itemClassName" | "triggerClassName" | "contentClassName">) =>
+}: Pick<
+  AccordionProps,
+  "items" | "itemClassName" | "triggerClassName" | "contentClassName"
+>) =>
   items.map((item) => (
     <AccordionPrimitive.Item
       key={item.value}
@@ -49,11 +52,20 @@ export const Accordion = ({
   ...rootProps
 }: AccordionProps) => {
   const sharedProps = { className: clsx(styles.accordion, className) };
-  const itemProps = { items, itemClassName, triggerClassName, contentClassName };
+  const itemProps = {
+    items,
+    itemClassName,
+    triggerClassName,
+    contentClassName,
+  };
 
   if (type === "multiple") {
     return (
-      <AccordionPrimitive.Root type="multiple" {...sharedProps} {...(rootProps as object)}>
+      <AccordionPrimitive.Root
+        type="multiple"
+        {...sharedProps}
+        {...(rootProps as object)}
+      >
         <AccordionItems {...itemProps} />
       </AccordionPrimitive.Root>
     );

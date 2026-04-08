@@ -1,5 +1,9 @@
 import * as React from "react";
-import { CalendarCheckIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
+import {
+  CalendarCheckIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+} from "@phosphor-icons/react";
 
 import styles from "./CalendarToolbar.module.css";
 import type { CalendarView } from "../MealPlanCalendar/MealPlanCalendar.types";
@@ -105,5 +109,5 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = React.memo(
         </div>
       </div>
     );
-  }
+  },
 );

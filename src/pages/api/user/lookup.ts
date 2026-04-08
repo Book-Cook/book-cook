@@ -9,7 +9,7 @@ type ResponseData = { name?: string; error?: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData>,
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -43,7 +43,7 @@ export default async function handler(
       .collection("users")
       .findOne(
         { _id: objectId },
-        { projection: { name: 1, email: 1, _id: 1 } }
+        { projection: { name: 1, email: 1, _id: 1 } },
       );
 
     if (!user) {

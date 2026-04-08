@@ -5,7 +5,9 @@ import { SearchBox } from "./SearchBox";
 
 describe("SearchBox", () => {
   it("renders with placeholder and value", () => {
-    render(<SearchBox placeholder="Search..." value="hello" onChange={() => {}} />);
+    render(
+      <SearchBox placeholder="Search..." value="hello" onChange={() => {}} />,
+    );
 
     const input = screen.getByPlaceholderText("Search...");
     expect(input).toHaveValue("hello");

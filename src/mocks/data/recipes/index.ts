@@ -99,5 +99,5 @@ export const RecipesByOwner = {
  * All unique tags from recipes
  */
 export const allTags = Array.from(
-  new Set(allRecipes.flatMap((recipe) => recipe.tags))
+  new Set(allRecipes.flatMap((recipe) => recipe.tags)),
 ).sort();

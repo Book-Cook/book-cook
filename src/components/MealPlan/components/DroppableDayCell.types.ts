@@ -7,5 +7,9 @@ export type DroppableDayCellProps = {
   isPast: boolean;
   mealPlan: MealPlanWithRecipes | undefined;
   children?: React.ReactNode;
-  onMealRemove: (date: string, time: string, mealIndex: number) => Promise<void>;
+  onMealRemove: (
+    date: string,
+    time: string,
+    mealIndex: number,
+  ) => Promise<void>;
 };

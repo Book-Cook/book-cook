@@ -17,13 +17,18 @@ export function SelectAllPlugin() {
     return editor.registerCommand(
       KEY_DOWN_COMMAND,
       (event) => {
-        if (!(IS_APPLE ? event.metaKey : event.ctrlKey) || event.code !== "KeyA") {
+        if (
+          !(IS_APPLE ? event.metaKey : event.ctrlKey) ||
+          event.code !== "KeyA"
+        ) {
           return false;
         }
         event.preventDefault();
         editor.update(() => {
           const selection = $getSelection();
-          if (!$isRangeSelection(selection)) {return;}
+          if (!$isRangeSelection(selection)) {
+            return;
+          }
           const anchor = selection.anchor.getNode();
           const element =
             $findMatchingParent(anchor, $isListItemNode) ??
@@ -40,7 +45,7 @@ export function SelectAllPlugin() {
         });
         return true;
       },
-      COMMAND_PRIORITY_CRITICAL
+      COMMAND_PRIORITY_CRITICAL,
     );
   }, [editor]);
 

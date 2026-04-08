@@ -13,7 +13,7 @@ type ShareRequestBody = { shareWithEmail: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData>,
 ) {
   // Validate request method
   const allowedMethods = ["GET", "POST", "DELETE"];
@@ -81,7 +81,7 @@ export default async function handler(
         .collection("users")
         .updateOne(
           { email: userEmail },
-          { $addToSet: { sharedWithUsers: shareWithEmail } }
+          { $addToSet: { sharedWithUsers: shareWithEmail } },
         );
 
       return res
@@ -108,7 +108,7 @@ export default async function handler(
           $pull: {
             sharedWithUsers: shareWithEmail,
           } as PullOperator<Document>,
-        }
+        },
       );
 
       return res.status(200).json({ message: "Access removed successfully" });

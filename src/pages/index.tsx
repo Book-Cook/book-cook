@@ -7,7 +7,7 @@ import { LoadingScreen } from "../components/FallbackScreens";
 
 const LandingPage = dynamic(
   () => import("../components/LandingPage/LandingPage"),
-  { loading: () => <LoadingScreen /> }
+  { loading: () => <LoadingScreen /> },
 );
 
 export default function Index() {

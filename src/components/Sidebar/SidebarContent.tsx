@@ -25,11 +25,25 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/recipes", label: "Recipes", icon: <BookOpenIcon size={18} /> },
-  { href: "/collections", label: "Collections", icon: <GridFourIcon size={18} />, disabled: true },
-  { href: "/explore", label: "Explore", icon: <CompassIcon size={18} />, disabled: true },
+  {
+    href: "/collections",
+    label: "Collections",
+    icon: <GridFourIcon size={18} />,
+    disabled: true,
+  },
+  {
+    href: "/explore",
+    label: "Explore",
+    icon: <CompassIcon size={18} />,
+    disabled: true,
+  },
 ];
 
-export const SidebarContent = ({ currentPath, onNewRecipe, onSearch }: SidebarContentProps) => {
+export const SidebarContent = ({
+  currentPath,
+  onNewRecipe,
+  onSearch,
+}: SidebarContentProps) => {
   const router = useRouter();
 
   return (

@@ -9,20 +9,20 @@ import { authOptions } from "../../../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "DELETE") {
     res.setHeader("Allow", ["DELETE"]);
-    return res.status(405).json({ 
-      message: `Method ${req.method} not allowed` 
+    return res.status(405).json({
+      message: `Method ${req.method} not allowed`,
     });
   }
 
   const session: Session | null = await getServerSession(req, res, authOptions);
 
   if (!session?.user?.id) {
-    return res.status(401).json({ 
-      message: "Unauthorized. Please log in." 
+    return res.status(401).json({
+      message: "Unauthorized. Please log in.",
     });
   }
 
@@ -30,46 +30,48 @@ export default async function handler(
     const { date, time, mealIndex } = req.query;
 
     if (!date || !time || mealIndex === undefined) {
-      return res.status(400).json({ 
-        message: "Date, time, and meal index are required" 
+      return res.status(400).json({
+        message: "Date, time, and meal index are required",
       });
     }
 
     const mealIndexNum = parseInt(mealIndex as string, 10);
     if (isNaN(mealIndexNum) || mealIndexNum < 0) {
-      return res.status(400).json({ 
-        message: "Invalid meal index" 
+      return res.status(400).json({
+        message: "Invalid meal index",
       });
     }
 
     const db = await getDb();
-    
+
     // Find the meal plan
-    const mealPlan = await db.collection("mealPlans").findOne({ 
-      userId: session.user.id, 
-      date: date as string 
+    const mealPlan = await db.collection("mealPlans").findOne({
+      userId: session.user.id,
+      date: date as string,
     });
 
     if (!mealPlan) {
-      return res.status(404).json({ 
-        message: "Meal plan not found" 
+      return res.status(404).json({
+        message: "Meal plan not found",
       });
     }
 
     // Find the time slot
     const timeSlots = mealPlan.meals?.timeSlots ?? [];
-    const timeSlotIndex = timeSlots.findIndex((slot: Record<string, unknown>) => slot.time === time);
+    const timeSlotIndex = timeSlots.findIndex(
+      (slot: Record<string, unknown>) => slot.time === time,
+    );
 
     if (timeSlotIndex === -1) {
-      return res.status(404).json({ 
-        message: "Time slot not found" 
+      return res.status(404).json({
+        message: "Time slot not found",
       });
     }
 
     const timeSlot = timeSlots[timeSlotIndex];
     if (!timeSlot.meals || mealIndexNum >= timeSlot.meals.length) {
-      return res.status(404).json({ 
-        message: "Meal not found" 
+      return res.status(404).json({
+        message: "Meal not found",
       });
     }
 
@@ -81,23 +83,25 @@ export default async function handler(
         $set: { updatedAt: new Date() },
       } as unknown as UpdateFilter<Document>;
       await db.collection("mealPlans").updateOne(
-        { 
-          userId: session.user.id, 
-          date: date as string 
+        {
+          userId: session.user.id,
+          date: date as string,
         },
-        removeTimeSlotUpdate
+        removeTimeSlotUpdate,
       );
     } else {
       // Remove just the specific meal
       await db.collection("mealPlans").updateOne(
-        { 
-          userId: session.user.id, 
-          date: date as string 
+        {
+          userId: session.user.id,
+          date: date as string,
         },
         {
-          $unset: { [`meals.timeSlots.${timeSlotIndex}.meals.${mealIndexNum}`]: "" },
+          $unset: {
+            [`meals.timeSlots.${timeSlotIndex}.meals.${mealIndexNum}`]: "",
+          },
           $set: { updatedAt: new Date() },
-        }
+        },
       );
 
       // Clean up the array (remove null elements)
@@ -105,16 +109,16 @@ export default async function handler(
         $pull: { [`meals.timeSlots.${timeSlotIndex}.meals`]: null },
       } as unknown as UpdateFilter<Document>;
       await db.collection("mealPlans").updateOne(
-        { 
-          userId: session.user.id, 
-          date: date as string 
+        {
+          userId: session.user.id,
+          date: date as string,
         },
-        cleanUpMealsUpdate
+        cleanUpMealsUpdate,
       );
     }
 
-    res.status(200).json({ 
-      message: "Meal removed successfully" 
+    res.status(200).json({
+      message: "Meal removed successfully",
     });
   } catch (error) {
     console.error("Failed to delete meal:", error);

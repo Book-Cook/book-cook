@@ -29,7 +29,9 @@ jest.mock("../../../../pages/api/auth/[...nextauth]", () => ({
   authOptions: {},
 }));
 
-const mockGetServerSession = getServerSession as jest.MockedFunction<typeof getServerSession>;
+const mockGetServerSession = getServerSession as jest.MockedFunction<
+  typeof getServerSession
+>;
 const mockGetDb = getDb as jest.MockedFunction<typeof getDb>;
 
 describe("/api/user/saved-recipes", () => {
@@ -44,7 +46,7 @@ describe("/api/user/saved-recipes", () => {
   describe("GET", () => {
     it("should return saved recipes for authenticated user", async () => {
       mockGetServerSession.mockResolvedValue(mockSession);
-      
+
       const mockDb = {
         collection: jest.fn().mockReturnValue({
           aggregate: jest.fn().mockReturnValue({
@@ -87,7 +89,7 @@ describe("/api/user/saved-recipes", () => {
   describe("POST", () => {
     it("should save a public recipe", async () => {
       mockGetServerSession.mockResolvedValue(mockSession);
-      
+
       const mockRecipe = {
         _id: "recipe1",
         owner: "otheruser",
@@ -97,7 +99,8 @@ describe("/api/user/saved-recipes", () => {
 
       const mockDb = {
         collection: jest.fn().mockReturnValue({
-          findOne: jest.fn()
+          findOne: jest
+            .fn()
             .mockResolvedValueOnce(mockRecipe) // First call - find recipe
             .mockResolvedValueOnce(null), // Second call - find existing saved recipes
           updateOne: jest.fn().mockResolvedValue({ acknowledged: true }),
@@ -120,7 +123,7 @@ describe("/api/user/saved-recipes", () => {
 
     it("should unsave an already saved recipe", async () => {
       mockGetServerSession.mockResolvedValue(mockSession);
-      
+
       const mockRecipe = {
         _id: "recipe1",
         owner: "otheruser",
@@ -135,7 +138,8 @@ describe("/api/user/saved-recipes", () => {
 
       const mockDb = {
         collection: jest.fn().mockReturnValue({
-          findOne: jest.fn()
+          findOne: jest
+            .fn()
             .mockResolvedValueOnce(mockRecipe) // First call - find recipe
             .mockResolvedValueOnce(mockExistingSaved), // Second call - find existing saved recipes
           updateOne: jest.fn().mockResolvedValue({ acknowledged: true }),
@@ -158,7 +162,7 @@ describe("/api/user/saved-recipes", () => {
 
     it("should not allow saving your own recipe", async () => {
       mockGetServerSession.mockResolvedValue(mockSession);
-      
+
       const mockRecipe = {
         _id: "recipe1",
         owner: "user123", // Same as session user
@@ -187,7 +191,7 @@ describe("/api/user/saved-recipes", () => {
 
     it("should not allow saving private recipes", async () => {
       mockGetServerSession.mockResolvedValue(mockSession);
-      
+
       const mockDb = {
         collection: jest.fn().mockReturnValue({
           findOne: jest.fn().mockResolvedValue(null), // Recipe not found (not public)

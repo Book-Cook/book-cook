@@ -15,7 +15,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
       tabIndex: tabIndexProp,
       ...rest
     },
-    ref
+    ref,
   ): React.ReactElement => {
     const isClickable = Boolean(onClick);
     const role = roleProp ?? (isClickable ? "button" : undefined);
@@ -30,7 +30,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
         onKeyDown?.(event);
       },
-      [isClickable, onClick, onKeyDown]
+      [isClickable, onClick, onKeyDown],
     );
 
     const shouldHandleKeyDown = isClickable || Boolean(onKeyDown);
@@ -38,7 +38,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const cardClassName = cx(
       styles.card,
       isClickable && styles.clickable,
-      className
+      className,
     );
 
     return (
@@ -54,7 +54,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 Card.displayName = "Card";

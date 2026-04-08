@@ -29,7 +29,7 @@ export default async function handler(req: any, res: any) {
         .collection("collections")
         .findOne(
           { userId: session?.user?.id },
-          { projection: { collections: 1, _id: 0 } }
+          { projection: { collections: 1, _id: 0 } },
         );
 
       if (!userDoc?.collections || userDoc.collections.length === 0) {
@@ -39,7 +39,7 @@ export default async function handler(req: any, res: any) {
 
       // Convert string IDs to ObjectIds
       const objectIds = userDoc.collections.map(
-        (id: string) => new ObjectId(id)
+        (id: string) => new ObjectId(id),
       );
 
       // Query the recipes collection using the $in operator.
@@ -49,7 +49,10 @@ export default async function handler(req: any, res: any) {
         .toArray();
 
       // Add caching headers for better performance
-      res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=600');
+      res.setHeader(
+        "Cache-Control",
+        "s-maxage=120, stale-while-revalidate=600",
+      );
       res.status(200).json(recipes);
     } catch (error) {
       console.error("Failed to fetch recently viewed recipes:", error);
@@ -61,29 +64,33 @@ export default async function handler(req: any, res: any) {
       const { recipeId } = req.body;
 
       if (session.user?.id) {
-        const result = await db.collection("collections").updateOne(
-          { userId: session.user.id },
-          { $addToSet: { collections: recipeId } },
-          { upsert: true }
-        );
+        const result = await db
+          .collection("collections")
+          .updateOne(
+            { userId: session.user.id },
+            { $addToSet: { collections: recipeId } },
+            { upsert: true },
+          );
 
         if (!result.upsertedCount && result.modifiedCount === 0) {
-          await db.collection("collections").updateOne(
-            { userId: session.user.id },
-            { $pull: { collections: recipeId } }
-          );
-          
-          return res.status(200).json({ 
-            success: true, 
+          await db
+            .collection("collections")
+            .updateOne(
+              { userId: session.user.id },
+              { $pull: { collections: recipeId } },
+            );
+
+          return res.status(200).json({
+            success: true,
             action: "removed",
-            message: "Recipe removed from collection" 
+            message: "Recipe removed from collection",
           });
         }
 
-        return res.status(201).json({ 
-          success: true, 
+        return res.status(201).json({
+          success: true,
           action: "added",
-          message: "Recipe added to collection" 
+          message: "Recipe added to collection",
         });
       }
     } catch (error) {

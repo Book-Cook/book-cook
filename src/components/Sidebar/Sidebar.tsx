@@ -57,7 +57,7 @@ export const Sidebar = ({
 
   const setSectionOpen = (id: string, open: boolean) => {
     setSectionOpenState((prev) =>
-      prev[id] === open ? prev : { ...prev, [id]: open }
+      prev[id] === open ? prev : { ...prev, [id]: open },
     );
   };
 
@@ -77,7 +77,9 @@ export const Sidebar = ({
 
   const profileFooter = profile ? (
     <SidebarItem
-      icon={<Avatar name={profile.name} imageURL={profile.imageURL} size="sm" />}
+      icon={
+        <Avatar name={profile.name} imageURL={profile.imageURL} size="sm" />
+      }
       label={profile.name}
       labelStacked
       onClick={profile.onClick}
@@ -120,7 +122,9 @@ export const Sidebar = ({
               <span className={styles.logoIcon}>
                 <BookOpenIcon size={16} weight="fill" />
               </span>
-              <span className={styles.logoText} data-sidebar-collapsible="true">Book Cook</span>
+              <span className={styles.logoText} data-sidebar-collapsible="true">
+                Book Cook
+              </span>
             </Link>
           )}
           {showToggle && !collapsed && (

@@ -1,110 +1,37 @@
 /**
  * Calendar subscription management component
  */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CheckCircleIcon, CopyIcon, PlusIcon } from "@phosphor-icons/react";
 
 import styles from "./CalendarSubscription.module.css";
-import type { CalendarSubscriptionProps, CalendarTokenData } from "./CalendarSubscription.types";
+import type { CalendarSubscriptionProps } from "./CalendarSubscription.types";
+import { useCalendarSubscription } from "./useCalendarSubscription";
 
 import { Button } from "../../Button";
-import { Dialog, DialogBody, DialogContent, DialogFooter, DialogTitle } from "../../Dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from "../../Dialog";
 import { Input } from "../../Input";
 import { Spinner } from "../../Spinner";
 import { Text } from "../../Text";
 
 export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
-  const [tokenData, setTokenData] = useState<CalendarTokenData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [copySuccess, setCopySuccess] = useState<
-    "subscription" | "webcal" | null
-  >(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  useEffect(() => {
-    void fetchTokenData();
-  }, []);
-
-  const fetchTokenData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/meal-plans/calendar-token");
-
-      if (response.status === 404) {
-        setTokenData(null);
-        setError(null);
-      } else if (response.ok) {
-        const data = await response.json();
-        setTokenData(data);
-        setError(null);
-      } else {
-        throw new Error("Failed to fetch calendar token");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setTokenData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createToken = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch("/api/meal-plans/calendar-token", {
-        method: "POST",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create calendar token");
-      }
-
-      const data = await response.json();
-      setTokenData(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteToken = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch("/api/meal-plans/calendar-token", {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete calendar token");
-      }
-
-      setTokenData(null);
-      setShowDeleteDialog(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const copyToClipboard = async (
-    text: string,
-    type: "subscription" | "webcal"
-  ) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopySuccess(type);
-      setTimeout(() => setCopySuccess(null), 2000);
-    } catch (err) {
-      console.error("Failed to copy to clipboard:", err);
-    }
-  };
+  const {
+    tokenData,
+    loading,
+    error,
+    copySuccess,
+    showDeleteDialog,
+    setShowDeleteDialog,
+    createToken,
+    deleteToken,
+    copyToClipboard,
+  } = useCalendarSubscription();
 
   if (loading && !tokenData) {
     return (
@@ -116,9 +43,7 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
 
   return (
     <div className={styles.container}>
-      {error && (
-        <div className={styles.errorBar}>{error}</div>
-      )}
+      {error && <div className={styles.errorBar}>{error}</div>}
 
       {!tokenData ? (
         <div className={styles.section}>
@@ -212,9 +137,9 @@ export const CalendarSubscription: React.FC<CalendarSubscriptionProps> = () => {
                 <DialogBody>
                   <DialogTitle>Delete Calendar Subscription</DialogTitle>
                   <Text>
-                    Are you sure you want to delete your calendar
-                    subscription? This will invalidate all existing calendar
-                    subscriptions and cannot be undone.
+                    Are you sure you want to delete your calendar subscription?
+                    This will invalidate all existing calendar subscriptions and
+                    cannot be undone.
                   </Text>
                 </DialogBody>
                 <DialogFooter>

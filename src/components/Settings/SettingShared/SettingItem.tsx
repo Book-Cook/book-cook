@@ -22,15 +22,8 @@ export const SettingItem: React.FC<SettingItemProps> = ({
   fullWidth = false,
 }) => {
   return (
-    <div
-      className={clsx(
-        styles.setting,
-        fullWidth && styles.settingFullWidth
-      )}
-    >
-      <div
-        className={clsx(styles.info, fullWidth && styles.infoFullWidth)}
-      >
+    <div className={clsx(styles.setting, fullWidth && styles.settingFullWidth)}>
+      <div className={clsx(styles.info, fullWidth && styles.infoFullWidth)}>
         <div className={styles.label}>{label}</div>
         <div className={styles.description}>{description}</div>
         {statusMessage && (

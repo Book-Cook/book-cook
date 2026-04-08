@@ -4,8 +4,10 @@ import { getServerSession } from "next-auth/next";
 import { getDb } from "../../../../../utils/db";
 import { authOptions } from "../../../auth/[...nextauth]";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "PATCH") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -19,7 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { date, time } = req.query;
     const { mealIndex, targetDate, targetTime } = req.body;
 
-    if (!date || !time || typeof mealIndex !== "number" || !targetDate || !targetTime) {
+    if (
+      !date ||
+      !time ||
+      typeof mealIndex !== "number" ||
+      !targetDate ||
+      !targetTime
+    ) {
       return res.status(400).json({ message: "Missing required parameters" });
     }
 
@@ -38,7 +46,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Find the source time slot
     const timeSlots = sourceMealPlan.meals?.timeSlots ?? [];
-    const sourceSlotIndex = timeSlots.findIndex((slot: { time: string }) => slot.time === time);
+    const sourceSlotIndex = timeSlots.findIndex(
+      (slot: { time: string }) => slot.time === time,
+    );
 
     if (sourceSlotIndex === -1) {
       return res.status(404).json({ message: "Source time slot not found" });
@@ -54,20 +64,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Check if we're moving within the same date
     const isSameDate = date === targetDate;
-    
+
     if (isSameDate) {
       // Handle move within the same date more efficiently
       // Remove from source slot
       sourceSlot.meals.splice(mealIndex, 1);
-      
+
       // Remove source slot if empty
       if (sourceSlot.meals.length === 0) {
         timeSlots.splice(sourceSlotIndex, 1);
       }
-      
+
       // Add to target slot in the same plan
-      const targetSlotIndex = timeSlots.findIndex((slot: { time: string }) => slot.time === targetTime);
-      
+      const targetSlotIndex = timeSlots.findIndex(
+        (slot: { time: string }) => slot.time === targetTime,
+      );
+
       if (targetSlotIndex >= 0) {
         // Add to existing time slot
         timeSlots[targetSlotIndex].meals.push(mealToMove);
@@ -78,10 +90,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           meals: [mealToMove],
         });
       }
-      
+
       // Sort time slots
-      timeSlots.sort((a: { time: string }, b: { time: string }) => a.time.localeCompare(b.time));
-      
+      timeSlots.sort((a: { time: string }, b: { time: string }) =>
+        a.time.localeCompare(b.time),
+      );
+
       // Update the meal plan
       await mealPlansCollection.updateOne(
         { userId: session.user.id, date: date as string },
@@ -90,16 +104,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             "meals.timeSlots": timeSlots,
             updatedAt: new Date(),
           },
-        }
+        },
       );
-      
+
       return res.status(200).json({ message: "Meal moved successfully" });
     }
-    
+
     // Different dates - handle as before
     // Remove meal from source slot
     sourceSlot.meals.splice(mealIndex, 1);
-    
+
     // If source slot is now empty, remove it
     if (sourceSlot.meals.length === 0) {
       timeSlots.splice(sourceSlotIndex, 1);
@@ -113,12 +127,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           "meals.timeSlots": timeSlots,
           updatedAt: new Date(),
         },
-      }
+      },
     );
 
     // Now add to target meal plan
     const targetDateStr = targetDate as string;
-    
+
     // Find or create target meal plan
     let targetMealPlan = await mealPlansCollection.findOne({
       userId: session.user.id,
@@ -140,7 +154,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Add meal to target time slot
     const targetTimeSlots = targetMealPlan.meals?.timeSlots ?? [];
-    const targetSlotIndex = targetTimeSlots.findIndex((slot: { time: string }) => slot.time === targetTime);
+    const targetSlotIndex = targetTimeSlots.findIndex(
+      (slot: { time: string }) => slot.time === targetTime,
+    );
 
     if (targetSlotIndex >= 0) {
       // Add to existing time slot
@@ -154,7 +170,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Sort time slots
-    targetTimeSlots.sort((a: { time: string }, b: { time: string }) => a.time.localeCompare(b.time));
+    targetTimeSlots.sort((a: { time: string }, b: { time: string }) =>
+      a.time.localeCompare(b.time),
+    );
 
     // Update target meal plan
     await mealPlansCollection.updateOne(
@@ -164,7 +182,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           "meals.timeSlots": targetTimeSlots,
           updatedAt: new Date(),
         },
-      }
+      },
     );
 
     return res.status(200).json({ message: "Meal moved successfully" });

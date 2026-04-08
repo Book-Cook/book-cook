@@ -17,7 +17,10 @@ import { Input } from "../Input";
 
 import { useCreateRecipe } from "../../clientToServer/post/useCreateRecipe";
 
-export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) => {
+export const NewRecipeDialog = ({
+  open,
+  onOpenChange,
+}: NewRecipeDialogProps) => {
   const [title, setTitle] = useState("");
   const router = useRouter();
   const mutation = useCreateRecipe();
@@ -28,7 +31,14 @@ export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) =>
       return;
     }
     mutation.mutate(
-      { title: trimmed, data: "", tags: [], imageURL: "", emoji: "", isPublic: false },
+      {
+        title: trimmed,
+        data: "",
+        tags: [],
+        imageURL: "",
+        emoji: "",
+        isPublic: false,
+      },
       {
         onSuccess: (response) => {
           void router.push(`/recipes/${response.recipeId}`);
@@ -37,7 +47,7 @@ export const NewRecipeDialog = ({ open, onOpenChange }: NewRecipeDialogProps) =>
         onError: () => {
           toast.error("Failed to create recipe. Please try again.");
         },
-      }
+      },
     );
   };
 

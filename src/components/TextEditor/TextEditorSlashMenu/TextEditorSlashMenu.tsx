@@ -8,13 +8,20 @@ import {
 import { $createHeadingNode } from "@lexical/rich-text";
 import { $setBlocksType } from "@lexical/selection";
 import type { TextNode } from "lexical";
-import { $createParagraphNode, $getSelection, $isRangeSelection } from "lexical";
+import {
+  $createParagraphNode,
+  $getSelection,
+  $isRangeSelection,
+} from "lexical";
 import * as ReactDOM from "react-dom";
 
 import styles from "./TextEditorSlashMenu.module.css";
 
 export class SlashOption extends MenuOption {
-  constructor(public title: string, public tag: "h1" | "h2" | "p") {
+  constructor(
+    public title: string,
+    public tag: "h1" | "h2" | "p",
+  ) {
     super(title);
   }
 }
@@ -33,12 +40,14 @@ export function SlashMenu() {
   const onSelectOption = (
     selectedOption: SlashOption,
     nodeToRemove: TextNode | null,
-    closeMenu: () => void
+    closeMenu: () => void,
   ) => {
     editor.update(() => {
       nodeToRemove?.remove();
       const selection = $getSelection();
-      if (!$isRangeSelection(selection)) {return;}
+      if (!$isRangeSelection(selection)) {
+        return;
+      }
       switch (selectedOption.tag) {
         case "h1":
           $setBlocksType(selection, () => $createHeadingNode("h1"));
@@ -60,7 +69,9 @@ export function SlashMenu() {
       triggerFn={checkForSlash}
       options={OPTIONS}
       menuRenderFn={(anchorRef, { selectedIndex, selectOptionAndCleanUp }) => {
-        if (anchorRef.current == null || queryString === null) {return null;}
+        if (anchorRef.current == null || queryString === null) {
+          return null;
+        }
         return ReactDOM.createPortal(
           <div className={styles.menu}>
             {OPTIONS.map((option, i) => (
@@ -74,7 +85,7 @@ export function SlashMenu() {
               </button>
             ))}
           </div>,
-          anchorRef.current
+          anchorRef.current,
         );
       }}
     />

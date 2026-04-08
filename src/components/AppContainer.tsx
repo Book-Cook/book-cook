@@ -6,12 +6,12 @@ import { SearchBoxProvider } from "../context";
 
 const Toast = dynamic(
   () => import("./Toast").then((m) => ({ default: m.Toast })),
-  { ssr: false, loading: () => null }
+  { ssr: false, loading: () => null },
 );
 
 const AppShell = dynamic(
   () => import("./AppShell").then((m) => ({ default: m.AppShell })),
-  { ssr: false, loading: () => null }
+  { ssr: false, loading: () => null },
 );
 
 export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({

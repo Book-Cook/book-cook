@@ -21,12 +21,22 @@ type Story = StoryObj<typeof RecipeGallery>;
 const { create } = createStorySet<typeof RecipeGallery>();
 
 // Clean story definitions
-export const Default: Story = create("Default (All Recipes)", [recipeVariants.default()]);
+export const Default: Story = create("Default (All Recipes)", [
+  recipeVariants.default(),
+]);
 
-export const ManyRecipes: Story = create("Many Recipes", [recipeVariants.many()]);
+export const ManyRecipes: Story = create("Many Recipes", [
+  recipeVariants.many(),
+]);
 
-export const EmptyState: Story = create("Empty State", [recipeVariants.empty()]);
+export const EmptyState: Story = create("Empty State", [
+  recipeVariants.empty(),
+]);
 
-export const ErrorState: Story = create("Error State", [recipeVariants.error()]);
+export const ErrorState: Story = create("Error State", [
+  recipeVariants.error(),
+]);
 
-export const LoadingState: Story = create("Loading State", [recipeVariants.loading()]);
+export const LoadingState: Story = create("Loading State", [
+  recipeVariants.loading(),
+]);

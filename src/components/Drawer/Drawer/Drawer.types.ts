@@ -7,7 +7,7 @@ export type DrawerOpenChangeData = { open: boolean };
 export type DrawerOpenChangeEvent = Event | React.SyntheticEvent;
 export type DrawerOnOpenChange = (
   event: DrawerOpenChangeEvent,
-  data: DrawerOpenChangeData
+  data: DrawerOpenChangeData,
 ) => void;
 
 export type DrawerProps = React.PropsWithChildren<

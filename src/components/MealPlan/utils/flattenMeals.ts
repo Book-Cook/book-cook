@@ -4,12 +4,12 @@
 import type { TimeSlot, FlattenedMeal } from "../types";
 
 export const flattenMeals = (
-  meals: TimeSlot[], 
-  date: string
+  meals: TimeSlot[],
+  date: string,
 ): FlattenedMeal[] => {
   const flattened: FlattenedMeal[] = [];
-  
-  meals.forEach(timeSlot => {
+
+  meals.forEach((timeSlot) => {
     timeSlot.meals.forEach((meal, index) => {
       flattened.push({
         id: `${date}-${timeSlot.time}-${index}`,
@@ -19,6 +19,6 @@ export const flattenMeals = (
       });
     });
   });
-  
+
   return flattened;
 };

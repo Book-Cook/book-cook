@@ -1,9 +1,11 @@
 ## Feature Request (verbatim)
+
 "Lets use playwright to polish issues with UI and ensure each page and feature is working properly and performantly"
 
 ---
 
 ## Plain-Language Summary
+
 Write Playwright tests that verify every page and interactive component in the app renders correctly, behaves correctly under user interaction, and exposes the specific visual and functional defects discovered by code inspection of the migrated custom CSS-module system.
 
 ---
@@ -112,7 +114,7 @@ The feature is a Playwright test suite that validates the visual and functional 
 6. When an authenticated user is on the home page, a "Browse Your Recipes" button is present and clicking it navigates to `/recipes`.
 7. When an authenticated user is on the home page, a "Create New Recipe" button is present and clicking it opens the New Recipe dialog (not navigates to `/newRecipe`). The dialog contains an input with placeholder "e.g. Spaghetti carbonara".
 
-  > Note: The current code routes "Create New Recipe" to `/newRecipe` which redirects back. This criterion defines the intended corrected behavior. See Open Questions.
+> Note: The current code routes "Create New Recipe" to `/newRecipe` which redirects back. This criterion defines the intended corrected behavior. See Open Questions.
 
 8. When an authenticated user is on the home page, the recipe carousel labeled "Recent Recipes" is visible and contains at least one recipe card.
 
@@ -126,7 +128,7 @@ The feature is a Playwright test suite that validates the visual and functional 
 14. When the recipes API returns zero results, the page displays the text "No data available" in place of the gallery.
 15. When the recipes API returns an error, the page displays the text "Error" in place of the gallery.
 
-  > Criteria 14 and 15 encode current behavior. See Out of Scope regarding the unstyled fallback screens.
+> Criteria 14 and 15 encode current behavior. See Out of Scope regarding the unstyled fallback screens.
 
 ### Recipe Detail Page (`/recipes/[id]` -- authenticated)
 
@@ -136,7 +138,7 @@ The feature is a Playwright test suite that validates the visual and functional 
 19. When a user is editing a recipe and the content is changed, the RecipeSaveBar appears at the bottom-right of the viewport with "Save" and "Cancel" buttons.
 20. When a user navigates to a recipe detail URL where the ID does not correspond to any recipe, the page does not render blank indefinitely -- it displays an error state or navigates away within 5 seconds.
 
-  > Criterion 20 codifies the required fix for the `if (!recipe) return null` issue found in `RecipePageInner`. See Open Questions.
+> Criterion 20 codifies the required fix for the `if (!recipe) return null` issue found in `RecipePageInner`. See Open Questions.
 
 ### `/newRecipe` Route
 
@@ -146,7 +148,7 @@ The feature is a Playwright test suite that validates the visual and functional 
 
 22. When an authenticated user navigates to `http://localhost:3001/settings`, the page renders within the AppShell (sidebar is visible) and displays meaningful content -- not a bare unstyled `<div>Settings</div>`.
 
-  > This criterion will fail against the current implementation. It defines the required end state. See Open Questions.
+> This criterion will fail against the current implementation. It defines the required end state. See Open Questions.
 
 ### Sidebar
 

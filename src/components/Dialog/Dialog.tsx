@@ -63,7 +63,7 @@ export const DialogContent = ({
         styles.content,
         sizeClassMap[size],
         variantClassMap[variant],
-        className
+        className,
       )}
       data-close-button={withCloseButton ? "" : undefined}
       data-motion={motion}
@@ -84,10 +84,7 @@ export const DialogContent = ({
 );
 
 export const DialogTitle = ({ className, ...props }: DialogTitleProps) => (
-  <DialogPrimitive.Title
-    className={clsx(styles.title, className)}
-    {...props}
-  />
+  <DialogPrimitive.Title className={clsx(styles.title, className)} {...props} />
 );
 
 export const DialogDescription = ({

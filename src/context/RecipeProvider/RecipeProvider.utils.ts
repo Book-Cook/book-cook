@@ -15,7 +15,7 @@ export const toEditableData = (recipe?: Recipe | null): EditableData => ({
 
 export const hasPendingEdits = (
   current: EditableData,
-  snapshot: EditableData | null
+  snapshot: EditableData | null,
 ): boolean => {
   if (!snapshot) {
     return false;
@@ -25,7 +25,7 @@ export const hasPendingEdits = (
 
 export const buildUpdatePayload = (
   editableData: EditableData,
-  immediateUpdate?: Partial<UpdateRecipePayload>
+  immediateUpdate?: Partial<UpdateRecipePayload>,
 ): UpdateRecipePayload => ({
   title: editableData.title,
   data: editableData.content,

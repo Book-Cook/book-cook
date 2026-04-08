@@ -104,7 +104,7 @@ export const DataQueries = {
       (recipe) =>
         recipe.title.toLowerCase().includes(searchTerm) ||
         recipe.data.toLowerCase().includes(searchTerm) ||
-        recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+        recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm)),
     );
   },
 
@@ -112,7 +112,7 @@ export const DataQueries = {
   sortRecipes: (
     recipes: typeof allRecipes,
     sortProperty: string,
-    sortDirection: string
+    sortDirection: string,
   ) => {
     return [...recipes].sort((a, b) => {
       let aValue: string | Date;

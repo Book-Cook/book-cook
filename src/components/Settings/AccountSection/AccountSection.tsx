@@ -124,7 +124,9 @@ export const AccountSection: React.FC = () => {
           label="Sign Out"
           description="Log out of your BookCook account."
         >
-          <Button appearance="secondary" onClick={handleSignOut}>Sign Out</Button>
+          <Button appearance="secondary" onClick={handleSignOut}>
+            Sign Out
+          </Button>
         </SettingItem>
       )}
 
@@ -133,7 +135,11 @@ export const AccountSection: React.FC = () => {
           label="Clear Recently Viewed"
           description="Remove all recipes from your recently viewed list."
         >
-          <Button appearance="secondary" onClick={clearRecents} disabled={isClearing}>
+          <Button
+            appearance="secondary"
+            onClick={clearRecents}
+            disabled={isClearing}
+          >
             {isClearing ? "Clearing..." : "Clear Recently Viewed"}
           </Button>
         </SettingItem>

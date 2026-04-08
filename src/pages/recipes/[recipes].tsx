@@ -9,7 +9,7 @@ const RecipePage = dynamic(
   {
     loading: () => null,
     ssr: false,
-  }
+  },
 );
 
 export default function Recipes() {

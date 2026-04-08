@@ -12,43 +12,48 @@ This Storybook setup uses custom fetch mocking for realistic API simulation in s
 ## Usage in Stories
 
 ### Basic Usage
+
 ```typescript
 import { withRecipeMocks } from "./mockApi";
 
 export const MyStory = {
-  decorators: [withRecipeMocks]
-}
+  decorators: [withRecipeMocks],
+};
 ```
 
 ### Available Decorators
 
 - `withRecipeMocks` - Standard recipe data
-- `withHomepageMocks` - Collections and recently viewed recipes  
+- `withHomepageMocks` - Collections and recently viewed recipes
 - `withEmptyMocks` - Empty state for all endpoints
 - `withErrorMocks` - 500 errors for all endpoints
 - `withLoadingMocks` - 2-second delay for loading states
 
 ### Custom API Responses
+
 ```typescript
 import { withApiMocks } from "./mockApi";
 
 export const MyStory = {
-  decorators: [withApiMocks({
-    '/api/recipes': {
-      response: [customRecipe1, customRecipe2],
-      delay: 1000
-    },
-    '/api/user/collections': {
-      response: [],
-      status: 404
-    }
-  })]
-}
+  decorators: [
+    withApiMocks({
+      "/api/recipes": {
+        response: [customRecipe1, customRecipe2],
+        delay: 1000,
+      },
+      "/api/user/collections": {
+        response: [],
+        status: 404,
+      },
+    }),
+  ],
+};
 ```
 
 ## Example Stories
 
 The `HomePage.stories.tsx` demonstrates all capabilities:
+
 - **Default**: Standard mock data
 - **Empty State**: No recipes to display
 - **Loading State**: Shows skeleton loading with 2s delay

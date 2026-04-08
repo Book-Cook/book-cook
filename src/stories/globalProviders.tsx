@@ -1,5 +1,5 @@
-import React from 'react';
-import type { StoryContext } from '@storybook/react';
+import React from "react";
+import type { StoryContext } from "@storybook/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -29,7 +29,10 @@ const StoryWrapper: React.FC<{ Story: React.ComponentType }> = ({ Story }) => {
   );
 };
 
-export const withGlobalProviders = (Story: React.ComponentType, _context: StoryContext) => (
+export const withGlobalProviders = (
+  Story: React.ComponentType,
+  _context: StoryContext,
+) => (
   <SessionProvider session={mockSession}>
     <StoryWrapper Story={Story} />
   </SessionProvider>

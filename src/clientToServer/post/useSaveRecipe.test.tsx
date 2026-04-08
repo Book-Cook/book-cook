@@ -102,10 +102,10 @@ describe("useSaveRecipe", () => {
 
   it("should update query cache optimistically", async () => {
     // Set initial cache data
-    queryClient.setQueryData(["savedRecipes"], [
-      { _id: "recipe1" },
-      { _id: "recipe2" },
-    ]);
+    queryClient.setQueryData(
+      ["savedRecipes"],
+      [{ _id: "recipe1" }, { _id: "recipe2" }],
+    );
 
     const mockResponse = {
       success: true,

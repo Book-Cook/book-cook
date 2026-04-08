@@ -5,12 +5,12 @@
 export const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const DAY_NAMES_FULL = [
   "Sunday",
-  "Monday", 
+  "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
 
 /**
@@ -19,21 +19,21 @@ export const DAY_NAMES_FULL = [
 export function getCalendarDays(currentDate: Date): Date[] {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
-  
+
   // First day of the month
   const firstDay = new Date(year, month, 1);
   const startDate = new Date(firstDay);
   startDate.setDate(startDate.getDate() - firstDay.getDay());
-  
+
   // Generate 6 weeks (42 days)
   const days: Date[] = [];
   const currentDay = new Date(startDate);
-  
+
   for (let i = 0; i < 42; i++) {
     days.push(new Date(currentDay));
     currentDay.setDate(currentDay.getDate() + 1);
   }
-  
+
   return days;
 }
 
@@ -68,11 +68,11 @@ export function getWeekRange(date: Date): { start: Date; end: Date } {
   const start = new Date(date);
   start.setDate(date.getDate() - date.getDay());
   start.setHours(0, 0, 0, 0);
-  
+
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
   end.setHours(23, 59, 59, 999);
-  
+
   return { start, end };
 }
 
@@ -83,7 +83,7 @@ export function getMonthRange(date: Date): { start: Date; end: Date } {
   const start = new Date(date.getFullYear(), date.getMonth(), 1);
   const end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
   end.setHours(23, 59, 59, 999);
-  
+
   return { start, end };
 }
 
@@ -91,26 +91,30 @@ export function getMonthRange(date: Date): { start: Date; end: Date } {
  * Format date as YYYY-MM-DD for API calls
  */
 export function formatDateForAPI(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 /**
  * Navigate to previous/next period
  */
-export function navigateDate(date: Date, direction: 'prev' | 'next', period: 'day' | 'week' | 'month'): Date {
+export function navigateDate(
+  date: Date,
+  direction: "prev" | "next",
+  period: "day" | "week" | "month",
+): Date {
   const newDate = new Date(date);
-  
+
   switch (period) {
-    case 'day':
-      newDate.setDate(newDate.getDate() + (direction === 'next' ? 1 : -1));
+    case "day":
+      newDate.setDate(newDate.getDate() + (direction === "next" ? 1 : -1));
       break;
-    case 'week':
-      newDate.setDate(newDate.getDate() + (direction === 'next' ? 7 : -7));
+    case "week":
+      newDate.setDate(newDate.getDate() + (direction === "next" ? 7 : -7));
       break;
-    case 'month':
-      newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
+    case "month":
+      newDate.setMonth(newDate.getMonth() + (direction === "next" ? 1 : -1));
       break;
   }
-  
+
   return newDate;
 }

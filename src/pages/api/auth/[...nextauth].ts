@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
 
       // Check if user already has a collections document
       const existingCollection = await collections.findOne({
-        userId: existingUser?._id.toString()
+        userId: existingUser?._id.toString(),
       });
 
       if (!existingCollection) {

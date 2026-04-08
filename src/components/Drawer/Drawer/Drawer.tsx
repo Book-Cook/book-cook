@@ -75,7 +75,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           }
           backdropProps?.onClick?.(event);
         },
-        [backdropProps, closeOnBackdropClick, onOpenChange]
+        [backdropProps, closeOnBackdropClick, onOpenChange],
       );
 
     const drawerClasses = cx(
@@ -83,13 +83,13 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       positionClassMap[position],
       sizeClassMap[size],
       open ? styles.open : styles.closed,
-      className
+      className,
     );
 
     const backdropClasses = cx(
       styles.backdrop,
       open && styles.backdropOpen,
-      backdropProps?.className
+      backdropProps?.className,
     );
 
     const labelledBy = ariaLabelledBy ?? undefined;
@@ -121,7 +121,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
         </div>
       </>
     );
-  }
+  },
 );
 
 Drawer.displayName = "Drawer";

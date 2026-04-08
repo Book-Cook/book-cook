@@ -4,7 +4,12 @@ import styles from "./MonthView.module.css";
 import type { MonthViewProps } from "./MonthView.types";
 import { DroppableDayCell } from "../components/DroppableDayCell";
 import { formatDateString } from "../utils/formatDateString";
-import { dayNames, getCalendarDays, getMealPlanForDate, isPastDate } from "../utils/monthCalendarUtils";
+import {
+  dayNames,
+  getCalendarDays,
+  getMealPlanForDate,
+  isPastDate,
+} from "../utils/monthCalendarUtils";
 
 export const MonthView: React.FC<MonthViewProps> = ({
   currentDate,
@@ -18,14 +23,14 @@ export const MonthView: React.FC<MonthViewProps> = ({
   return (
     <div className={styles.container}>
       {/* Day of week headers */}
-      {dayNames.map(day => (
+      {dayNames.map((day) => (
         <div key={day} className={styles.dayOfWeekHeader}>
           {day}
         </div>
       ))}
 
       {/* Calendar days */}
-      {calendarDays.map(date => {
+      {calendarDays.map((date) => {
         const dateStr = formatDateString(date);
         const isToday = date.toDateString() === today;
         const isCurrentMonth = date.getMonth() === currentMonth;
