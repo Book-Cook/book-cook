@@ -31,7 +31,9 @@ export function useAddToCollection() {
           },
         );
       } catch (error) {
-        throw new Error(`Failed to add recipe to collection: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+          `Failed to add recipe to collection: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onMutate: async (recipeId: string) => {

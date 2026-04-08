@@ -28,7 +28,9 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 }) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
-  const [pendingMeal, setPendingMeal] = React.useState<PendingMeal | null>(null);
+  const [pendingMeal, setPendingMeal] = React.useState<PendingMeal | null>(
+    null,
+  );
 
   const { sidebarWidth, isMobile, handleMouseDown } = useSidebarResize();
 
@@ -44,8 +46,12 @@ export const MealPlanCalendar: React.FC<MealPlanCalendarProps> = ({
 
   const { mealPlansData } = useMealPlanData({ view, currentDate });
 
-  const { addMealMutation, removeMealMutation, reorderMealMutation, moveMealMutation } =
-    useMealPlanMutations({ dateRange });
+  const {
+    addMealMutation,
+    removeMealMutation,
+    reorderMealMutation,
+    moveMealMutation,
+  } = useMealPlanMutations({ dateRange });
 
   const { draggedRecipe, handleDragStart, handleDragEnd } = useMealDragDrop(
     {

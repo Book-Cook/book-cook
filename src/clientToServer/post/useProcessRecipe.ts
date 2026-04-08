@@ -18,14 +18,11 @@ export const useConvertMeasurements = () => {
   >({
     mutationKey: ["convertMeasurementsAI"],
     mutationFn: async (payload) => {
-      return fetchJson<ConvertMeasurementsResponse>(
-        "/api/ai/processRecipe",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
+      return fetchJson<ConvertMeasurementsResponse>("/api/ai/processRecipe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
     },
   });
 };

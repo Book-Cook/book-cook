@@ -24,7 +24,9 @@ export function useSaveRecipe() {
           body: JSON.stringify({ recipeId }),
         });
       } catch (error) {
-        throw new Error(`Failed to save recipe: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+          `Failed to save recipe: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onMutate: async (recipeId: string) => {

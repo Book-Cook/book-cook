@@ -32,7 +32,9 @@ export function useToggleRecipeVisibility() {
           },
         );
       } catch (error) {
-        throw new Error(`Failed to update recipe visibility: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+          `Failed to update recipe visibility: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onSuccess: async (data, { recipeId }) => {
