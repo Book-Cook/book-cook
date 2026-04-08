@@ -32,7 +32,7 @@ interface UseCoverUploadReturn {
   setInputRef: (el: HTMLInputElement | null) => void;
   handleFileSelect: (file: File) => Promise<void>;
   handleRemoveCover: () => Promise<void>;
-  internalRef: RefObject<HTMLInputElement>;
+  internalRef: RefObject<HTMLInputElement | null>;
 }
 
 /**
