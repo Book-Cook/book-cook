@@ -42,7 +42,7 @@ export default async () => {
     // Transform all node_modules except CSS modules and the few packages
     // that ship valid CJS (geist is required by next/jest).
     "^.+\\.module\\.(css|sass|scss)$",
-    "/node_modules/(?!(geist|string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http|@mswjs|until-async)/)",
+    "/node_modules/(?!(geist|string-width|strip-ansi|ansi-regex|wrap-ansi|jose|bson|mongodb|node-mocks-http|msw|@mswjs|until-async)/)",
   ];
   return config;
 };
