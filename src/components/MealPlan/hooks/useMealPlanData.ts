@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { CalendarView } from "../MealPlanCalendar/MealPlanCalendar.types";
 import { formatDateString } from "../utils/formatDateString";
 
+import type { MealPlanWithRecipes } from "../../../clientToServer/types/mealPlan.types";
+
 interface UseMealPlanDataProps {
   view: CalendarView;
   currentDate: Date;
@@ -14,7 +16,7 @@ interface DateRange {
 }
 
 interface MealPlanQueryResult {
-  mealPlans: unknown[];
+  mealPlans: MealPlanWithRecipes[];
 }
 
 interface UseMealPlanDataReturn {
