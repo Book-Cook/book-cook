@@ -47,8 +47,12 @@ export function removeMeal(date: string, time: string, mealIndex: number) {
  * Move meal to different time slot
  */
 export function moveMeal(payload: MealMovePayload) {
-  const { date, time } = payload;
-  return apiCall(`/api/meal-plans/${date}/${time}/move`, "POST", payload);
+  const { sourceDate, sourceTime } = payload;
+  return apiCall(
+    `/api/meal-plans/${sourceDate}/${sourceTime}/move`,
+    "POST",
+    payload,
+  );
 }
 
 /**
