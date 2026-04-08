@@ -3,7 +3,9 @@
   background-color: var(--app-bg);
   color: var(--app-fg);
   font-family: var(--app-font);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .content {

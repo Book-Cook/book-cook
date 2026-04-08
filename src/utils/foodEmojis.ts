@@ -152,7 +152,7 @@ export const searchFoodEmojis = (keyword: string): string[] => {
       searchTerms.some(
         (term) =>
           info.name.toLowerCase().includes(term) ||
-          info.category.toLowerCase().includes(term)
+          info.category.toLowerCase().includes(term),
       )
     ) {
       results.push(emoji);

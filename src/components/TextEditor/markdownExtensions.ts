@@ -2,7 +2,10 @@
  * Custom Lexical markdown transformers for horizontal rules and tables.
  * @lexical/markdown v0.40 does not ship TABLE or HR transformers, so we provide them here.
  */
-import type { MultilineElementTransformer, ElementTransformer } from "@lexical/markdown";
+import type {
+  MultilineElementTransformer,
+  ElementTransformer,
+} from "@lexical/markdown";
 import {
   $createHorizontalRuleNode,
   $isHorizontalRuleNode,
@@ -40,7 +43,10 @@ export const HR_TRANSFORMER: ElementTransformer = {
 // ── Markdown Table ───────────────────────────────────────────────────────────
 
 function parseCells(line: string): string[] {
-  return line.split("|").slice(1, -1).map((c) => c.trim());
+  return line
+    .split("|")
+    .slice(1, -1)
+    .map((c) => c.trim());
 }
 
 function isSeparatorRow(cells: string[]): boolean {
@@ -63,13 +69,17 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
       i++;
     }
 
-    if (tableLines.length < 2) {return null;} // not a valid table
+    if (tableLines.length < 2) {
+      return null;
+    } // not a valid table
 
     const tableNode = $createTableNode();
 
     tableLines.forEach((line, rowIndex) => {
       const cells = parseCells(line);
-      if (isSeparatorRow(cells)) {return;} // skip the `| --- | --- |` row
+      if (isSeparatorRow(cells)) {
+        return;
+      } // skip the `| --- | --- |` row
 
       const isHeader = rowIndex === 0;
       const rowNode = $createTableRowNode();
@@ -94,10 +104,14 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
 
   // export converts a TableNode back to markdown
   export: (node: LexicalNode) => {
-    if (!$isTableNode(node)) {return null;}
+    if (!$isTableNode(node)) {
+      return null;
+    }
 
     const rows = node.getChildren().filter($isTableRowNode);
-    if (rows.length === 0) {return null;}
+    if (rows.length === 0) {
+      return null;
+    }
 
     const markdownRows = rows.map((row) => {
       const cells = row.getChildren().filter($isTableCellNode);
@@ -111,9 +125,7 @@ export const TABLE_TRANSFORMER: MultilineElementTransformer = {
     });
 
     // Insert separator after header row
-    const headerCells = (
-      rows[0].getChildren().filter($isTableCellNode)
-    ).length;
+    const headerCells = rows[0].getChildren().filter($isTableCellNode).length;
     const separator = `| ${Array(headerCells).fill("---").join(" | ")} |`;
     markdownRows.splice(1, 0, separator);
 

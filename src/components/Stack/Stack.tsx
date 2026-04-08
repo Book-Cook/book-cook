@@ -51,7 +51,7 @@ export const Stack = forwardRef<HTMLElement, StackProps>((props, ref) => {
         alignStyles[align],
         gapStyles[gap],
         wrap ? styles.wrap : styles.noWrap,
-        className
+        className,
       )}
       {...rest}
     >

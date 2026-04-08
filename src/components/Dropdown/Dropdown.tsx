@@ -33,7 +33,7 @@ export const DropdownTrigger = ({
       styles.trigger,
       sizeStyles[size],
       fullWidth && styles.fullWidth,
-      className
+      className,
     )}
     {...props}
   />
@@ -80,10 +80,7 @@ export const DropdownGroup = (props: DropdownGroupProps) => (
   <Select.Group {...props} />
 );
 
-export const DropdownLabel = ({
-  className,
-  ...props
-}: DropdownLabelProps) => (
+export const DropdownLabel = ({ className, ...props }: DropdownLabelProps) => (
   <Select.Label className={clsx(styles.label, className)} {...props} />
 );
 

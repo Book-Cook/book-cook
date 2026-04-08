@@ -17,7 +17,9 @@ export const RecipeTags = ({
 
   const addTag = (raw: string) => {
     const tag = raw.trim().toLowerCase();
-    if (!tag || tags.includes(tag)) {return;}
+    if (!tag || tags.includes(tag)) {
+      return;
+    }
     onTagsChange?.([...tags, tag]);
     setInputValue("");
   };
@@ -39,7 +41,10 @@ export const RecipeTags = ({
     return (
       <div className={styles.tagList}>
         {tags.map((tag) => (
-          <Tag key={tag} onClick={onTagClick ? () => onTagClick(tag) : undefined}>
+          <Tag
+            key={tag}
+            onClick={onTagClick ? () => onTagClick(tag) : undefined}
+          >
             {tag}
           </Tag>
         ))}
@@ -55,7 +60,10 @@ export const RecipeTags = ({
           <button
             type="button"
             className={styles.removeBtn}
-            onClick={(e) => { e.stopPropagation(); removeTag(tag); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              removeTag(tag);
+            }}
             aria-label={`Remove tag ${tag}`}
           >
             <XIcon size={10} weight="bold" />
@@ -68,7 +76,11 @@ export const RecipeTags = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        onBlur={() => { if (inputValue) {addTag(inputValue);} }}
+        onBlur={() => {
+          if (inputValue) {
+            addTag(inputValue);
+          }
+        }}
         placeholder={tags.length === 0 ? "Add tags…" : ""}
         size={Math.max(inputValue.length + 1, tags.length === 0 ? 10 : 2)}
       />

@@ -20,7 +20,10 @@ export function useCreateRecipe() {
       return (await response.json()) as CreateRecipeResponse;
     },
     onSuccess: (_data) => {
-      void queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "none" });
+      void queryClient.invalidateQueries({
+        queryKey: ["recipes"],
+        refetchType: "none",
+      });
     },
     onError: (error) => {
       if (error instanceof Error) {

@@ -28,12 +28,20 @@ import { useDeleteSharedUser } from "../../clientToServer/delete/useDeleteShared
 import { useSharedUsers } from "../../clientToServer/fetch/useSharedUsers";
 import { useShareWithUser } from "../../clientToServer/post/useShareWithUser";
 
-const mockUseSharedUsers = useSharedUsers as jest.MockedFunction<typeof useSharedUsers>;
-const mockUseShareWithUser = useShareWithUser as jest.MockedFunction<typeof useShareWithUser>;
-const mockUseDeleteSharedUser = useDeleteSharedUser as jest.MockedFunction<typeof useDeleteSharedUser>;
+const mockUseSharedUsers = useSharedUsers as jest.MockedFunction<
+  typeof useSharedUsers
+>;
+const mockUseShareWithUser = useShareWithUser as jest.MockedFunction<
+  typeof useShareWithUser
+>;
+const mockUseDeleteSharedUser = useDeleteSharedUser as jest.MockedFunction<
+  typeof useDeleteSharedUser
+>;
 
 function makeQueryWrapper() {
-  const qc = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+  const qc = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={qc}>{children}</QueryClientProvider>
   );
@@ -41,15 +49,25 @@ function makeQueryWrapper() {
 }
 
 function makeMutateMock() {
-  return jest.fn((_email: string, opts?: { onSuccess?: () => void; onError?: (e: Error) => void }) => {
-    opts?.onSuccess?.();
-  });
+  return jest.fn(
+    (
+      _email: string,
+      opts?: { onSuccess?: () => void; onError?: (e: Error) => void },
+    ) => {
+      opts?.onSuccess?.();
+    },
+  );
 }
 
 function makeErrorMutateMock(msg: string) {
-  return jest.fn((_email: string, opts?: { onSuccess?: () => void; onError?: (e: Error) => void }) => {
-    opts?.onError?.(new Error(msg));
-  });
+  return jest.fn(
+    (
+      _email: string,
+      opts?: { onSuccess?: () => void; onError?: (e: Error) => void },
+    ) => {
+      opts?.onError?.(new Error(msg));
+    },
+  );
 }
 
 describe("SharingSection (within SettingsPage)", () => {
@@ -86,7 +104,7 @@ describe("SharingSection (within SettingsPage)", () => {
   it("shows empty state when no users are shared", () => {
     renderSettings();
     expect(
-      screen.getByText("You haven't shared your recipes with anyone yet.")
+      screen.getByText("You haven't shared your recipes with anyone yet."),
     ).toBeInTheDocument();
   });
 
@@ -119,7 +137,9 @@ describe("SharingSection (within SettingsPage)", () => {
     fireEvent.change(input, { target: { value: "not-an-email" } });
     fireEvent.click(screen.getByRole("button", { name: "Share" }));
 
-    expect(screen.getByText("Enter a valid email address.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Enter a valid email address."),
+    ).toBeInTheDocument();
     expect(mockUseShareWithUser().mutate).not.toHaveBeenCalled();
   });
 
@@ -138,7 +158,10 @@ describe("SharingSection (within SettingsPage)", () => {
 
     expect(mutateSpy).toHaveBeenCalledWith(
       "test@example.com",
-      expect.objectContaining({ onSuccess: expect.any(Function), onError: expect.any(Function) })
+      expect.objectContaining({
+        onSuccess: expect.any(Function),
+        onError: expect.any(Function),
+      }),
     );
   });
 
@@ -197,7 +220,7 @@ describe("SharingSection (within SettingsPage)", () => {
 
     expect(mutateSpy).toHaveBeenCalledWith(
       "alice@example.com",
-      expect.objectContaining({ onError: expect.any(Function) })
+      expect.objectContaining({ onError: expect.any(Function) }),
     );
   });
 
@@ -221,7 +244,7 @@ describe("SharingSection (within SettingsPage)", () => {
 
     expect(mutateSpy).toHaveBeenCalledWith(
       "enter@example.com",
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
@@ -231,9 +254,13 @@ describe("SharingSection (within SettingsPage)", () => {
     const input = screen.getByPlaceholderText("user@example.com");
     fireEvent.change(input, { target: { value: "bad" } });
     fireEvent.click(screen.getByRole("button", { name: "Share" }));
-    expect(screen.getByText("Enter a valid email address.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Enter a valid email address."),
+    ).toBeInTheDocument();
 
     fireEvent.change(input, { target: { value: "b" } });
-    expect(screen.queryByText("Enter a valid email address.")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Enter a valid email address."),
+    ).not.toBeInTheDocument();
   });
 });

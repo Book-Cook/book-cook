@@ -40,7 +40,7 @@ export const Text: React.FC<TextProps> = (props) => {
         italic && styles.italic,
         underline && styles.underline,
         strikethrough && styles.strikethrough,
-        className
+        className,
       )}
       {...rest}
     />

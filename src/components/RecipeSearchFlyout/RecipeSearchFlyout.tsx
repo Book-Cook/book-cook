@@ -9,7 +9,10 @@ import styles from "./RecipeSearchFlyout.module.css";
 import type { RecipeSearchFlyoutProps } from "./RecipeSearchFlyout.types";
 import { Text } from "../Text";
 
-import { fetchAllRecipes, fetchRecipesPaginated } from "../../clientToServer/fetch/fetchAllRecipes";
+import {
+  fetchAllRecipes,
+  fetchRecipesPaginated,
+} from "../../clientToServer/fetch/fetchAllRecipes";
 import { groupRecipesByTime } from "../../utils/groupRecipesByTime";
 
 const SEARCH_LIMIT = 50;
@@ -26,7 +29,10 @@ export const RecipeSearchFlyout = ({
 
   // Debounce query by 200ms to avoid hammering the API on every keystroke
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 200);
+    const t = setTimeout(
+      () => setDebouncedQuery(query.trim().toLowerCase()),
+      200,
+    );
     return () => clearTimeout(t);
   }, [query]);
 
@@ -41,12 +47,13 @@ export const RecipeSearchFlyout = ({
   // Server-side search across ALL recipes when the user types
   const { data: searchData, isFetching: isSearching } = useQuery({
     queryKey: ["recipeSearch", debouncedQuery],
-    queryFn: () => fetchRecipesPaginated({
-      searchBoxValue: debouncedQuery,
-      orderBy: "dateNewest",
-      limit: SEARCH_LIMIT,
-      offset: 0,
-    }),
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue: debouncedQuery,
+        orderBy: "dateNewest",
+        limit: SEARCH_LIMIT,
+        offset: 0,
+      }),
     enabled: open && debouncedQuery.length > 0,
     staleTime: 30 * 1000,
   });
@@ -66,11 +73,19 @@ export const RecipeSearchFlyout = ({
   const seen = new Set<string>();
   const defaultSource = [];
   for (const r of recentRecipes) {
-    if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
+    if (!seen.has(r._id)) {
+      seen.add(r._id);
+      defaultSource.push(r);
+    }
   }
   for (const r of defaultRecipes) {
-    if (defaultSource.length >= 30) { break; }
-    if (!seen.has(r._id)) { seen.add(r._id); defaultSource.push(r); }
+    if (defaultSource.length >= 30) {
+      break;
+    }
+    if (!seen.has(r._id)) {
+      seen.add(r._id);
+      defaultSource.push(r);
+    }
   }
 
   const results = trimmed ? (searchData?.recipes ?? []) : defaultSource;
@@ -97,8 +112,17 @@ export const RecipeSearchFlyout = ({
           <DialogPrimitive.Title className={styles.srOnly}>
             Search recipes
           </DialogPrimitive.Title>
-          <div className={cx(styles.searchRow, !showResults && styles.searchRowNoResults)}>
-            <MagnifyingGlassIcon size={16} className={styles.searchIcon} aria-hidden="true" />
+          <div
+            className={cx(
+              styles.searchRow,
+              !showResults && styles.searchRowNoResults,
+            )}
+          >
+            <MagnifyingGlassIcon
+              size={16}
+              className={styles.searchIcon}
+              aria-hidden="true"
+            />
             <input
               ref={inputRef}
               className={styles.searchInput}
@@ -119,26 +143,34 @@ export const RecipeSearchFlyout = ({
           {showResults && (
             <div className={styles.results}>
               {isSearching && trimmed ? (
-                <Text size={300} className={styles.empty}>Searching…</Text>
-              ) : groups.length > 0 ? groups.map((group) => (
-                <div key={group.label} className={styles.group}>
-                  <div className={styles.groupLabel}>{group.label}</div>
-                  {group.recipes.map((recipe) => (
-                    <button
-                      key={recipe._id}
-                      className={styles.recipeItem}
-                      onClick={() => navigate(recipe._id)}
-                      title={recipe.title}
-                    >
-                      <span className={styles.recipeEmoji} aria-hidden="true">
-                        {recipe.emoji ?? "🍴"}
-                      </span>
-                      <span className={styles.recipeTitle}>{recipe.title || "Untitled Recipe"}</span>
-                    </button>
-                  ))}
-                </div>
-              )) : trimmed ? (
-                <Text size={300} className={styles.empty}>No recipes found for &quot;{query}&quot;</Text>
+                <Text size={300} className={styles.empty}>
+                  Searching…
+                </Text>
+              ) : groups.length > 0 ? (
+                groups.map((group) => (
+                  <div key={group.label} className={styles.group}>
+                    <div className={styles.groupLabel}>{group.label}</div>
+                    {group.recipes.map((recipe) => (
+                      <button
+                        key={recipe._id}
+                        className={styles.recipeItem}
+                        onClick={() => navigate(recipe._id)}
+                        title={recipe.title}
+                      >
+                        <span className={styles.recipeEmoji} aria-hidden="true">
+                          {recipe.emoji ?? "🍴"}
+                        </span>
+                        <span className={styles.recipeTitle}>
+                          {recipe.title || "Untitled Recipe"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ))
+              ) : trimmed ? (
+                <Text size={300} className={styles.empty}>
+                  No recipes found for &quot;{query}&quot;
+                </Text>
               ) : null}
             </div>
           )}

@@ -20,8 +20,17 @@ export const AllVariants: Story = {
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {/* Basic variants */}
       <div>
-        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Basic Variants</h3>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>
+          Basic Variants
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <Button appearance="primary">Primary</Button>
           <Button appearance="secondary">Secondary</Button>
           <Button appearance="subtle">Subtle</Button>
@@ -31,19 +40,45 @@ export const AllVariants: Story = {
 
       {/* With icons */}
       <div>
-        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>With Icons</h3>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" icon={<PlusIcon />}>Add Item</Button>
-          <Button appearance="secondary" icon={<PencilIcon />}>Edit</Button>
-          <Button appearance="subtle" icon={<TrashIcon />}>Delete</Button>
-          <Button appearance="transparent" icon={<PlusIcon />}>Create</Button>
+        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>
+          With Icons
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Button appearance="primary" icon={<PlusIcon />}>
+            Add Item
+          </Button>
+          <Button appearance="secondary" icon={<PencilIcon />}>
+            Edit
+          </Button>
+          <Button appearance="subtle" icon={<TrashIcon />}>
+            Delete
+          </Button>
+          <Button appearance="transparent" icon={<PlusIcon />}>
+            Create
+          </Button>
         </div>
       </div>
 
       {/* Icon only */}
       <div>
-        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Icon Only</h3>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>
+          Icon Only
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <Button appearance="primary" icon={<PlusIcon />} />
           <Button appearance="secondary" icon={<PencilIcon />} />
           <Button appearance="subtle" icon={<TrashIcon />} />
@@ -53,21 +88,51 @@ export const AllVariants: Story = {
 
       {/* Disabled states */}
       <div>
-        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Disabled States</h3>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" disabled>Primary</Button>
-          <Button appearance="secondary" disabled>Secondary</Button>
-          <Button appearance="subtle" disabled>Subtle</Button>
-          <Button appearance="transparent" disabled>Transparent</Button>
+        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>
+          Disabled States
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Button appearance="primary" disabled>
+            Primary
+          </Button>
+          <Button appearance="secondary" disabled>
+            Secondary
+          </Button>
+          <Button appearance="subtle" disabled>
+            Subtle
+          </Button>
+          <Button appearance="transparent" disabled>
+            Transparent
+          </Button>
         </div>
       </div>
 
       {/* Disabled with icons */}
       <div>
-        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>Disabled with Icons</h3>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-          <Button appearance="primary" icon={<PlusIcon />} disabled>Add Item</Button>
-          <Button appearance="secondary" icon={<PencilIcon />} disabled>Edit</Button>
+        <h3 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 600 }}>
+          Disabled with Icons
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Button appearance="primary" icon={<PlusIcon />} disabled>
+            Add Item
+          </Button>
+          <Button appearance="secondary" icon={<PencilIcon />} disabled>
+            Edit
+          </Button>
           <Button appearance="subtle" icon={<TrashIcon />} disabled />
         </div>
       </div>

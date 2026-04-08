@@ -7,17 +7,16 @@ import { navLinks } from "../constants";
 
 import { Link } from "../../Link";
 
-export const NavigationLinks: React.FC<NavigationLinksProps> = ({ currentPath }) => {
+export const NavigationLinks: React.FC<NavigationLinksProps> = ({
+  currentPath,
+}) => {
   return (
     <>
       {navLinks.map((link) => (
         <Link
           key={link.url}
           href={link.url}
-          className={cx(
-            styles.link,
-            currentPath === link.url && styles.active
-          )}
+          className={cx(styles.link, currentPath === link.url && styles.active)}
           underline="none"
         >
           {link.label}

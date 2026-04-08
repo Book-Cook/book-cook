@@ -11,7 +11,7 @@ import { Text } from "../../Text";
 export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
   (
     { id, recipeId, title, emoji, duration, position, onRemove },
-    ref
+    ref,
   ): React.ReactElement => {
     const router = useRouter();
 
@@ -23,7 +23,7 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
         }
         await router.push(`/recipes/${recipeId}`);
       },
-      [recipeId, router]
+      [recipeId, router],
     );
 
     const handleRemoveClick = React.useCallback(
@@ -31,12 +31,12 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
         event.stopPropagation();
         onRemove();
       },
-      [onRemove]
+      [onRemove],
     );
 
     const cardHeight = React.useMemo(
       () => Math.max(30, (duration / 60) * 60 - 8),
-      [duration]
+      [duration],
     );
 
     const style = React.useMemo<React.CSSProperties>(
@@ -44,7 +44,7 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
         top: `${position}px`,
         height: `${cardHeight}px`,
       }),
-      [cardHeight, position]
+      [cardHeight, position],
     );
 
     return (
@@ -72,7 +72,7 @@ export const MealCard = React.forwardRef<HTMLDivElement, MealCardProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 MealCard.displayName = "MealCard";

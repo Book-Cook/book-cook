@@ -1,6 +1,7 @@
 ## Feature Request (verbatim)
 
 I would like you to investigate migrating the changes from book cook v2 into book cook v1 this should include:
+
 1. The new component system — we no longer are using Fluent
 2. Any UI changes or new components
 

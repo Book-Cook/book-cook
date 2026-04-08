@@ -39,7 +39,7 @@ const handleGetRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
   db: Db,
-  session: Session | null
+  session: Session | null,
 ) => {
   try {
     const parsed = getQuerySchema.safeParse(req.query);
@@ -60,7 +60,9 @@ const handleGetRequest = async (
     const offsetNum = parseInt(offset, 10);
 
     if (isNaN(limitNum) || isNaN(offsetNum) || limitNum < 1 || limitNum > 100) {
-      return res.status(400).json({ message: "Invalid pagination parameters." });
+      return res
+        .status(400)
+        .json({ message: "Invalid pagination parameters." });
     }
 
     // 2. Define visibility conditions.
@@ -80,7 +82,7 @@ const handleGetRequest = async (
           .collection("users")
           .find(
             { sharedWithUsers: session.user.email },
-            { projection: { _id: 1 } }
+            { projection: { _id: 1 } },
           )
           .map((user) => user._id.toString())
           .toArray();
@@ -97,7 +99,9 @@ const handleGetRequest = async (
     // Unauthenticated users have no visibility — return empty rather than
     // passing an invalid `$or: []` to MongoDB.
     if (visibilityConditions.length === 0) {
-      return res.status(200).json({ recipes: [], totalCount: 0, hasMore: false });
+      return res
+        .status(200)
+        .json({ recipes: [], totalCount: 0, hasMore: false });
     }
 
     // Avoid wrapping a single condition in $or (minor query optimization).
@@ -116,7 +120,7 @@ const handleGetRequest = async (
 
     if (tags) {
       const tagsList = (Array.isArray(tags) ? tags : [tags]).filter(
-        (tag) => typeof tag === "string" && tag.trim()
+        (tag) => typeof tag === "string" && tag.trim(),
       );
       if (tagsList.length > 0) {
         query = { $and: [query, { tags: { $all: tagsList } }] };
@@ -139,7 +143,7 @@ const handleGetRequest = async (
       .countDocuments(query);
 
     // Add caching headers for better performance
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({
       recipes,
       totalCount,
@@ -155,7 +159,7 @@ const handlePostRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
   db: Db,
-  session: Session | null
+  session: Session | null,
 ) => {
   try {
     if (!session?.user?.id) {
@@ -193,7 +197,7 @@ const handlePostRequest = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
     res.setHeader("Allow", ALLOWED_METHODS);
@@ -205,7 +209,7 @@ export default async function handler(
     const session: Session | null = await getServerSession(
       req,
       res,
-      authOptions
+      authOptions,
     );
     const db = await getDb();
 

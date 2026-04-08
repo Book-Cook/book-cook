@@ -49,7 +49,7 @@ async function getUserIdFromToken(token: string): Promise<string | null> {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -76,7 +76,7 @@ export default async function handler(
       const session: Session | null = await getServerSession(
         req,
         res,
-        authOptions
+        authOptions,
       );
 
       if (!session?.user?.id) {
@@ -91,7 +91,7 @@ export default async function handler(
     // Calculate date range (default: next 30 days)
     const startDate = new Date().toISOString().split("T")[0];
     const endDate = new Date(
-      Date.now() + parseInt(range as string) * 24 * 60 * 60 * 1000
+      Date.now() + parseInt(range as string) * 24 * 60 * 60 * 1000,
     )
       .toISOString()
       .split("T")[0];
@@ -147,7 +147,7 @@ export default async function handler(
 
     // Create a recipe map for quick lookup
     const recipeMap = new Map<string, RecipeDocument>(
-      recipes.map((r) => [r._id.toString(), r])
+      recipes.map((r) => [r._id.toString(), r]),
     );
 
     // Enhance meal plans with recipe data
@@ -160,9 +160,7 @@ export default async function handler(
           ...slot,
           meals: slot.meals.map((meal: MealItem) => ({
             ...meal,
-            ...(meal.recipeId
-              ? { recipe: recipeMap.get(meal.recipeId) }
-              : {}),
+            ...(meal.recipeId ? { recipe: recipeMap.get(meal.recipeId) } : {}),
           })),
         }));
       }
@@ -173,9 +171,7 @@ export default async function handler(
           const key = mealType as LegacyMealKey;
           enhancedMeals[key] = {
             ...meal,
-            ...(meal.recipeId
-              ? { recipe: recipeMap.get(meal.recipeId) }
-              : {}),
+            ...(meal.recipeId ? { recipe: recipeMap.get(meal.recipeId) } : {}),
           } as MealPlanWithRecipes["meals"][LegacyMealKey];
         }
       });
@@ -198,7 +194,7 @@ export default async function handler(
     res.setHeader("Content-Type", "text/calendar; charset=utf-8");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="meal-plan.ics"'
+      'attachment; filename="meal-plan.ics"',
     );
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 

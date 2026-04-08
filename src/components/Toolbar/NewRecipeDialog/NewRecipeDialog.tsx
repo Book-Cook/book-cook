@@ -63,10 +63,10 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
         onError: (error) => {
           console.error("Recipe creation API error:", error);
           setErrorMessage(
-            error instanceof Error ? error.message : "Failed to create recipe."
+            error instanceof Error ? error.message : "Failed to create recipe.",
           );
         },
-      }
+      },
     );
   };
 

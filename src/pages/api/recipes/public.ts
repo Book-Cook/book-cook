@@ -27,7 +27,7 @@ const VALID_SORT_DIRECTIONS = ["asc", "desc"];
 const handleGetRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  db: Db
+  db: Db,
 ) => {
   try {
     const {
@@ -53,7 +53,9 @@ const handleGetRequest = async (
     const offsetNum = parseInt(offset as string, 10);
 
     if (isNaN(limitNum) || isNaN(offsetNum) || limitNum < 1 || limitNum > 100) {
-      return res.status(400).json({ message: "Invalid pagination parameters." });
+      return res
+        .status(400)
+        .json({ message: "Invalid pagination parameters." });
     }
 
     // Base query for public recipes only
@@ -63,17 +65,14 @@ const handleGetRequest = async (
     if (search && typeof search === "string" && search.trim()) {
       const searchRegex = { $regex: search.trim(), $options: "i" };
       query = {
-        $and: [
-          query,
-          { $or: [{ title: searchRegex }, { tags: searchRegex }] }
-        ],
+        $and: [query, { $or: [{ title: searchRegex }, { tags: searchRegex }] }],
       };
     }
 
     // Add tag filtering
     if (tags) {
       const tagsList = (Array.isArray(tags) ? tags : [tags]).filter(
-        (tag) => typeof tag === "string" && tag.trim()
+        (tag) => typeof tag === "string" && tag.trim(),
       );
       if (tagsList.length > 0) {
         query = { $and: [query, { tags: { $in: tagsList } }] };
@@ -150,7 +149,7 @@ const handleGetRequest = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
     res.setHeader("Allow", ALLOWED_METHODS);

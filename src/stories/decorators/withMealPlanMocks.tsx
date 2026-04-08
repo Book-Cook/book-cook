@@ -2,7 +2,12 @@
 import { withApiMocks, type MockHandlerRequest } from "../mockApi";
 
 import type { Recipe } from "../../clientToServer/types";
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese } from "../../mocks/data/recipes";
+import {
+  chocolateChipCookies,
+  thaiGreenCurry,
+  caesarSalad,
+  beefBolognese,
+} from "../../mocks/data/recipes";
 import { getMockId, getMockTimestamp } from "../../mocks/utils/mockDates";
 
 type MockMeal = {
@@ -96,8 +101,10 @@ const mockMealPlans: MockMealPlan[] = [
 
 const parseRequestBody = (req: MockHandlerRequest) => {
   const { body } = req;
-  if (!body) {return {};}
-  
+  if (!body) {
+    return {};
+  }
+
   if (typeof body === "string") {
     try {
       return JSON.parse(body);
@@ -105,11 +112,11 @@ const parseRequestBody = (req: MockHandlerRequest) => {
       return {};
     }
   }
-  
+
   if (body instanceof URLSearchParams) {
     return Object.fromEntries(body.entries());
   }
-  
+
   return {};
 };
 
@@ -117,47 +124,70 @@ const parseRequestBody = (req: MockHandlerRequest) => {
 let currentMealPlans: MockMealPlan[] = [...mockMealPlans];
 
 // Helper to add meal to mock data
-const addMealToMockData = (date: string, time: string, recipeId: string, servings: number = 1) => {
-  const existingPlanIndex = currentMealPlans.findIndex(plan => plan.date === date);
-  
+const addMealToMockData = (
+  date: string,
+  time: string,
+  recipeId: string,
+  servings: number = 1,
+) => {
+  const existingPlanIndex = currentMealPlans.findIndex(
+    (plan) => plan.date === date,
+  );
+
   if (existingPlanIndex >= 0) {
     const plan = currentMealPlans[existingPlanIndex];
-    
+
     plan.meals.timeSlots ??= [];
-    
+
     // Find existing time slot or create new one
-    const existingSlotIndex = plan.meals.timeSlots.findIndex((slot) => slot.time === time);
+    const existingSlotIndex = plan.meals.timeSlots.findIndex(
+      (slot) => slot.time === time,
+    );
     const newMeal: MockMeal = {
       recipeId,
       servings,
       time,
-      recipe: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese].find(r => r._id === recipeId)
+      recipe: [
+        chocolateChipCookies,
+        thaiGreenCurry,
+        caesarSalad,
+        beefBolognese,
+      ].find((r) => r._id === recipeId),
     };
-    
+
     if (existingSlotIndex >= 0) {
       plan.meals.timeSlots[existingSlotIndex].meals.push(newMeal);
     } else {
       plan.meals.timeSlots.push({
         time,
-        meals: [newMeal]
+        meals: [newMeal],
       });
     }
   } else {
     // Create new meal plan
     const newPlan = {
-      _id: getMockId('mealplan'),
+      _id: getMockId("mealplan"),
       userId: "user_001",
       date,
       meals: {
-        timeSlots: [{
-          time,
-          meals: [{
-            recipeId,
-            servings,
+        timeSlots: [
+          {
             time,
-            recipe: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese].find(r => r._id === recipeId)
-          }]
-        }]
+            meals: [
+              {
+                recipeId,
+                servings,
+                time,
+                recipe: [
+                  chocolateChipCookies,
+                  thaiGreenCurry,
+                  caesarSalad,
+                  beefBolognese,
+                ].find((r) => r._id === recipeId),
+              },
+            ],
+          },
+        ],
       },
       createdAt: getMockTimestamp(),
       updatedAt: getMockTimestamp(),
@@ -168,101 +198,118 @@ const addMealToMockData = (date: string, time: string, recipeId: string, serving
 
 // Meal plan mock variants
 export const mealPlanVariants = {
-  default: () => withApiMocks({
-    '/api/meal-plans': {
-      GET: {
-        response: {
-          mealPlans: currentMealPlans,
-          totalCount: currentMealPlans.length,
+  default: () =>
+    withApiMocks({
+      "/api/meal-plans": {
+        GET: {
+          response: {
+            mealPlans: currentMealPlans,
+            totalCount: currentMealPlans.length,
+          },
         },
-      },
-      POST: {
-        response: { message: "Meal plan updated successfully" },
-        status: 201,
-        delay: 300,
-        handler: (req: MockHandlerRequest) => {
-          const body = parseRequestBody(req);
-          const { date, time, recipeId, servings = 1 } = body;
-          
-          if (date && time && recipeId) {
-            addMealToMockData(date, time, recipeId, servings);
-          }
-          
-          return { message: "Meal plan updated successfully" };
-        }
-      }
-    },
-    '/api/recipes': {
-      response: {
-        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese],
-        totalCount: 4,
-        hasMore: false,
-      },
-    },
-  }),
+        POST: {
+          response: { message: "Meal plan updated successfully" },
+          status: 201,
+          delay: 300,
+          handler: (req: MockHandlerRequest) => {
+            const body = parseRequestBody(req);
+            const { date, time, recipeId, servings = 1 } = body;
 
-  withMeals: () => withApiMocks({
-    '/api/meal-plans': {
-      GET: {
-        response: {
-          mealPlans: mockMealPlans,
-          totalCount: mockMealPlans.length,
+            if (date && time && recipeId) {
+              addMealToMockData(date, time, recipeId, servings);
+            }
+
+            return { message: "Meal plan updated successfully" };
+          },
         },
       },
-      POST: {
-        response: { message: "Meal plan updated successfully" },
-        status: 201,
-        delay: 300,
-        handler: (req: MockHandlerRequest) => {
-          const body = parseRequestBody(req);
-          const { date, time, recipeId, servings = 1 } = body;
-          
-          if (date && time && recipeId) {
-            addMealToMockData(date, time, recipeId, servings);
-          }
-          
-          return { message: "Meal plan updated successfully" };
-        }
-      }
-    },
-    '/api/recipes': {
-      response: {
-        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese],
-        totalCount: 4,
-        hasMore: false,
+      "/api/recipes": {
+        response: {
+          recipes: [
+            chocolateChipCookies,
+            thaiGreenCurry,
+            caesarSalad,
+            beefBolognese,
+          ],
+          totalCount: 4,
+          hasMore: false,
+        },
       },
-    },
-  }),
+    }),
+
+  withMeals: () =>
+    withApiMocks({
+      "/api/meal-plans": {
+        GET: {
+          response: {
+            mealPlans: mockMealPlans,
+            totalCount: mockMealPlans.length,
+          },
+        },
+        POST: {
+          response: { message: "Meal plan updated successfully" },
+          status: 201,
+          delay: 300,
+          handler: (req: MockHandlerRequest) => {
+            const body = parseRequestBody(req);
+            const { date, time, recipeId, servings = 1 } = body;
+
+            if (date && time && recipeId) {
+              addMealToMockData(date, time, recipeId, servings);
+            }
+
+            return { message: "Meal plan updated successfully" };
+          },
+        },
+      },
+      "/api/recipes": {
+        response: {
+          recipes: [
+            chocolateChipCookies,
+            thaiGreenCurry,
+            caesarSalad,
+            beefBolognese,
+          ],
+          totalCount: 4,
+          hasMore: false,
+        },
+      },
+    }),
 
   empty: () => {
     currentMealPlans = []; // Reset to empty
     return withApiMocks({
-      '/api/meal-plans': {
+      "/api/meal-plans": {
         GET: {
           response: {
             mealPlans: [],
             totalCount: 0,
           },
         },
-      POST: {
-        response: { message: "Meal plan updated successfully" },
-        status: 201,
-        delay: 300,
-        handler: (req: MockHandlerRequest) => {
-          const body = parseRequestBody(req);
-          const { date, time, recipeId, servings = 1 } = body;
-          
-          if (date && time && recipeId) {
-            addMealToMockData(date, time, recipeId, servings);
-          }
-            
+        POST: {
+          response: { message: "Meal plan updated successfully" },
+          status: 201,
+          delay: 300,
+          handler: (req: MockHandlerRequest) => {
+            const body = parseRequestBody(req);
+            const { date, time, recipeId, servings = 1 } = body;
+
+            if (date && time && recipeId) {
+              addMealToMockData(date, time, recipeId, servings);
+            }
+
             return { message: "Meal plan updated successfully" };
-          }
-        }
+          },
+        },
       },
-      '/api/recipes': {
+      "/api/recipes": {
         response: {
-          recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese],
+          recipes: [
+            chocolateChipCookies,
+            thaiGreenCurry,
+            caesarSalad,
+            beefBolognese,
+          ],
           totalCount: 4,
           hasMore: false,
         },
@@ -270,32 +317,39 @@ export const mealPlanVariants = {
     });
   },
 
-  loading: () => withApiMocks({
-    '/api/meal-plans': {
-      response: {
-        mealPlans: mockMealPlans,
-        totalCount: mockMealPlans.length,
+  loading: () =>
+    withApiMocks({
+      "/api/meal-plans": {
+        response: {
+          mealPlans: mockMealPlans,
+          totalCount: mockMealPlans.length,
+        },
+        delay: 999999,
       },
-      delay: 999999,
-    },
-    '/api/recipes': {
-      response: {
-        recipes: [chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese],
-        totalCount: 4,
-        hasMore: false,
+      "/api/recipes": {
+        response: {
+          recipes: [
+            chocolateChipCookies,
+            thaiGreenCurry,
+            caesarSalad,
+            beefBolognese,
+          ],
+          totalCount: 4,
+          hasMore: false,
+        },
+        delay: 999999,
       },
-      delay: 999999,
-    },
-  }),
+    }),
 
-  error: () => withApiMocks({
-    '/api/meal-plans': {
-      response: { error: 'Failed to fetch meal plans' },
-      status: 500,
-    },
-    '/api/recipes': {
-      response: { error: 'Failed to fetch recipes' },
-      status: 500,
-    },
-  }),
+  error: () =>
+    withApiMocks({
+      "/api/meal-plans": {
+        response: { error: "Failed to fetch meal plans" },
+        status: 500,
+      },
+      "/api/recipes": {
+        response: { error: "Failed to fetch recipes" },
+        status: 500,
+      },
+    }),
 } as const;

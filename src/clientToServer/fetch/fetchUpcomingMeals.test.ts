@@ -13,7 +13,7 @@ describe("fetchUpcomingMeals", () => {
     jest.clearAllMocks();
     // Mock current time to be consistent
     jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-01-15T10:00:00.000Z'));
+    jest.setSystemTime(new Date("2024-01-15T10:00:00.000Z").getTime());
   });
 
   afterEach(() => {
@@ -25,7 +25,7 @@ describe("fetchUpcomingMeals", () => {
       mealPlans: [
         {
           _id: "plan1",
-          userId: "user1", 
+          userId: "user1",
           date: "2024-01-15",
           meals: {
             timeSlots: [
@@ -40,18 +40,18 @@ describe("fetchUpcomingMeals", () => {
                       title: "Test Recipe",
                       emoji: "🍽️",
                       imageURL: "test.jpg",
-                      tags: ["lunch"]
-                    }
-                  }
-                ]
-              }
-            ]
+                      tags: ["lunch"],
+                    },
+                  },
+                ],
+              },
+            ],
           },
           createdAt: "2024-01-15T00:00:00.000Z",
-          updatedAt: "2024-01-15T00:00:00.000Z"
-        }
+          updatedAt: "2024-01-15T00:00:00.000Z",
+        },
       ],
-      totalCount: 1
+      totalCount: 1,
     };
 
     mockFetchJson.mockResolvedValue(mockMealPlans);
@@ -59,7 +59,7 @@ describe("fetchUpcomingMeals", () => {
     const result = await fetchUpcomingMeals();
 
     expect(mockFetchJson).toHaveBeenCalledWith(
-      expect.stringContaining("/api/meal-plans?startDate=")
+      expect.stringContaining("/api/meal-plans?startDate="),
     );
     expect(result.meals).toHaveLength(1);
     expect(result.meals[0]).toMatchObject({
@@ -68,7 +68,7 @@ describe("fetchUpcomingMeals", () => {
       emoji: "🍽️",
       imageURL: "test.jpg",
       tags: ["lunch"],
-      isPast: false
+      isPast: false,
     });
     expect(result.currentMealIndex).toBe(0);
   });
@@ -77,7 +77,7 @@ describe("fetchUpcomingMeals", () => {
     const mockMealPlans = {
       mealPlans: [
         {
-          _id: "plan1", 
+          _id: "plan1",
           userId: "user1",
           date: "2024-01-15",
           meals: {
@@ -93,10 +93,10 @@ describe("fetchUpcomingMeals", () => {
                       title: "Past Recipe",
                       emoji: "🥞",
                       imageURL: "past.jpg",
-                      tags: ["breakfast"]
-                    }
-                  }
-                ]
+                      tags: ["breakfast"],
+                    },
+                  },
+                ],
               },
               {
                 time: "09:30", // Recent time (current is 10:00) - within 1 hour buffer
@@ -109,18 +109,18 @@ describe("fetchUpcomingMeals", () => {
                       title: "Recent Recipe",
                       emoji: "🥖",
                       imageURL: "recent.jpg",
-                      tags: ["brunch"]
-                    }
-                  }
-                ]
-              }
-            ]
+                      tags: ["brunch"],
+                    },
+                  },
+                ],
+              },
+            ],
           },
           createdAt: "2024-01-15T00:00:00.000Z",
-          updatedAt: "2024-01-15T00:00:00.000Z"
-        }
+          updatedAt: "2024-01-15T00:00:00.000Z",
+        },
       ],
-      totalCount: 1
+      totalCount: 1,
     };
 
     mockFetchJson.mockResolvedValue(mockMealPlans);
@@ -139,7 +139,7 @@ describe("fetchUpcomingMeals", () => {
         {
           _id: "plan1",
           userId: "user1",
-          date: "2024-01-15", 
+          date: "2024-01-15",
           meals: {
             breakfast: {
               recipeId: "recipe1",
@@ -149,15 +149,15 @@ describe("fetchUpcomingMeals", () => {
                 title: "Legacy Breakfast",
                 emoji: "🥞",
                 imageURL: "breakfast.jpg",
-                tags: ["breakfast"]
-              }
-            }
+                tags: ["breakfast"],
+              },
+            },
           },
           createdAt: "2024-01-15T00:00:00.000Z",
-          updatedAt: "2024-01-15T00:00:00.000Z"
-        }
+          updatedAt: "2024-01-15T00:00:00.000Z",
+        },
       ],
-      totalCount: 1
+      totalCount: 1,
     };
 
     mockFetchJson.mockResolvedValue(mockMealPlans);
@@ -167,7 +167,7 @@ describe("fetchUpcomingMeals", () => {
     expect(result.meals[0]).toMatchObject({
       _id: "recipe1",
       title: "Legacy Breakfast",
-      emoji: "🥞"
+      emoji: "🥞",
     });
   });
 
@@ -187,23 +187,33 @@ describe("fetchUpcomingMeals", () => {
                     recipeId: "recipe1",
                     servings: 2,
                     time: "12:00",
-                    recipe: { title: "Recipe 1", emoji: "🍽️", imageURL: "", tags: [] }
+                    recipe: {
+                      title: "Recipe 1",
+                      emoji: "🍽️",
+                      imageURL: "",
+                      tags: [],
+                    },
                   },
                   {
                     recipeId: "recipe1", // Duplicate
                     servings: 1,
-                    time: "12:00", 
-                    recipe: { title: "Recipe 1", emoji: "🍽️", imageURL: "", tags: [] }
-                  }
-                ]
-              }
-            ]
+                    time: "12:00",
+                    recipe: {
+                      title: "Recipe 1",
+                      emoji: "🍽️",
+                      imageURL: "",
+                      tags: [],
+                    },
+                  },
+                ],
+              },
+            ],
           },
           createdAt: "2024-01-15T00:00:00.000Z",
-          updatedAt: "2024-01-15T00:00:00.000Z"
-        }
+          updatedAt: "2024-01-15T00:00:00.000Z",
+        },
       ],
-      totalCount: 1
+      totalCount: 1,
     };
 
     mockFetchJson.mockResolvedValue(mockMealPlans);

@@ -1,6 +1,6 @@
 export async function fetchJson<T>(
   input: RequestInfo | URL,
-  init?: RequestInit
+  init?: RequestInit,
 ): Promise<T> {
   const response = await fetch(input, init);
   let data: unknown;

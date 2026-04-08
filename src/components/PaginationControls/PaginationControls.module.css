@@ -19,7 +19,9 @@
   background: transparent;
   color: var(--ui-TextSecondary);
   cursor: pointer;
-  transition: background-color 0.1s ease, color 0.1s ease;
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease;
 }
 
 .navButton:hover:not(:disabled) {
@@ -61,11 +63,17 @@
 .pageButtonActive {
   color: var(--brand-Primary);
   font-weight: 600;
-  background-color: var(--brand-BackgroundSelected, color-mix(in srgb, var(--brand-Primary) 10%, transparent));
+  background-color: var(
+    --brand-BackgroundSelected,
+    color-mix(in srgb, var(--brand-Primary) 10%, transparent)
+  );
 }
 
 .pageButtonActive:hover {
-  background-color: var(--brand-BackgroundSelected, color-mix(in srgb, var(--brand-Primary) 10%, transparent));
+  background-color: var(
+    --brand-BackgroundSelected,
+    color-mix(in srgb, var(--brand-Primary) 10%, transparent)
+  );
 }
 
 .pageButtonActive::after {

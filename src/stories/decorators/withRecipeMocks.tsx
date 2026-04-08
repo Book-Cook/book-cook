@@ -1,11 +1,18 @@
 import { withApiMocks } from "../mockApi";
 
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad, beefBolognese, avocadoToast, lemonGarlicSalmon } from "../../mocks/data/recipes";
+import {
+  chocolateChipCookies,
+  thaiGreenCurry,
+  caesarSalad,
+  beefBolognese,
+  avocadoToast,
+  lemonGarlicSalmon,
+} from "../../mocks/data/recipes";
 
 // Base recipe collection
 export const baseRecipes = [
   chocolateChipCookies,
-  thaiGreenCurry, 
+  thaiGreenCurry,
   caesarSalad,
   beefBolognese,
   avocadoToast,
@@ -15,7 +22,11 @@ export const baseRecipes = [
 // Generate extended recipe sets
 export const generateManyRecipes = (baseSet = baseRecipes) => [
   ...baseSet,
-  { ...chocolateChipCookies, _id: "recipe_007", title: "Double Chocolate Cookies" },
+  {
+    ...chocolateChipCookies,
+    _id: "recipe_007",
+    title: "Double Chocolate Cookies",
+  },
   { ...thaiGreenCurry, _id: "recipe_008", title: "Red Thai Curry" },
   { ...caesarSalad, _id: "recipe_009", title: "Greek Salad" },
   { ...beefBolognese, _id: "recipe_010", title: "Spaghetti Carbonara" },
@@ -34,7 +45,7 @@ export const generateManyPublicRecipes = () => [
     emoji: "🍪",
   },
   {
-    title: "Thai Green Curry", 
+    title: "Thai Green Curry",
     savedCount: 35,
     viewCount: 150,
     creatorName: "Thai Kitchen",
@@ -45,7 +56,7 @@ export const generateManyPublicRecipes = () => [
   {
     title: "Caesar Salad",
     savedCount: 20,
-    viewCount: 100, 
+    viewCount: 100,
     creatorName: "Chef Caesar",
     _id: "recipe_003",
     tags: ["salad", "healthy"],
@@ -56,7 +67,7 @@ export const generateManyPublicRecipes = () => [
     savedCount: 45,
     viewCount: 180,
     creatorName: "Italian Chef",
-    _id: "recipe_004", 
+    _id: "recipe_004",
     tags: ["pasta", "beef", "italian"],
     emoji: "🍝",
   },
@@ -82,61 +93,67 @@ export const generateManyPublicRecipes = () => [
 
 // Recipe mock variants
 export const recipeVariants = {
-  default: () => withApiMocks({
-    '/api/recipes': {
-      response: {
-        recipes: baseRecipes,
-        totalCount: baseRecipes.length,
-        hasMore: false,
+  default: () =>
+    withApiMocks({
+      "/api/recipes": {
+        response: {
+          recipes: baseRecipes,
+          totalCount: baseRecipes.length,
+          hasMore: false,
+        },
       },
-    },
-  }),
+    }),
 
-  many: () => withApiMocks({
-    '/api/recipes': {
-      response: {
-        recipes: generateManyRecipes(),
-        totalCount: generateManyRecipes().length,
-        hasMore: false,
+  many: () =>
+    withApiMocks({
+      "/api/recipes": {
+        response: {
+          recipes: generateManyRecipes(),
+          totalCount: generateManyRecipes().length,
+          hasMore: false,
+        },
       },
-    },
-  }),
+    }),
 
-  empty: () => withApiMocks({
-    '/api/recipes': {
-      response: {
-        recipes: [],
-        totalCount: 0,
-        hasMore: false,
+  empty: () =>
+    withApiMocks({
+      "/api/recipes": {
+        response: {
+          recipes: [],
+          totalCount: 0,
+          hasMore: false,
+        },
       },
-    },
-  }),
+    }),
 
-  loading: () => withApiMocks({
-    '/api/recipes': {
-      response: {
-        recipes: baseRecipes,
-        totalCount: baseRecipes.length,
-        hasMore: false,
+  loading: () =>
+    withApiMocks({
+      "/api/recipes": {
+        response: {
+          recipes: baseRecipes,
+          totalCount: baseRecipes.length,
+          hasMore: false,
+        },
+        delay: 999999,
       },
-      delay: 999999,
-    },
-  }),
+    }),
 
-  error: () => withApiMocks({
-    '/api/recipes': {
-      response: { error: 'Server error' },
-      status: 500,
-    },
-  }),
-
-  custom: (recipes: unknown[]) => withApiMocks({
-    '/api/recipes': {
-      response: {
-        recipes,
-        totalCount: recipes.length,
-        hasMore: false,
+  error: () =>
+    withApiMocks({
+      "/api/recipes": {
+        response: { error: "Server error" },
+        status: 500,
       },
-    },
-  }),
+    }),
+
+  custom: (recipes: unknown[]) =>
+    withApiMocks({
+      "/api/recipes": {
+        response: {
+          recipes,
+          totalCount: recipes.length,
+          hasMore: false,
+        },
+      },
+    }),
 } as const;

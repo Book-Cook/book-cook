@@ -1,7 +1,11 @@
 import { generateManyPublicRecipes } from "./withRecipeMocks";
 import { withApiMocks } from "../mockApi";
 
-import { chocolateChipCookies, thaiGreenCurry, caesarSalad } from "../../mocks/data/recipes";
+import {
+  chocolateChipCookies,
+  thaiGreenCurry,
+  caesarSalad,
+} from "../../mocks/data/recipes";
 
 // Base mock recipes with public recipe metadata
 const baseMockRecipes = [
@@ -27,57 +31,65 @@ const baseMockRecipes = [
 
 // Story variants for public recipes
 export const publicRecipeVariants = {
-  default: () => withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: baseMockRecipes,
-        totalCount: 3,
-        hasMore: false,
-      },
-    },
-  }),
-
-  empty: () => withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: [],
-        totalCount: 0,
-        hasMore: false,
-      },
-    },
-  }),
-
-  loading: () => withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: baseMockRecipes,
-        totalCount: 3,
-        hasMore: false,
-      },
-      delay: 999999, // Never resolves
-    },
-  }),
-
-  error: () => withApiMocks({
-    '/api/recipes/public': {
-      response: { error: 'Failed to fetch public recipes' },
-      status: 500,
-    },
-  }),
-
-  many: () => withApiMocks({
-    '/api/recipes/public': {
-      response: {
-        recipes: generateManyPublicRecipes(),
-        totalCount: 50,
-        hasMore: true,
-      },
-    },
-  }),
-
-  custom: (recipes: unknown[], options: { totalCount?: number; hasMore?: boolean } = {}) => 
+  default: () =>
     withApiMocks({
-      '/api/recipes/public': {
+      "/api/recipes/public": {
+        response: {
+          recipes: baseMockRecipes,
+          totalCount: 3,
+          hasMore: false,
+        },
+      },
+    }),
+
+  empty: () =>
+    withApiMocks({
+      "/api/recipes/public": {
+        response: {
+          recipes: [],
+          totalCount: 0,
+          hasMore: false,
+        },
+      },
+    }),
+
+  loading: () =>
+    withApiMocks({
+      "/api/recipes/public": {
+        response: {
+          recipes: baseMockRecipes,
+          totalCount: 3,
+          hasMore: false,
+        },
+        delay: 999999, // Never resolves
+      },
+    }),
+
+  error: () =>
+    withApiMocks({
+      "/api/recipes/public": {
+        response: { error: "Failed to fetch public recipes" },
+        status: 500,
+      },
+    }),
+
+  many: () =>
+    withApiMocks({
+      "/api/recipes/public": {
+        response: {
+          recipes: generateManyPublicRecipes(),
+          totalCount: 50,
+          hasMore: true,
+        },
+      },
+    }),
+
+  custom: (
+    recipes: unknown[],
+    options: { totalCount?: number; hasMore?: boolean } = {},
+  ) =>
+    withApiMocks({
+      "/api/recipes/public": {
         response: {
           recipes,
           totalCount: options.totalCount ?? recipes.length,

@@ -19,7 +19,21 @@ const mockPush = jest.fn();
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ alt, src, width, height, fill, ...props }: { alt: string; src?: string; width?: number; height?: number; fill?: boolean; [key: string]: unknown }) => {
+  default: ({
+    alt,
+    src,
+    width,
+    height,
+    fill,
+    ...props
+  }: {
+    alt: string;
+    src?: string;
+    width?: number;
+    height?: number;
+    fill?: boolean;
+    [key: string]: unknown;
+  }) => {
     const filteredProps = { ...props };
     delete filteredProps.blurDataURL;
     delete filteredProps.placeholder;
@@ -27,7 +41,15 @@ jest.mock("next/image", () => ({
     delete filteredProps.loading;
     delete filteredProps.sizes;
     delete filteredProps.draggable;
-    return <img alt={alt} src={src} width={width} height={height} {...(fill ? {} : filteredProps)} />;
+    return (
+      <img
+        alt={alt}
+        src={src}
+        width={width}
+        height={height}
+        {...(fill ? {} : filteredProps)}
+      />
+    );
   },
 }));
 
@@ -97,12 +119,14 @@ describe("RecipeCard", () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("Test Recipe")).toBeInTheDocument();
     expect(screen.getByText(/Dec 31, 2023|Jan 1, 2024/)).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: /Test Recipe placeholder emoji/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Test Recipe placeholder emoji/i }),
+    ).toBeInTheDocument();
   });
 
   it("shows creator information when provided", () => {
@@ -111,7 +135,7 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, creatorName: "John Doe", savedCount: 15 }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("By John Doe • 15 saves")).toBeInTheDocument();
@@ -122,7 +146,7 @@ describe("RecipeCard", () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     // Use a flexible matcher that works across timezones
@@ -136,7 +160,7 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, creatorName: "Jane Doe", savedCount: 0 }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("By Jane Doe • 0 saves")).toBeInTheDocument();
@@ -145,10 +169,8 @@ describe("RecipeCard", () => {
   it("handles undefined saves count", () => {
     render(
       <RecipeWrapper>
-        <RecipeCard
-          recipe={{ ...mockRecipe, creatorName: "Jane Doe" }}
-        />
-      </RecipeWrapper>
+        <RecipeCard recipe={{ ...mockRecipe, creatorName: "Jane Doe" }} />
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("By Jane Doe • 0 saves")).toBeInTheDocument();
@@ -158,17 +180,19 @@ describe("RecipeCard", () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
-    expect(screen.queryByRole("button", { name: /more options/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /more options/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("navigates to recipe page when clicked", async () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     const card = screen.getByRole("button", { name: /test recipe/i });
@@ -186,20 +210,24 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, imageURL: "https://example.com/image.jpg" }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
-    expect(screen.getByRole("img", { name: "Test Recipe" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Test Recipe" }),
+    ).toBeInTheDocument();
   });
 
   it("displays emoji fallback when no image", () => {
     render(
       <RecipeWrapper>
         <RecipeCard recipe={mockRecipe} />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
-    expect(screen.getByRole("img", { name: /Test Recipe placeholder emoji/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /Test Recipe placeholder emoji/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText("🍕")).toBeInTheDocument();
   });
 
@@ -212,7 +240,7 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, createdAt: recentDate.toISOString() }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("NEW")).toBeInTheDocument();
@@ -227,7 +255,7 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, createdAt: oldDate.toISOString() }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.queryByText("NEW")).not.toBeInTheDocument();
@@ -239,7 +267,7 @@ describe("RecipeCard", () => {
         <RecipeCard
           recipe={{ ...mockRecipe, tags: ["italian", "pasta", "dinner"] }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("italian")).toBeInTheDocument();
@@ -251,9 +279,12 @@ describe("RecipeCard", () => {
     render(
       <RecipeWrapper>
         <RecipeCard
-          recipe={{ ...mockRecipe, tags: ["tag1", "tag2", "tag3", "tag4", "tag5"] }}
+          recipe={{
+            ...mockRecipe,
+            tags: ["tag1", "tag2", "tag3", "tag4", "tag5"],
+          }}
         />
-      </RecipeWrapper>
+      </RecipeWrapper>,
     );
 
     expect(screen.getByText("tag1")).toBeInTheDocument();

@@ -24,14 +24,15 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
       children,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const { collapsed } = useSidebarContext();
     const resolvedDepth = Math.max(0, depth);
     const indentStyle =
       resolvedDepth > 0
-        ? ({ "--sidebar-item-indent": `${resolvedDepth * 14}px` } as
-            CSSProperties)
+        ? ({
+            "--sidebar-item-indent": `${resolvedDepth * 14}px`,
+          } as CSSProperties)
         : undefined;
 
     const button = (
@@ -55,7 +56,7 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
               <span
                 className={clsx(
                   styles.itemLabel,
-                  labelStacked && styles.itemLabelStacked
+                  labelStacked && styles.itemLabelStacked,
                 )}
                 aria-hidden={collapsed}
                 data-sidebar-collapsible="true"
@@ -67,7 +68,7 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
                 as="span"
                 className={clsx(
                   styles.itemLabel,
-                  labelStacked && styles.itemLabelStacked
+                  labelStacked && styles.itemLabelStacked,
                 )}
                 aria-hidden={collapsed}
                 data-sidebar-collapsible="true"
@@ -90,11 +91,16 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
     );
 
     return (
-      <Tooltip content={label} side="right" align="center" disabled={!collapsed}>
+      <Tooltip
+        content={label}
+        side="right"
+        align="center"
+        disabled={!collapsed}
+      >
         {button}
       </Tooltip>
     );
-  }
+  },
 );
 
 SidebarItem.displayName = "SidebarItem";

@@ -5,7 +5,10 @@ export interface SearchBoxProps
   /**
    * Called when the input value changes.
    */
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>, value: string) => void;
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    value: string,
+  ) => void;
   /**
    * Shows a clear button that resets the input to empty.
    */

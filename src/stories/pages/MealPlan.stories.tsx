@@ -23,10 +23,18 @@ const { create } = createStorySet<typeof MealPlanPage>();
 // Story definitions
 export const Default: Story = create("Default", [mealPlanVariants.default()]);
 
-export const WithMealPlans: Story = create("With Meal Plans", [mealPlanVariants.withMeals()]);
+export const WithMealPlans: Story = create("With Meal Plans", [
+  mealPlanVariants.withMeals(),
+]);
 
-export const EmptyState: Story = create("Empty State", [mealPlanVariants.empty()]);
+export const EmptyState: Story = create("Empty State", [
+  mealPlanVariants.empty(),
+]);
 
-export const LoadingState: Story = create("Loading State", [mealPlanVariants.loading()]);
+export const LoadingState: Story = create("Loading State", [
+  mealPlanVariants.loading(),
+]);
 
-export const ErrorState: Story = create("Error State", [mealPlanVariants.error()]);
+export const ErrorState: Story = create("Error State", [
+  mealPlanVariants.error(),
+]);

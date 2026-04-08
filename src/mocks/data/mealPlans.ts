@@ -1,8 +1,4 @@
-import {
-  avocadoToast,
-  beefBolognese,
-  lemonGarlicSalmon
-} from "./recipes";
+import { avocadoToast, beefBolognese, lemonGarlicSalmon } from "./recipes";
 import { MOCK_DATES, MOCK_TIMESTAMPS } from "../utils/mockDates";
 
 import type { MealPlanWithRecipes } from "../../clientToServer/types";
@@ -72,7 +68,7 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
     createdAt: MOCK_TIMESTAMPS.yesterday,
     updatedAt: MOCK_TIMESTAMPS.yesterday,
   },
-  
+
   // Today's meals
   {
     _id: "meal-plan-today",
@@ -216,15 +212,18 @@ export const mockMealPlans: MealPlanWithRecipes[] = [
 ];
 
 // Generate meal plan response matching API format
-export const generateMealPlanResponse = (startDate?: string, endDate?: string) => {
+export const generateMealPlanResponse = (
+  startDate?: string,
+  endDate?: string,
+) => {
   let filteredPlans = mockMealPlans;
-  
+
   if (startDate && endDate) {
-    filteredPlans = mockMealPlans.filter(plan => 
-      plan.date >= startDate && plan.date <= endDate
+    filteredPlans = mockMealPlans.filter(
+      (plan) => plan.date >= startDate && plan.date <= endDate,
     );
   }
-  
+
   return {
     mealPlans: filteredPlans,
     totalCount: filteredPlans.length,

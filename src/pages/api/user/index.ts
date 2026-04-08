@@ -11,7 +11,7 @@ type ResponseData = { message: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData>,
 ) {
   if (req.method !== "DELETE") {
     res.setHeader("Allow", ["DELETE"]);
@@ -44,7 +44,7 @@ export default async function handler(
           { sharedWithUsers: session.user?.email },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           { $pull: { sharedWithUsers: session?.user?.email } } as any,
-          { session: mongoSession }
+          { session: mongoSession },
         );
 
         // Delete the user document

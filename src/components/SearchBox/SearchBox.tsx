@@ -5,18 +5,22 @@ import styles from "./SearchBox.module.css";
 import type { SearchBoxProps } from "./SearchBox.types";
 
 export const SearchBox = React.forwardRef<HTMLInputElement, SearchBoxProps>(
-  ({
-    allowClear = true,
-    className,
-    onChange,
-    value,
-    defaultValue,
-    contentBefore,
-    contentAfter,
-    ...rest
-  },
-  ref) => {
-    const [internalValue, setInternalValue] = React.useState<string>(defaultValue?.toString() ?? "");
+  (
+    {
+      allowClear = true,
+      className,
+      onChange,
+      value,
+      defaultValue,
+      contentBefore,
+      contentAfter,
+      ...rest
+    },
+    ref,
+  ) => {
+    const [internalValue, setInternalValue] = React.useState<string>(
+      defaultValue?.toString() ?? "",
+    );
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? (value as string) : internalValue;
@@ -43,12 +47,14 @@ export const SearchBox = React.forwardRef<HTMLInputElement, SearchBoxProps>(
     const classes = cx(
       styles.input,
       contentBefore && styles.withContentBefore,
-      className
+      className,
     );
 
     return (
       <div className={styles.root}>
-        {contentBefore ? <span className={styles.contentBefore}>{contentBefore}</span> : null}
+        {contentBefore ? (
+          <span className={styles.contentBefore}>{contentBefore}</span>
+        ) : null}
         <input
           ref={ref}
           className={classes}
@@ -57,15 +63,22 @@ export const SearchBox = React.forwardRef<HTMLInputElement, SearchBoxProps>(
           onChange={handleChange}
           {...rest}
         />
-        {contentAfter ? <span className={styles.contentAfter}>{contentAfter}</span> : null}
+        {contentAfter ? (
+          <span className={styles.contentAfter}>{contentAfter}</span>
+        ) : null}
         {showClear && (
-          <button type="button" className={styles.clearButton} onClick={handleClear} aria-label="Clear">
+          <button
+            type="button"
+            className={styles.clearButton}
+            onClick={handleClear}
+            aria-label="Clear"
+          >
             ×
           </button>
         )}
       </div>
     );
-  }
+  },
 );
 
 SearchBox.displayName = "SearchBox";

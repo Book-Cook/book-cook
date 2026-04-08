@@ -26,8 +26,11 @@ beforeEach(() => {
 
 // Helpers shared across GET tests
 function makeGetReq(query: Record<string, string> = {}) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return { method: "GET", query: { sortProperty: "createdAt", sortDirection: "desc", ...query } } as any;
+  return {
+    method: "GET",
+    query: { sortProperty: "createdAt", sortDirection: "desc", ...query },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any;
 }
 
 function makeCursor(docs: unknown[]) {
@@ -52,15 +55,29 @@ describe("/api/recipes", () => {
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ recipes: [], totalCount: 0, hasMore: false });
+    expect(res.json).toHaveBeenCalledWith({
+      recipes: [],
+      totalCount: 0,
+      hasMore: false,
+    });
   });
 
   test("GET authenticated with no shared users returns only own recipes", async () => {
     const req = makeGetReq();
     const res = mockRes();
-    (getServerSession as jest.Mock).mockResolvedValue({ user: { id: "user1", email: "user1@test.com" } });
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user1", email: "user1@test.com" },
+    });
 
-    const recipeDocs = [{ _id: "r1", owner: "user1", title: "My Recipe", tags: [], isPublic: false }];
+    const recipeDocs = [
+      {
+        _id: "r1",
+        owner: "user1",
+        title: "My Recipe",
+        tags: [],
+        isPublic: false,
+      },
+    ];
     const userCursor = makeCursor([]); // no shared owners
     const recipeCursor = makeCursor(recipeDocs);
     const countDocuments = jest.fn().mockResolvedValue(1);
@@ -89,15 +106,31 @@ describe("/api/recipes", () => {
   test("GET authenticated includes shared owners' recipes", async () => {
     const req = makeGetReq();
     const res = mockRes();
-    (getServerSession as jest.Mock).mockResolvedValue({ user: { id: "user1", email: "user1@test.com" } });
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user1", email: "user1@test.com" },
+    });
 
     // user2 has shared with user1
     const userCursor = {
-      map: jest.fn().mockReturnValue({ toArray: jest.fn().mockResolvedValue(["user2"]) }),
+      map: jest
+        .fn()
+        .mockReturnValue({ toArray: jest.fn().mockResolvedValue(["user2"]) }),
     };
     const recipeDocs = [
-      { _id: "r1", owner: "user1", title: "My Recipe", tags: [], isPublic: false },
-      { _id: "r2", owner: "user2", title: "Shared Recipe", tags: [], isPublic: false },
+      {
+        _id: "r1",
+        owner: "user1",
+        title: "My Recipe",
+        tags: [],
+        isPublic: false,
+      },
+      {
+        _id: "r2",
+        owner: "user2",
+        title: "Shared Recipe",
+        tags: [],
+        isPublic: false,
+      },
     ];
     const recipeCursor = makeCursor(recipeDocs);
     const countDocuments = jest.fn().mockResolvedValue(2);
@@ -125,9 +158,19 @@ describe("/api/recipes", () => {
   test("GET still returns own recipes when sharedOwners lookup throws", async () => {
     const req = makeGetReq();
     const res = mockRes();
-    (getServerSession as jest.Mock).mockResolvedValue({ user: { id: "user1", email: "user1@test.com" } });
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user1", email: "user1@test.com" },
+    });
 
-    const recipeDocs = [{ _id: "r1", owner: "user1", title: "My Recipe", tags: [], isPublic: false }];
+    const recipeDocs = [
+      {
+        _id: "r1",
+        owner: "user1",
+        title: "My Recipe",
+        tags: [],
+        isPublic: false,
+      },
+    ];
     const recipeCursor = makeCursor(recipeDocs);
     const countDocuments = jest.fn().mockResolvedValue(1);
 

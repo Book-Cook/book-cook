@@ -12,19 +12,19 @@ const ALLOWED_METHODS = ["GET", "POST", "PUT"];
 async function handleGet(
   req: NextApiRequest,
   res: NextApiResponse,
-  userId: string
+  userId: string,
 ) {
   try {
     const { startDate, endDate } = req.query;
 
     if (!startDate || !endDate) {
-      return res.status(400).json({ 
-        message: "Start date and end date are required" 
+      return res.status(400).json({
+        message: "Start date and end date are required",
       });
     }
 
     const db = await getDb();
-    
+
     const mealPlans = await db
       .collection("mealPlans")
       .find({
@@ -39,9 +39,9 @@ async function handleGet(
 
     // Get all unique recipe IDs
     const recipeIds = new Set<string>();
-    mealPlans.forEach(plan => {
+    mealPlans.forEach((plan) => {
       const meals = plan.meals ?? {};
-      
+
       // Handle timeSlots structure
       if (meals.timeSlots && Array.isArray(meals.timeSlots)) {
         meals.timeSlots.forEach((slot: unknown) => {
@@ -56,10 +56,10 @@ async function handleGet(
           }
         });
       }
-      
+
       // Handle legacy meal types
       Object.values(meals).forEach((meal: unknown) => {
-        if (meal && typeof meal === 'object' && !Array.isArray(meal)) {
+        if (meal && typeof meal === "object" && !Array.isArray(meal)) {
           const mealData = meal as Record<string, unknown>;
           if (mealData?.recipeId) {
             recipeIds.add(mealData.recipeId as string);
@@ -72,21 +72,19 @@ async function handleGet(
     const recipes = await db
       .collection("recipes")
       .find({
-        _id: { $in: Array.from(recipeIds).map(id => new ObjectId(id)) }
+        _id: { $in: Array.from(recipeIds).map((id) => new ObjectId(id)) },
       })
       .project({ title: 1, emoji: 1, imageURL: 1, tags: 1 })
       .toArray();
 
     // Create a recipe map for quick lookup
-    const recipeMap = new Map(
-      recipes.map(r => [r._id.toString(), r])
-    );
+    const recipeMap = new Map(recipes.map((r) => [r._id.toString(), r]));
 
     // Enhance meal plans with recipe data
-    const enhancedMealPlans = mealPlans.map(plan => {
+    const enhancedMealPlans = mealPlans.map((plan) => {
       const meals = plan.meals ?? {};
       const enhancedMeals: Record<string, unknown> = {};
-      
+
       // Handle timeSlots structure
       if (meals.timeSlots && Array.isArray(meals.timeSlots)) {
         enhancedMeals.timeSlots = meals.timeSlots.map((slot: unknown) => {
@@ -99,35 +97,40 @@ async function handleGet(
                 if (mealData?.recipeId) {
                   return {
                     ...mealData,
-                    recipe: recipeMap.get(mealData.recipeId as string) ?? null
+                    recipe: recipeMap.get(mealData.recipeId as string) ?? null,
                   };
                 }
                 return mealData;
-              })
+              }),
             };
           }
           return timeSlot;
         });
       }
-      
+
       // Handle legacy meal types
       Object.entries(meals).forEach(([mealType, meal]) => {
-        if (mealType !== 'timeSlots' && meal && typeof meal === 'object' && !Array.isArray(meal)) {
+        if (
+          mealType !== "timeSlots" &&
+          meal &&
+          typeof meal === "object" &&
+          !Array.isArray(meal)
+        ) {
           const mealData = meal as Record<string, unknown>;
           if (mealData?.recipeId) {
             enhancedMeals[mealType] = {
               ...mealData,
-              recipe: recipeMap.get(mealData.recipeId as string) ?? null
+              recipe: recipeMap.get(mealData.recipeId as string) ?? null,
             };
           } else {
             enhancedMeals[mealType] = mealData;
           }
         }
       });
-      
+
       return {
         ...plan,
-        meals: enhancedMeals
+        meals: enhancedMeals,
       };
     });
 
@@ -144,20 +147,27 @@ async function handleGet(
 async function handlePost(
   req: NextApiRequest,
   res: NextApiResponse,
-  userId: string
+  userId: string,
 ) {
   try {
-    const { date, time, mealType, recipeId, servings = 1, duration = 60 } = req.body;
+    const {
+      date,
+      time,
+      mealType,
+      recipeId,
+      servings = 1,
+      duration = 60,
+    } = req.body;
 
     // Support both new time-based and legacy meal-type-based APIs
     if (!date || !recipeId || (!time && !mealType)) {
-      return res.status(400).json({ 
-        message: "Date, time (or mealType), and recipe ID are required" 
+      return res.status(400).json({
+        message: "Date, time (or mealType), and recipe ID are required",
       });
     }
 
     const db = await getDb();
-    
+
     // Check if meal plan exists for this date
     const existingPlan = await db
       .collection("mealPlans")
@@ -166,18 +176,18 @@ async function handlePost(
     // Handle time-based system
     if (time) {
       const mealData = { recipeId, servings, time, duration };
-      
+
       if (existingPlan) {
         // Check if we already have timeSlots or need to migrate from legacy
         const currentMeals = existingPlan.meals ?? {};
-        
+
         currentMeals.timeSlots ??= [];
-        
+
         // Find existing time slot or create new one
         const existingTimeSlotIndex = currentMeals.timeSlots.findIndex(
-          (slot: Record<string, unknown>) => slot.time === time
+          (slot: Record<string, unknown>) => slot.time === time,
         );
-        
+
         if (existingTimeSlotIndex >= 0) {
           // Add to existing time slot
           const addToExistingSlot = {
@@ -186,10 +196,9 @@ async function handlePost(
             },
             $set: { updatedAt: new Date() },
           } as unknown as UpdateFilter<Document>;
-          await db.collection("mealPlans").updateOne(
-            { userId, date },
-            addToExistingSlot
-          );
+          await db
+            .collection("mealPlans")
+            .updateOne({ userId, date }, addToExistingSlot);
         } else {
           // Create new time slot
           const createTimeSlotUpdate = {
@@ -201,10 +210,9 @@ async function handlePost(
             },
             $set: { updatedAt: new Date() },
           } as unknown as UpdateFilter<Document>;
-          await db.collection("mealPlans").updateOne(
-            { userId, date },
-            createTimeSlotUpdate
-          );
+          await db
+            .collection("mealPlans")
+            .updateOne({ userId, date }, createTimeSlotUpdate);
         }
       } else {
         // Create new plan with time-based structure
@@ -212,10 +220,12 @@ async function handlePost(
           userId,
           date,
           meals: {
-            timeSlots: [{
-              time,
-              meals: [mealData]
-            }]
+            timeSlots: [
+              {
+                time,
+                meals: [mealData],
+              },
+            ],
           },
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -224,7 +234,7 @@ async function handlePost(
     } else if (mealType) {
       // Legacy meal-type system (backward compatibility)
       const mealData = { recipeId, servings };
-      
+
       if (existingPlan) {
         await db.collection("mealPlans").updateOne(
           { userId, date },
@@ -233,7 +243,7 @@ async function handlePost(
               [`meals.${mealType}`]: mealData,
               updatedAt: new Date(),
             },
-          }
+          },
         );
       } else {
         await db.collection("mealPlans").insertOne({
@@ -248,8 +258,8 @@ async function handlePost(
       }
     }
 
-    res.status(201).json({ 
-      message: "Meal plan updated successfully" 
+    res.status(201).json({
+      message: "Meal plan updated successfully",
     });
   } catch (error) {
     console.error("Failed to update meal plan:", error);
@@ -260,19 +270,19 @@ async function handlePost(
 async function handlePut(
   req: NextApiRequest,
   res: NextApiResponse,
-  userId: string
+  userId: string,
 ) {
   try {
     const { date, meals, notes } = req.body as UpdateMealPlanPayload;
 
     if (!date) {
-      return res.status(400).json({ 
-        message: "Date is required" 
+      return res.status(400).json({
+        message: "Date is required",
       });
     }
 
     const db = await getDb();
-    
+
     await db.collection("mealPlans").replaceOne(
       { userId, date },
       {
@@ -283,11 +293,11 @@ async function handlePut(
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      { upsert: true }
+      { upsert: true },
     );
 
-    res.status(200).json({ 
-      message: "Meal plan updated successfully" 
+    res.status(200).json({
+      message: "Meal plan updated successfully",
     });
   } catch (error) {
     console.error("Failed to update meal plan:", error);
@@ -297,20 +307,20 @@ async function handlePut(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!req.method || !ALLOWED_METHODS.includes(req.method)) {
     res.setHeader("Allow", ALLOWED_METHODS);
-    return res.status(405).json({ 
-      message: `Method ${req.method} not allowed` 
+    return res.status(405).json({
+      message: `Method ${req.method} not allowed`,
     });
   }
 
   const session: Session | null = await getServerSession(req, res, authOptions);
 
   if (!session?.user?.id) {
-    return res.status(401).json({ 
-      message: "Unauthorized. Please log in." 
+    return res.status(401).json({
+      message: "Unauthorized. Please log in.",
     });
   }
 
@@ -322,8 +332,8 @@ export default async function handler(
     case "PUT":
       return handlePut(req, res, session.user.id);
     default:
-      return res.status(405).json({ 
-        message: "Method not allowed" 
+      return res.status(405).json({
+        message: "Method not allowed",
       });
   }
 }

@@ -11,7 +11,7 @@
 - AI Recipe Creation
 - Personal Cookbook Building
 - Meal Planning
-*Each with simple animated icon*
+  _Each with simple animated icon_
 
 ## 3. Interactive Demo Visual
 

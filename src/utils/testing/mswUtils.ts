@@ -43,12 +43,12 @@ export const mockApiResponse = (
   method: "get" | "post" | "put" | "delete",
   path: string,
   response: Record<string, unknown>,
-  status: number = 200
+  status: number = 200,
 ) => {
   server.use(
     http[method](path, () => {
       return HttpResponse.json(response, { status });
-    })
+    }),
   );
 };
 
@@ -63,12 +63,12 @@ export const mockApiError = (
   method: "get" | "post" | "put" | "delete",
   path: string,
   message: string = "Internal Server Error",
-  status: number = 500
+  status: number = 500,
 ) => {
   server.use(
     http[method](path, () => {
       return HttpResponse.json({ message }, { status });
-    })
+    }),
   );
 };
 
@@ -83,13 +83,13 @@ export const mockApiWithDelay = (
   method: "get" | "post" | "put" | "delete",
   path: string,
   delay: number,
-  response: Record<string, unknown> = { success: true }
+  response: Record<string, unknown> = { success: true },
 ) => {
   server.use(
     http[method](path, async () => {
       await new Promise((resolve) => setTimeout(resolve, delay));
       return HttpResponse.json(response);
-    })
+    }),
   );
 };
 
@@ -100,7 +100,7 @@ export const mockAuthError = () => {
   server.use(
     http.get("/api/recipes*", () => {
       return HttpResponse.json({ message: "Unauthorized" }, { status: 401 });
-    })
+    }),
   );
 };
 

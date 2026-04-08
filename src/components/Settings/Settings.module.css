@@ -219,7 +219,8 @@
 
 .select:focus {
   border-color: var(--brand-Primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-Primary) 20%, transparent);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--brand-Primary) 20%, transparent);
 }
 
 .toggle {
@@ -259,7 +260,7 @@
   border-radius: 50%;
   transition: transform 0.15s ease;
   pointer-events: none;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .toggleInput:checked ~ .toggleThumb {
@@ -380,7 +381,8 @@
 
 .shareInput:focus {
   border-color: var(--brand-Primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-Primary) 20%, transparent);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--brand-Primary) 20%, transparent);
 }
 
 .shareInput::placeholder {
@@ -456,13 +458,25 @@
 /* ── Animations ────────────────────────────────── */
 
 @keyframes slideDown {
-  from { height: 0; opacity: 0; }
-  to { height: var(--radix-accordion-content-height); opacity: 1; }
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { height: var(--radix-accordion-content-height); opacity: 1; }
-  to { height: 0; opacity: 0; }
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
 }
 
 @media (max-width: 600px) {

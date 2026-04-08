@@ -54,7 +54,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
       children,
       ...rest
     },
-    ref
+    ref,
   ): React.ReactElement => {
     const variantDefaultsOverride = variant
       ? variantDefaults[variant]
@@ -72,7 +72,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
       italic && styles.italic,
       block && styles.block,
       truncate && styles.truncate,
-      className
+      className,
     );
 
     return (
@@ -84,7 +84,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
         {children}
       </Component>
     );
-  }
+  },
 );
 
 Text.displayName = "Text";
@@ -120,12 +120,12 @@ export const Subtitle2 = React.forwardRef<
 Subtitle2.displayName = "Subtitle2";
 
 export const Body1 = React.forwardRef<HTMLElement, Omit<TextProps, "variant">>(
-  (props, ref) => <Text ref={ref} variant="body1" {...props} />
+  (props, ref) => <Text ref={ref} variant="body1" {...props} />,
 );
 Body1.displayName = "Body1";
 
 export const Body2 = React.forwardRef<HTMLElement, Omit<TextProps, "variant">>(
-  (props, ref) => <Text ref={ref} variant="body2" {...props} />
+  (props, ref) => <Text ref={ref} variant="body2" {...props} />,
 );
 Body2.displayName = "Body2";
 

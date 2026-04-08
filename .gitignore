@@ -99,3 +99,7 @@ storybook-static/
 
 package-manifest.json
 .claude/settings.local.json
+
+# Build artifacts
+webpack-stats.json
+test-results/

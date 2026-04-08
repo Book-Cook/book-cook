@@ -1,11 +1,9 @@
-import type { KeyboardEvent } from "react";
-import { useEffect, useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { clsx } from "clsx";
-import useEmblaCarousel from "embla-carousel-react";
 
 import styles from "./RecipeCardCarousel.module.css";
 import type { RecipeCardCarouselProps } from "./RecipeCardCarousel.types";
+import { useCarouselNavigation } from "./useCarouselNavigation";
 import { Button } from "../Button";
 import { RecipeCard } from "../RecipeCard";
 import { SubsectionHeading } from "../Typography";
@@ -27,79 +25,31 @@ export const RecipeCardCarousel = ({
 }: RecipeCardCarouselProps) => {
   const hasRecipes = recipes.length > 0;
 
-  const options = {
-    align: "start" as const,
-    containScroll: "trimSnaps" as const,
-    ...emblaOptions,
-  };
+  const {
+    viewportRef,
+    canScrollPrev,
+    canScrollNext,
+    scrollPrev,
+    scrollNext,
+    handleKeyDown,
+  } = useCarouselNavigation({ emblaOptions, initialScrollIndex });
 
-  const [viewportRef, emblaApi] = useEmblaCarousel(options);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-
-  useEffect(() => {
-    if (!emblaApi) {
-      return;
-    }
-    const onScrollUpdate = () => {
-      setCanScrollPrev(emblaApi.canScrollPrev());
-      setCanScrollNext(emblaApi.canScrollNext());
-    };
-    onScrollUpdate();
-    emblaApi.on("select", onScrollUpdate);
-    emblaApi.on("reInit", onScrollUpdate);
-    return () => {
-      emblaApi.off("select", onScrollUpdate);
-      emblaApi.off("reInit", onScrollUpdate);
-    };
-  }, [emblaApi]);
-
-  const scrollPrev = () => emblaApi?.scrollPrev();
-  const scrollNext = () => emblaApi?.scrollNext();
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!emblaApi) {
-      return;
-    }
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      emblaApi.scrollPrev();
-    }
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      emblaApi.scrollNext();
-    }
-    if (event.key === "Home") {
-      event.preventDefault();
-      emblaApi.scrollTo(0);
-    }
-    if (event.key === "End") {
-      event.preventDefault();
-      const lastIndex = emblaApi.scrollSnapList().length - 1;
-      if (lastIndex >= 0) {
-        emblaApi.scrollTo(lastIndex);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!emblaApi || initialScrollIndex == null || initialScrollIndex <= 0) {
-      return;
-    }
-    emblaApi.scrollTo(initialScrollIndex, true);
-  }, [emblaApi, initialScrollIndex]);
-
-  const controlsVisible = recipes.length > 1 && (canScrollPrev || canScrollNext);
+  const controlsVisible =
+    recipes.length > 1 && (canScrollPrev || canScrollNext);
   const resolvedAriaLabel = ariaLabel ?? title ?? "Recipe carousel";
   const showHeader = Boolean(title) || controlsVisible;
 
   if (!isLoading && !hasRecipes) {
-    if (!emptyMessage) { return null; }
+    if (!emptyMessage) {
+      return null;
+    }
     return (
       <div className={clsx(styles.carousel, className)}>
         {title && (
           <div className={styles.header}>
-            <SubsectionHeading className={styles.title}>{title}</SubsectionHeading>
+            <SubsectionHeading className={styles.title}>
+              {title}
+            </SubsectionHeading>
           </div>
         )}
         <p className={styles.emptyMessage}>{emptyMessage}</p>
@@ -112,7 +62,9 @@ export const RecipeCardCarousel = ({
       <div className={clsx(styles.carousel, className)}>
         {title && (
           <div className={styles.header}>
-            <SubsectionHeading className={styles.title}>{title}</SubsectionHeading>
+            <SubsectionHeading className={styles.title}>
+              {title}
+            </SubsectionHeading>
           </div>
         )}
         <div className={styles.viewport}>

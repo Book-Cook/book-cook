@@ -75,10 +75,7 @@ const ChangeTitleDialog: React.FC<ChangeTitleDialogProps> = ({
       title="Change Recipe Title"
       actions={
         <>
-          <Button
-            appearance="secondary"
-            onClick={handleCancelClick}
-          >
+          <Button appearance="secondary" onClick={handleCancelClick}>
             Cancel
           </Button>
           <Button

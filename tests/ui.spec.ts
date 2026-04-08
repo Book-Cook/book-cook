@@ -102,20 +102,34 @@ test.describe("Landing page (unauthenticated)", () => {
 
   test("shows Book Cook heading", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1").filter({ hasText: "Book Cook" })).toBeVisible({ timeout: 5000 });
+    await expect(
+      page.locator("h1").filter({ hasText: "Book Cook" }),
+    ).toBeVisible({ timeout: 5000 });
   });
 
   test("shows Continue with Google button", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("button", { name: /continue with google/i })).toBeVisible({ timeout: 5000 });
+    await expect(
+      page.getByRole("button", { name: /continue with google/i }),
+    ).toBeVisible({ timeout: 5000 });
   });
 
-  test("no blank flash -- page has content immediately on load", async ({ page }) => {
+  test("no blank flash -- page has content immediately on load", async ({
+    page,
+  }) => {
     // Navigate and immediately check that body is not empty
     await page.goto("/");
     // The page must have some visible content within 3 seconds
-    const hasHeading = await page.locator("h1").first().isVisible().catch(() => false);
-    const hasButton = await page.getByRole("button").first().isVisible().catch(() => false);
+    const hasHeading = await page
+      .locator("h1")
+      .first()
+      .isVisible()
+      .catch(() => false);
+    const hasButton = await page
+      .getByRole("button")
+      .first()
+      .isVisible()
+      .catch(() => false);
     // Either heading or button must be visible quickly -- retry via waitFor
     await page.waitForSelector("h1, button", { timeout: 3000 });
     const bodyText = await page.locator("body").textContent();
@@ -126,7 +140,9 @@ test.describe("Landing page (unauthenticated)", () => {
   });
 
   // AC3: Continue with Google button has a positive computed width
-  test("AC3: Continue with Google button has positive computed width", async ({ page }) => {
+  test("AC3: Continue with Google button has positive computed width", async ({
+    page,
+  }) => {
     await page.goto("/");
     const btn = page.getByRole("button", { name: /continue with google/i });
     await expect(btn).toBeVisible({ timeout: 5000 });
@@ -138,7 +154,9 @@ test.describe("Landing page (unauthenticated)", () => {
   // AC4: Sign-in card has a visible border
   test("AC4: sign-in card has a visible border", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1").filter({ hasText: "Book Cook" })).toBeVisible({ timeout: 5000 });
+    await expect(
+      page.locator("h1").filter({ hasText: "Book Cook" }),
+    ).toBeVisible({ timeout: 5000 });
     // The card wraps the heading and button -- find the nearest ancestor with a border
     const hasBorder = await page.evaluate(() => {
       // Walk from the h1 up until we find an element with a non-zero, non-transparent border
@@ -171,7 +189,9 @@ test.describe("Home page (authenticated)", () => {
 
   test("sidebar is present", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
   });
 
   test("welcome heading contains BookCook or Welcome", async ({ page }) => {
@@ -180,7 +200,9 @@ test.describe("Home page (authenticated)", () => {
     await expect(heading).toBeVisible({ timeout: 8000 });
   });
 
-  test("Create New Recipe button opens dialog, not navigates", async ({ page }) => {
+  test("Create New Recipe button opens dialog, not navigates", async ({
+    page,
+  }) => {
     await page.goto("/");
     const btn = page.getByRole("button", { name: /create new recipe/i });
     await expect(btn).toBeVisible({ timeout: 8000 });
@@ -194,17 +216,21 @@ test.describe("Home page (authenticated)", () => {
   test("recent recipes section is visible", async ({ page }) => {
     await page.goto("/");
     // The carousel title "Recent Recipes" is rendered as text in the section
-    await expect(page.getByText("Recent Recipes")).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText("Recent Recipes")).toBeVisible({
+      timeout: 8000,
+    });
   });
 
   // AC6: Browse Your Recipes button navigates to /recipes
   test("AC6: Browse Your Recipes navigates to /recipes", async ({ page }) => {
     await mockRecipesList(page);
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
-    const btn = page.getByRole("button", { name: /browse your recipes/i }).or(
-      page.getByRole("link", { name: /browse your recipes/i })
-    );
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
+    const btn = page
+      .getByRole("button", { name: /browse your recipes/i })
+      .or(page.getByRole("link", { name: /browse your recipes/i }));
     await expect(btn.first()).toBeVisible({ timeout: 8000 });
     await btn.first().click();
     await expect(page).toHaveURL(/\/recipes/, { timeout: 5000 });
@@ -220,15 +246,23 @@ test.describe("Sidebar behavior", () => {
     await mockAuth(page);
   });
 
-  test("sidebar renders with New Recipe and Recipes nav items", async ({ page }) => {
+  test("sidebar renders with New Recipe and Recipes nav items", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
     // New Recipe and Recipes buttons are always in the sidebar
-    await expect(page.getByRole("button", { name: "New Recipe" })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "New Recipe" }),
+    ).toBeVisible();
     // Recipes button -- may have aria-label or label text
-    const recipesItem = page.locator('[data-sidebar="true"]').getByRole("button").filter({ hasText: /^Recipes$/ }).or(
-      page.locator('[data-sidebar="true"] button[aria-label="Recipes"]')
-    );
+    const recipesItem = page
+      .locator('[data-sidebar="true"]')
+      .getByRole("button")
+      .filter({ hasText: /^Recipes$/ })
+      .or(page.locator('[data-sidebar="true"] button[aria-label="Recipes"]'));
     await expect(recipesItem.first()).toBeVisible();
   });
 
@@ -244,12 +278,14 @@ test.describe("Sidebar behavior", () => {
     // When expanded: the button's label span has text "Collections" / "Explore".
     // The disabled button itself gets aria-label when collapsed. At 1440px sidebar is expanded,
     // so we locate by text content of the label child span.
-    const collectionsBtn = sidebar.locator('button').filter({ hasText: /^Collections$/ }).or(
-      sidebar.locator('button[aria-label="Collections"]')
-    );
-    const exploreBtn = sidebar.locator('button').filter({ hasText: /^Explore$/ }).or(
-      sidebar.locator('button[aria-label="Explore"]')
-    );
+    const collectionsBtn = sidebar
+      .locator("button")
+      .filter({ hasText: /^Collections$/ })
+      .or(sidebar.locator('button[aria-label="Collections"]'));
+    const exploreBtn = sidebar
+      .locator("button")
+      .filter({ hasText: /^Explore$/ })
+      .or(sidebar.locator('button[aria-label="Explore"]'));
     await expect(collectionsBtn.first()).toBeDisabled();
     await expect(exploreBtn.first()).toBeDisabled();
   });
@@ -261,39 +297,57 @@ test.describe("Sidebar behavior", () => {
     const sidebar = page.locator('[data-sidebar="true"]');
     await expect(sidebar).toBeVisible({ timeout: 8000 });
     // After hydration sidebar should be expanded at 1440px
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 8000,
+    });
     // Click collapse button
     await page.getByRole("button", { name: "Collapse sidebar" }).click();
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 3000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 3000,
+    });
   });
 
   // AC13/AC29: At 900px sidebar is collapsed (auto-collapse)
-  test("at 900px viewport sidebar is collapsed by default", async ({ page }) => {
+  test("at 900px viewport sidebar is collapsed by default", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
     await expect(sidebar).toBeVisible({ timeout: 8000 });
     // useMediaQuery drives collapse at <=900px after hydration
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 8000,
+    });
   });
 
   test("profile item shows user name Caleb Z", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/recipes");
     // At expanded view the profile SidebarItem label text "Caleb Z" is visible
-    await expect(page.locator('[data-sidebar="true"]').getByText("Caleb Z")).toBeVisible({ timeout: 8000 });
+    await expect(
+      page.locator('[data-sidebar="true"]').getByText("Caleb Z"),
+    ).toBeVisible({ timeout: 8000 });
   });
 
   // AC25: expand sidebar after collapse
-  test("AC25: toggle button expands sidebar after collapse", async ({ page }) => {
+  test("AC25: toggle button expands sidebar after collapse", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 8000,
+    });
     await page.getByRole("button", { name: "Collapse sidebar" }).click();
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 3000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 3000,
+    });
     await page.getByRole("button", { name: "Expand sidebar" }).click();
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 3000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 3000,
+    });
   });
 
   // AC24: collapsed labels carry aria-hidden="true"
@@ -301,16 +355,24 @@ test.describe("Sidebar behavior", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 8000,
+    });
     await page.getByRole("button", { name: "Collapse sidebar" }).click();
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 3000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 3000,
+    });
     // All collapsible label spans should now have aria-hidden="true"
-    const hiddenLabels = sidebar.locator('[data-sidebar-collapsible="true"][aria-hidden="true"]');
+    const hiddenLabels = sidebar.locator(
+      '[data-sidebar-collapsible="true"][aria-hidden="true"]',
+    );
     await expect(hiddenLabels.first()).toBeAttached({ timeout: 3000 });
   });
 
   // AC27: Recipes nav item has aria-current="page" on /recipes
-  test("AC27: Recipes nav item has aria-current=page on /recipes", async ({ page }) => {
+  test("AC27: Recipes nav item has aria-current=page on /recipes", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
@@ -340,15 +402,21 @@ test.describe("Sidebar behavior", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 8000,
+    });
     await page.getByRole("button", { name: "Collapse sidebar" }).click();
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 3000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 3000,
+    });
     // Hover over the Recipes nav icon (aria-label="Recipes" when collapsed)
     const recipesIcon = sidebar.locator('button[aria-label="Recipes"]');
     await expect(recipesIcon.first()).toBeVisible({ timeout: 3000 });
     await recipesIcon.first().hover();
     // Tooltip content appears -- look for tooltip role or the label text in a tooltip element
-    const tooltip = page.locator('[role="tooltip"]').or(page.locator('[data-radix-popper-content-wrapper]'));
+    const tooltip = page
+      .locator('[role="tooltip"]')
+      .or(page.locator("[data-radix-popper-content-wrapper]"));
     await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
   });
 });
@@ -365,7 +433,9 @@ test.describe("Recipes page (authenticated)", () => {
 
   test("shows recipe cards", async ({ page }) => {
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // Recipe cards are rendered in a list
     const list = page.getByRole("list");
     await expect(list.first()).toBeVisible({ timeout: 8000 });
@@ -374,16 +444,24 @@ test.describe("Recipes page (authenticated)", () => {
   // AC11: real cards rendered (no skeleton aria-label)
   test("AC11: real recipe cards shown, not skeletons", async ({ page }) => {
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // Wait until loading skeletons are gone
-    await expect(page.locator('[aria-label="Loading recipe"]').first()).not.toBeAttached({ timeout: 8000 });
+    await expect(
+      page.locator('[aria-label="Loading recipe"]').first(),
+    ).not.toBeAttached({ timeout: 8000 });
     // The real cards should have the recipe title text
     await expect(page.getByText("Test Recipe")).toBeVisible({ timeout: 5000 });
   });
 
-  test("sort dropdown is functional -- click it, see options", async ({ page }) => {
+  test("sort dropdown is functional -- click it, see options", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // Radix Select renders a trigger with role="combobox"
     const trigger = page.getByRole("combobox").first();
     await expect(trigger).toBeVisible();
@@ -391,28 +469,41 @@ test.describe("Recipes page (authenticated)", () => {
     // Options appear in a listbox
     const listbox = page.getByRole("listbox");
     await expect(listbox).toBeVisible({ timeout: 3000 });
-    await expect(page.getByRole("option", { name: /sort by date/i }).first()).toBeVisible();
+    await expect(
+      page.getByRole("option", { name: /sort by date/i }).first(),
+    ).toBeVisible();
   });
 
   // AC12: changing sort updates count label without page reload
-  test("AC12: changing sort option updates count without full page reload", async ({ page }) => {
+  test("AC12: changing sort option updates count without full page reload", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // Capture the initial URL before sort change
     const urlBefore = page.url();
     const trigger = page.getByRole("combobox").first();
     await trigger.click();
     const listbox = page.getByRole("listbox");
     await expect(listbox).toBeVisible({ timeout: 3000 });
-    await page.getByRole("option", { name: /sort by title \(asc\)/i }).first().click();
+    await page
+      .getByRole("option", { name: /sort by title \(asc\)/i })
+      .first()
+      .click();
     // Count label should update -- it shows "N recipes in your collection"
-    await expect(page.getByText(/recipe.*in your collection/i)).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/recipe.*in your collection/i)).toBeVisible({
+      timeout: 5000,
+    });
     // URL should still be /recipes (no navigation)
     expect(page.url()).toBe(urlBefore);
   });
 
   // AC13: after 300ms debounce, LoadingScreen shown while API is pending
-  test("AC13: LoadingScreen shown while recipes API is pending past 300ms", async ({ page }) => {
+  test("AC13: LoadingScreen shown while recipes API is pending past 300ms", async ({
+    page,
+  }) => {
     // Override to delay the response (registered after beforeEach, takes priority)
     await page.route("**/api/recipes**", async (route) => {
       if (route.request().method() === "GET") {
@@ -427,7 +518,9 @@ test.describe("Recipes page (authenticated)", () => {
       }
     });
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // After 300ms debounce, FallbackScreen renders LoadingScreen which has role="status"
     await page.waitForTimeout(350);
     // LoadingScreen has role="status" aria-label="Loading"
@@ -450,8 +543,12 @@ test.describe("Recipes page (authenticated)", () => {
       }
     });
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
-    await expect(page.getByText("No data available")).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
+    await expect(page.getByText("No data available")).toBeVisible({
+      timeout: 8000,
+    });
   });
 
   // AC15: error state shows ErrorScreen text
@@ -465,15 +562,23 @@ test.describe("Recipes page (authenticated)", () => {
       }
     });
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     await expect(page.getByText("Error")).toBeVisible({ timeout: 8000 });
   });
 
-  test("at 375px mobile, page renders without horizontal overflow", async ({ page }) => {
+  test("at 375px mobile, page renders without horizontal overflow", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
-    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
+    const scrollWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
     expect(scrollWidth).toBeLessThanOrEqual(375 + 1); // 1px tolerance
   });
 });
@@ -497,13 +602,17 @@ test.describe("Recipe detail page (authenticated)", () => {
   test("renders the recipe title", async ({ page }) => {
     await page.goto(`/recipes/${MOCK_RECIPE._id}`);
     // The viewer renders RecipeTitle which is h1
-    await expect(page.locator("h1").filter({ hasText: MOCK_RECIPE.title })).toBeVisible({ timeout: 8000 });
+    await expect(
+      page.locator("h1").filter({ hasText: MOCK_RECIPE.title }),
+    ).toBeVisible({ timeout: 8000 });
   });
 
   test("no blank flash before content", async ({ page }) => {
     await page.goto(`/recipes/${MOCK_RECIPE._id}`);
     // After navigation there should be either LoadingScreen or recipe content -- not an empty body
-    await page.waitForSelector("h1, [class*='loading'], [class*='container']", { timeout: 5000 });
+    await page.waitForSelector("h1, [class*='loading'], [class*='container']", {
+      timeout: 5000,
+    });
     const bodyText = await page.locator("body").textContent();
     expect(bodyText?.trim().length).toBeGreaterThan(0);
   });
@@ -564,7 +673,9 @@ test.describe("Recipe detail page - invalid ID", () => {
 
 test.describe("/newRecipe route", () => {
   // AC21: /newRecipe redirects to /recipes within 3 seconds
-  test("AC21: navigating to /newRecipe redirects to /recipes", async ({ page }) => {
+  test("AC21: navigating to /newRecipe redirects to /recipes", async ({
+    page,
+  }) => {
     await page.goto("/newRecipe");
     await expect(page).toHaveURL(/\/recipes/, { timeout: 3000 });
     // Page should not remain blank after redirect
@@ -583,10 +694,14 @@ test.describe("Settings page", () => {
   });
 
   // AC22: settings page renders inside AppShell (sidebar visible)
-  test("AC22: settings page renders inside AppShell with sidebar", async ({ page }) => {
+  test("AC22: settings page renders inside AppShell with sidebar", async ({
+    page,
+  }) => {
     await page.goto("/settings");
     // AppShell renders sidebar when session is present
-    await expect(page.locator('[data-sidebar="true"]').first()).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]').first()).toBeVisible({
+      timeout: 8000,
+    });
     // The settings content "Settings" is rendered
     await expect(page.getByText("Settings")).toBeVisible({ timeout: 5000 });
   });
@@ -612,7 +727,9 @@ test.describe("New recipe creation", () => {
     await page.getByRole("button", { name: /create new recipe/i }).click();
     await expect(page.getByRole("dialog")).toBeVisible({ timeout: 5000 });
     // Input has placeholder "e.g. Spaghetti carbonara" and label "Title"
-    await expect(page.getByPlaceholder("e.g. Spaghetti carbonara")).toBeVisible();
+    await expect(
+      page.getByPlaceholder("e.g. Spaghetti carbonara"),
+    ).toBeVisible();
     await expect(page.getByText("Title")).toBeVisible();
   });
 
@@ -638,7 +755,9 @@ test.describe("New recipe creation", () => {
   });
 
   // AC33: Enter key in title input submits the dialog
-  test("AC33: Enter key in non-empty title input submits dialog", async ({ page }) => {
+  test("AC33: Enter key in non-empty title input submits dialog", async ({
+    page,
+  }) => {
     // Mock the create recipe API
     await page.route("**/api/recipes", (route) => {
       if (route.request().method() === "POST") {
@@ -658,11 +777,15 @@ test.describe("New recipe creation", () => {
     await input.fill("My New Recipe");
     await input.press("Enter");
     // Dialog should close and navigate to new recipe page
-    await expect(page).toHaveURL(/\/recipes\/new-recipe-123/, { timeout: 5000 });
+    await expect(page).toHaveURL(/\/recipes\/new-recipe-123/, {
+      timeout: 5000,
+    });
   });
 
   // AC34: Cancel button / Escape closes dialog and clears input
-  test("AC34: Cancel button closes dialog and clears title input", async ({ page }) => {
+  test("AC34: Cancel button closes dialog and clears title input", async ({
+    page,
+  }) => {
     await page.goto("/");
     await page.getByRole("button", { name: /create new recipe/i }).click();
     await expect(page.getByRole("dialog")).toBeVisible({ timeout: 5000 });
@@ -689,7 +812,9 @@ test.describe("New recipe creation", () => {
 // ---------------------------------------------------------------------------
 
 test.describe("Fallback screens", () => {
-  test("unauthenticated /recipes shows Access Restricted and Sign In button", async ({ page }) => {
+  test("unauthenticated /recipes shows Access Restricted and Sign In button", async ({
+    page,
+  }) => {
     // Explicitly return null session (unauthenticated)
     await page.route("**/api/auth/session", (route) => {
       route.fulfill({
@@ -699,12 +824,16 @@ test.describe("Fallback screens", () => {
       });
     });
     await page.goto("/recipes");
-    await expect(page.getByText("Access Restricted")).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText("Access Restricted")).toBeVisible({
+      timeout: 8000,
+    });
     await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
   });
 
   // AC6: LoadingScreen renders when session is in loading state
-  test("AC6: LoadingScreen renders during session loading", async ({ page }) => {
+  test("AC6: LoadingScreen renders during session loading", async ({
+    page,
+  }) => {
     // Delay session response to simulate loading state
     await page.route("**/api/auth/session", async (route) => {
       await new Promise((r) => setTimeout(r, 600));
@@ -715,9 +844,15 @@ test.describe("Fallback screens", () => {
       });
     });
     await page.route("**/api/auth/csrf", (route) => {
-      route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ csrfToken: "test" }) });
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ csrfToken: "test" }),
+      });
     });
-    await page.route("**/api/auth/_log", (route) => route.fulfill({ status: 200 }));
+    await page.route("**/api/auth/_log", (route) =>
+      route.fulfill({ status: 200 }),
+    );
 
     // Navigate without awaiting so we can inspect during the 600ms delay window
     const navPromise = page.goto("/");
@@ -746,14 +881,18 @@ test.describe("Component states: Button", () => {
   });
 
   // AC36: disabled button has pointer-events none and reduced opacity
-  test("AC36: disabled Button has opacity < 1 and pointer-events none", async ({ page }) => {
+  test("AC36: disabled Button has opacity < 1 and pointer-events none", async ({
+    page,
+  }) => {
     await page.goto("/");
     await page.getByRole("button", { name: /create new recipe/i }).click();
     await expect(page.getByRole("dialog")).toBeVisible({ timeout: 5000 });
     // The Cancel button in the dialog is a secondary Button;
     // when not pending it is enabled. The Create button is primary.
     // We inspect the Create button which is a real Button component.
-    const createBtn = page.getByRole("dialog").getByRole("button", { name: "Create" });
+    const createBtn = page
+      .getByRole("dialog")
+      .getByRole("button", { name: "Create" });
     await expect(createBtn).toBeVisible();
     // Check that a disabled button has reduced opacity via CSS class
     const hasPointerEventsNone = await page.evaluate(() => {
@@ -775,9 +914,13 @@ test.describe("Component states: Button", () => {
   // Runtime test would require intercepting a slow POST; covered by AC33 structure.
 
   // AC38: Button focus ring via keyboard Tab
-  test("AC38: primary Button shows focus ring on keyboard focus", async ({ page }) => {
+  test("AC38: primary Button shows focus ring on keyboard focus", async ({
+    page,
+  }) => {
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
     // Tab to the first focusable button and check box-shadow
     await page.keyboard.press("Tab");
     // Check that the focused element has a non-none box-shadow (focus ring)
@@ -792,7 +935,10 @@ test.describe("Component states: Button", () => {
       return [...document.styleSheets].some((ss) => {
         try {
           return [...ss.cssRules].some((r) => {
-            return r.cssText?.includes(":focus-visible") && r.cssText?.includes("box-shadow");
+            return (
+              r.cssText?.includes(":focus-visible") &&
+              r.cssText?.includes("box-shadow")
+            );
           });
         } catch {
           return false;
@@ -806,10 +952,14 @@ test.describe("Component states: Button", () => {
   // AC35: Button hover cursor is pointer
   test("AC35: Button has cursor pointer", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
     const cursor = await page.evaluate(() => {
       // Find a button with the .button CSS module class (contains "button" in class names)
-      const btn = document.querySelector('button[class*="button"]') as HTMLElement | null;
+      const btn = document.querySelector(
+        'button[class*="button"]',
+      ) as HTMLElement | null;
       if (!btn) return null;
       return window.getComputedStyle(btn).cursor;
     });
@@ -839,7 +989,10 @@ test.describe("Component states: Input", () => {
       return [...document.styleSheets].some((ss) => {
         try {
           return [...ss.cssRules].some((r) => {
-            return r.cssText?.includes(":focus-within") && r.cssText?.includes("box-shadow");
+            return (
+              r.cssText?.includes(":focus-within") &&
+              r.cssText?.includes("box-shadow")
+            );
           });
         } catch {
           return false;
@@ -851,15 +1004,23 @@ test.describe("Component states: Input", () => {
 
   // AC41: disabled state CSS defines pointer-events none (CSS module class names are hashed;
   // check property values which are preserved verbatim in CSS rule text)
-  test("AC41: disabled state CSS has pointer-events none and opacity", async ({ page }) => {
+  test("AC41: disabled state CSS has pointer-events none and opacity", async ({
+    page,
+  }) => {
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
     const hasDisabledRule = await page.evaluate(() => {
       return [...document.styleSheets].some((ss) => {
         try {
           return [...ss.cssRules].some((r) => {
             const t = r.cssText ?? "";
-            return t.includes("pointer-events") && t.includes("none") && t.includes("opacity");
+            return (
+              t.includes("pointer-events") &&
+              t.includes("none") &&
+              t.includes("opacity")
+            );
           });
         } catch {
           return false;
@@ -881,16 +1042,23 @@ test.describe("Component states: RecipeCard", () => {
   });
 
   // AC42: RecipeCard hover has transform translateY(-2px)
-  test("AC42: RecipeCard hover CSS rule includes translateY(-2px)", async ({ page }) => {
+  test("AC42: RecipeCard hover CSS rule includes translateY(-2px)", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     // Wait for real cards to load
     await expect(page.getByText("Test Recipe")).toBeVisible({ timeout: 8000 });
     const hasHoverTransform = await page.evaluate(() => {
       return [...document.styleSheets].some((ss) => {
         try {
           return [...ss.cssRules].some((r) => {
-            return r.cssText?.includes(":hover") && r.cssText?.includes("translateY(-2px)");
+            return (
+              r.cssText?.includes(":hover") &&
+              r.cssText?.includes("translateY(-2px)")
+            );
           });
         } catch {
           return false;
@@ -901,14 +1069,19 @@ test.describe("Component states: RecipeCard", () => {
   });
 
   // AC43: RecipeCard focus-visible has two-ring box-shadow
-  test("AC43: RecipeCard focus-visible CSS rule contains two-ring box-shadow", async ({ page }) => {
+  test("AC43: RecipeCard focus-visible CSS rule contains two-ring box-shadow", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
     await expect(page.getByText("Test Recipe")).toBeVisible({ timeout: 8000 });
     const hasFocusVisibleRing = await page.evaluate(() => {
       return [...document.styleSheets].some((ss) => {
         try {
           return [...ss.cssRules].some((r) => {
-            return r.cssText?.includes(":focus-visible") && r.cssText?.includes("brand-Primary");
+            return (
+              r.cssText?.includes(":focus-visible") &&
+              r.cssText?.includes("brand-Primary")
+            );
           });
         } catch {
           return false;
@@ -919,10 +1092,14 @@ test.describe("Component states: RecipeCard", () => {
   });
 
   // AC31: recipe cards render with correct data (title from fixture)
-  test("AC31: recipe cards show correct title and emoji from API", async ({ page }) => {
+  test("AC31: recipe cards show correct title and emoji from API", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
     await expect(page.getByText("Test Recipe")).toBeVisible({ timeout: 8000 });
-    await expect(page.getByText("Another Recipe")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Another Recipe")).toBeVisible({
+      timeout: 5000,
+    });
   });
 });
 
@@ -941,7 +1118,9 @@ test.describe("Responsive layout", () => {
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
     await expect(sidebar).toBeVisible({ timeout: 8000 });
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "false", {
+      timeout: 8000,
+    });
   });
 
   test("at 800px sidebar is collapsed/icon-only", async ({ page }) => {
@@ -949,20 +1128,30 @@ test.describe("Responsive layout", () => {
     await page.goto("/recipes");
     const sidebar = page.locator('[data-sidebar="true"]');
     await expect(sidebar).toBeVisible({ timeout: 8000 });
-    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", { timeout: 8000 });
+    await expect(sidebar).toHaveAttribute("data-sidebar-collapsed", "true", {
+      timeout: 8000,
+    });
   });
 
   // AC44: mobile 375px no horizontal overflow
-  test("AC44: at 375px mobile, main content has no horizontal overflow", async ({ page }) => {
+  test("AC44: at 375px mobile, main content has no horizontal overflow", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
-    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
+    const scrollWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
     expect(scrollWidth).toBeLessThanOrEqual(375 + 1);
   });
 
   // AC46: no layout shift after hydration on home page
-  test("AC46: no horizontal layout shift after hydration on home page", async ({ page }) => {
+  test("AC46: no horizontal layout shift after hydration on home page", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
     const sidebar = page.locator('[data-sidebar="true"]');
@@ -977,10 +1166,14 @@ test.describe("Responsive layout", () => {
   });
 
   // AC47: /recipes page shows content without prolonged blank white screen
-  test("AC47: /recipes page shows content promptly after load", async ({ page }) => {
+  test("AC47: /recipes page shows content promptly after load", async ({
+    page,
+  }) => {
     await page.goto("/recipes");
     // The heading "My Recipes" must appear (auth and recipes are mocked in beforeEach)
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     const bodyText = await page.locator("body").textContent();
     expect(bodyText?.trim().length).toBeGreaterThan(0);
   });
@@ -991,7 +1184,9 @@ test.describe("Responsive layout", () => {
 // ---------------------------------------------------------------------------
 
 test.describe("Page load performance", () => {
-  test("unauthenticated / -- body has children, no blank white flash", async ({ page }) => {
+  test("unauthenticated / -- body has children, no blank white flash", async ({
+    page,
+  }) => {
     await page.goto("/");
     // Body must have rendered content within 3 seconds
     await page.waitForSelector("body > *", { timeout: 3000 });
@@ -999,7 +1194,9 @@ test.describe("Page load performance", () => {
     expect(childCount).toBeGreaterThan(0);
   });
 
-  test("no @fluentui or @griffel loaded in network requests", async ({ page }) => {
+  test("no @fluentui or @griffel loaded in network requests", async ({
+    page,
+  }) => {
     const fluentRequests: string[] = [];
     page.on("request", (req) => {
       const url = req.url();
@@ -1026,7 +1223,9 @@ test.describe("Page load performance", () => {
     const errors: string[] = [];
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto("/");
-    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-sidebar="true"]')).toBeVisible({
+      timeout: 8000,
+    });
     expect(errors).toHaveLength(0);
   });
 
@@ -1036,11 +1235,15 @@ test.describe("Page load performance", () => {
     const errors: string[] = [];
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto("/recipes");
-    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
     expect(errors).toHaveLength(0);
   });
 
-  test("AC49: no uncaught JS errors on recipe detail page", async ({ page }) => {
+  test("AC49: no uncaught JS errors on recipe detail page", async ({
+    page,
+  }) => {
     await mockAuth(page);
     await page.route(`**/api/recipes/${MOCK_RECIPE._id}`, (route) => {
       route.fulfill({
@@ -1052,7 +1255,9 @@ test.describe("Page load performance", () => {
     const errors: string[] = [];
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto(`/recipes/${MOCK_RECIPE._id}`);
-    await expect(page.locator("h1").filter({ hasText: MOCK_RECIPE.title })).toBeVisible({ timeout: 8000 });
+    await expect(
+      page.locator("h1").filter({ hasText: MOCK_RECIPE.title }),
+    ).toBeVisible({ timeout: 8000 });
     expect(errors).toHaveLength(0);
   });
 });

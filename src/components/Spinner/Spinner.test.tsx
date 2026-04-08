@@ -9,7 +9,7 @@ describe("Spinner", () => {
 
     expect(screen.getByRole("progressbar")).toHaveAttribute(
       "aria-label",
-      "Loading"
+      "Loading",
     );
   });
 
@@ -19,7 +19,7 @@ describe("Spinner", () => {
     expect(screen.getByText("Fetching recipes...")).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toHaveAttribute(
       "aria-label",
-      "Fetching recipes..."
+      "Fetching recipes...",
     );
   });
 
@@ -33,12 +33,12 @@ describe("Spinner", () => {
 
   it("uses ariaLabel when label is not a string", () => {
     render(
-      <Spinner label={<span>Custom node</span>} ariaLabel="Loading data" />
+      <Spinner label={<span>Custom node</span>} ariaLabel="Loading data" />,
     );
 
     expect(screen.getByRole("progressbar")).toHaveAttribute(
       "aria-label",
-      "Loading data"
+      "Loading data",
     );
   });
 

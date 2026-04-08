@@ -73,7 +73,7 @@ export class DataStore {
   removeFromCollection(userId: string, recipeId: string): void {
     if (this.collections[userId]) {
       this.collections[userId] = this.collections[userId].filter(
-        (id) => id !== recipeId
+        (id) => id !== recipeId,
       );
     }
   }
@@ -117,7 +117,7 @@ export class DataStore {
     Object.keys(this.recentlyViewed).forEach((userId) => {
       if (this.recentlyViewed[userId]) {
         this.recentlyViewed[userId] = this.recentlyViewed[userId].filter(
-          (id) => id !== recipeId
+          (id) => id !== recipeId,
         );
       }
     });

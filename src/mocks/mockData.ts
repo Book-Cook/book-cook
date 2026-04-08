@@ -130,12 +130,12 @@ export const mockSharedUsers = {
 
 // Mock tags extracted from recipes
 export const mockTags = Array.from(
-  new Set(mockRecipes.flatMap((recipe) => recipe.tags))
+  new Set(mockRecipes.flatMap((recipe) => recipe.tags)),
 ).sort();
 
 // Helper functions for generating dynamic data
 export const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
-  _id: getMockId('recipe'),
+  _id: getMockId("recipe"),
   title: "Mock Recipe",
   data: "## Mock recipe content",
   tags: ["mock"],
@@ -160,7 +160,7 @@ export const getRecipesByTags = (tags: string[]): Recipe[] => {
     return mockRecipes;
   }
   return mockRecipes.filter((recipe) =>
-    tags.some((tag) => recipe.tags.includes(tag))
+    tags.some((tag) => recipe.tags.includes(tag)),
   );
 };
 
@@ -173,14 +173,14 @@ export const searchRecipes = (query: string): Recipe[] => {
     (recipe) =>
       recipe.title.toLowerCase().includes(searchTerm) ||
       recipe.data.toLowerCase().includes(searchTerm) ||
-      recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm)),
   );
 };
 
 export const sortRecipes = (
   recipes: Recipe[],
   sortProperty: string,
-  sortDirection: string
+  sortDirection: string,
 ): Recipe[] => {
   const sorted = [...recipes].sort((a, b) => {
     let aValue: string | Date;

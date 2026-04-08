@@ -21,7 +21,7 @@ export const createRecipeHandlers = (store: DataStore) => [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Invalid sorting parameters." },
-        { status: 400 }
+        { status: 400 },
       );
     }
   }),
@@ -39,7 +39,7 @@ export const createRecipeHandlers = (store: DataStore) => [
           message: "Recipe uploaded successfully.",
           recipeId: recipe._id,
         },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (_error) {
       if (_error instanceof RecipeService.ValidationError) {
@@ -47,7 +47,7 @@ export const createRecipeHandlers = (store: DataStore) => [
       }
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -66,18 +66,18 @@ export const createRecipeHandlers = (store: DataStore) => [
       if (_error instanceof RecipeService.NotFoundError) {
         return HttpResponse.json(
           { message: "Recipe not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
       if (_error instanceof RecipeService.UnauthorizedError) {
         return HttpResponse.json(
           { message: "Not authorized to view this recipe" },
-          { status: 403 }
+          { status: 403 },
         );
       }
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -98,18 +98,18 @@ export const createRecipeHandlers = (store: DataStore) => [
       if (_error instanceof RecipeService.NotFoundError) {
         return HttpResponse.json(
           { message: "Recipe not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
       if (_error instanceof RecipeService.UnauthorizedError) {
         return HttpResponse.json(
           { message: "Not authorized to update this recipe" },
-          { status: 403 }
+          { status: 403 },
         );
       }
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -130,18 +130,18 @@ export const createRecipeHandlers = (store: DataStore) => [
       if (_error instanceof RecipeService.NotFoundError) {
         return HttpResponse.json(
           { message: "Recipe not found." },
-          { status: 404 }
+          { status: 404 },
         );
       }
       if (_error instanceof RecipeService.UnauthorizedError) {
         return HttpResponse.json(
           { message: "Not authorized to delete this recipe" },
-          { status: 403 }
+          { status: 403 },
         );
       }
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),

@@ -11,7 +11,7 @@ export async function fetchUser(userId?: string): Promise<UserInfo | null> {
 
   try {
     return await fetchJson<UserInfo | null>(
-      `/api/user/lookup?userId=${encodeURIComponent(userId)}`
+      `/api/user/lookup?userId=${encodeURIComponent(userId)}`,
     );
   } catch (error) {
     console.error("Error fetching user:", error);

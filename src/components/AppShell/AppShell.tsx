@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { BookOpenIcon, ListIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
+import {
+  BookOpenIcon,
+  ListIcon,
+  MagnifyingGlassIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -45,8 +50,19 @@ export const AppShell = ({ children }: AppShellProps) => {
   const handleNewRecipe = (): void => {
     setDrawerOpen(false);
     createRecipe(
-      { title: "", data: "", tags: [], imageURL: "", emoji: "", isPublic: false },
-      { onSuccess: (res) => { void router.push(`/recipes/${res.recipeId}`); } }
+      {
+        title: "",
+        data: "",
+        tags: [],
+        imageURL: "",
+        emoji: "",
+        isPublic: false,
+      },
+      {
+        onSuccess: (res) => {
+          void router.push(`/recipes/${res.recipeId}`);
+        },
+      },
     );
   };
 
@@ -62,7 +78,9 @@ export const AppShell = ({ children }: AppShellProps) => {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [drawerOpen]);
 
   if (!session) {
@@ -105,13 +123,25 @@ export const AppShell = ({ children }: AppShellProps) => {
       <div
         className={styles.backdrop}
         data-open={drawerOpen && !profileMenuOpen ? "true" : "false"}
-        onClick={() => { if (!profileMenuOpen) { setDrawerOpen(false); } }}
+        onClick={() => {
+          if (!profileMenuOpen) {
+            setDrawerOpen(false);
+          }
+        }}
         aria-hidden="true"
       />
 
       {/* Sidebar — normal on desktop, drawer on mobile */}
-      <div className={styles.sidebarWrap} data-open={drawerOpen ? "true" : "false"}>
-        <AppSidebar forceExpanded={isMobile} onNewRecipe={handleNewRecipe} onSearch={handleSearch} onMenuOpenChange={setProfileMenuOpen} />
+      <div
+        className={styles.sidebarWrap}
+        data-open={drawerOpen ? "true" : "false"}
+      >
+        <AppSidebar
+          forceExpanded={isMobile}
+          onNewRecipe={handleNewRecipe}
+          onSearch={handleSearch}
+          onMenuOpenChange={setProfileMenuOpen}
+        />
       </div>
 
       <main className={styles.main}>{children}</main>

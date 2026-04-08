@@ -8,7 +8,7 @@ describe("Drawer", () => {
     render(
       <Drawer open ariaLabel="Menu">
         <DrawerBody>Drawer body</DrawerBody>
-      </Drawer>
+      </Drawer>,
     );
 
     expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("Drawer", () => {
         backdropProps={{ "data-testid": "drawer-backdrop" }}
       >
         <DrawerBody>Drawer body</DrawerBody>
-      </Drawer>
+      </Drawer>,
     );
 
     fireEvent.click(screen.getByTestId("drawer-backdrop"));
@@ -39,7 +39,7 @@ describe("Drawer", () => {
     render(
       <Drawer open ariaLabel="Menu" onOpenChange={onOpenChange}>
         <DrawerBody>Drawer body</DrawerBody>
-      </Drawer>
+      </Drawer>,
     );
 
     fireEvent.keyDown(document, { key: "Escape" });
@@ -52,7 +52,7 @@ describe("Drawer", () => {
     render(
       <Drawer open ariaLabel="Menu" position="start">
         <DrawerBody>Drawer body</DrawerBody>
-      </Drawer>
+      </Drawer>,
     );
 
     const drawer = screen.getByRole("dialog", { name: "Menu" });
@@ -67,7 +67,7 @@ describe("Drawer", () => {
             Title text
           </DrawerHeaderTitle>
         </DrawerHeader>
-      </Drawer>
+      </Drawer>,
     );
 
     expect(screen.getByText("Title text")).toBeInTheDocument();

@@ -18,6 +18,7 @@ Previously failing criteria re-validated in this run: AC-21, AC-34, AC-35, AC-36
 `cd C:/code/Personal/book-cook && yarn next build`
 
 **Full output:**
+
 ```
   ▲ Next.js 14.2.12
 
@@ -71,6 +72,7 @@ Dev server started with `node node_modules/next/dist/bin/next dev --port 3020` (
 Screenshot: `dev-team-output/migrate-v2-components-to-v1/screenshots/revision3-homepage-3020.png`
 
 Observations:
+
 - Page title: "Book Cook" (HTTP 200)
 - AppShell renders: collapsible left sidebar visible with nav items (New Recipe, Recipes, Collections, Explore) and Account footer
 - LandingPage card renders in main area: "Book Cook" title, "Sign in to access your recipe gallery and editor." subtitle, "Continue with Google" button with Google logo
@@ -83,6 +85,7 @@ Observations:
 Screenshot: `dev-team-output/migrate-v2-components-to-v1/screenshots/revision3-recipes-3020.png`
 
 Observations:
+
 - Page title: "Book Cook" (HTTP 200)
 - Renders the Unauthorized fallback: Phosphor LockSimple icon, "Access Restricted" heading, "You need to be signed in to view your recipes" body, "Sign In" primary button
 - No crash, no Fluent error overlay
@@ -98,6 +101,7 @@ Observations:
 Command: `grep -n "isLoading" C:/code/Personal/book-cook/src/components/Button/Button.tsx`
 Expected: Lines showing `{!isLoading && <span>{children}</span>}` and spinner with `aria-hidden="true"`
 Actual output:
+
 ```
 39:      isLoading = false,
 48:    const isDisabled = Boolean(disabled) || isLoading;
@@ -107,6 +111,7 @@ Actual output:
 71:        {!isLoading && <span>{children}</span>}
 72:        {!isLoading && endIcon}
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -114,12 +119,14 @@ Scenario: Verify the full Button component source to confirm no unconditional ch
 Command: Read `src/components/Button/Button.tsx` (full file)
 Expected: The only `{children}` render is guarded by `!isLoading`; spinner has `aria-hidden="true"`
 Actual output:
+
 ```
 Line 67: {isLoading && <span className={styles.spinner} aria-hidden="true" />}
 Line 70: {!isLoading && startIcon}
 Line 71: {!isLoading && <span>{children}</span>}
 Line 72: {!isLoading && endIcon}
 ```
+
 No unconditional children render path exists. All three content elements (startIcon, children, endIcon) are guarded by `!isLoading`.
 Result: PASS
 
@@ -133,6 +140,7 @@ Result: PASS
 Command: `grep -rn "RecipeView" C:/code/Personal/book-cook/src/components/RecipePage/RecipePage.tsx`
 Expected: RecipeView imported and rendered; old sub-components not present
 Actual output:
+
 ```
 3:import { RecipeView } from "../RecipeView";
 4:import { RecipeViewSaveStateProvider } from "../RecipeView/RecipeViewSaveStateContext";
@@ -140,6 +148,7 @@ Actual output:
 19:      <RecipeView
 28:    </RecipeViewSaveStateProvider>
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -147,6 +156,7 @@ Scenario: Confirm old sub-components (RecipeHeader, RecipeContent, RecipeTags, R
 Command: Read `src/components/RecipePage/RecipePage.tsx` (full file, 39 lines)
 Expected: Only RecipeView, RecipeViewSaveStateProvider, RecipeSaveBar, RecipeProvider, useRecipe imports
 Actual output:
+
 ```
 import * as React from "react";
 import { RecipeProvider, useRecipe } from "../../context";
@@ -154,6 +164,7 @@ import { RecipeView } from "../RecipeView";
 import { RecipeViewSaveStateProvider } from "../RecipeView/RecipeViewSaveStateContext";
 import { RecipeSaveBar } from "../RecipeSaveBar";
 ```
+
 No imports of RecipeHeader, RecipeContent, RecipeTags, or RecipeImage.
 Result: PASS
 
@@ -167,9 +178,11 @@ Result: PASS
 Command: `grep -n "contentEditable" C:/code/Personal/book-cook/src/components/RecipeView/RecipeHeader/RecipeHeader.tsx`
 Expected: `contentEditable` present on an `h1` element inside an editor-mode conditional
 Actual output:
+
 ```
 58:            contentEditable
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -177,6 +190,7 @@ Scenario: Confirm the conditional structure -- editor mode gets contentEditable 
 Command: Read `src/components/RecipeView/RecipeHeader/RecipeHeader.tsx` lines 54-66
 Expected: `isEditable ? <h1 contentEditable> : <RecipeTitle>`
 Actual output:
+
 ```
 Line 54: {isEditable ? (
 Line 55:   <h1
@@ -192,6 +206,7 @@ Line 64: ) : (
 Line 65:   <RecipeTitle className={styles.title}>{recipe.title}</RecipeTitle>
 Line 66: )}
 ```
+
 Editor mode: `<h1 contentEditable>`. Viewer mode: `<RecipeTitle>`. Mutually exclusive branches confirmed.
 Result: PASS
 
@@ -205,6 +220,7 @@ Result: PASS
 Command: Read `src/components/RecipeView/RecipeView.tsx` (the active render path for recipe content)
 Expected: `TextEditor` used directly, not Fluent Textarea
 Actual output:
+
 ```
 Line 5: import { TextEditor } from "../TextEditor";
 ...
@@ -214,6 +230,7 @@ Line 19:     viewingMode={viewingMode}
 Line 20:     onDirty={saveState?.markDataDirty}
 Line 21:   />
 ```
+
 RecipeView (the active component replacing RecipePage sub-components) uses TextEditor, not Fluent Textarea.
 Result: PASS
 
@@ -222,6 +239,7 @@ Scenario: Confirm TextEditor renders `<textarea>` in editor mode and `<div>` in 
 Command: Read `src/components/TextEditor/TextEditor.tsx`
 Expected: `viewingMode === "editor"` returns `<textarea>`, otherwise returns `<div>`
 Actual output:
+
 ```
 Line 15: if (viewingMode === "editor") {
 Line 16:   return (
@@ -239,6 +257,7 @@ Line 27:     {text}
 Line 28:   </div>
 Line 29: );
 ```
+
 Result: PASS
 
 **Criterion verdict:** PASS
@@ -251,6 +270,7 @@ Result: PASS
 Command: `grep -rn "MarkdownParser" C:/code/Personal/book-cook/src/`
 Expected: Results should only reference the MarkdownParser component's own files (MarkdownParser.tsx, index.ts, types) -- not any import from a page or content-rendering component
 Actual output:
+
 ```
 C:/code/Personal/book-cook/src/components/index.ts:3:export * from "./MarkdownParser";
 C:/code/Personal/book-cook/src/components/MarkdownParser/index.ts:1:export * from "./MarkdownParser";
@@ -259,6 +279,7 @@ C:/code/Personal/book-cook/src/components/MarkdownParser/MarkdownParser.tsx:4:im
 C:/code/Personal/book-cook/src/components/MarkdownParser/MarkdownParser.tsx:6:export const MarkdownParser: React.FC<MarkdownParserProps> = (props) => {
 C:/code/Personal/book-cook/src/components/MarkdownParser/MarkdownParser.types.ts:6:export type MarkdownParserProps = {
 ```
+
 Result: PASS -- all hits are within the MarkdownParser component's own files. No active page or content-rendering component imports MarkdownParser.
 
 **Edge/failure case test**
@@ -266,9 +287,11 @@ Scenario: Confirm RecipeContent.tsx (kept for compile safety) also uses TextEdit
 Command: Read `src/components/RecipePage/RecipeContent/RecipeContent.tsx`
 Expected: TextEditor imported and used; no MarkdownParser import
 Actual output:
+
 ```
 Line 3: import { TextEditor } from "../../TextEditor";
 ```
+
 No MarkdownParser import. RecipeContent (even as dead code) uses TextEditor.
 Result: PASS
 
@@ -282,6 +305,7 @@ Result: PASS
 Command: Read `src/components/RecipeView/RecipeHeader/RecipeHeader.tsx` lines 42-51
 Expected: A `<div>` with `style` that sets `backgroundImage` conditionally on `recipe.imageURL`
 Actual output:
+
 ```
 Line 42: <div
 Line 43:   className={styles.cover}
@@ -294,6 +318,7 @@ Line 49:   role="img"
 Line 50:   aria-label={recipe.title}
 Line 51: />
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -301,6 +326,7 @@ Scenario: When `imageURL` is absent, the cover div gets `style={undefined}` (no 
 Command: Read same lines 44-48 (ternary on `recipe.imageURL`)
 Expected: Falsy imageURL produces `undefined` style (no background-image attribute set)
 Actual output:
+
 ```
 style={
   recipe.imageURL
@@ -308,6 +334,7 @@ style={
     : undefined
 }
 ```
+
 When `recipe.imageURL` is falsy, `style` is `undefined` -- the browser applies no inline background-image.
 Result: PASS
 
@@ -321,6 +348,7 @@ Result: PASS
 Command: Read `src/components/RecipeSaveBar/RecipeSaveBar.tsx` lines 10-16
 Expected: Early return `null` when `!isDirty && status === "idle"`
 Actual output:
+
 ```
 Line 11: const saveState = useRecipeViewSaveState();
 Line 12: const isDirty = saveState?.isDirty ?? false;
@@ -329,6 +357,7 @@ Line 14: if (!isDirty && status === "idle") {
 Line 15:   return null;
 Line 16: }
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -336,6 +365,7 @@ Scenario: Confirm RecipeSaveBar is rendered inside RecipePage within the RecipeV
 Command: Read `src/components/RecipePage/RecipePage.tsx`
 Expected: `<RecipeSaveBar>` rendered as sibling to `<RecipeView>` inside `<RecipeViewSaveStateProvider>`
 Actual output:
+
 ```
 Line 15: <RecipeViewSaveStateProvider
 Line 16:   initialTitle={recipe.title}
@@ -352,6 +382,7 @@ Line 26:     onCancel={cancelEditing}
 Line 27:   />
 Line 28: </RecipeViewSaveStateProvider>
 ```
+
 RecipeSaveBar is inside the provider context. `isDirty` from the context drives the render gate.
 Result: PASS
 
@@ -365,9 +396,11 @@ Result: PASS
 Command: `ls C:/code/Personal/book-cook/src/components/TagPicker/ 2>&1`
 Expected: "No such file or directory" -- directory deleted
 Actual output:
+
 ```
 ls: cannot access 'C:/code/Personal/book-cook/src/components/TagPicker/': No such file or directory
 ```
+
 Exit code: 2 (directory does not exist)
 Result: PASS
 
@@ -376,9 +409,11 @@ Scenario: Confirm no file in src/ imports TagPicker
 Command: `grep -rn "TagPicker" C:/code/Personal/book-cook/src/ 2>&1; echo "EXIT:$?"`
 Expected: No output (exit code 1 = no matches)
 Actual output:
+
 ```
 EXIT:1
 ```
+
 Zero matches. No active code references TagPicker.
 Result: PASS
 
@@ -392,10 +427,12 @@ Result: PASS
 Command: `grep -n "toast" C:/code/Personal/book-cook/src/components/NewRecipeDialog/NewRecipeDialog.tsx`
 Expected: `import { toast } from "sonner"` and a `toast.error(...)` call in the error handler
 Actual output:
+
 ```
 3:import { toast } from "sonner";
 37:          toast.error("Failed to create recipe. Please try again.");
 ```
+
 Result: PASS
 
 **Edge/failure case test**
@@ -403,10 +440,12 @@ Scenario: Confirm no `alert()` calls remain in NewRecipeDialog.tsx
 Command: `grep -n "alert" C:/code/Personal/book-cook/src/components/NewRecipeDialog/NewRecipeDialog.tsx; echo "EXIT:$?"`
 Expected: No output (exit code 1 = no matches)
 Actual output:
+
 ```
 ---ALERT---
 EXIT:1
 ```
+
 Zero matches. No `alert()` calls remain.
 Result: PASS
 
@@ -421,14 +460,17 @@ Result: PASS
 Command: `document.documentElement.className` evaluated in Playwright on `http://localhost:3020/`
 Expected: Class matching `theme_light__*` CSS module hash
 Actual output:
+
 ```
 "theme_light__c4gn5"
 ```
+
 Result: PASS
 
 ### Landing page renders without Fluent crash
 
 Screenshot: `revision3-homepage-3020.png`
+
 - AppShell sidebar renders with nav items (New Recipe, Recipes, Collections, Explore, Account)
 - LandingPage card renders ("Book Cook", subtitle, "Continue with Google" button)
 - No `isMounted` flash, no Fluent error overlay
@@ -437,6 +479,7 @@ Screenshot: `revision3-homepage-3020.png`
 ### Recipes page renders without crash
 
 Screenshot: `revision3-recipes-3020.png`
+
 - Unauthorized fallback renders: Phosphor LockSimple icon, "Access Restricted" heading, v2 primary "Sign In" button
 - No crash, no Fluent error overlay
 - Console: 12 errors, all `next-auth` session 500s and `/api/recipes` 500s (expected without DB). Zero application errors.

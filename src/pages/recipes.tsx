@@ -4,9 +4,7 @@ import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import styles from "./recipes.module.css";
-import {
-  Unauthorized,
-} from "../components";
+import { Unauthorized } from "../components";
 import {
   Dropdown,
   DropdownTrigger,
@@ -37,19 +35,22 @@ export default function Recipes() {
 
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const {
-    data,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage],
-    queryFn: () => fetchRecipesPaginated({
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      "recipes",
       searchBoxValue,
-      orderBy: sortOption,
+      sortOption,
       selectedTags,
-      offset,
-      limit: PAGE_SIZE,
-    }),
+      currentPage,
+    ],
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue,
+        orderBy: sortOption,
+        selectedTags,
+        offset,
+        limit: PAGE_SIZE,
+      }),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     refetchOnMount: true,
@@ -58,7 +59,9 @@ export default function Recipes() {
   const recipes = data?.recipes ?? [];
   const totalCount = data?.totalCount ?? 0;
 
-  const availableTags = Array.from(new Set(recipes.flatMap((r) => r.tags ?? [])));
+  const availableTags = Array.from(
+    new Set(recipes.flatMap((r) => r.tags ?? [])),
+  );
 
   if (status === "loading") {
     return null;
@@ -86,10 +89,16 @@ export default function Recipes() {
               <DropdownCaret />
             </DropdownTrigger>
             <DropdownContent>
-              <DropdownItem value="dateNewest">Sort by date (newest)</DropdownItem>
-              <DropdownItem value="dateOldest">Sort by date (oldest)</DropdownItem>
+              <DropdownItem value="dateNewest">
+                Sort by date (newest)
+              </DropdownItem>
+              <DropdownItem value="dateOldest">
+                Sort by date (oldest)
+              </DropdownItem>
               <DropdownItem value="ascTitle">Sort by title (asc)</DropdownItem>
-              <DropdownItem value="descTitle">Sort by title (desc)</DropdownItem>
+              <DropdownItem value="descTitle">
+                Sort by title (desc)
+              </DropdownItem>
             </DropdownContent>
           </Dropdown>
           <MultiSelectMenu

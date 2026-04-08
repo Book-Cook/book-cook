@@ -9,7 +9,7 @@ const meta: Meta<typeof HomePage> = {
   title: "Pages/HomePage",
   component: HomePage,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -23,12 +23,22 @@ const { create } = createStorySet<typeof HomePage>();
 // Clean story definitions
 export const Default: Story = create("Default", [homepageVariants.default()]);
 
-export const EmptyState: Story = create("Empty State", [homepageVariants.empty()]);
+export const EmptyState: Story = create("Empty State", [
+  homepageVariants.empty(),
+]);
 
-export const LoadingState: Story = create("Loading State", [homepageVariants.loading()]);
+export const LoadingState: Story = create("Loading State", [
+  homepageVariants.loading(),
+]);
 
-export const ErrorState: Story = create("Error State", [homepageVariants.error()]);
+export const ErrorState: Story = create("Error State", [
+  homepageVariants.error(),
+]);
 
-export const OnlyRecentlyViewed: Story = create("Only Recently Viewed", [homepageVariants.onlyRecentlyViewed()]);
+export const OnlyRecentlyViewed: Story = create("Only Recently Viewed", [
+  homepageVariants.onlyRecentlyViewed(),
+]);
 
-export const OnlyCollections: Story = create("Only Collections", [homepageVariants.onlyCollections()]);
+export const OnlyCollections: Story = create("Only Collections", [
+  homepageVariants.onlyCollections(),
+]);

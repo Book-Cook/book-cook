@@ -17,7 +17,7 @@ export function useSettingsSection(sectionId: string, keywords: string[]) {
 
     // Join all keywords and check if they include the search term
     return keywords.some((keyword) =>
-      keyword.toLowerCase().includes(searchTerm)
+      keyword.toLowerCase().includes(searchTerm),
     );
   }, [searchTerm, keywords]);
 

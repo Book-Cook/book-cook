@@ -16,7 +16,7 @@ if (
   ].filter(Boolean);
 
   throw new Error(
-    `Missing MongoDB environment variables: ${missingVars.join(", ")}. Please add them to .env.local`
+    `Missing MongoDB environment variables: ${missingVars.join(", ")}. Please add them to .env.local`,
   );
 }
 
@@ -74,7 +74,6 @@ async function createMongoConnection(): Promise<MongoClient> {
 
   // If custom URI is provided, use it directly (best for mobile hotspots)
   if (customUri) {
-
     // Choose appropriate options based on URI type
     const options = customUri.includes("mongodb+srv://")
       ? srvOptions
@@ -87,7 +86,7 @@ async function createMongoConnection(): Promise<MongoClient> {
     } catch (error) {
       console.error("Custom MongoDB URI failed:", error);
       throw new Error(
-        `Custom MongoDB connection failed: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Custom MongoDB connection failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -100,7 +99,7 @@ async function createMongoConnection(): Promise<MongoClient> {
   } catch (error) {
     console.warn(
       "Primary MongoDB SRV connection failed, trying direct connection...",
-      error
+      error,
     );
 
     try {
@@ -114,7 +113,7 @@ async function createMongoConnection(): Promise<MongoClient> {
         fallback: fallbackError,
       });
       throw new Error(
-        `MongoDB connection failed. For mobile hotspots, try setting MONGODB_URI in .env with your Atlas connection string: ${fallbackError instanceof Error ? fallbackError.message : "Unknown error"}`
+        `MongoDB connection failed. For mobile hotspots, try setting MONGODB_URI in .env with your Atlas connection string: ${fallbackError instanceof Error ? fallbackError.message : "Unknown error"}`,
       );
     }
   }

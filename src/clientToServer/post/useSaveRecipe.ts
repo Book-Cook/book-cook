@@ -18,33 +18,32 @@ export function useSaveRecipe() {
       }
 
       try {
-        return await fetchJson<SaveRecipeResponse>(
-          "/api/user/saved-recipes",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ recipeId }),
-          }
-        );
+        return await fetchJson<SaveRecipeResponse>("/api/user/saved-recipes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recipeId }),
+        });
       } catch (error) {
-        let errorInfo = "";
-        if (error instanceof Error) {
-          errorInfo = error.message;
-        }
-        throw new Error(`Failed to save recipe: ${errorInfo}`);
+        throw new Error(
+          `Failed to save recipe: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onMutate: async (recipeId: string) => {
       await queryClient.cancelQueries({ queryKey: ["savedRecipes"] });
       await queryClient.cancelQueries({ queryKey: ["publicRecipes"] });
-      
+
       const previousSavedRecipes = queryClient.getQueryData(["savedRecipes"]);
 
       queryClient.setQueryData(["savedRecipes"], (old: unknown) => {
-        const recipes = Array.isArray(old) ? (old as Array<{ _id: string }>) : [];
-        const isAlreadySaved = recipes.some((recipe) => recipe._id === recipeId);
-        
-        return isAlreadySaved 
+        const recipes = Array.isArray(old)
+          ? (old as Array<{ _id: string }>)
+          : [];
+        const isAlreadySaved = recipes.some(
+          (recipe) => recipe._id === recipeId,
+        );
+
+        return isAlreadySaved
           ? recipes.filter((recipe) => recipe._id !== recipeId)
           : [...recipes, { _id: recipeId }];
       });
@@ -52,15 +51,31 @@ export function useSaveRecipe() {
       return { previousSavedRecipes };
     },
     onError: (err, recipeId, context) => {
-      if (context && typeof context === 'object' && 'previousSavedRecipes' in context) {
-        queryClient.setQueryData(["savedRecipes"], context.previousSavedRecipes);
+      if (
+        context &&
+        typeof context === "object" &&
+        "previousSavedRecipes" in context
+      ) {
+        queryClient.setQueryData(
+          ["savedRecipes"],
+          context.previousSavedRecipes,
+        );
       }
     },
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["savedRecipes"], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["publicRecipes"], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["collections"], refetchType: "all" }),
+        queryClient.invalidateQueries({
+          queryKey: ["savedRecipes"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["publicRecipes"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["collections"],
+          refetchType: "all",
+        }),
       ]);
     },
   });

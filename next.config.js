@@ -76,6 +76,8 @@ const nextConfig = {
       { protocol: "https", hostname: "beyondfrosting.com" },
       { protocol: "https", hostname: "therecipecritic.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      // Cloudflare R2 public bucket (recipe cover photos)
+      { protocol: "https", hostname: "pub-*.r2.dev" },
     ],
   },
 
@@ -115,7 +117,10 @@ const nextConfig = {
     // the app only uses HEADING, QUOTE, list and text-format transformers.
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@lexical/code": path.resolve(__dirname, "src/stubs/lexical-code-stub.js"),
+      "@lexical/code": path.resolve(
+        __dirname,
+        "src/stubs/lexical-code-stub.js",
+      ),
     };
 
     if (!dev) {
@@ -142,7 +147,7 @@ const nextConfig = {
             const filteredSource = filterWebpackStats(webpackStats);
             return JSON.stringify(filteredSource);
           },
-        })
+        }),
       );
     }
     return config;

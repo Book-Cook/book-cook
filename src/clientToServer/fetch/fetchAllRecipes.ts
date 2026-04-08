@@ -25,7 +25,7 @@ export interface FetchRecipesParams {
 export const fetchAllRecipes = async (
   searchBoxValue: string,
   orderBy: string,
-  selectedTags: string[] = []
+  selectedTags: string[] = [],
 ): Promise<Recipe[]> => {
   const response = await fetchRecipesPaginated({
     searchBoxValue,
@@ -46,7 +46,7 @@ export const fetchRecipesPaginated = async ({
     sortOptions[orderBy as keyof typeof sortOptions] || sortOptions.dateNewest;
 
   let url = `/api/recipes?search=${encodeURIComponent(searchBoxValue)}&sortProperty=${encodeURIComponent(
-    sortConfig.property
+    sortConfig.property,
   )}&sortDirection=${encodeURIComponent(sortConfig.direction)}`;
 
   if (selectedTags.length > 0) {

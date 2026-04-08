@@ -33,7 +33,7 @@ type ResponseData =
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData>,
 ) {
   if (req.method !== "GET" && req.method !== "PUT" && req.method !== "DELETE") {
     res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
@@ -140,7 +140,7 @@ export default async function handler(
         await db.collection("users").updateOne(
           { email: session.user.email },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          { $pull: { recentlyViewedRecipes: new ObjectId(id) as any } }
+          { $pull: { recentlyViewedRecipes: new ObjectId(id) as any } },
         );
 
         // Then, push the recipe id, keeping only the last 10 items.
@@ -154,7 +154,7 @@ export default async function handler(
               },
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any,
-          }
+          },
         );
       }
 
@@ -179,16 +179,14 @@ export default async function handler(
 
       const { title, data, tags, imageURL, emoji, isPublic } = parsed.data;
       const setFields: UpdateFields = {};
-      const addToSetFields: UpdateFields = {};
 
-      // Fields that use $set
       if (title) {
         setFields.title = title;
       }
       if (data) {
         setFields.data = data;
       }
-      if (imageURL) {
+      if (imageURL !== undefined) {
         setFields.imageURL = imageURL;
       }
       if (emoji) {
@@ -201,18 +199,14 @@ export default async function handler(
         setFields.tags = tags;
       }
 
-      const updateOperation: { $set?: UpdateFields; $addToSet?: UpdateFields } =
-        {};
+      const updateOperation: { $set?: UpdateFields } = {};
       if (Object.keys(setFields).length > 0) {
         updateOperation.$set = setFields;
-      }
-      if (Object.keys(addToSetFields).length > 0) {
-        updateOperation.$addToSet = addToSetFields;
       }
 
       const result = await recipesCollection.updateOne(
         { _id: new ObjectId(id) },
-        updateOperation
+        updateOperation,
       );
 
       if (result.matchedCount === 0) {
@@ -225,8 +219,7 @@ export default async function handler(
       res.status(500).json({ message: "Internal Server Error" });
     }
   } else {
-    // if (req.method === "DELETE")
-    // Delete a recipe by ID
+    // DELETE a recipe by ID
     try {
       const recipe = await canUpdateOrDelete(id);
       if (recipe === undefined) {

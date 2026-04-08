@@ -6,8 +6,8 @@
 
 ## Revision Check
 
-| Prior issue | Status | Notes |
-|-------------|--------|-------|
+| Prior issue                                               | Status   | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| --------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Issue 1: AC6 LoadingScreen test makes a vacuous assertion | RESOLVED | Lines 720-732 replace the `toBeDefined()` check with a two-phase approach: (1) `await expect(spinner).toBeAttached({ timeout: 1500 })` asserted against `[role="status"][aria-label="Loading"]` while the 600ms session response is still in-flight, and (2) after `navPromise` resolves, `await expect(spinner).not.toBeAttached()` plus `expect(bodyText?.trim().length).toBeGreaterThan(0)`. Removing `LoadingScreen` from the `status === "loading"` branch in `index.tsx` would cause the `toBeAttached` assertion to fail. The assertion is no longer vacuous. |
 
 ---

@@ -5,8 +5,15 @@ import styles from "./HourlyDayView.module.css";
 import { TimeSlot } from "../TimeSlot/TimeSlot";
 import { formatDateString } from "../utils/formatDateString";
 
-import type { MealItem, MealPlanWithRecipes } from "../../../clientToServer/types";
-import { DEFAULT_TIME_CONFIG, generateTimeSlots, mealTypeToTime } from "../../../utils/timeSlots";
+import type {
+  MealItem,
+  MealPlanWithRecipes,
+} from "../../../clientToServer/types";
+import {
+  DEFAULT_TIME_CONFIG,
+  generateTimeSlots,
+  mealTypeToTime,
+} from "../../../utils/timeSlots";
 import { Text } from "../../Text";
 
 interface HourlyDayViewProps {
@@ -15,7 +22,7 @@ interface HourlyDayViewProps {
   onMealRemove: (
     date: string,
     time: string,
-    mealIndex: number
+    mealIndex: number,
   ) => Promise<void>;
 }
 
@@ -115,7 +122,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
               <div
                 className={clsx(
                   styles.timeLabel,
-                  isPast && styles.pastTimeLabel
+                  isPast && styles.pastTimeLabel,
                 )}
               >
                 {time}
@@ -123,7 +130,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
               <div
                 className={clsx(
                   styles.timeSlotContainer,
-                  isPast && styles.pastTime
+                  isPast && styles.pastTime,
                 )}
               >
                 <TimeSlot

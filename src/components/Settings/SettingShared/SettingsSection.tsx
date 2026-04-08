@@ -24,7 +24,10 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
       if (index === array.length - 1) {
         return [child];
       }
-      return [child, <hr key={`divider-${index}`} className={styles.divider} />];
+      return [
+        child,
+        <hr key={`divider-${index}`} className={styles.divider} />,
+      ];
     });
 
   return (

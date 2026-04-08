@@ -1,4 +1,4 @@
-import type { NextRequest} from "next/server";
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { measurementConversionPrompt } from "../../../constants";
@@ -10,7 +10,7 @@ export default async function handler(req: NextRequest) {
   if (req.method !== "POST") {
     return NextResponse.json(
       { message: "Method Not Allowed" },
-      { status: 405 }
+      { status: 405 },
     );
   }
 
@@ -20,7 +20,7 @@ export default async function handler(req: NextRequest) {
     if (!htmlContent || typeof htmlContent !== "string") {
       return NextResponse.json(
         { message: "Missing or invalid htmlContent in request body" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -41,7 +41,7 @@ export default async function handler(req: NextRequest) {
 
     return NextResponse.json(
       { message: `Error processing recipe: ${displayMessage}` },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

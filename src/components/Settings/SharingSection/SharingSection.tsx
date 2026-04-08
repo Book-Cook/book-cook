@@ -47,7 +47,9 @@ export const SharingSection: React.FC = () => {
     !searchTerm || shareUserKeywords.some((k) => k.includes(searchTerm));
 
   const handleShareRecipeBook = async () => {
-    if (!shareEmail) {return;}
+    if (!shareEmail) {
+      return;
+    }
 
     try {
       await shareRecipeMutation.mutateAsync(shareEmail);
@@ -57,7 +59,7 @@ export const SharingSection: React.FC = () => {
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to share your book cook"
+          : "Failed to share your book cook",
       );
     }
   };
@@ -72,7 +74,7 @@ export const SharingSection: React.FC = () => {
       toast.success(`Access for ${email} has been removed.`);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to remove access"
+        error instanceof Error ? error.message : "Failed to remove access",
       );
     }
   };
@@ -125,10 +127,7 @@ export const SharingSection: React.FC = () => {
               sharedUsers.map((email) => (
                 <div key={email} className={styles.userItem}>
                   <div className={styles.userInfo}>
-                    <Avatar
-                      name={email.split("@")[0]}
-                      size="sm"
-                    />
+                    <Avatar name={email.split("@")[0]} size="sm" />
                     <Text>{email}</Text>
                   </div>
                   <Button

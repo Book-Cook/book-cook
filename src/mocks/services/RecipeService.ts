@@ -77,13 +77,13 @@ export class RecipeService {
   static getFilteredRecipes(
     store: DataStore,
     user: User,
-    params: QueryParams
+    params: QueryParams,
   ): Recipe[] {
     let recipes = store.getRecipes();
 
     // Filter by access permissions
     recipes = recipes.filter((recipe) =>
-      this.canUserAccessRecipe(store, recipe, user)
+      this.canUserAccessRecipe(store, recipe, user),
     );
 
     // Apply search filter
@@ -100,7 +100,7 @@ export class RecipeService {
     return this.sortRecipes(
       recipes,
       params.sortProperty!,
-      params.sortDirection!
+      params.sortDirection!,
     );
   }
 
@@ -110,7 +110,7 @@ export class RecipeService {
   static createRecipe(
     store: DataStore,
     userId: string,
-    data: Partial<Recipe>
+    data: Partial<Recipe>,
   ): Recipe {
     if (!data.title?.trim()) {
       throw new this.ValidationError("Title required.");
@@ -153,7 +153,7 @@ export class RecipeService {
     store: DataStore,
     recipeId: string,
     user: User,
-    updates: Partial<Recipe>
+    updates: Partial<Recipe>,
   ): Recipe {
     const recipe = store.getRecipeById(recipeId);
 
@@ -205,7 +205,7 @@ export class RecipeService {
       .filter((recipe) => this.canUserAccessRecipe(store, recipe, user));
 
     const tags = Array.from(
-      new Set(recipes.flatMap((recipe) => recipe.tags))
+      new Set(recipes.flatMap((recipe) => recipe.tags)),
     ).sort();
 
     return tags;
@@ -217,7 +217,7 @@ export class RecipeService {
   static addToRecentlyViewed(
     store: DataStore,
     userId: string,
-    recipeId: string
+    recipeId: string,
   ): void {
     store.addToRecentlyViewed(userId, recipeId);
   }
@@ -226,7 +226,7 @@ export class RecipeService {
   private static canUserAccessRecipe(
     store: DataStore,
     recipe: Recipe,
-    user: User
+    user: User,
   ): boolean {
     // Public recipes are accessible to everyone
     if (recipe.isPublic) {
@@ -246,7 +246,7 @@ export class RecipeService {
   private static canUserModifyRecipe(
     store: DataStore,
     recipe: Recipe,
-    user: User
+    user: User,
   ): boolean {
     // Owner can always modify
     if (recipe.owner === user.id) {
@@ -268,20 +268,20 @@ export class RecipeService {
       (recipe) =>
         recipe.title.toLowerCase().includes(searchTerm) ||
         recipe.data.toLowerCase().includes(searchTerm) ||
-        recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+        recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm)),
     );
   }
 
   private static filterByTags(recipes: Recipe[], tags: string[]): Recipe[] {
     return recipes.filter((recipe) =>
-      tags.some((tag) => recipe.tags.includes(tag))
+      tags.some((tag) => recipe.tags.includes(tag)),
     );
   }
 
   private static sortRecipes(
     recipes: Recipe[],
     sortProperty: string,
-    sortDirection: string
+    sortDirection: string,
   ): Recipe[] {
     return [...recipes].sort((a, b) => {
       let aValue: string | Date;

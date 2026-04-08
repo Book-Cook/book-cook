@@ -8,20 +8,20 @@ import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ 
-      message: `Method ${req.method} not allowed` 
+    return res.status(405).json({
+      message: `Method ${req.method} not allowed`,
     });
   }
 
   const session: Session | null = await getServerSession(req, res, authOptions);
 
   if (!session?.user?.id) {
-    return res.status(401).json({ 
-      message: "Unauthorized. Please log in." 
+    return res.status(401).json({
+      message: "Unauthorized. Please log in.",
     });
   }
 
@@ -29,8 +29,8 @@ export default async function handler(
     const { updates } = req.body as BatchUpdateMealPlanPayload;
 
     if (!updates || !Array.isArray(updates)) {
-      return res.status(400).json({ 
-        message: "Updates array is required" 
+      return res.status(400).json({
+        message: "Updates array is required",
       });
     }
 
@@ -76,7 +76,7 @@ export default async function handler(
       await db.collection("mealPlans").bulkWrite(bulkOps);
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Meal plans updated successfully",
       updatedCount: bulkOps.length,
     });

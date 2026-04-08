@@ -29,21 +29,28 @@ export function useToggleRecipeVisibility() {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ isPublic }),
-          }
+          },
         );
       } catch (error) {
-        let errorInfo = "";
-        if (error instanceof Error) {
-          errorInfo = error.message;
-        }
-        throw new Error(`Failed to update recipe visibility: ${errorInfo}`);
+        throw new Error(
+          `Failed to update recipe visibility: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onSuccess: async (data, { recipeId }) => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["recipe", recipeId], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["publicRecipes"], refetchType: "all" }),
+        queryClient.invalidateQueries({
+          queryKey: ["recipes"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["recipe", recipeId],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["publicRecipes"],
+          refetchType: "all",
+        }),
       ]);
     },
   });

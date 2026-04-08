@@ -6,7 +6,7 @@
  */
 
 // Base date for all mocks: January 15, 2024
-export const MOCK_BASE_DATE = '2024-01-15T12:00:00.000Z';
+export const MOCK_BASE_DATE = "2024-01-15T12:00:00.000Z";
 
 /**
  * Get a date relative to the mock base date
@@ -16,7 +16,7 @@ export const MOCK_BASE_DATE = '2024-01-15T12:00:00.000Z';
 export const getMockDate = (daysOffset: number = 0): string => {
   const date = new Date(MOCK_BASE_DATE);
   date.setDate(date.getDate() + daysOffset);
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 };
 
 /**
@@ -25,7 +25,10 @@ export const getMockDate = (daysOffset: number = 0): string => {
  * @param hours - Optional hours to add
  * @returns ISO timestamp string
  */
-export const getMockTimestamp = (daysOffset: number = 0, hours: number = 0): string => {
+export const getMockTimestamp = (
+  daysOffset: number = 0,
+  hours: number = 0,
+): string => {
   const date = new Date(MOCK_BASE_DATE);
   date.setDate(date.getDate() + daysOffset);
   date.setHours(date.getHours() + hours);
@@ -36,7 +39,7 @@ export const getMockTimestamp = (daysOffset: number = 0, hours: number = 0): str
  * Get a mock ID with a consistent counter instead of Date.now()
  */
 let mockIdCounter = 1000;
-export const getMockId = (prefix: string = 'mock'): string => {
+export const getMockId = (prefix: string = "mock"): string => {
   return `${prefix}_${mockIdCounter++}`;
 };
 

@@ -2,7 +2,9 @@
   color: var(--colorNeutralForeground1);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    text-decoration-color 0.15s ease;
 }
 
 .muted {

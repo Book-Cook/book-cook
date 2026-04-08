@@ -7,7 +7,13 @@ import { Sidebar } from "./Sidebar";
 import { SidebarContent } from "./SidebarContent";
 import { SidebarItem } from "./SidebarItem";
 import { Avatar } from "../Avatar";
-import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "../Menu";
+import {
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
+} from "../Menu";
 
 type AppSidebarProps = {
   forceExpanded?: boolean;
@@ -16,7 +22,12 @@ type AppSidebarProps = {
   onMenuOpenChange?: (open: boolean) => void;
 };
 
-export const AppSidebar = ({ forceExpanded, onNewRecipe, onSearch, onMenuOpenChange }: AppSidebarProps): React.ReactElement => {
+export const AppSidebar = ({
+  forceExpanded,
+  onNewRecipe,
+  onSearch,
+  onMenuOpenChange,
+}: AppSidebarProps): React.ReactElement => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -25,7 +36,9 @@ export const AppSidebar = ({ forceExpanded, onNewRecipe, onSearch, onMenuOpenCha
   const profileImage = session?.user?.image ?? undefined;
 
   return (
-    <Sidebar {...(forceExpanded ? { collapsed: false, showToggle: false } : {})}>
+    <Sidebar
+      {...(forceExpanded ? { collapsed: false, showToggle: false } : {})}
+    >
       <SidebarContent
         onNewRecipe={onNewRecipe}
         onSearch={onSearch}
@@ -35,7 +48,9 @@ export const AppSidebar = ({ forceExpanded, onNewRecipe, onSearch, onMenuOpenCha
         <Menu onOpenChange={onMenuOpenChange}>
           <MenuTrigger asChild>
             <SidebarItem
-              icon={<Avatar name={profileName} imageURL={profileImage} size="sm" />}
+              icon={
+                <Avatar name={profileName} imageURL={profileImage} size="sm" />
+              }
               label={profileName}
             />
           </MenuTrigger>
@@ -50,7 +65,12 @@ export const AppSidebar = ({ forceExpanded, onNewRecipe, onSearch, onMenuOpenCha
               </div>
             </div>
             <MenuSeparator />
-            <MenuItem startIcon={<GearSixIcon size={16} />} onSelect={() => router.push("/settings")}>Settings</MenuItem>
+            <MenuItem
+              startIcon={<GearSixIcon size={16} />}
+              onSelect={() => router.push("/settings")}
+            >
+              Settings
+            </MenuItem>
             <MenuItem
               startIcon={<SignOutIcon size={16} />}
               onSelect={() => signOut({ callbackUrl: "/" })}

@@ -12,7 +12,10 @@ export type WeekDayDropZoneProps = {
   className: string;
 };
 
-export const WeekDayDropZone: React.FC<WeekDayDropZoneProps> = ({ dateStr, className }) => {
+export const WeekDayDropZone: React.FC<WeekDayDropZoneProps> = ({
+  dateStr,
+  className,
+}) => {
   const { isOver, setNodeRef } = useDroppable({
     id: `week-day-${dateStr}`,
     data: {
@@ -24,10 +27,12 @@ export const WeekDayDropZone: React.FC<WeekDayDropZoneProps> = ({ dateStr, class
   return (
     <div
       ref={setNodeRef}
-      className={clsx(className, isOver && 'dropping')}
+      className={clsx(className, isOver && "dropping")}
       style={{
-        borderColor: isOver ? 'var(--brand-Primary)' : undefined,
-        backgroundColor: isOver ? 'color-mix(in srgb, var(--brand-Primary) 10%, transparent)' : undefined,
+        borderColor: isOver ? "var(--brand-Primary)" : undefined,
+        backgroundColor: isOver
+          ? "color-mix(in srgb, var(--brand-Primary) 10%, transparent)"
+          : undefined,
       }}
     >
       <Text>Drop recipe here</Text>

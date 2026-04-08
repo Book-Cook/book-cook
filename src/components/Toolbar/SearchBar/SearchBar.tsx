@@ -10,7 +10,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const handleChange = (
     _event: React.ChangeEvent<HTMLInputElement>,
-    value: string
+    value: string,
   ) => {
     onSearchBoxValueChange(value);
     if (onSearch) {

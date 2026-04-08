@@ -5,9 +5,11 @@
 }
 
 .cover {
-  width: 100%;
-  height: clamp(160px, 26vw, 280px);
-  border-radius: 0;
+  /* Full-bleed: break out of AppShell padding */
+  margin-inline: calc(-1 * var(--page-x-padding, 40px));
+  margin-top: calc(-1 * var(--page-y-padding, 32px));
+  width: calc(100% + 2 * var(--page-x-padding, 40px));
+  height: clamp(280px, 38vh, 440px);
   background-size: cover;
   background-position: center;
   background-color: var(--ui-ControlHover);
@@ -26,6 +28,15 @@
   padding-right: var(--header-right-padding);
   display: flex;
   flex-direction: column;
+}
+
+.mainHasCover {
+  padding-top: 20px;
+}
+
+.addCoverBtn {
+  align-self: flex-start;
+  margin-left: -10px; /* compensate for button's internal padding so text aligns with content */
 }
 
 .title {
@@ -71,7 +82,6 @@
   pointer-events: none;
 }
 
-
 .editorAligned {
   --header-left-padding: calc(
     var(--header-x-padding) + var(--editor-gutter, 0px)
@@ -87,7 +97,7 @@
   }
 
   .cover {
-    height: 180px;
+    height: 220px;
   }
 
   .metaGrid {

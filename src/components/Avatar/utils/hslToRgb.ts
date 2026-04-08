@@ -28,5 +28,9 @@ export const hslToRgb = (h: number, s: number, l: number) => {
   const r = hue2rgb(p, q, h + 1 / 3);
   const g = hue2rgb(p, q, h);
   const b = hue2rgb(p, q, h - 1 / 3);
-  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  return {
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255),
+  };
 };

@@ -1,22 +1,23 @@
 # Phase 1: UI Code Fixes
 
 ## Verification Plan
+
 Run `yarn next build` in the project root. The build must complete with exit code 0 and print "Compiled successfully". All pages must appear in the route table with no TypeScript errors.
 
 ## Implementation
 
-| File | Change | Fix |
-|------|--------|-----|
-| `src/components/Theme/theme.module.css` | Added `--ui-PageBackground` and `--ui-Divider` tokens to both `.light` and `.dark` blocks | Fix 5 -- missing CSS tokens |
-| `src/components/FallbackScreens/FallbackScreens.module.css` | Created new shared CSS module with `.container`, `.icon`, `.title`, `.body` layout classes | Fix 6 -- shared layout for fallback screens |
-| `src/components/FallbackScreens/NoDataScreen.tsx` | Replaced unstyled stub with centered layout using `ArchiveIcon`, heading "No data available" (text preserved for AC14) | Fix 6 -- NoDataScreen stub |
-| `src/components/FallbackScreens/ErrorScreen.tsx` | Replaced unstyled stub with centered layout using `WarningCircleIcon`, heading "Error" (text preserved for AC15), accepts optional `message` prop | Fix 6 -- ErrorScreen stub |
-| `src/components/Sidebar/SidebarItem/SidebarItem.module.css` | Added `[aria-current="page"]` rule (brand-tinted background + brand text), hover override for active state, and `:disabled` rule (opacity 0.4, cursor not-allowed, pointer-events none) | Fix 1 -- sidebar active state + disabled items |
-| `src/components/Sidebar/SidebarContent.tsx` | Added `NavItem` type with optional `disabled` field; set `disabled: true` on `/collections` and `/explore` entries; pass `disabled` prop to `SidebarItem` and guard `onClick` with `item.disabled ? undefined : ...` | Fix 1 -- disabled nav items |
-| `src/pages/index.tsx` | Replaced `loading: () => null` in both dynamic imports with `loading: () => <LoadingScreen />`; replaced `if (status === "loading") return null` with `return <LoadingScreen />` | Fix 2 -- blank flash on index page |
-| `src/components/HomePage/HomePage.tsx` | Added `useState(false)` for `isNewRecipeOpen`; imported `NewRecipeDialog`; rendered `<NewRecipeDialog>` in JSX; changed "Create New Recipe" button `onClick` to `() => setIsNewRecipeOpen(true)` | Fix 3 -- HomePage "Create New Recipe" opens dialog |
-| `src/components/RecipePage/RecipePage.tsx` | Destructured `isLoading` and `error` from `useRecipe()`; replaced `if (!recipe) return null` with `if (isLoading) return <LoadingScreen />` and `if (error \|\| !recipe) return <ErrorScreen />` | Fix 4 -- RecipePage null/loading/error states |
-| `src/pages/settings.tsx` | Wrapped `<div>Settings</div>` in `<AppShell>` so the sidebar renders on the settings page | Fix 7 -- settings.tsx AppShell wrapper |
+| File                                                        | Change                                                                                                                                                                                                               | Fix                                                |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `src/components/Theme/theme.module.css`                     | Added `--ui-PageBackground` and `--ui-Divider` tokens to both `.light` and `.dark` blocks                                                                                                                            | Fix 5 -- missing CSS tokens                        |
+| `src/components/FallbackScreens/FallbackScreens.module.css` | Created new shared CSS module with `.container`, `.icon`, `.title`, `.body` layout classes                                                                                                                           | Fix 6 -- shared layout for fallback screens        |
+| `src/components/FallbackScreens/NoDataScreen.tsx`           | Replaced unstyled stub with centered layout using `ArchiveIcon`, heading "No data available" (text preserved for AC14)                                                                                               | Fix 6 -- NoDataScreen stub                         |
+| `src/components/FallbackScreens/ErrorScreen.tsx`            | Replaced unstyled stub with centered layout using `WarningCircleIcon`, heading "Error" (text preserved for AC15), accepts optional `message` prop                                                                    | Fix 6 -- ErrorScreen stub                          |
+| `src/components/Sidebar/SidebarItem/SidebarItem.module.css` | Added `[aria-current="page"]` rule (brand-tinted background + brand text), hover override for active state, and `:disabled` rule (opacity 0.4, cursor not-allowed, pointer-events none)                              | Fix 1 -- sidebar active state + disabled items     |
+| `src/components/Sidebar/SidebarContent.tsx`                 | Added `NavItem` type with optional `disabled` field; set `disabled: true` on `/collections` and `/explore` entries; pass `disabled` prop to `SidebarItem` and guard `onClick` with `item.disabled ? undefined : ...` | Fix 1 -- disabled nav items                        |
+| `src/pages/index.tsx`                                       | Replaced `loading: () => null` in both dynamic imports with `loading: () => <LoadingScreen />`; replaced `if (status === "loading") return null` with `return <LoadingScreen />`                                     | Fix 2 -- blank flash on index page                 |
+| `src/components/HomePage/HomePage.tsx`                      | Added `useState(false)` for `isNewRecipeOpen`; imported `NewRecipeDialog`; rendered `<NewRecipeDialog>` in JSX; changed "Create New Recipe" button `onClick` to `() => setIsNewRecipeOpen(true)`                     | Fix 3 -- HomePage "Create New Recipe" opens dialog |
+| `src/components/RecipePage/RecipePage.tsx`                  | Destructured `isLoading` and `error` from `useRecipe()`; replaced `if (!recipe) return null` with `if (isLoading) return <LoadingScreen />` and `if (error \|\| !recipe) return <ErrorScreen />`                     | Fix 4 -- RecipePage null/loading/error states      |
+| `src/pages/settings.tsx`                                    | Wrapped `<div>Settings</div>` in `<AppShell>` so the sidebar renders on the settings page                                                                                                                            | Fix 7 -- settings.tsx AppShell wrapper             |
 
 ## Build Result
 
@@ -56,6 +57,7 @@ Route (pages)                              Size     First Load JS
 ```
 
 Pre-existing warnings (not introduced by these changes):
+
 - `caniuse-lite is outdated` -- browserslist database notice, unrelated to this work
 - `webpack.FileSystemInfo` path casing warning -- Windows case-insensitive filesystem artifact in the node_modules path resolution, pre-existing
 
@@ -69,11 +71,11 @@ Run `npx playwright test --reporter=list` in the project root. The command start
 
 ## Implementation
 
-| File | Change | Purpose |
-|------|--------|---------|
-| `package.json` | Added `@playwright/test` to devDependencies; added `"test:e2e": "playwright test"` script | Install playwright and expose test command |
-| `playwright.config.ts` | Created at project root; configures `testDir: ./tests`, `baseURL: http://localhost:3004`, Chromium project, webServer to start `yarn next dev --port 3004` | Playwright runner configuration |
-| `tests/ui.spec.ts` | Created with 27 tests across 9 describe blocks covering landing page, home page, sidebar, recipes gallery, recipe detail, new recipe dialog, fallback screens, responsive layout, and performance | End-to-end coverage of all major page and feature scenarios |
+| File                   | Change                                                                                                                                                                                            | Purpose                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `package.json`         | Added `@playwright/test` to devDependencies; added `"test:e2e": "playwright test"` script                                                                                                         | Install playwright and expose test command                  |
+| `playwright.config.ts` | Created at project root; configures `testDir: ./tests`, `baseURL: http://localhost:3004`, Chromium project, webServer to start `yarn next dev --port 3004`                                        | Playwright runner configuration                             |
+| `tests/ui.spec.ts`     | Created with 27 tests across 9 describe blocks covering landing page, home page, sidebar, recipes gallery, recipe detail, new recipe dialog, fallback screens, responsive layout, and performance | End-to-end coverage of all major page and feature scenarios |
 
 ### Test scope decisions
 
@@ -129,11 +131,11 @@ Running 27 tests using 1 worker
 
 ### Issues addressed
 
-| Issue | Fix | Files changed |
-|-------|-----|---------------|
-| Issue 1: 22 acceptance criteria untested | Added 35 new tests covering AC3, AC4, AC6, AC11, AC12, AC13, AC14, AC15, AC21, AC22, AC24, AC25, AC26, AC27, AC28, AC31, AC32, AC33, AC34, AC35, AC36, AC38, AC39, AC41, AC42, AC43, AC44, AC46, AC47, AC49 (x4 pages). AC17-19 deferred with TODO comment in test file because no edit button is surfaced in RecipeView. | `tests/ui.spec.ts` |
-| Issue 2: Disabled nav items test asserts count >= 0 | Replaced count check with `toBeDisabled()` assertions on both Collections and Explore buttons located by text content. SidebarItem passes `disabled` via `...rest` spread to the `<button>` element, so `toBeDisabled()` checks the native disabled attribute correctly. | `tests/ui.spec.ts` |
-| Issue 3: reuseExistingServer: false and port mismatch | Changed `reuseExistingServer` to `true` and port to 3001 in both `baseURL` and `webServer` config. | `playwright.config.ts` |
+| Issue                                                 | Fix                                                                                                                                                                                                                                                                                                                       | Files changed          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| Issue 1: 22 acceptance criteria untested              | Added 35 new tests covering AC3, AC4, AC6, AC11, AC12, AC13, AC14, AC15, AC21, AC22, AC24, AC25, AC26, AC27, AC28, AC31, AC32, AC33, AC34, AC35, AC36, AC38, AC39, AC41, AC42, AC43, AC44, AC46, AC47, AC49 (x4 pages). AC17-19 deferred with TODO comment in test file because no edit button is surfaced in RecipeView. | `tests/ui.spec.ts`     |
+| Issue 2: Disabled nav items test asserts count >= 0   | Replaced count check with `toBeDisabled()` assertions on both Collections and Explore buttons located by text content. SidebarItem passes `disabled` via `...rest` spread to the `<button>` element, so `toBeDisabled()` checks the native disabled attribute correctly.                                                  | `tests/ui.spec.ts`     |
+| Issue 3: reuseExistingServer: false and port mismatch | Changed `reuseExistingServer` to `true` and port to 3001 in both `baseURL` and `webServer` config.                                                                                                                                                                                                                        | `playwright.config.ts` |
 
 ### Implementation notes
 
@@ -143,6 +145,7 @@ Running 27 tests using 1 worker
 - Settings AC22: fixed strict-mode violation where `[data-sidebar="true"]` resolved to 2 elements by appending `.first()`.
 
 ### Changes outside feedback scope
+
 None.
 
 ## Test Run (post-revision)

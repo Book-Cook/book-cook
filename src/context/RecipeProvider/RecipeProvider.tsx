@@ -32,7 +32,8 @@ const defaultContextValue: RecipeContextValue = {
 export const RecipeContext =
   React.createContext<RecipeContextValue>(defaultContextValue);
 
-export const useRecipe = (): RecipeContextValue => React.useContext(RecipeContext);
+export const useRecipe = (): RecipeContextValue =>
+  React.useContext(RecipeContext);
 
 export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -66,7 +67,7 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({
       handleAddTag,
       handleRemoveTag,
     }),
-    [editableData, updateEditableData, handleAddTag, handleRemoveTag]
+    [editableData, updateEditableData, handleAddTag, handleRemoveTag],
   );
 
   return (

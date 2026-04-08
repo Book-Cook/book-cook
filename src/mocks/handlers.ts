@@ -34,7 +34,7 @@ const getCurrentUser = (request: Request) => {
 const canAccessRecipe = (
   recipe: Recipe,
   userId: string,
-  userEmail: string
+  userEmail: string,
 ): boolean => {
   // Public recipes are accessible to everyone
   if (recipe.isPublic) {
@@ -72,27 +72,27 @@ export const recipeHandlers = [
     ) {
       return HttpResponse.json(
         { message: "Invalid sorting parameters." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     try {
       // Get recipes user can access
       let accessibleRecipes = recipesStore.filter((recipe) =>
-        canAccessRecipe(recipe, currentUser.id, currentUser.email)
+        canAccessRecipe(recipe, currentUser.id, currentUser.email),
       );
 
       // Apply search filter
       if (search) {
         accessibleRecipes = searchRecipes(search).filter((recipe) =>
-          accessibleRecipes.some((ar) => ar._id === recipe._id)
+          accessibleRecipes.some((ar) => ar._id === recipe._id),
         );
       }
 
       // Apply tag filters
       if (tags.length > 0) {
         accessibleRecipes = getRecipesByTags(tags).filter((recipe) =>
-          accessibleRecipes.some((ar) => ar._id === recipe._id)
+          accessibleRecipes.some((ar) => ar._id === recipe._id),
         );
       }
 
@@ -100,14 +100,14 @@ export const recipeHandlers = [
       const sortedRecipes = sortRecipes(
         accessibleRecipes,
         sortProperty,
-        sortDirection
+        sortDirection,
       );
 
       return HttpResponse.json(sortedRecipes);
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -129,7 +129,7 @@ export const recipeHandlers = [
       if (!body.title?.trim()) {
         return HttpResponse.json(
           { message: "Title required." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -150,12 +150,12 @@ export const recipeHandlers = [
           message: "Recipe uploaded successfully.",
           recipeId: newRecipe._id,
         },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -170,14 +170,14 @@ export const recipeHandlers = [
     if (!recipe) {
       return HttpResponse.json(
         { message: "Recipe not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!canAccessRecipe(recipe, currentUser.id, currentUser.email)) {
       return HttpResponse.json(
         { message: "Not authorized to view this recipe" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -213,7 +213,7 @@ export const recipeHandlers = [
     if (recipeIndex === -1) {
       return HttpResponse.json(
         { message: "Recipe not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -222,13 +222,13 @@ export const recipeHandlers = [
     // Check authorization (owner or shared user)
     const isOwner = recipe.owner === currentUser.id;
     const isSharedUser = sharedUsersStore[recipe.owner]?.includes(
-      currentUser.email
+      currentUser.email,
     );
 
     if (!isOwner && !isSharedUser) {
       return HttpResponse.json(
         { message: "Not authorized to update this recipe" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -250,7 +250,7 @@ export const recipeHandlers = [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -265,7 +265,7 @@ export const recipeHandlers = [
     if (recipeIndex === -1) {
       return HttpResponse.json(
         { message: "Recipe not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -274,13 +274,13 @@ export const recipeHandlers = [
     // Check authorization
     const isOwner = recipe.owner === currentUser.id;
     const isSharedUser = sharedUsersStore[recipe.owner]?.includes(
-      currentUser.email
+      currentUser.email,
     );
 
     if (!isOwner && !isSharedUser) {
       return HttpResponse.json(
         { message: "Not authorized to update this recipe" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -290,14 +290,14 @@ export const recipeHandlers = [
     // Remove from collections
     Object.keys(collectionsStore).forEach((userId) => {
       collectionsStore[userId] = collectionsStore[userId].filter(
-        (recipeId) => recipeId !== id
+        (recipeId) => recipeId !== id,
       );
     });
 
     // Remove from recently viewed
     Object.keys(recentlyViewedStore).forEach((userId) => {
       recentlyViewedStore[userId] = recentlyViewedStore[userId].filter(
-        (recipeId) => recipeId !== id
+        (recipeId) => recipeId !== id,
       );
     });
 
@@ -313,11 +313,11 @@ export const recipeHandlers = [
 
     // Get tags from recipes user can access
     const accessibleRecipes = recipesStore.filter((recipe) =>
-      canAccessRecipe(recipe, currentUser.id, currentUser.email)
+      canAccessRecipe(recipe, currentUser.id, currentUser.email),
     );
 
     const tags = Array.from(
-      new Set(accessibleRecipes.flatMap((recipe) => recipe.tags))
+      new Set(accessibleRecipes.flatMap((recipe) => recipe.tags)),
     ).sort();
 
     return HttpResponse.json(tags);
@@ -329,7 +329,7 @@ export const recipeHandlers = [
 
     const userCollections = collectionsStore[currentUser.id] || [];
     const collectionRecipes = recipesStore.filter((recipe) =>
-      userCollections.includes(recipe._id)
+      userCollections.includes(recipe._id),
     );
 
     return HttpResponse.json(collectionRecipes);
@@ -345,7 +345,7 @@ export const recipeHandlers = [
       if (!recipeId) {
         return HttpResponse.json(
           { message: "Recipe ID is required" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -354,7 +354,7 @@ export const recipeHandlers = [
       if (!recipe) {
         return HttpResponse.json(
           { message: "Recipe not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -369,12 +369,12 @@ export const recipeHandlers = [
 
       return HttpResponse.json(
         { message: "Recipe added to collection" },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -424,7 +424,7 @@ export const recipeHandlers = [
       if (!shareWithEmail) {
         return HttpResponse.json(
           { message: "Email is required" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -433,7 +433,7 @@ export const recipeHandlers = [
       if (!emailRegex.test(shareWithEmail)) {
         return HttpResponse.json(
           { message: "Invalid email format" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -441,19 +441,19 @@ export const recipeHandlers = [
       if (shareWithEmail.toLowerCase() === currentUser.email.toLowerCase()) {
         return HttpResponse.json(
           { message: "Cannot share with yourself" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       // Check if target user exists
       const targetUser = Object.values(mockUsers).find(
-        (user) => user.email.toLowerCase() === shareWithEmail.toLowerCase()
+        (user) => user.email.toLowerCase() === shareWithEmail.toLowerCase(),
       );
 
       if (!targetUser) {
         return HttpResponse.json(
           { message: "User not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -472,7 +472,7 @@ export const recipeHandlers = [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -489,7 +489,7 @@ export const recipeHandlers = [
       if (!sharedUsersStore[currentUser.id]) {
         return HttpResponse.json(
           { message: "User not in your shared list" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -499,7 +499,7 @@ export const recipeHandlers = [
       if (userIndex === -1) {
         return HttpResponse.json(
           { message: "User not in your shared list" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -511,7 +511,7 @@ export const recipeHandlers = [
     } catch (_error) {
       return HttpResponse.json(
         { message: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),
@@ -524,7 +524,7 @@ export const recipeHandlers = [
       if (!htmlContent || typeof htmlContent !== "string") {
         return HttpResponse.json(
           { message: "Missing or invalid htmlContent in request body" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -540,7 +540,7 @@ export const recipeHandlers = [
           message:
             "Error processing recipe: Server error during recipe conversion",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }),

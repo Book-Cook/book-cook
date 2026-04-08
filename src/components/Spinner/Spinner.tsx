@@ -9,7 +9,7 @@ const DEFAULT_LABEL = "Loading";
 export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
   (
     { size = "medium", label, ariaLabel = DEFAULT_LABEL, className, ...rest },
-    ref
+    ref,
   ) => {
     const mergedClassName = cx(styles.spinner, styles[size], className);
 
@@ -31,7 +31,7 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
         {label ? <span className={styles.label}>{label}</span> : null}
       </div>
     );
-  }
+  },
 );
 
 Spinner.displayName = "Spinner";

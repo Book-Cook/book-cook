@@ -13,7 +13,14 @@ export const SidebarHistory = () => {
 
   const { data: result } = useQuery({
     queryKey: ["recipes", "", "dateNewest", [], 1],
-    queryFn: () => fetchRecipesPaginated({ searchBoxValue: "", orderBy: "dateNewest", selectedTags: [], offset: 0, limit: 20 }),
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue: "",
+        orderBy: "dateNewest",
+        selectedTags: [],
+        offset: 0,
+        limit: 20,
+      }),
     enabled: Boolean(session),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,

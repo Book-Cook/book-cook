@@ -13,7 +13,8 @@
   appearance: none;
   font: inherit;
   color: inherit;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  box-shadow: 0 1px 0
+    color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
   transition:
     border-color var(--motion-default),
     box-shadow var(--motion-default),
@@ -28,15 +29,18 @@
   .interactive:hover {
     border-color: var(--ui-ControlBorderHover);
     box-shadow:
-      0 10px 24px -20px color-mix(in srgb, var(--ui-ControlBorderPressed) 70%, transparent),
-      0 6px 16px -14px color-mix(in srgb, var(--ui-ControlBorderPressed) 40%, transparent);
+      0 10px 24px -20px
+        color-mix(in srgb, var(--ui-ControlBorderPressed) 70%, transparent),
+      0 6px 16px -14px
+        color-mix(in srgb, var(--ui-ControlBorderPressed) 40%, transparent);
     transform: translateY(-2px);
   }
 }
 
 .interactive:active {
   border-color: var(--ui-ControlBorder);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--ui-ControlBorder) 18%, transparent);
+  box-shadow: 0 1px 0
+    color-mix(in srgb, var(--ui-ControlBorder) 18%, transparent);
   transform: translateY(0);
 }
 
@@ -73,7 +77,11 @@
       color-mix(in srgb, var(--ui-Canvas) 88%, transparent),
       transparent 60%
     ),
-    linear-gradient(135deg, var(--brand-BackgroundDisabled), var(--ui-ControlHover));
+    linear-gradient(
+      135deg,
+      var(--brand-BackgroundDisabled),
+      var(--ui-ControlHover)
+    );
 }
 
 .mediaImage {
@@ -90,7 +98,8 @@
   flex: 1;
   gap: 5px;
   padding: 14px 14px 12px;
-  border-top: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  border-top: 1px solid
+    color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
   background: var(--ui-Canvas);
 }
 
@@ -192,7 +201,6 @@
   z-index: 1;
 }
 
-
 @media (max-width: 720px) {
   .body {
     padding: 12px 12px 10px;
@@ -233,7 +241,8 @@
   flex-direction: column;
   gap: 8px;
   padding: 14px 14px 12px;
-  border-top: 1px solid color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
+  border-top: 1px solid
+    color-mix(in srgb, var(--ui-ControlBorder) 12%, transparent);
   background: var(--ui-Canvas);
 }
 

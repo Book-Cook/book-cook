@@ -25,13 +25,15 @@ const HomePage = () => {
   const userKey = session?.user?.email;
   const hasSession = Boolean(session);
 
-  const { data: recentlyViewed, isLoading: isRecentlyViewedLoading } = useQuery({
-    queryKey: ["recentlyViewed", userKey],
-    queryFn: fetchRecentlyViewed,
-    enabled: hasSession,
-    placeholderData: (previousData) => previousData,
-    ...sharedQueryOptions,
-  });
+  const { data: recentlyViewed, isLoading: isRecentlyViewedLoading } = useQuery(
+    {
+      queryKey: ["recentlyViewed", userKey],
+      queryFn: fetchRecentlyViewed,
+      enabled: hasSession,
+      placeholderData: (previousData) => previousData,
+      ...sharedQueryOptions,
+    },
+  );
 
   const { data: favoriteRecipes, isLoading: isFavoriteLoading } = useQuery({
     queryKey: ["collections", userKey],

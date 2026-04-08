@@ -82,7 +82,7 @@ export const SidebarSection = ({
       className={clsx(styles.section, className)}
       triggerClassName={clsx(
         styles.sectionTrigger,
-        isItemVariant && styles.sectionTriggerItem
+        isItemVariant && styles.sectionTriggerItem,
       )}
       contentClassName={styles.sectionContent}
       data-sidebar-collapsible="true"

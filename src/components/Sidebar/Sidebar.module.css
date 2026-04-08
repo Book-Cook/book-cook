@@ -17,8 +17,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background:
-    linear-gradient(180deg, var(--sidebar-surface) 0%, var(--sidebar-surface-bottom) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--sidebar-surface) 0%,
+    var(--sidebar-surface-bottom) 100%
+  );
   box-shadow: inset 0 1px 0 var(--sidebar-surface-accent);
   box-sizing: border-box;
   position: relative;
@@ -119,7 +122,8 @@
   align-items: center;
   gap: 6px;
 }
-.sidebar[data-sidebar-collapsed="true"] :global([data-sidebar-collapsible="true"]) {
+.sidebar[data-sidebar-collapsed="true"]
+  :global([data-sidebar-collapsible="true"]) {
   display: none;
 }
 
@@ -143,7 +147,6 @@
 .sidebar[data-sidebar-collapsed="true"] .profileItem {
   align-self: center;
 }
-
 
 .profileName {
   color: var(--ui-TextPrimary);
@@ -214,7 +217,8 @@
     gap: 6px;
   }
 
-  .sidebar[data-sidebar-hydrated="false"] :global([data-sidebar-collapsible="true"]) {
+  .sidebar[data-sidebar-hydrated="false"]
+    :global([data-sidebar-collapsible="true"]) {
     display: none;
   }
 
@@ -222,7 +226,8 @@
     align-self: center;
   }
 
-  .sidebar[data-sidebar-hydrated="false"] .profileItem:not([data-collapsed="true"]) {
+  .sidebar[data-sidebar-hydrated="false"]
+    .profileItem:not([data-collapsed="true"]) {
     grid-template-columns: 1fr;
     gap: 0;
     min-height: var(--sidebar-collapsed-item-size, 40px);

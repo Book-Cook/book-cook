@@ -44,7 +44,7 @@ export const MealPlanSidebar: React.FC = () => {
     return recipes.filter(
       (recipe) =>
         recipe.title.toLowerCase().includes(query) ||
-        recipe.tags.some((tag) => tag.toLowerCase().includes(query))
+        recipe.tags.some((tag) => tag.toLowerCase().includes(query)),
     );
   }, [recipes, debouncedSearch]);
 

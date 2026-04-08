@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from "@testing-library/react";
 
-import { PaginationControls } from './PaginationControls';
+import { PaginationControls } from "./PaginationControls";
 
-describe('PaginationControls', () => {
+describe("PaginationControls", () => {
   const defaultProps = {
     currentPage: 1,
     totalPages: 5,
@@ -13,74 +13,82 @@ describe('PaginationControls', () => {
     jest.clearAllMocks();
   });
 
-  it('renders pagination controls', () => {
+  it("renders pagination controls", () => {
     render(<PaginationControls {...defaultProps} />);
-    
-    expect(screen.getByText('1')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
+
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
   });
 
-  it('highlights current page with active class', () => {
+  it("highlights current page with active class", () => {
     render(<PaginationControls {...defaultProps} currentPage={2} />);
 
-    const currentPageButton = screen.getByRole('button', { name: '2' });
+    const currentPageButton = screen.getByRole("button", { name: "2" });
     expect(currentPageButton).toBeInTheDocument();
     expect(currentPageButton.className).toMatch(/pageButtonActive/);
   });
 
-  it('disables previous button on first page', () => {
+  it("disables previous button on first page", () => {
     render(<PaginationControls {...defaultProps} currentPage={1} />);
-    
-    expect(screen.getByTitle('Previous page')).toBeDisabled();
+
+    expect(screen.getByTitle("Previous page")).toBeDisabled();
   });
 
-  it('disables next button on last page', () => {
-    render(<PaginationControls {...defaultProps} currentPage={5} totalPages={5} />);
-    
-    expect(screen.getByTitle('Next page')).toBeDisabled();
+  it("disables next button on last page", () => {
+    render(
+      <PaginationControls {...defaultProps} currentPage={5} totalPages={5} />,
+    );
+
+    expect(screen.getByTitle("Next page")).toBeDisabled();
   });
 
-  it('calls onPageChange when page button is clicked', () => {
+  it("calls onPageChange when page button is clicked", () => {
     render(<PaginationControls {...defaultProps} />);
-    
-    fireEvent.click(screen.getByText('3'));
+
+    fireEvent.click(screen.getByText("3"));
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(3);
   });
 
-  it('calls onPageChange when navigation buttons are clicked', () => {
+  it("calls onPageChange when navigation buttons are clicked", () => {
     render(<PaginationControls {...defaultProps} currentPage={3} />);
-    
-    fireEvent.click(screen.getByTitle('Previous page'));
+
+    fireEvent.click(screen.getByTitle("Previous page"));
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(2);
-    
-    fireEvent.click(screen.getByTitle('Next page'));
+
+    fireEvent.click(screen.getByTitle("Next page"));
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(4);
   });
 
-  it('shows ellipsis for large page ranges', () => {
-    render(<PaginationControls {...defaultProps} currentPage={1} totalPages={10} />);
-    
-    expect(screen.getByText('...')).toBeInTheDocument();
-    expect(screen.getByText('10')).toBeInTheDocument();
+  it("shows ellipsis for large page ranges", () => {
+    render(
+      <PaginationControls {...defaultProps} currentPage={1} totalPages={10} />,
+    );
+
+    expect(screen.getByText("...")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
   });
 
-  it('shows active page indicator via CSS class', () => {
+  it("shows active page indicator via CSS class", () => {
     render(<PaginationControls {...defaultProps} currentPage={2} />);
 
-    const currentPageButton = screen.getByRole('button', { name: '2' });
+    const currentPageButton = screen.getByRole("button", { name: "2" });
     expect(currentPageButton.className).toMatch(/pageButtonActive/);
   });
 
-  it('does not render when totalPages is 1', () => {
-    const { container } = render(<PaginationControls {...defaultProps} totalPages={1} />);
-    
+  it("does not render when totalPages is 1", () => {
+    const { container } = render(
+      <PaginationControls {...defaultProps} totalPages={1} />,
+    );
+
     expect(container.firstChild).toBeNull();
   });
 
-  it('does not render when totalPages is 0', () => {
-    const { container } = render(<PaginationControls {...defaultProps} totalPages={0} />);
-    
+  it("does not render when totalPages is 0", () => {
+    const { container } = render(
+      <PaginationControls {...defaultProps} totalPages={0} />,
+    );
+
     expect(container.firstChild).toBeNull();
   });
 });

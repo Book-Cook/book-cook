@@ -7,15 +7,17 @@ interface StoryProvidersOptions {
 
 export const withStoryProviders = (options: StoryProvidersOptions = {}) => {
   const StoryWrapper = (Story: React.ComponentType) => {
-    const queryClient = options.queryClient ?? new QueryClient({
-      defaultOptions: {
-        queries: { 
-          retry: false, 
-          staleTime: 0,
-          refetchOnWindowFocus: false,
+    const queryClient =
+      options.queryClient ??
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            staleTime: 0,
+            refetchOnWindowFocus: false,
+          },
         },
-      },
-    });
+      });
 
     return (
       <QueryClientProvider client={queryClient}>
@@ -23,7 +25,7 @@ export const withStoryProviders = (options: StoryProvidersOptions = {}) => {
       </QueryClientProvider>
     );
   };
-  
-  StoryWrapper.displayName = 'StoryProviders';
+
+  StoryWrapper.displayName = "StoryProviders";
   return StoryWrapper;
 };

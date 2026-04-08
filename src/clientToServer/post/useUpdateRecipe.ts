@@ -29,15 +29,11 @@ export function useUpdateRecipe(recipeId: string | undefined) {
         isPublic: Boolean(updatedRecipeData.isPublic),
       };
 
-      try {
-        return await fetchJson(`/api/recipes/${recipeId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (error) {
-        return error;
-      }
+      return fetchJson(`/api/recipes/${recipeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
     },
     onSuccess: async () => {
       // Ensure any queries that include the "recipe" or "recipes" keys

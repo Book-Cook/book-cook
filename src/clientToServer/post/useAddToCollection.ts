@@ -28,14 +28,12 @@ export function useAddToCollection() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ recipeId }),
-          }
+          },
         );
       } catch (error) {
-        let errorInfo = "";
-        if (error instanceof Error) {
-          errorInfo = error.message;
-        }
-        throw new Error(`Failed to add recipe to collection: ${errorInfo}`);
+        throw new Error(
+          `Failed to add recipe to collection: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     },
     onMutate: async (recipeId: string) => {
@@ -43,9 +41,13 @@ export function useAddToCollection() {
       const previousCollections = queryClient.getQueryData(["collections"]);
 
       queryClient.setQueryData(["collections"], (old: unknown) => {
-        const recipes = Array.isArray(old) ? (old as Array<{ _id: string }>) : [];
-        const isInCollection = recipes.some((recipe) => recipe._id === recipeId);
-        return isInCollection 
+        const recipes = Array.isArray(old)
+          ? (old as Array<{ _id: string }>)
+          : [];
+        const isInCollection = recipes.some(
+          (recipe) => recipe._id === recipeId,
+        );
+        return isInCollection
           ? recipes.filter((recipe) => recipe._id !== recipeId)
           : [...recipes, { _id: recipeId }];
       });
@@ -53,15 +55,28 @@ export function useAddToCollection() {
       return { previousCollections };
     },
     onError: (err, recipeId, context) => {
-      if (context && typeof context === 'object' && 'previousCollections' in context) {
+      if (
+        context &&
+        typeof context === "object" &&
+        "previousCollections" in context
+      ) {
         queryClient.setQueryData(["collections"], context.previousCollections);
       }
     },
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["collections"], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["recipeCollections"], refetchType: "all" }),
-        queryClient.invalidateQueries({ queryKey: ["recipes"], refetchType: "all" }),
+        queryClient.invalidateQueries({
+          queryKey: ["collections"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["recipeCollections"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["recipes"],
+          refetchType: "all",
+        }),
       ]);
     },
   });

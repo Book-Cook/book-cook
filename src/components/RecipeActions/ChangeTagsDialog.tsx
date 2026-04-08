@@ -39,7 +39,7 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
         (tag) =>
           tag.toLowerCase().includes(newTag.toLowerCase()) &&
           !tags.includes(tag) &&
-          tag.toLowerCase() !== newTag.toLowerCase()
+          tag.toLowerCase() !== newTag.toLowerCase(),
       )
       .slice(0, 5);
   }, [availableTags, newTag, tags]);
@@ -111,7 +111,9 @@ const ChangeTagsDialog: React.FC<ChangeTagsDialogProps> = ({
             placeholder="Add a new tag"
             value={newTag}
             onChange={(e) => {
-              setNewTag(e.target.value.substring(0, maxTagLength).toLowerCase());
+              setNewTag(
+                e.target.value.substring(0, maxTagLength).toLowerCase(),
+              );
               setShowSuggestions(true);
             }}
             ref={inputRef}

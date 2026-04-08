@@ -88,7 +88,10 @@ export const RecipeCard = ({
         {isNew && <span className={styles.newBadge}>NEW</span>}
       </div>
       <div className={styles.body}>
-        <BodyText as="h3" className={clsx(styles.title, !recipe.title && styles.untitled)}>
+        <BodyText
+          as="h3"
+          className={clsx(styles.title, !recipe.title && styles.untitled)}
+        >
           {recipe.title || "Untitled Recipe"}
         </BodyText>
         {showMeta && creatorName ? (

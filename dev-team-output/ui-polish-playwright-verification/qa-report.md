@@ -9,17 +9,21 @@
 ## Test Suite Run
 
 **Command run:**
+
 ```
 cd C:/code/Personal/book-cook && npx playwright test --reporter=list 2>&1
 ```
 
 **Dev server check:**
+
 ```
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/
 ```
+
 Output: `200`
 
 **Full output:**
+
 ```
 npm warn Unknown user config "email". This will stop working in the next major version of npm.
 
@@ -165,57 +169,57 @@ Recipe card image `naturalWidth`. No test was written or run for this criterion.
 
 ## Summary Table
 
-| AC | Description (abbreviated) | Verdict |
-|----|--------------------------|---------|
-| AC-1 | Landing page shows "Book Cook" card and Google button | PASS |
-| AC-2 | No blank flash > 500ms on unauthenticated landing | PASS |
-| AC-3 | Google button has positive computed width | PASS |
-| AC-4 | Sign-in card has visible border | PASS |
-| AC-5 | Authenticated home shows "Welcome" + sidebar | PASS |
-| AC-6 | "Browse Your Recipes" navigates to /recipes | PASS |
-| AC-7 | "Create New Recipe" opens dialog, not /newRecipe | PASS |
-| AC-8 | Recent Recipes carousel visible with cards | PASS |
-| AC-9 | /recipes shows "My Recipes" heading | PASS |
-| AC-10 | Unauthenticated /recipes shows "Access Restricted" | PASS |
-| AC-11 | Real recipe cards shown (not skeletons) when API returns data | PASS |
-| AC-12 | Sort dropdown updates count without reload | PASS |
-| AC-13 | LoadingScreen shown while API pending > 300ms | PASS |
-| AC-14 | Empty API response shows "No data available" | PASS |
-| AC-15 | API error shows "Error" screen | PASS |
-| AC-16 | Valid recipe title in h1 within 5s | PASS |
-| AC-17 | Edit button surfaces editable input | NOT TESTED (deferred) |
-| AC-18 | Cancel editing restores h1, hides RecipeSaveBar | NOT TESTED (deferred) |
-| AC-19 | RecipeSaveBar appears on content change | NOT TESTED (deferred) |
-| AC-20 | Invalid recipe ID shows error, not blank indefinitely | PASS |
-| AC-21 | /newRecipe redirects to /recipes | PASS |
-| AC-22 | Settings page inside AppShell with sidebar | PASS |
-| AC-23 | Sidebar visible on all pages | PASS |
-| AC-24 | Collapse sidebar hides labels (aria-hidden) | PASS |
-| AC-25 | Expand sidebar restores labels | PASS |
-| AC-26 | Collapsed nav icon hover shows tooltip | PASS |
-| AC-27 | Recipes nav item has aria-current=page on /recipes | PASS |
-| AC-28 | Profile avatar opens Sign out menu | PASS |
-| AC-29 | Viewport <= 900px: sidebar collapsed by default | PASS |
-| AC-30 | Viewport 1280px: sidebar expanded | PASS |
-| AC-31 | New recipe dialog submit navigates to /recipes/[id] | PASS |
-| AC-32 | Empty title does not submit dialog | PASS |
-| AC-33 | Enter key in non-empty title submits dialog | PASS |
-| AC-34 | Cancel/Escape closes dialog and clears input | PASS |
-| AC-35 | Primary Button hover changes background | PASS |
-| AC-36 | Disabled Button: opacity < 1, pointer-events none | PASS |
-| AC-37 | Loading Button: spinner present, label transparent | NOT TESTED |
-| AC-38 | Button focus ring visible on keyboard focus | PASS |
-| AC-39 | Input focus ring visible on focus | PASS |
-| AC-40 | Input error state: red border + role=alert element | NOT TESTED |
-| AC-41 | Disabled Input: .disabled class, HTML disabled attr | PASS |
-| AC-42 | RecipeCard hover: translateY(-2px) via computed style | PASS |
-| AC-43 | RecipeCard focus: two-ring box-shadow | PASS |
-| AC-44 | 375px mobile: no horizontal overflow | PASS |
-| AC-45 | 1440px desktop: sidebar expanded, content not obscured | PASS |
-| AC-46 | No layout shift after hydration on home page | PASS |
-| AC-47 | /recipes shows content within 1s of parse | PASS |
-| AC-48 | Recipe card image has non-zero naturalWidth | NOT TESTED |
-| AC-49 | No uncaught JS errors on 4 pages | PASS |
+| AC    | Description (abbreviated)                                     | Verdict               |
+| ----- | ------------------------------------------------------------- | --------------------- |
+| AC-1  | Landing page shows "Book Cook" card and Google button         | PASS                  |
+| AC-2  | No blank flash > 500ms on unauthenticated landing             | PASS                  |
+| AC-3  | Google button has positive computed width                     | PASS                  |
+| AC-4  | Sign-in card has visible border                               | PASS                  |
+| AC-5  | Authenticated home shows "Welcome" + sidebar                  | PASS                  |
+| AC-6  | "Browse Your Recipes" navigates to /recipes                   | PASS                  |
+| AC-7  | "Create New Recipe" opens dialog, not /newRecipe              | PASS                  |
+| AC-8  | Recent Recipes carousel visible with cards                    | PASS                  |
+| AC-9  | /recipes shows "My Recipes" heading                           | PASS                  |
+| AC-10 | Unauthenticated /recipes shows "Access Restricted"            | PASS                  |
+| AC-11 | Real recipe cards shown (not skeletons) when API returns data | PASS                  |
+| AC-12 | Sort dropdown updates count without reload                    | PASS                  |
+| AC-13 | LoadingScreen shown while API pending > 300ms                 | PASS                  |
+| AC-14 | Empty API response shows "No data available"                  | PASS                  |
+| AC-15 | API error shows "Error" screen                                | PASS                  |
+| AC-16 | Valid recipe title in h1 within 5s                            | PASS                  |
+| AC-17 | Edit button surfaces editable input                           | NOT TESTED (deferred) |
+| AC-18 | Cancel editing restores h1, hides RecipeSaveBar               | NOT TESTED (deferred) |
+| AC-19 | RecipeSaveBar appears on content change                       | NOT TESTED (deferred) |
+| AC-20 | Invalid recipe ID shows error, not blank indefinitely         | PASS                  |
+| AC-21 | /newRecipe redirects to /recipes                              | PASS                  |
+| AC-22 | Settings page inside AppShell with sidebar                    | PASS                  |
+| AC-23 | Sidebar visible on all pages                                  | PASS                  |
+| AC-24 | Collapse sidebar hides labels (aria-hidden)                   | PASS                  |
+| AC-25 | Expand sidebar restores labels                                | PASS                  |
+| AC-26 | Collapsed nav icon hover shows tooltip                        | PASS                  |
+| AC-27 | Recipes nav item has aria-current=page on /recipes            | PASS                  |
+| AC-28 | Profile avatar opens Sign out menu                            | PASS                  |
+| AC-29 | Viewport <= 900px: sidebar collapsed by default               | PASS                  |
+| AC-30 | Viewport 1280px: sidebar expanded                             | PASS                  |
+| AC-31 | New recipe dialog submit navigates to /recipes/[id]           | PASS                  |
+| AC-32 | Empty title does not submit dialog                            | PASS                  |
+| AC-33 | Enter key in non-empty title submits dialog                   | PASS                  |
+| AC-34 | Cancel/Escape closes dialog and clears input                  | PASS                  |
+| AC-35 | Primary Button hover changes background                       | PASS                  |
+| AC-36 | Disabled Button: opacity < 1, pointer-events none             | PASS                  |
+| AC-37 | Loading Button: spinner present, label transparent            | NOT TESTED            |
+| AC-38 | Button focus ring visible on keyboard focus                   | PASS                  |
+| AC-39 | Input focus ring visible on focus                             | PASS                  |
+| AC-40 | Input error state: red border + role=alert element            | NOT TESTED            |
+| AC-41 | Disabled Input: .disabled class, HTML disabled attr           | PASS                  |
+| AC-42 | RecipeCard hover: translateY(-2px) via computed style         | PASS                  |
+| AC-43 | RecipeCard focus: two-ring box-shadow                         | PASS                  |
+| AC-44 | 375px mobile: no horizontal overflow                          | PASS                  |
+| AC-45 | 1440px desktop: sidebar expanded, content not obscured        | PASS                  |
+| AC-46 | No layout shift after hydration on home page                  | PASS                  |
+| AC-47 | /recipes shows content within 1s of parse                     | PASS                  |
+| AC-48 | Recipe card image has non-zero naturalWidth                   | NOT TESTED            |
+| AC-49 | No uncaught JS errors on 4 pages                              | PASS                  |
 
 **Passed:** 42
 **Failed:** 0
@@ -235,11 +239,11 @@ None. All 62 tests passed.
 
 The following criteria are explicitly not covered by the current test suite. They are not failures -- they are known gaps documented in `changes.md` and carried forward from prior QA cycles.
 
-| AC | Reason deferred |
-|----|----------------|
+| AC    | Reason deferred                                                                               |
+| ----- | --------------------------------------------------------------------------------------------- |
 | AC-17 | `RecipeView` does not surface an edit button; requires code change before test can be written |
-| AC-18 | Same as AC-17 |
-| AC-19 | Same as AC-17 |
-| AC-37 | No test was written for the `isLoading={true}` Button spinner state |
-| AC-40 | No test was written for the Input `error` prop state (red border + role="alert") |
-| AC-48 | No test was written for recipe card image `naturalWidth` |
+| AC-18 | Same as AC-17                                                                                 |
+| AC-19 | Same as AC-17                                                                                 |
+| AC-37 | No test was written for the `isLoading={true}` Button spinner state                           |
+| AC-40 | No test was written for the Input `error` prop state (red border + role="alert")              |
+| AC-48 | No test was written for recipe card image `naturalWidth`                                      |

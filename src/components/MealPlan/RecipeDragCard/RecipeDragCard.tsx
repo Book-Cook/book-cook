@@ -23,7 +23,12 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
   tags,
   isDragging = false,
 }) => {
-  const { attributes, listeners, setNodeRef, isDragging: isActiveDrag } = useDraggable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    isDragging: isActiveDrag,
+  } = useDraggable({
     id: `recipe-${id}`,
     data: {
       recipe: { id, title, emoji, tags },
@@ -38,7 +43,7 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
   const containerClass = clsx(
     styles.container,
     isDragging && styles.isDragging,
-    isDragging && styles.overlay
+    isDragging && styles.overlay,
   );
   const displayEmoji = emoji && emoji.trim().length > 0 ? emoji : "🍽️";
 
@@ -55,7 +60,7 @@ export const RecipeDragCard: React.FC<RecipeDragCardProps> = ({
         <Text className={styles.title}>{title}</Text>
         {tags && tags.length > 0 && (
           <div className={styles.tags}>
-            {tags.slice(0, 3).map(tag => (
+            {tags.slice(0, 3).map((tag) => (
               <span key={tag} className={styles.tag}>
                 {tag}
               </span>

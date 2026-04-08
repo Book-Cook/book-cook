@@ -5,7 +5,11 @@ import { HOUR_HEIGHT, MIN_HOUR, TIME_COLUMN_WIDTH } from "./constants";
 import { DayColumn } from "./DayColumn";
 import styles from "./WeekView.module.css";
 import type { WeekViewProps } from "./WeekView.types";
-import { WeekHeader, TimeColumn, CurrentTimeLine } from "../components/WeekViewComponents";
+import {
+  WeekHeader,
+  TimeColumn,
+  CurrentTimeLine,
+} from "../components/WeekViewComponents";
 import { formatDateString } from "../utils/formatDateString";
 import { getCurrentTimePosition } from "../utils/getCurrentTimePosition";
 import { getInitialScrollPosition } from "../utils/getInitialScrollPosition";
@@ -33,11 +37,14 @@ export const WeekView: React.FC<WeekViewProps> = ({
     }
   }, []);
 
-  const weekDates = React.useMemo(() => getWeekDates(currentDate), [currentDate]);
+  const weekDates = React.useMemo(
+    () => getWeekDates(currentDate),
+    [currentDate],
+  );
 
   const currentTimePosition = React.useMemo(
     () => getCurrentTimePosition(currentTime, MIN_HOUR, HOUR_HEIGHT),
-    [currentTime]
+    [currentTime],
   );
 
   return (
@@ -47,11 +54,13 @@ export const WeekView: React.FC<WeekViewProps> = ({
       <div ref={scrollRef} className={styles.scrollContainer}>
         <div
           className={styles.gridContainer}
-          style={{ gridTemplateColumns: `${TIME_COLUMN_WIDTH}px repeat(7, 1fr)` }}
+          style={{
+            gridTemplateColumns: `${TIME_COLUMN_WIDTH}px repeat(7, 1fr)`,
+          }}
         >
           <TimeColumn />
 
-          {weekDates.map(date => {
+          {weekDates.map((date) => {
             const dateStr = formatDateString(date);
             const meals = getMealsForDate(date, mealPlans);
             const isPast = isPastDate(date);
@@ -66,7 +75,9 @@ export const WeekView: React.FC<WeekViewProps> = ({
                 <DayColumn
                   date={dateStr}
                   meals={meals}
-                  onRemoveMeal={(time, index) => onMealRemove(dateStr, time, index)}
+                  onRemoveMeal={(time, index) =>
+                    onMealRemove(dateStr, time, index)
+                  }
                   isPast={isPast}
                 />
 

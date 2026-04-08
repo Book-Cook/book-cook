@@ -8,18 +8,18 @@
 
 ## Files Read
 
-| File | What was found |
-|------|----------------|
-| `src/clientToServer/types/recipes.types.ts` | `Recipe` type extended with `emoji`, `owner`, `isPublic` (required) and `savedCount`, `viewCount`, `publishedAt`, `creatorName` (optional). New `CreateRecipeInput` type exported: `title`, `data`, `tags`, optional `imageURL`. `CreateRecipeResponse` unchanged. Barrel (`types/index.ts`) re-exports everything, making `CreateRecipeInput` reachable from `../types` import path used in `useCreateRecipe`. |
-| `src/clientToServer/post/useCreateRecipe.ts` | `mutationFn` parameter type changed from `Omit<Recipe, "_id" \| "createdAt">` to `CreateRecipeInput`. Mutation body, error handling, and `onSuccess` cache invalidation are otherwise unchanged. `NewRecipeDialog` at line 29 passes `{ title, data: "", tags: [], imageURL: "" }` which satisfies `CreateRecipeInput` (imageURL is optional). |
-| 16 deleted files (confirmed via Glob) | All 7 orphaned `.styles.ts` files, the full `Toolbar/`, `RecipeCarousel/`, `Typography/components/`, `Typography/utils/` directories, and `TagPicker/TagPicker.tsx` + `TagPicker/index.ts` are absent from disk. Glob searches for each path returned no results. |
+| File                                         | What was found                                                                                                                                                                                                                                                                                                                                                                                                  |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/clientToServer/types/recipes.types.ts`  | `Recipe` type extended with `emoji`, `owner`, `isPublic` (required) and `savedCount`, `viewCount`, `publishedAt`, `creatorName` (optional). New `CreateRecipeInput` type exported: `title`, `data`, `tags`, optional `imageURL`. `CreateRecipeResponse` unchanged. Barrel (`types/index.ts`) re-exports everything, making `CreateRecipeInput` reachable from `../types` import path used in `useCreateRecipe`. |
+| `src/clientToServer/post/useCreateRecipe.ts` | `mutationFn` parameter type changed from `Omit<Recipe, "_id" \| "createdAt">` to `CreateRecipeInput`. Mutation body, error handling, and `onSuccess` cache invalidation are otherwise unchanged. `NewRecipeDialog` at line 29 passes `{ title, data: "", tags: [], imageURL: "" }` which satisfies `CreateRecipeInput` (imageURL is optional).                                                                  |
+| 16 deleted files (confirmed via Glob)        | All 7 orphaned `.styles.ts` files, the full `Toolbar/`, `RecipeCarousel/`, `Typography/components/`, `Typography/utils/` directories, and `TagPicker/TagPicker.tsx` + `TagPicker/index.ts` are absent from disk. Glob searches for each path returned no results.                                                                                                                                               |
 
 ---
 
 ## Revision Check
 
-| Prior issue | Status | Notes |
-|-------------|--------|-------|
+| Prior issue                                                                                | Status   | Notes                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Issue 1: Orphaned `.styles.ts` files cause hard build failure (`@griffel/react` not found) | RESOLVED | All 7 files deleted. Glob confirms none exist. Grep for `@griffel` across `src/` returns zero results. Build reported as passing with zero TypeScript errors. |
 
 ---

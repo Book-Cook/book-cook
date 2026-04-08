@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 
-import styles from './VirtualizedRecipeList.module.css';
-import { PaginationControls } from '../PaginationControls/PaginationControls';
-import { RecipeCard } from '../RecipeCard';
+import styles from "./VirtualizedRecipeList.module.css";
+import { PaginationControls } from "../PaginationControls/PaginationControls";
+import { RecipeCard } from "../RecipeCard";
 import { Spinner } from "../Spinner";
 import { Text } from "../Text";
 
-import type { Recipe } from '../../clientToServer/types';
+import type { Recipe } from "../../clientToServer/types";
 
 export interface VirtualizedRecipeListProps {
   recipes: Recipe[];
@@ -30,8 +30,8 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
   error = null,
   onPageChange,
   onPageSizeChange: _onPageSizeChange,
-  emptyStateMessage = 'No recipes found.',
-  loadingMessage = 'Loading recipes...',
+  emptyStateMessage = "No recipes found.",
+  loadingMessage = "Loading recipes...",
 }) => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -51,7 +51,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
           Something went wrong
         </Text>
         <Text size={300}>
-          {error.message || 'Failed to load recipes. Please try again.'}
+          {error.message || "Failed to load recipes. Please try again."}
         </Text>
       </div>
     );
@@ -63,9 +63,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
         <Text size={400} weight="semibold">
           {emptyStateMessage}
         </Text>
-        <Text size={300}>
-          Try adjusting your search criteria or filters.
-        </Text>
+        <Text size={300}>Try adjusting your search criteria or filters.</Text>
       </div>
     );
   }
@@ -77,7 +75,11 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
           <div
             key={recipe._id}
             className={styles.cardWrapper}
-            style={{ '--fadeInDelay': `${Math.min(index * 0.1, 0.3)}s` } as React.CSSProperties}
+            style={
+              {
+                "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
+              } as React.CSSProperties
+            }
           >
             <RecipeCard recipe={recipe} />
           </div>
