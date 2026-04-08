@@ -1,10 +1,7 @@
 /**
  * Consolidated MealPlan types
  */
-import type {
-  CreateMealPlanPayload,
-  MealItem,
-} from "../../clientToServer/types";
+import type { CreateMealPlanPayload, MealItem } from "../../clientToServer/types";
 
 export type CalendarView = "day" | "week" | "month";
 
