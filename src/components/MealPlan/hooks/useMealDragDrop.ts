@@ -3,6 +3,8 @@ import type { DragEndEvent } from "@dnd-kit/core";
 
 import type { DraggedRecipe, MealDragDropHandlers } from "../types";
 
+import type { CreateMealPlanPayload } from "../../../clientToServer/types";
+
 export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
   const [draggedRecipe, setDraggedRecipe] = useState<DraggedRecipe | null>(
     null,
@@ -102,15 +104,13 @@ export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
       if (recipe && dropTarget?.date) {
         // If we have a specific time slot, use it directly
         if (dropTarget.time) {
-          const payload: Record<string, unknown> = {
-            date: dropTarget.date,
+          handlers.addMealMutation.mutate({
+            date: dropTarget.date as string,
             recipeId: recipe.id,
             servings: 1,
-            time: dropTarget.time,
+            time: dropTarget.time as string,
             duration: 60,
-          };
-
-          handlers.addMealMutation.mutate(payload);
+          });
         }
         // If it's a month view day, week view drop zone, or general day drop - show time picker
         else if (
@@ -119,20 +119,19 @@ export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
           view === "week" ||
           view === "month"
         ) {
-          handlers.setPendingMeal({ recipe, date: dropTarget.date });
+          handlers.setPendingMeal({ recipe, date: dropTarget.date as string });
           handlers.setShowTimePicker(true);
           handlers.setSidebarOpen(false);
         }
         // Legacy meal type support
         else if (dropTarget.mealType) {
-          const payload: Record<string, unknown> = {
-            date: dropTarget.date,
+          handlers.addMealMutation.mutate({
+            date: dropTarget.date as string,
             recipeId: recipe.id,
             servings: 1,
+            time: "",
             mealType: dropTarget.mealType,
-          };
-
-          handlers.addMealMutation.mutate(payload);
+          } as CreateMealPlanPayload);
         }
       }
 

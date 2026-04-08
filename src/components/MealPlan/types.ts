@@ -1,7 +1,7 @@
 /**
  * Consolidated MealPlan types
  */
-import type { MealItem } from "../../clientToServer/types";
+import type { CreateMealPlanPayload, MealItem } from "../../clientToServer/types";
 
 export type CalendarView = "day" | "week" | "month";
 
@@ -41,10 +41,12 @@ export type ApiPayload = Record<string, unknown> & {
   date: string;
 };
 
-export type MealMovePayload = ApiPayload & {
-  time: string;
+export type MealMovePayload = {
+  sourceDate: string;
+  sourceTime: string;
   mealIndex: number;
-  newTime: string;
+  targetDate: string;
+  targetTime: string;
 };
 
 export type MealReorderPayload = ApiPayload & {
@@ -55,13 +57,13 @@ export type MealReorderPayload = ApiPayload & {
 
 export type MealDragDropHandlers = {
   addMealMutation: {
-    mutate: (payload: Record<string, unknown>) => void;
+    mutate: (payload: CreateMealPlanPayload) => void;
   };
   reorderMealMutation: {
-    mutate: (payload: Record<string, unknown>) => void;
+    mutate: (payload: MealReorderPayload) => void;
   };
   moveMealMutation: {
-    mutate: (payload: Record<string, unknown>) => void;
+    mutate: (payload: MealMovePayload) => void;
   };
   setPendingMeal: (meal: PendingMeal | null) => void;
   setShowTimePicker: (show: boolean) => void;
