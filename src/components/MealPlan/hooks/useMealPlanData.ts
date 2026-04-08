@@ -13,9 +13,13 @@ interface DateRange {
   endDate: string;
 }
 
+interface MealPlanQueryResult {
+  mealPlans: unknown[];
+}
+
 interface UseMealPlanDataReturn {
   dateRange: DateRange;
-  mealPlansData: unknown;
+  mealPlansData: MealPlanQueryResult | undefined;
 }
 
 function getDateRange(view: CalendarView, currentDate: Date): DateRange {
@@ -54,7 +58,7 @@ export function useMealPlanData({
 }: UseMealPlanDataProps): UseMealPlanDataReturn {
   const dateRange = getDateRange(view, currentDate);
 
-  const { data: mealPlansData } = useQuery({
+  const { data: mealPlansData } = useQuery<MealPlanQueryResult>({
     queryKey: ["mealPlans", dateRange.startDate, dateRange.endDate],
     queryFn: async () => {
       const response = await fetch(
