@@ -3,7 +3,6 @@ import { MagnifyingGlassIcon, FunnelIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 
 import discoverStyles from "./discover.module.css";
-import { useDiscoverFilters } from "./useDiscoverFilters";
 import { fetchPublicRecipes } from "../clientToServer/fetch/fetchPublicRecipes";
 import { Button } from "../components/Button";
 import {
@@ -18,6 +17,7 @@ import { RecipeCard } from "../components/RecipeCard";
 import galleryStyles from "../components/RecipeGallery/RecipeGallery.module.css";
 import { SearchBox } from "../components/SearchBox";
 import { Text, Heading1 } from "../components/Text";
+import { useDiscoverFilters } from "../hooks/useDiscoverFilters";
 
 export default function DiscoverPage() {
   const {
