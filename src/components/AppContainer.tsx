@@ -23,9 +23,14 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
     setSearchBoxValue(incomingValue);
   }, []);
 
+  const searchBoxContextValue = React.useMemo(
+    () => ({ searchBoxValue, onSearchBoxValueChange }),
+    [searchBoxValue, onSearchBoxValueChange],
+  );
+
   return (
     <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
-      <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+      <SearchBoxProvider value={searchBoxContextValue}>
         <Toast />
         <AppShell>{children}</AppShell>
       </SearchBoxProvider>

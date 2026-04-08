@@ -71,6 +71,7 @@ const nextConfig = {
     },
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "www.tasteofhome.com" },
       { protocol: "https", hostname: "beyondfrosting.com" },
