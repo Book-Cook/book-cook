@@ -25,8 +25,14 @@ export const RecipeCardCarousel = ({
 }: RecipeCardCarouselProps) => {
   const hasRecipes = recipes.length > 0;
 
-  const { viewportRef, canScrollPrev, canScrollNext, scrollPrev, scrollNext, handleKeyDown } =
-    useCarouselNavigation({ emblaOptions, initialScrollIndex });
+  const {
+    viewportRef,
+    canScrollPrev,
+    canScrollNext,
+    scrollPrev,
+    scrollNext,
+    handleKeyDown,
+  } = useCarouselNavigation({ emblaOptions, initialScrollIndex });
 
   const controlsVisible =
     recipes.length > 1 && (canScrollPrev || canScrollNext);

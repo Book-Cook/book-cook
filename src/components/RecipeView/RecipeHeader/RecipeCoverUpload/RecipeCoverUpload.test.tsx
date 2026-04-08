@@ -26,7 +26,9 @@ jest.mock("@phosphor-icons/react", () => ({
 // Mock Menu so items render inline (no Radix portal/pointer-event complexity)
 jest.mock("src/components/Menu", () => ({
   Menu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  MenuTrigger: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
+  MenuTrigger: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
   MenuContent: ({ children }: { children: React.ReactNode }) => (
     <div role="menu">{children}</div>
   ),
