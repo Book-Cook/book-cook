@@ -4,7 +4,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--colorNeutralForeground2);
+  color: var(--ui-TextSecondary);
   font-size: 14px;
   line-height: 1.4;
   vertical-align: middle;
@@ -14,16 +14,16 @@
   width: var(--spinner-size);
   height: var(--spinner-size);
   border-radius: 50%;
-  border: var(--spinner-stroke) solid var(--colorNeutralStroke3);
-  border-top-color: var(--colorBrandBackground);
-  border-right-color: var(--colorBrandBackground);
+  border: var(--spinner-stroke) solid var(--ui-ControlBorder);
+  border-top-color: var(--brand-Primary);
+  border-right-color: var(--brand-Primary);
   animation: spin 0.75s linear infinite;
   box-sizing: border-box;
   flex-shrink: 0;
 }
 
 .label {
-  color: var(--colorNeutralForeground2);
+  color: var(--ui-TextSecondary);
 }
 
 .tiny {

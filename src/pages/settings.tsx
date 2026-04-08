@@ -10,6 +10,8 @@ const SettingsPage = dynamic(
   { loading: () => <LoadingScreen />, ssr: false },
 );
 
+export const getServerSideProps = () => ({ props: {} });
+
 export default function Settings() {
   return <SettingsPage />;
 }

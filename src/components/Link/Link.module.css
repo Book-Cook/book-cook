@@ -1,5 +1,5 @@
 .link {
-  color: var(--colorNeutralForeground1);
+  color: var(--ui-TextPrimary);
   text-decoration: none;
   font-weight: 600;
   transition:
@@ -8,7 +8,7 @@
 }
 
 .muted {
-  color: var(--colorNeutralForeground2);
+  color: var(--ui-TextSecondary);
 }
 
 .underlineAlways {
@@ -26,14 +26,14 @@
 }
 
 .link:hover {
-  color: var(--colorBrandBackgroundHover);
+  color: var(--brand-Hover);
 }
 
 .link:active {
-  color: var(--colorBrandBackgroundSelected);
+  color: var(--brand-Pressed);
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--colorStrokeFocus2);
+  outline: 2px solid var(--brand-Primary);
   outline-offset: 2px;
 }

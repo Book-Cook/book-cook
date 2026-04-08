@@ -1,6 +1,6 @@
 .header {
   padding: 16px 20px;
-  border-bottom: 1px solid var(--colorNeutralStroke2);
+  border-bottom: 1px solid var(--ui-Divider);
   display: flex;
   flex-direction: column;
   gap: 4px;

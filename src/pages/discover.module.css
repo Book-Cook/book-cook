@@ -14,7 +14,7 @@
 
 .searchBox {
   flex-grow: 1;
-  min-width: 300px;
+  min-width: min(300px, 100%);
 }
 
 .filterRow {
@@ -25,7 +25,7 @@
 }
 
 .filterItem {
-  min-width: 150px;
+  min-width: min(150px, 100%);
 }
 
 .emptyState {

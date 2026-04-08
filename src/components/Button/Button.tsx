@@ -5,9 +5,9 @@ import styles from "./Button.module.css";
 import type { ButtonProps } from "./Button.types";
 
 const variantStyles = {
-  primary: styles.variantPrimary,
-  secondary: styles.variantSecondary,
-  ghost: styles.variantGhost,
+  primary: styles.primary,
+  secondary: styles.secondary,
+  ghost: styles.subtle,
   destructive: styles.variantDestructive,
 };
 

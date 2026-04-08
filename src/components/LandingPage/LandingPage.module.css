@@ -3,15 +3,30 @@
   display: grid;
   place-items: center;
   padding: 24px;
+  background: var(--ui-Canvas);
 }
 
 .card {
-  width: min(520px, 100%);
-  padding: 20px;
-  border: 1px solid var(--ui-ControlBorder, #e6e8ee);
+  width: min(480px, 100%);
+  padding: 28px;
+  border: 1px solid var(--ui-Divider);
+  border-radius: 16px;
+  background: var(--ui-PageBackground);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--brand-Primary);
+  color: #fff;
   border-radius: 12px;
-  background: var(--ui-PageBackground, #ffffff);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
 }
 
 .title {
@@ -19,17 +34,18 @@
   line-height: 1.2;
   font-weight: 650;
   margin: 0;
-  color: var(--ui-TextPrimary, #111827);
+  color: var(--ui-TextPrimary);
 }
 
 .subtitle {
-  margin: 10px 0 0;
-  color: var(--ui-TextSecondary, #4b5563);
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--ui-TextSecondary);
   line-height: 1.5;
 }
 
 .actions {
-  margin-top: 16px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;

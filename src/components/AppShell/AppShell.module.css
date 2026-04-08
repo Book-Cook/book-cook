@@ -59,8 +59,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border: none;
     background: none;
     color: var(--ui-TextPrimary);
@@ -102,7 +102,7 @@
   }
 
   .mobileHeaderRight {
-    width: 36px;
+    width: 44px;
     flex-shrink: 0;
   }
 
@@ -143,5 +143,6 @@
     --page-x-padding: 16px;
     --page-y-padding: 16px;
     padding: var(--page-y-padding) var(--page-x-padding);
+    padding-bottom: max(var(--page-y-padding), env(safe-area-inset-bottom, 0px));
   }
 }

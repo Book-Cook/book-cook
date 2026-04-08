@@ -9,25 +9,27 @@
   width: 100%;
   padding: 8px 12px;
   padding-right: 36px;
-  border: 1px solid var(--colorNeutralStroke1);
+  border: 1px solid var(--ui-Divider);
   border-radius: 8px;
   font-size: 14px;
   line-height: 20px;
-  background: var(--colorNeutralBackground1);
-  color: var(--colorNeutralForeground1);
+  background: var(--ui-PageBackground);
+  color: var(--ui-TextPrimary);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 }
 
 .input::placeholder {
-  color: var(--colorNeutralForeground3);
+  color: var(--ui-TextCaption);
 }
 
 .input:focus {
-  outline: 2px solid var(--colorStrokeFocus2);
-  outline-offset: 2px;
-  border-color: var(--colorStrokeFocus2);
+  outline: none;
+  border-color: var(--brand-Primary);
+  box-shadow:
+    0 0 0 2px var(--ui-Canvas),
+    0 0 0 4px var(--brand-Primary);
 }
 
 .input:disabled {
@@ -47,7 +49,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--colorNeutralForeground3);
+  color: var(--ui-TextCaption);
   pointer-events: none;
 }
 
@@ -59,7 +61,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--colorNeutralForeground3);
+  color: var(--ui-TextCaption);
 }
 
 .clearButton {
@@ -75,15 +77,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--colorNeutralForeground3);
+  color: var(--ui-TextCaption);
   border-radius: 4px;
 }
 
 .clearButton:hover {
-  color: var(--colorNeutralForeground2);
+  color: var(--ui-TextSecondary);
 }
 
 .clearButton:focus-visible {
-  outline: 2px solid var(--colorStrokeFocus2);
+  outline: 2px solid var(--brand-Primary);
   outline-offset: 2px;
 }

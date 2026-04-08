@@ -19,6 +19,11 @@
   background: var(--ui-ControlPressed);
 }
 
+.interactive:focus-visible {
+  outline: 2px solid var(--brand-Primary);
+  outline-offset: 2px;
+}
+
 .text {
   color: var(--ui-TextSecondary);
   font-size: 13px;

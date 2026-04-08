@@ -18,9 +18,9 @@
 }
 
 .emoji {
-  border: 1px solid var(--colorNeutralStroke1);
+  border: 1px solid var(--ui-Divider);
   border-radius: 10px;
-  background: var(--colorNeutralBackground3);
+  background: var(--ui-ControlHover);
   cursor: pointer;
   font-size: 24px;
   padding: 10px;
@@ -28,19 +28,19 @@
 }
 
 .emoji:hover {
-  background: var(--colorNeutralBackground2);
+  background: var(--ui-ControlPressed);
 }
 
 .empty {
-  color: var(--colorNeutralForeground3);
+  color: var(--ui-TextCaption);
   padding: 8px 0;
   text-align: center;
 }
 
 .pill {
   align-self: flex-start;
-  background: var(--colorBrandBackground2);
-  color: var(--colorBrandForeground1);
+  background: var(--brand-BackgroundDisabled);
+  color: var(--brand-Primary);
   border-radius: 12px;
   padding: 8px 12px;
   cursor: pointer;

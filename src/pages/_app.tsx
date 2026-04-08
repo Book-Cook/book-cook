@@ -52,3 +52,9 @@ export default function App(props: AppProps): React.ReactElement {
     </>
   );
 }
+
+// Disable Automatic Static Optimization globally so that pages are
+// server-rendered and React hooks in _app work correctly during builds.
+App.getInitialProps = (): { pageProps: object } => ({
+  pageProps: {},
+});

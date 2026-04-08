@@ -31,6 +31,15 @@
     flex-direction: column;
     align-items: stretch;
   }
+
+  .searchWrapper {
+    width: 100%;
+  }
+
+  .sortDropdown {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .searchWrapper {
