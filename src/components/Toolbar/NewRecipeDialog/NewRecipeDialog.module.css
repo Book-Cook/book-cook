@@ -1,8 +1,8 @@
 .dialogSurface {
   max-width: 450px;
   width: 100%;
-  border-radius: var(--borderRadiusLarge, 14px);
-  box-shadow: var(--shadow16, 0 8px 24px rgba(0, 0, 0, 0.12));
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .dialogBody {
@@ -16,8 +16,8 @@
 .textArea {
   width: 100%;
   flex-grow: 1;
-  font-size: var(--fontSizeBase300);
-  line-height: var(--lineHeightBase300);
+  font-size: 14px;
+  line-height: 1.5;
   min-height: 80px;
   resize: none;
 }
@@ -47,20 +47,20 @@
 }
 
 .characterCount {
-  font-size: var(--fontSizeBase200);
-  color: var(--colorNeutralForeground3);
+  font-size: 12px;
+  color: var(--ui-TextCaption);
   text-align: right;
   margin-top: 4px;
 }
 
 .errorMessage {
-  color: var(--colorPaletteRedForeground1);
-  font-size: var(--fontSizeBase200);
-  margin-top: var(--spacingVerticalS);
+  color: var(--danger-Primary);
+  font-size: 12px;
+  margin-top: 6px;
 }
 
 .spinnerContainer {
   display: inline-flex;
-  margin-left: var(--spacingHorizontalS);
+  margin-left: 8px;
   align-items: center;
 }

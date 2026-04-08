@@ -99,55 +99,17 @@
   color: var(--ui-TextPrimary);
 }
 
-/* Legacy variant classes */
-.variantPrimary {
-  background-color: var(--brand-Primary);
-  color: #fff;
-  border-color: var(--brand-Primary);
-}
-.variantPrimary:hover:not(:disabled) {
-  background-color: var(--brand-Hover);
-  border-color: var(--brand-Hover);
-  transform: translateY(-1px);
-}
-.variantPrimary:active:not(:disabled) {
-  background-color: var(--brand-Pressed);
-  transform: translateY(1px);
-}
-
-.variantSecondary {
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-  border-color: var(--ui-ControlBorder);
-}
-.variantSecondary:hover:not(:disabled) {
-  border-color: var(--ui-ControlBorderHover);
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-}
-.variantSecondary:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
-.variantGhost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ui-TextSecondary);
-}
-.variantGhost:hover:not(:disabled) {
-  background-color: var(--ui-ControlHover);
-  color: var(--ui-TextPrimary);
-}
-.variantGhost:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
 .variantDestructive {
   background-color: transparent;
+  border-color: transparent;
   color: var(--danger-Primary);
 }
 .variantDestructive:hover:not(:disabled) {
-  background-color: var(--danger-Hover);
+  background-color: var(--danger-BackgroundDisabled);
+  border-color: var(--danger-Disabled);
+}
+.variantDestructive:active:not(:disabled) {
+  background-color: var(--danger-Disabled);
 }
 .variantDestructive:focus-visible {
   box-shadow:

@@ -3,7 +3,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: var(--colorNeutralForeground1);
+  color: var(--ui-TextPrimary);
   font-weight: 600;
   font-size: 14px;
   line-height: 20px;
@@ -20,16 +20,16 @@
   left: 50%;
   width: 0;
   height: 2px;
-  background-color: var(--colorBrandBackground);
+  background-color: var(--brand-Primary);
   transform: translateX(-50%);
   transition: width 0.2s ease-in-out;
   border-radius: 999px;
 }
 
 .link:hover {
-  color: var(--colorBrandForeground1);
+  color: var(--brand-Primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(146, 114, 230, 0.15);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--brand-Primary) 15%, transparent);
   text-decoration: none;
 }
 
@@ -38,5 +38,5 @@
 }
 
 .active {
-  background-color: var(--colorNeutralBackground3);
+  background-color: var(--ui-ControlHover);
 }
