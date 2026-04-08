@@ -81,7 +81,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
               } as React.CSSProperties
             }
           >
-            <RecipeCard recipe={recipe} />
+            <RecipeCard recipe={recipe} priority={index < 4} />
           </div>
         ))}
       </div>

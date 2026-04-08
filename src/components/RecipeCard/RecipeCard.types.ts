@@ -27,4 +27,10 @@ export type RecipeCardProps = {
    * @default false
    */
   isLoading?: boolean;
+
+  /**
+   * Pass true for the first few visible cards to eagerly load their images (LCP).
+   * @default false
+   */
+  priority?: boolean;
 };

@@ -29,6 +29,7 @@ export const RecipeCard = ({
   className,
   showMeta = true,
   isLoading = false,
+  priority = false,
 }: RecipeCardProps) => {
   const router = useRouter();
 
@@ -79,6 +80,7 @@ export const RecipeCard = ({
             fill
             sizes="(max-width: 720px) 100vw, 240px"
             className={styles.mediaImage}
+            priority={priority}
           />
         ) : (
           <span className={styles.emoji} aria-hidden="true">
