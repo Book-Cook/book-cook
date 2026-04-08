@@ -1,7 +1,6 @@
 import * as React from "react";
 import { createContext, useContext, useEffect } from "react";
 
-import styles from "./theme.module.css";
 import type {
   ThemeProviderProps,
   ThemeContextType,
@@ -16,16 +15,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
     if (theme === "system") {
       const mq = window.matchMedia("(prefers-color-scheme: dark)");
       const apply = (): void => {
-        document.documentElement.className = mq.matches
-          ? styles.dark
-          : styles.light;
+        document.documentElement.setAttribute(
+          "data-theme",
+          mq.matches ? "dark" : "light",
+        );
       };
       apply();
       mq.addEventListener("change", apply);
       return () => mq.removeEventListener("change", apply);
     }
-    document.documentElement.className =
-      theme === "dark" ? styles.dark : styles.light;
+    document.documentElement.setAttribute(
+      "data-theme",
+      theme === "dark" ? "dark" : "light",
+    );
   }, [theme]);
 
   return (

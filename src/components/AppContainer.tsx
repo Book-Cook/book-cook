@@ -2,7 +2,7 @@ import * as React from "react";
 import dynamic from "next/dynamic";
 import { SessionProvider } from "next-auth/react";
 
-import { SearchBoxProvider } from "../context";
+import { SearchBoxProvider } from "../context/SearchBoxProvider";
 
 const Toast = dynamic(
   () => import("./Toast").then((m) => ({ default: m.Toast })),
@@ -19,9 +19,9 @@ export const AppContainer: React.FC<{ children?: React.ReactNode }> = ({
 }) => {
   const [searchBoxValue, setSearchBoxValue] = React.useState("");
 
-  const onSearchBoxValueChange = (incomingValue: string) => {
+  const onSearchBoxValueChange = React.useCallback((incomingValue: string) => {
     setSearchBoxValue(incomingValue);
-  };
+  }, []);
 
   return (
     <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>

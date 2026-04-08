@@ -1,8 +1,22 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+// Runs before React hydrates — sets data-theme on <html> so there is zero
+// flash of wrong theme for users who have saved light, dark, or system preference.
+const themeScript = `
+(function(){
+  try {
+    var t = localStorage.getItem('theme') || 'system';
+    if (t === 'system') {
+      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  } catch(e) {}
+})();
+`.trim();
+
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en" suppressHydrationWarning>
       <Head>
         <meta name="application-name" content="Book Cook" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -22,6 +36,8 @@ export default function Document() {
         />
       </Head>
       <body>
+        {/* eslint-disable-next-line react/no-danger */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Main />
         <NextScript />
       </body>
