@@ -1,24 +1,29 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 
-import { importRecipeMarkdown } from "../textEditorConfig";
-
-function looksLikeMarkdown(text: string): boolean {
-  return /^#{1,6}\s|\*\*|__|\*[^*]|^-\s|^\d+\.\s|^>\s|^```/m.test(text);
-}
+import {
+  $insertPastedMarkdown,
+  LEXICAL_CLIPBOARD_TYPE,
+  looksLikeMarkdown,
+} from "./pasteMarkdown";
 
 export function MarkdownPastePlugin() {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    const root = editor.getRootElement();
-    if (!root) {
-      return;
-    }
-
     const handler = (event: ClipboardEvent) => {
-      const text = event.clipboardData?.getData("text/plain");
+      const clipboardData = event.clipboardData;
+      if (!clipboardData) {
+        return;
+      }
+
+      // Copies made inside a Lexical editor carry full node data — let Lexical
+      // restore it rather than degrading it to markdown text.
+      if (Array.from(clipboardData.types).includes(LEXICAL_CLIPBOARD_TYPE)) {
+        return;
+      }
+
+      const text = clipboardData.getData("text/plain");
       if (!text || !looksLikeMarkdown(text)) {
         return;
       }
@@ -26,24 +31,13 @@ export function MarkdownPastePlugin() {
       event.preventDefault();
       event.stopPropagation();
 
-      editor.update(() => {
-        const selection = $getSelection();
-        const rootText = $getRoot().getTextContent().trim();
-        const isEmptyOrFullySelected =
-          rootText === "" ||
-          ($isRangeSelection(selection) &&
-            selection.getTextContent().trim() === rootText);
-
-        if (isEmptyOrFullySelected) {
-          importRecipeMarkdown(text);
-        } else if ($isRangeSelection(selection)) {
-          selection.insertText(text);
-        }
-      });
+      editor.update(() => $insertPastedMarkdown(text));
     };
 
-    root.addEventListener("paste", handler, true); // capture phase
-    return () => root.removeEventListener("paste", handler, true);
+    return editor.registerRootListener((rootElement, prevRootElement) => {
+      prevRootElement?.removeEventListener("paste", handler, true);
+      rootElement?.addEventListener("paste", handler, true); // capture phase
+    });
   }, [editor]);
 
   return null;

@@ -11,6 +11,7 @@ import {
 import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
+import type { ElementNode } from "lexical";
 
 import { HR_TRANSFORMER, TABLE_TRANSFORMER } from "./markdownExtensions";
 import styles from "./TextEditor.module.css";
@@ -75,8 +76,11 @@ export const recipeShortcutTransformers = [
   ...TEXT_FORMAT_TRANSFORMERS,
 ];
 
-export const importRecipeMarkdown = (markdown: string): void => {
-  $convertFromMarkdownString(markdown, recipeTransformers, undefined, true);
+export const importRecipeMarkdown = (
+  markdown: string,
+  node?: ElementNode
+): void => {
+  $convertFromMarkdownString(markdown, recipeTransformers, node, true);
 };
 
 export const exportRecipeMarkdown = (): string =>
