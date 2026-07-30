@@ -158,7 +158,7 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
           currentPage={currentPage}
           pageSize={pageSize}
           isLoading={isLoading}
-          error={error as Error}
+          error={error}
           onPageChange={handlePageChange}
           onPageSizeChange={() => {}}
           emptyStateMessage="No recipes found in your collection."

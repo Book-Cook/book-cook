@@ -29,13 +29,19 @@ export default async function handler(
   try {
     const { date, time, mealIndex } = req.query;
 
-    if (!date || !time || mealIndex === undefined) {
+    if (
+      typeof date !== "string" ||
+      date.length === 0 ||
+      typeof time !== "string" ||
+      time.length === 0 ||
+      typeof mealIndex !== "string"
+    ) {
       return res.status(400).json({
         message: "Date, time, and meal index are required",
       });
     }
 
-    const mealIndexNum = parseInt(mealIndex as string, 10);
+    const mealIndexNum = parseInt(mealIndex, 10);
     if (isNaN(mealIndexNum) || mealIndexNum < 0) {
       return res.status(400).json({
         message: "Invalid meal index",
@@ -47,7 +53,7 @@ export default async function handler(
     // Find the meal plan
     const mealPlan = await db.collection("mealPlans").findOne({
       userId: session.user.id,
-      date: date as string,
+      date,
     });
 
     if (!mealPlan) {
@@ -79,13 +85,13 @@ export default async function handler(
     if (timeSlot.meals.length === 1) {
       // Remove the entire time slot if it's the only meal
       const removeTimeSlotUpdate = {
-        $pull: { "meals.timeSlots": { time: time as string } },
+        $pull: { "meals.timeSlots": { time } },
         $set: { updatedAt: new Date() },
       } as unknown as UpdateFilter<Document>;
       await db.collection("mealPlans").updateOne(
         {
           userId: session.user.id,
-          date: date as string,
+          date,
         },
         removeTimeSlotUpdate,
       );
@@ -94,7 +100,7 @@ export default async function handler(
       await db.collection("mealPlans").updateOne(
         {
           userId: session.user.id,
-          date: date as string,
+          date,
         },
         {
           $unset: {
@@ -111,7 +117,7 @@ export default async function handler(
       await db.collection("mealPlans").updateOne(
         {
           userId: session.user.id,
-          date: date as string,
+          date,
         },
         cleanUpMealsUpdate,
       );

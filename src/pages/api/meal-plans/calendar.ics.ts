@@ -25,6 +25,12 @@ type RecipeDocument = {
   emoji?: string;
   imageURL?: string;
 };
+const legacyMealKeys: LegacyMealKey[] = [
+  "breakfast",
+  "lunch",
+  "dinner",
+  "snack",
+];
 
 const isMealItem = (meal: unknown): meal is MealItem =>
   typeof meal === "object" &&
@@ -165,14 +171,13 @@ export default async function handler(
         }));
       }
 
-      const { timeSlots: _timeSlots, ...legacyMeals } = meals;
-      Object.entries(legacyMeals).forEach(([mealType, meal]) => {
+      legacyMealKeys.forEach((key) => {
+        const meal = meals[key];
         if (isMealItem(meal)) {
-          const key = mealType as LegacyMealKey;
           enhancedMeals[key] = {
             ...meal,
             ...(meal.recipeId ? { recipe: recipeMap.get(meal.recipeId) } : {}),
-          } as MealPlanWithRecipes["meals"][LegacyMealKey];
+          };
         }
       });
 

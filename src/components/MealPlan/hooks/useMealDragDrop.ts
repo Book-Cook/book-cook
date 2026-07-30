@@ -3,8 +3,6 @@ import type { DragEndEvent } from "@dnd-kit/core";
 
 import type { DraggedRecipe, MealDragDropHandlers } from "../types";
 
-import type { CreateMealPlanPayload } from "../../../clientToServer/types";
-
 export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
   const [draggedRecipe, setDraggedRecipe] = useState<DraggedRecipe | null>(
     null,
@@ -105,10 +103,10 @@ export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
         // If we have a specific time slot, use it directly
         if (dropTarget.time) {
           handlers.addMealMutation.mutate({
-            date: dropTarget.date as string,
+            date: dropTarget.date,
             recipeId: recipe.id,
             servings: 1,
-            time: dropTarget.time as string,
+            time: dropTarget.time,
             duration: 60,
           });
         }
@@ -119,19 +117,19 @@ export function useMealDragDrop(handlers: MealDragDropHandlers, view: string) {
           view === "week" ||
           view === "month"
         ) {
-          handlers.setPendingMeal({ recipe, date: dropTarget.date as string });
+          handlers.setPendingMeal({ recipe, date: dropTarget.date });
           handlers.setShowTimePicker(true);
           handlers.setSidebarOpen(false);
         }
         // Legacy meal type support
         else if (dropTarget.mealType) {
           handlers.addMealMutation.mutate({
-            date: dropTarget.date as string,
+            date: dropTarget.date,
             recipeId: recipe.id,
             servings: 1,
             time: "",
             mealType: dropTarget.mealType,
-          } as CreateMealPlanPayload);
+          });
         }
       }
 

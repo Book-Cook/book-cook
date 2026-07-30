@@ -49,7 +49,7 @@ export const defaultMocks: ApiMockConfig = {
 };
 
 const createFetchMock = (mockConfig: ApiMockConfig) => {
-  const originalFetch = window.fetch;
+  const originalFetch = window.fetch.bind(window);
 
   window.fetch = async (url: string | Request | URL, options?: RequestInit) => {
     const urlString =

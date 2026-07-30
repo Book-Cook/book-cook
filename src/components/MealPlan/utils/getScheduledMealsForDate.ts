@@ -35,7 +35,7 @@ export const getScheduledMealsForDate = (
   const legacyMealTypes = ["breakfast", "lunch", "dinner", "snack"] as const;
 
   legacyMealTypes.forEach((mealType) => {
-    const meal = dayPlan.meals[mealType as keyof typeof dayPlan.meals];
+    const meal = dayPlan.meals[mealType];
     if (
       meal &&
       typeof meal === "object" &&
@@ -46,13 +46,11 @@ export const getScheduledMealsForDate = (
       // Check if we already have a time slot for this time
       const existingSlot = scheduledMeals.find((slot) => slot.time === time);
       if (existingSlot) {
-        existingSlot.meals.push(
-          meal as MealItem & { recipe?: Record<string, unknown> },
-        );
+        existingSlot.meals.push(meal);
       } else {
         scheduledMeals.push({
           time,
-          meals: [meal as MealItem & { recipe?: Record<string, unknown> }],
+          meals: [meal],
         });
       }
     }

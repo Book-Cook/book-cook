@@ -97,7 +97,7 @@ async function handleGet(
                 if (mealData?.recipeId) {
                   return {
                     ...mealData,
-                    recipe: recipeMap.get(mealData.recipeId as string) ?? null,
+                    recipe: recipeMap.get(mealData.recipeId) ?? null,
                   };
                 }
                 return mealData;
@@ -120,7 +120,7 @@ async function handleGet(
           if (mealData?.recipeId) {
             enhancedMeals[mealType] = {
               ...mealData,
-              recipe: recipeMap.get(mealData.recipeId as string) ?? null,
+              recipe: recipeMap.get(mealData.recipeId) ?? null,
             };
           } else {
             enhancedMeals[mealType] = mealData;

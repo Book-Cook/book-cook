@@ -22,8 +22,10 @@ export default async function handler(
     const { oldIndex, newIndex } = req.body;
 
     if (
-      !date ||
-      !time ||
+      typeof date !== "string" ||
+      date.length === 0 ||
+      typeof time !== "string" ||
+      time.length === 0 ||
       typeof oldIndex !== "number" ||
       typeof newIndex !== "number"
     ) {
@@ -36,7 +38,7 @@ export default async function handler(
     // Find the meal plan for this date
     const mealPlan = await mealPlansCollection.findOne({
       userId: session.user.id,
-      date: date as string,
+      date,
     });
 
     if (!mealPlan) {
@@ -72,7 +74,7 @@ export default async function handler(
 
     // Update the meal plan
     const result = await mealPlansCollection.updateOne(
-      { userId: session.user.id, date: date as string },
+      { userId: session.user.id, date },
       {
         $set: {
           "meals.timeSlots": timeSlots,

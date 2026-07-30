@@ -64,7 +64,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
     const legacyMealTypes = ["breakfast", "lunch", "dinner", "snack"] as const;
 
     legacyMealTypes.forEach((mealType) => {
-      const meal = dayPlan.meals[mealType as keyof typeof dayPlan.meals];
+      const meal = dayPlan.meals[mealType];
       if (
         meal &&
         typeof meal === "object" &&
@@ -78,7 +78,7 @@ export const HourlyDayView: React.FC<HourlyDayViewProps> = ({
             {
               ...meal,
               time: defaultTime,
-            } as MealItem & { recipe?: Record<string, unknown> },
+            },
           ]);
         }
       }

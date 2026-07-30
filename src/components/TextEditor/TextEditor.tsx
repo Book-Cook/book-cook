@@ -1,21 +1,16 @@
 import { useEffect, useRef } from "react";
 import type { MutableRefObject } from "react";
-import { ListNode, ListItemNode } from "@lexical/list";
-import { $convertFromMarkdownString } from "@lexical/markdown";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
 import { HorizontalRulePlugin } from "@lexical/react/LexicalHorizontalRulePlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
-import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 import type { LexicalEditor } from "lexical";
 
 import { SelectAllPlugin, MarkdownPastePlugin } from "./plugins";
@@ -23,9 +18,10 @@ import styles from "./TextEditor.module.css";
 import type { TextEditorProps } from "./TextEditor.types";
 import {
   editorTheme,
-  recipeTransformers,
-  recipeShortcutTransformers,
   hashMarkdownKey,
+  importRecipeMarkdown,
+  recipeEditorNodes,
+  recipeShortcutTransformers,
 } from "./textEditorConfig";
 import { TextEditorPlaceholder } from "./TextEditorPlaceholder/TextEditorPlaceholder";
 import { SlashMenu } from "./TextEditorSlashMenu/TextEditorSlashMenu";
@@ -57,20 +53,11 @@ export const TextEditor: React.FC<TextEditorProps> = (props) => {
 
   const initialConfig = {
     namespace: "RecipeEditor",
-    nodes: [
-      HeadingNode,
-      QuoteNode,
-      ListNode,
-      ListItemNode,
-      HorizontalRuleNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-    ],
+    nodes: recipeEditorNodes,
     theme: editorTheme,
     editable: isEditable,
     editorState: () => {
-      $convertFromMarkdownString(text, recipeTransformers, undefined, true);
+      importRecipeMarkdown(text);
     },
     onError: (error: Error) => console.error(error),
   };

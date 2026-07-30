@@ -1,14 +1,31 @@
+import { ListItemNode, ListNode } from "@lexical/list";
 import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
   HEADING,
+  ORDERED_LIST,
   QUOTE,
   TEXT_FORMAT_TRANSFORMERS,
-  ORDERED_LIST,
   UNORDERED_LIST,
 } from "@lexical/markdown";
+import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 
 import { HR_TRANSFORMER, TABLE_TRANSFORMER } from "./markdownExtensions";
 import styles from "./TextEditor.module.css";
 import typography from "../Typography/Typography.module.css";
+
+export const recipeEditorNodes = [
+  HeadingNode,
+  QuoteNode,
+  ListNode,
+  ListItemNode,
+  HorizontalRuleNode,
+  TableNode,
+  TableCellNode,
+  TableRowNode,
+];
 
 export const editorTheme = {
   paragraph: typography.bodyText,
@@ -58,7 +75,14 @@ export const recipeShortcutTransformers = [
   ...TEXT_FORMAT_TRANSFORMERS,
 ];
 
-export const hashMarkdownKey = (markdown: string) => {
+export const importRecipeMarkdown = (markdown: string): void => {
+  $convertFromMarkdownString(markdown, recipeTransformers, undefined, true);
+};
+
+export const exportRecipeMarkdown = (): string =>
+  $convertToMarkdownString(recipeTransformers, undefined, true);
+
+export const hashMarkdownKey = (markdown: string): string => {
   const len = markdown.length;
   const sample =
     len > 8000
