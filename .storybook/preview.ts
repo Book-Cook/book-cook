@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/nextjs";
 import { withGlobalProviders } from "../src/stories/globalProviders";
 import { MOCK_BASE_DATE } from "../src/mocks/utils/mockDates";
+import "../src/styles/global.css";
 
 // Mock Date globally for consistent Chromatic snapshots
 // This ensures all stories use the same fixed date

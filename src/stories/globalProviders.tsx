@@ -14,11 +14,20 @@ const mockSession: Session = {
   expires: "2099-12-31",
 };
 
-const StoryWrapper: React.FC<{ Story: React.ComponentType }> = ({ Story }) => {
+const StoryWrapper: React.FC<{ Story: React.ComponentType; theme: string }> = ({
+  Story,
+  theme,
+}) => {
   const [searchBoxValue, setSearchBoxValue] = React.useState("");
   const onSearchBoxValueChange = (incomingValue: string) => {
     setSearchBoxValue(incomingValue);
   };
+
+  // Design tokens are published on [data-theme], so stories must set it to
+  // render with the same colours and typography as the application.
+  React.useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   return (
     <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
@@ -31,9 +40,12 @@ const StoryWrapper: React.FC<{ Story: React.ComponentType }> = ({ Story }) => {
 
 export const withGlobalProviders = (
   Story: React.ComponentType,
-  _context: StoryContext,
+  context: StoryContext,
 ) => (
   <SessionProvider session={mockSession}>
-    <StoryWrapper Story={Story} />
+    <StoryWrapper
+      Story={Story}
+      theme={(context.globals.themeMode as string) ?? "light"}
+    />
   </SessionProvider>
 );

@@ -18,6 +18,7 @@ export * from "./Toast";
 export * from "./Accordion";
 export * from "./AppShell";
 export * from "./Auth";
+export * from "./ConfirmDialog";
 export * from "./Dialog";
 export * from "./Dropdown";
 export * from "./Menu";
