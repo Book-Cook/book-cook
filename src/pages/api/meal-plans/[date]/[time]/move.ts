@@ -22,11 +22,15 @@ export default async function handler(
     const { mealIndex, targetDate, targetTime } = req.body;
 
     if (
-      !date ||
-      !time ||
+      typeof date !== "string" ||
+      date.length === 0 ||
+      typeof time !== "string" ||
+      time.length === 0 ||
       typeof mealIndex !== "number" ||
-      !targetDate ||
-      !targetTime
+      typeof targetDate !== "string" ||
+      targetDate.length === 0 ||
+      typeof targetTime !== "string" ||
+      targetTime.length === 0
     ) {
       return res.status(400).json({ message: "Missing required parameters" });
     }
@@ -37,7 +41,7 @@ export default async function handler(
     // Find the source meal plan
     const sourceMealPlan = await mealPlansCollection.findOne({
       userId: session.user.id,
-      date: date as string,
+      date,
     });
 
     if (!sourceMealPlan) {
@@ -98,7 +102,7 @@ export default async function handler(
 
       // Update the meal plan
       await mealPlansCollection.updateOne(
-        { userId: session.user.id, date: date as string },
+        { userId: session.user.id, date },
         {
           $set: {
             "meals.timeSlots": timeSlots,
@@ -121,7 +125,7 @@ export default async function handler(
 
     // Update source meal plan
     await mealPlansCollection.updateOne(
-      { userId: session.user.id, date: date as string },
+      { userId: session.user.id, date },
       {
         $set: {
           "meals.timeSlots": timeSlots,
@@ -131,7 +135,7 @@ export default async function handler(
     );
 
     // Now add to target meal plan
-    const targetDateStr = targetDate as string;
+    const targetDateStr = targetDate;
 
     // Find or create target meal plan
     let targetMealPlan = await mealPlansCollection.findOne({

@@ -4,10 +4,7 @@
 import { formatDateString } from "./formatDateString";
 import type { TimeSlot } from "../types";
 
-import type {
-  MealPlanWithRecipes,
-  MealItem,
-} from "../../../clientToServer/types";
+import type { MealPlanWithRecipes } from "../../../clientToServer/types";
 import { mealTypeToTime } from "../../../utils/timeSlots";
 
 export const getMealsForDate = (
@@ -36,13 +33,11 @@ export const getMealsForDate = (
       const existingSlot = allSlots.find((slot) => slot.time === time);
 
       if (existingSlot) {
-        existingSlot.meals.push(
-          meal as MealItem & { recipe?: Record<string, unknown> },
-        );
+        existingSlot.meals.push(meal);
       } else {
         allSlots.push({
           time,
-          meals: [meal as MealItem & { recipe?: Record<string, unknown> }],
+          meals: [meal],
         });
       }
     }

@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { $convertFromMarkdownString } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 
-import { recipeTransformers } from "../textEditorConfig";
+import { importRecipeMarkdown } from "../textEditorConfig";
 
 function looksLikeMarkdown(text: string): boolean {
   return /^#{1,6}\s|\*\*|__|\*[^*]|^-\s|^\d+\.\s|^>\s|^```/m.test(text);
@@ -36,7 +35,7 @@ export function MarkdownPastePlugin() {
             selection.getTextContent().trim() === rootText);
 
         if (isEmptyOrFullySelected) {
-          $convertFromMarkdownString(text, recipeTransformers, undefined, true);
+          importRecipeMarkdown(text);
         } else if ($isRangeSelection(selection)) {
           selection.insertText(text);
         }

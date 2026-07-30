@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useRef, useState } from "react";
-import { $convertToMarkdownString } from "@lexical/markdown";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { LexicalEditor } from "lexical";
 import { useRouter } from "next/router";
@@ -13,7 +12,7 @@ import {
   RecipeViewSaveStateProvider,
   useRecipeViewSaveState,
 } from "../RecipeView/RecipeViewSaveStateContext";
-import { recipeTransformers } from "../TextEditor/textEditorConfig";
+import { exportRecipeMarkdown } from "../TextEditor/textEditorConfig";
 
 import { fetchRecipe } from "../../clientToServer";
 
@@ -74,9 +73,7 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
     if (!editor) {
       return;
     }
-    const data = editor.read(() =>
-      $convertToMarkdownString(recipeTransformers),
-    );
+    const data = editor.read(exportRecipeMarkdown);
     const title = saveState?.getTitle() ?? recipe.title;
     const emoji = saveState?.getEmoji() ?? recipe.emoji;
     const tags = saveState?.getTags() ?? recipe.tags ?? [];

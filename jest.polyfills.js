@@ -1,29 +1,61 @@
 // Polyfills for Jest/MSW compatibility
-const { TextDecoder, TextEncoder } = require("util");
+const { Blob, File } = require("buffer");
 const {
   ReadableStream,
   WritableStream,
   TransformStream,
 } = require("stream/web");
+const { TextDecoder, TextEncoder } = require("util");
 
-// Set global polyfills
-global.TextDecoder = TextDecoder;
-global.TextEncoder = TextEncoder;
-global.ReadableStream = ReadableStream;
-global.WritableStream = WritableStream;
-global.TransformStream = TransformStream;
+class MessagePort {
+  postMessage() {}
+  close() {}
+  start() {}
+  addEventListener() {}
+  removeEventListener() {}
+}
 
-// Mock BroadcastChannel for MSW
-global.BroadcastChannel = class BroadcastChannel {
-  constructor(name) {
-    this.name = name;
+class MessageChannel {
+  constructor() {
+    this.port1 = new MessagePort();
+    this.port2 = new MessagePort();
   }
+}
 
+Object.assign(global, {
+  Blob,
+  File,
+  MessageChannel,
+  MessagePort,
+  ReadableStream,
+  TextDecoder,
+  TextEncoder,
+  TransformStream,
+  WritableStream,
+});
+
+global.BroadcastChannel = class BroadcastChannel {
   postMessage() {}
   close() {}
   addEventListener() {}
   removeEventListener() {}
 };
+
+const {
+  fetch,
+  FormData,
+  Headers,
+  Request,
+  Response,
+} = require("undici");
+
+Object.assign(global, {
+  fetch,
+  FormData,
+  Headers,
+  Request,
+  Response,
+});
 
 // Mock window APIs for carousel library (only if window exists)
 if (typeof window !== "undefined") {
@@ -60,6 +92,3 @@ if (typeof window !== "undefined") {
     disconnect() {}
   };
 }
-
-// Import whatwg-fetch for fetch polyfill
-require("whatwg-fetch");

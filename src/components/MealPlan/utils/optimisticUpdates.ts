@@ -4,7 +4,6 @@
 import type {
   CreateMealPlanPayload,
   MealPlanWithRecipes,
-  MealType,
 } from "../../../clientToServer/types";
 import { mealTypeToTime } from "../../../utils/timeSlots";
 
@@ -60,19 +59,17 @@ export function addMealOptimistically(
       }
     } else if (mealType) {
       // Legacy meal type
-      const legacyKey = mealType as MealType;
-      const legacyMealTypes: MealType[] = [
-        "breakfast",
-        "lunch",
-        "dinner",
-        "snack",
-      ];
-      if (!legacyMealTypes.includes(legacyKey)) {
+      if (
+        mealType !== "breakfast" &&
+        mealType !== "lunch" &&
+        mealType !== "dinner" &&
+        mealType !== "snack"
+      ) {
         return plan;
       }
       const meals = { ...updatedPlan.meals };
-      const defaultTime = time ?? mealTypeToTime(legacyKey);
-      meals[legacyKey] = {
+      const defaultTime = time ?? mealTypeToTime(mealType);
+      meals[mealType] = {
         recipeId: newMeal.recipeId ?? "",
         servings: newMeal.servings ?? 1,
         time: defaultTime,

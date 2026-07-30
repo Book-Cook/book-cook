@@ -77,7 +77,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
 
     return (
       <Component
-        ref={ref as React.Ref<HTMLElement>}
+        ref={ref}
         className={classNames}
         {...rest}
       >
