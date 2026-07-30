@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { LexicalEditor } from "lexical";
 import { useRouter } from "next/router";
 
+import { ConfirmDialog } from "../ConfirmDialog";
 import { LoadingScreen, ErrorScreen } from "../FallbackScreens";
 import { RecipeSaveBar } from "../RecipeSaveBar";
 import type { SaveBarStatus } from "../RecipeSaveBar/RecipeSaveBar.types";
@@ -15,6 +16,7 @@ import {
 import { exportRecipeMarkdown } from "../TextEditor/textEditorConfig";
 
 import { fetchRecipe } from "../../clientToServer";
+import { useUnsavedChangesGuard } from "../../hooks";
 
 type RecipePageInnerProps = {
   recipeId: string;
@@ -26,6 +28,8 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
   const [status, setStatus] = useState<SaveBarStatus>("idle");
   const saveState = useRecipeViewSaveState();
   const queryClient = useQueryClient();
+  const isDirty = saveState?.isDirty ?? false;
+  const guard = useUnsavedChangesGuard({ enabled: isDirty });
 
   const {
     data: recipe,
@@ -105,14 +109,30 @@ function RecipePageInner({ recipeId, onCancelReset }: RecipePageInnerProps) {
   };
 
   const onCancel = () => {
-    setStatus("idle");
-    onCancelReset();
+    guard.guardAction(() => {
+      setStatus("idle");
+      onCancelReset();
+    });
   };
 
   return (
     <>
       <RecipeView recipe={recipe} viewingMode="editor" editorRef={editorRef} />
       <RecipeSaveBar status={status} onSave={onSave} onCancel={onCancel} />
+      <ConfirmDialog
+        open={guard.isBlocked}
+        onOpenChange={(open) => {
+          if (!open) {
+            guard.stay();
+          }
+        }}
+        title="Discard unsaved changes?"
+        description="Your edits to this recipe have not been saved yet. They will be lost if you continue."
+        confirmLabel="Discard changes"
+        cancelLabel="Keep editing"
+        onConfirm={guard.discard}
+        onCancel={guard.stay}
+      />
     </>
   );
 }
