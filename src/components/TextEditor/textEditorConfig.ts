@@ -28,12 +28,17 @@ export const recipeEditorNodes = [
   TableRowNode,
 ];
 
+/** Lexical theme values accept a space-separated class list, so each block keeps
+ * the shared Typography primitive for family, weight and colour, and adds an
+ * editor-scoped class that owns rhythm, indent and rules. */
+const prose = (...classNames: string[]): string => classNames.join(" ");
+
 export const editorTheme = {
-  paragraph: typography.bodyText,
+  paragraph: prose(typography.bodyText, styles.paragraph),
   heading: {
-    h1: typography.sectionHeading,
-    h2: typography.sectionHeading,
-    h3: typography.subsectionHeading,
+    h1: prose(typography.sectionHeading, styles.heading, styles.h1),
+    h2: prose(typography.sectionHeading, styles.heading, styles.h2),
+    h3: prose(typography.subsectionHeading, styles.heading, styles.h3),
   },
   text: {
     bold: typography.bold,
@@ -41,10 +46,11 @@ export const editorTheme = {
     underline: typography.underline,
     strikethrough: typography.strikethrough,
   },
-  quote: typography.bodyText,
+  quote: prose(typography.bodyText, styles.quote),
+  hr: styles.hr,
   list: {
-    ol: styles.ol,
-    ul: styles.ul,
+    ol: prose(styles.list, styles.ol),
+    ul: prose(styles.list, styles.ul),
     listitem: styles.listItem,
     nested: {
       listitem: styles.nestedListItem,

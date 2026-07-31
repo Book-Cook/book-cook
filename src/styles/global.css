@@ -3,6 +3,47 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-serif: "Merriweather", "Georgia", serif;
 
+  /* Type scale */
+  --type-size-xs: 0.8125rem;
+  --type-size-sm: 0.875rem;
+  --type-size-md: 1rem;
+  --type-size-lg: 1.125rem;
+  --type-size-xl: 1.25rem;
+  --type-size-2xl: 1.375rem;
+  --type-size-3xl: 1.5rem;
+  --type-size-4xl: 1.75rem;
+  --type-size-5xl: 1.875rem;
+
+  /* Line height */
+  --type-leading-tight: 1.25;
+  --type-leading-snug: 1.4;
+  --type-leading-normal: 1.5;
+  --type-leading-relaxed: 1.65;
+
+  /* Letter spacing */
+  --type-tracking-tight: -0.02em;
+  --type-tracking-snug: -0.011em;
+
+  /* Font weight */
+  --type-weight-regular: 400;
+  --type-weight-medium: 500;
+  --type-weight-semibold: 600;
+
+  /* Prose rhythm — owns the editor's vertical spacing so no block relies on
+     user-agent defaults. Markdown blank lines import as empty paragraphs, so
+     consecutive text lines sit flush and structural blocks space themselves.
+     The measure is expressed in rem, not ch, so every block wraps at the same
+     width instead of scaling with its own font size. */
+  --prose-measure: 39rem;
+  --prose-gap-heading: 28px;
+  --prose-gap-subheading: 20px;
+  --prose-gap-block: 14px;
+  --prose-gap-rule: 28px;
+  --prose-list-indent: 26px;
+  --prose-list-item-gap: 6px;
+  --prose-quote-indent: 16px;
+  --prose-quote-rule: 3px;
+
   /* Animation */
   --motion-default: 0.2s ease;
   --motion-spring: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
