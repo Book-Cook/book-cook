@@ -33,38 +33,107 @@
   box-sizing: border-box;
 }
 
+.ol,
+.ul {
+  list-style-position: outside;
+}
+
 .ol {
-  padding: 0;
-  margin: 0;
-  padding-left: 24px;
   list-style-type: decimal;
 }
 
 .ul {
-  padding: 0;
-  margin: 0;
-  padding-left: 24px;
   list-style-type: disc;
-}
-
-.listItem {
-  margin: 6px 0;
-  line-height: 1.5;
-  font-family: var(--font-sans);
-  font-size: 16px;
 }
 
 .nestedListItem {
   list-style-type: none;
 }
 
+/* ── Prose rhythm ──
+   Markdown blank lines import as empty <p><br></p> blocks, so paragraphs sit
+   flush and every structural block owns its own spacing. Rules are scoped to
+   `.input` so they outrank the shared Typography primitives without those
+   primitives gaining margins that would disturb the rest of the app. */
+
+.input > * {
+  max-width: var(--prose-measure);
+}
+
+.input > .paragraph {
+  margin: 0;
+  line-height: var(--type-leading-relaxed);
+}
+
+.input > .heading {
+  margin: var(--prose-gap-heading) 0 0;
+}
+
+.input > .heading:first-child {
+  margin-top: 0;
+}
+
+.input > .h1 {
+  font-size: var(--type-size-4xl);
+  letter-spacing: var(--type-tracking-tight);
+}
+
+.input > .h2 {
+  font-size: var(--type-size-2xl);
+}
+
+.input > .h3 {
+  font-size: var(--type-size-lg);
+  margin-top: var(--prose-gap-subheading);
+}
+
+.input > .list {
+  margin: var(--prose-gap-block) 0;
+  padding: 0 0 0 var(--prose-list-indent);
+}
+
+.list .list {
+  margin: var(--prose-list-item-gap) 0 0;
+}
+
+.listItem {
+  margin: var(--prose-list-item-gap) 0;
+  padding-left: 4px;
+  line-height: var(--type-leading-relaxed);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-md);
+  color: var(--ui-TextSecondary);
+}
+
+.listItem::marker {
+  color: var(--ui-TextLabel);
+  font-variant-numeric: tabular-nums;
+}
+
+.input > .quote {
+  margin: var(--prose-gap-block) 0;
+  padding-left: var(--prose-quote-indent);
+  border-left: var(--prose-quote-rule) solid var(--brand-Primary);
+  line-height: var(--type-leading-relaxed);
+  color: var(--ui-TextLabel);
+  font-style: italic;
+}
+
+.hr {
+  margin: var(--prose-gap-rule) 0;
+  border: none;
+  border-top: 1px solid var(--ui-Divider);
+  height: 0;
+}
+
 /* ── Table ── */
 .table {
   border-collapse: collapse;
   width: 100%;
-  margin: 16px 0;
+  margin: var(--prose-gap-block) 0;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--type-size-sm);
+  line-height: var(--type-leading-normal);
 }
 
 .tableRow {
@@ -76,10 +145,11 @@
   padding: 8px 12px;
   vertical-align: top;
   min-width: 80px;
-  color: var(--ui-TextPrimary);
+  color: var(--ui-TextSecondary);
 }
 
 .tableCellHeader {
   background: var(--ui-ControlHover);
-  font-weight: 600;
+  font-weight: var(--type-weight-semibold);
+  color: var(--ui-TextPrimary);
 }

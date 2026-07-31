@@ -1,6 +1,7 @@
 import { createEditor } from "lexical";
 
 import {
+  editorTheme,
   exportRecipeMarkdown,
   importRecipeMarkdown,
   recipeEditorNodes,
@@ -40,5 +41,32 @@ describe("recipe markdown serialization", () => {
 
     expect(firstSave).toBe(markdown);
     expect(secondSave).toBe(markdown);
+  });
+});
+
+describe("editor theme", () => {
+  it("gives each heading level a distinct class so hierarchy is visible", () => {
+    const { h1, h2, h3 } = editorTheme.heading;
+
+    expect(new Set([h1, h2, h3]).size).toBe(3);
+  });
+
+  it("styles quotes apart from paragraphs", () => {
+    expect(editorTheme.quote).not.toBe(editorTheme.paragraph);
+  });
+
+  it("themes every block that carries prose rhythm", () => {
+    expect(editorTheme.hr).toBeTruthy();
+    expect(editorTheme.paragraph).toBeTruthy();
+    expect(editorTheme.list.ul).toBeTruthy();
+    expect(editorTheme.list.ol).toBeTruthy();
+  });
+
+  it("keeps ordered and unordered lists on a shared rhythm class", () => {
+    const shared = editorTheme.list.ul
+      .split(" ")
+      .filter((className) => editorTheme.list.ol.split(" ").includes(className));
+
+    expect(shared).toHaveLength(1);
   });
 });
