@@ -14,6 +14,11 @@ const withPWA = enablePWA
       disable: process.env.NODE_ENV === "development",
       register: true,
       skipWaiting: true,
+      // `/` is statically prerendered and returns identical HTML to everyone,
+      // so the start URL can be precached with the rest of the build output.
+      // Leaving this on made next-pwa patch history.replaceState and re-fetch
+      // the whole document during hydration purely to seed its start-url cache.
+      dynamicStartUrl: false,
       buildExcludes: [
         /middleware-manifest\.json$/,
         /\.map$/,

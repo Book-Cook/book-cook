@@ -118,7 +118,10 @@ export const Sidebar = ({
               </span>
             </button>
           ) : (
-            <Link href="/" className={styles.logoLink}>
+            // The sidebar only renders for signed-in users, and `/` redirects
+            // them straight back to `/recipes`, so prefetching the landing page
+            // downloads a route this user can never land on.
+            <Link href="/" prefetch={false} className={styles.logoLink}>
               <span className={styles.logoIcon}>
                 <BookOpenIcon size={16} weight="fill" />
               </span>
