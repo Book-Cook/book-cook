@@ -5,7 +5,7 @@ import type { Session } from "next-auth";
 import { getDb } from "src/utils/db";
 import { authOptions } from "../auth/[...nextauth]";
 
-import clientPromise from "../../../clients/mongo";
+import { getMongoClient } from "../../../clients/mongo";
 
 type ResponseData = { message: string };
 
@@ -26,7 +26,7 @@ export default async function handler(
   }
 
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = await getDb();
 
     // Start a session for transaction
