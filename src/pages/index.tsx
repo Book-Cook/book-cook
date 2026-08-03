@@ -1,25 +1,25 @@
 import * as React from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { LoadingScreen } from "../components/FallbackScreens";
-
-const LandingPage = dynamic(
-  () => import("../components/LandingPage/LandingPage"),
-  { loading: () => <LoadingScreen /> },
-);
+import LandingPage from "../components/LandingPage/LandingPage";
 
 export default function Index() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  if (status === "loading") {
-    return <LoadingScreen />;
-  }
+  React.useEffect(() => {
+    if (session) {
+      void router.replace("/recipes");
+    }
+  }, [session, router]);
 
-  if (session) {
-    void router.replace("/recipes");
+  // LandingPage is static markup, so it is imported directly and rendered while
+  // the session is still resolving. Deferring it behind a dynamic import and a
+  // `status === "loading"` gate served first-time visitors an empty shell that
+  // painted nothing until both the JS bundle and an auth round trip finished.
+  if (status === "authenticated") {
     return <LoadingScreen />;
   }
 
