@@ -58,22 +58,25 @@ export default function Recipes() {
 
   const recipes = data?.recipes ?? [];
   const totalCount = data?.totalCount ?? 0;
+  const isSessionLoading = status === "loading";
 
   const availableTags = Array.from(
     new Set(recipes.flatMap((r) => r.tags ?? [])),
   );
 
-  if (status === "loading") {
-    return null;
-  }
-
-  if (!session) {
+  // Rendering `null` while the session resolves left the server emitting an
+  // empty document and the browser showing a blank screen for a whole auth
+  // round trip. The page chrome does not depend on the session, so it paints
+  // immediately and only the list waits.
+  if (!isSessionLoading && !session) {
     return <Unauthorized />;
   }
 
-  const countLabel = `${totalCount} recipe${totalCount !== 1 ? "s" : ""}${
-    searchBoxValue ? ` matching "${searchBoxValue}"` : " in your collection"
-  }${selectedTags.length > 0 ? ` with tags: ${selectedTags.join(", ")}` : ""}`;
+  const countLabel = isSessionLoading
+    ? "Loading your collection"
+    : `${totalCount} recipe${totalCount !== 1 ? "s" : ""}${
+        searchBoxValue ? ` matching "${searchBoxValue}"` : " in your collection"
+      }${selectedTags.length > 0 ? ` with tags: ${selectedTags.join(", ")}` : ""}`;
 
   return (
     <div className={styles.pageContainer}>
@@ -114,7 +117,7 @@ export default function Recipes() {
         totalCount={totalCount}
         currentPage={currentPage}
         pageSize={PAGE_SIZE}
-        isLoading={isLoading}
+        isLoading={isLoading || isSessionLoading}
         error={error}
         onPageChange={setCurrentPage}
         onPageSizeChange={() => undefined}

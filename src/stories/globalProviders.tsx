@@ -18,11 +18,6 @@ const StoryWrapper: React.FC<{ Story: React.ComponentType; theme: string }> = ({
   Story,
   theme,
 }) => {
-  const [searchBoxValue, setSearchBoxValue] = React.useState("");
-  const onSearchBoxValueChange = (incomingValue: string) => {
-    setSearchBoxValue(incomingValue);
-  };
-
   // Design tokens are published on [data-theme], so stories must set it to
   // render with the same colours and typography as the application.
   React.useEffect(() => {
@@ -30,7 +25,7 @@ const StoryWrapper: React.FC<{ Story: React.ComponentType; theme: string }> = ({
   }, [theme]);
 
   return (
-    <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
+    <SearchBoxProvider>
       <div style={{ padding: "12px 24px", boxSizing: "border-box" }}>
         <Story />
       </div>

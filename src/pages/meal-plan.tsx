@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 
 import styles from "./meal-plan.module.css";
 import { Unauthorized } from "../components/FallbackScreens";
+import { Spinner } from "../components/Spinner";
 
 const MealPlanCalendar = dynamic(
   () =>
@@ -11,15 +12,17 @@ const MealPlanCalendar = dynamic(
       (mod) => mod.MealPlanCalendar,
     ),
   {
-    loading: () => null,
+    loading: () => <Spinner size="large" />,
     ssr: false,
   },
 );
 
 export default function MealPlanPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session) {
+  // Treating "still resolving" as unauthorized rendered nothing at all for a
+  // whole auth round trip. Only a settled unauthenticated session redirects.
+  if (status !== "loading" && !session) {
     return <Unauthorized />;
   }
 
