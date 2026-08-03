@@ -15,6 +15,12 @@ declare module "next-auth" {
   }
 }
 
+declare module "next-auth/jwt" {
+  interface JWT {
+    userId?: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -23,16 +29,35 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session }) {
-      if (session.user?.email) {
-        const db = await getDb();
-        const user = await db
-          .collection("users")
-          .findOne({ email: session.user.email }, { projection: { _id: 1 } });
+    // Resolve the user id once and cache it on the JWT. `getServerSession` runs
+    // these callbacks on every authenticated API request, so looking the user up
+    // here instead of in `session` removes a MongoDB round trip from each one.
+    async jwt({ token }) {
+      if (!token.userId && token.email) {
+        try {
+          const db = await getDb();
+          const user = await db
+            .collection("users")
+            .findOne({ email: token.email }, { projection: { _id: 1 } });
 
-        if (user?._id) {
-          session.user.id = user._id.toString();
+          // `events.signIn` creates the document *after* this callback first
+          // runs, so leave the id unset and retry on the next request rather
+          // than caching a miss.
+          if (user?._id) {
+            token.userId = user._id.toString();
+          }
+        } catch (error) {
+          // A database blip must not throw out of this callback: NextAuth would
+          // return an empty session and sign the user out. Keep the token and
+          // retry the lookup on the next request instead.
+          console.error("Failed to resolve user id for session token:", error);
         }
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && token.userId) {
+        session.user.id = token.userId;
       }
       return session;
     },

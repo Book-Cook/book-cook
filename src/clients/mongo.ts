@@ -42,13 +42,18 @@ const fallbackUri = `mongodb://${username}:${password}@${cluster}:27017/${dbName
 
 // Base connection options
 const baseOptions: MongoClientOptions = {
-  connectTimeoutMS: 30000,
+  connectTimeoutMS: 10000,
   socketTimeoutMS: 45000,
-  maxPoolSize: 50,
+  // Serverless runs many short-lived instances; a large pool per instance
+  // multiplies into a connection storm against the cluster.
+  maxPoolSize: 10,
+  // Without this the driver waits out its 30s default before surfacing a
+  // transient cluster blip, which is the difference between a slow page and a
+  // hung one.
+  serverSelectionTimeoutMS: 5000,
   retryWrites: true,
   family: 4, // Force IPv4 for mobile hotspot compatibility
   ...(process.env.NODE_ENV === "development" && {
-    serverSelectionTimeoutMS: 5000,
     heartbeatFrequencyMS: 2000,
   }),
 };
@@ -65,8 +70,6 @@ const directOptions: MongoClientOptions = {
   ...baseOptions,
   directConnection: false,
 };
-
-let clientPromise: Promise<MongoClient>;
 
 // Enhanced connection logic with automatic fallback
 async function createMongoConnection(): Promise<MongoClient> {
@@ -97,6 +100,13 @@ async function createMongoConnection(): Promise<MongoClient> {
     await client.connect();
     return client;
   } catch (error) {
+    // The direct fallback targets `cluster:27017`, which an Atlas SRV cluster
+    // does not serve. In production it can only burn another timeout, so keep
+    // it to development where it exists for mobile-hotspot DNS issues.
+    if (process.env.NODE_ENV !== "development") {
+      throw error;
+    }
+
     console.warn(
       "Primary MongoDB SRV connection failed, trying direct connection...",
       error,
@@ -119,18 +129,33 @@ async function createMongoConnection(): Promise<MongoClient> {
   }
 }
 
-try {
-  if (process.env.NODE_ENV === "development") {
-    // In development, use a global variable to preserve the connection across hot-reloads
-    global._mongoClientPromise ??= createMongoConnection();
-    clientPromise = global._mongoClientPromise;
-  } else {
-    // In production, create a new connection
-    clientPromise = createMongoConnection();
-  }
-} catch (error) {
-  console.error("MongoDB connection initialization error:", error);
-  throw new Error("Failed to initialize MongoDB connection");
+function connect(): Promise<MongoClient> {
+  // A rejected promise stays cached for the life of the instance, so a single
+  // transient failure would break every later request. Evict it instead.
+  const pending = createMongoConnection().catch((error) => {
+    if (global._mongoClientPromise === pending) {
+      global._mongoClientPromise = undefined;
+    }
+    throw error;
+  });
+  return pending;
 }
 
-export default clientPromise;
+/**
+ * Always read the client through this. It re-reads the cache, so a connection
+ * evicted after a failure is retried instead of returning the rejected promise
+ * forever.
+ */
+export function getMongoClient(): Promise<MongoClient> {
+  // Cached on `global` in every environment: it survives dev hot-reloads, and in
+  // production it stops a second module instance from opening a second pool.
+  global._mongoClientPromise ??= connect();
+  return global._mongoClientPromise;
+}
+
+// Start connecting at import time so the handshake overlaps with module
+// evaluation rather than blocking the first query.
+void getMongoClient().catch(() => {
+  // Swallowed here; callers surface the failure. Prevents an unhandled
+  // rejection when nothing has awaited the client yet.
+});

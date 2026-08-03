@@ -1,6 +1,6 @@
-import clientPromise from "src/clients/mongo";
+import { getMongoClient } from "src/clients/mongo";
 
 export async function getDb() {
-  const client = await clientPromise;
+  const client = await getMongoClient();
   return client.db(process.env.MONGODB_DB);
 }
