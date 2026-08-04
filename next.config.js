@@ -70,6 +70,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["@tanstack/query-core"],
+  // Bundle (rather than externalize) this ESM-only package on the server.
+  // Externalizing it made every importer an async webpack module, which loses
+  // next/router's RouterContext during static prerendering. Its CJS entry is a
+  // 4.9 MB all-icons monolith, so requiring it is not an option either.
+  transpilePackages: ["@phosphor-icons/react"],
   experimental: {
     reactCompiler: {
       target: "19",
@@ -101,7 +106,49 @@ const nextConfig = {
         "@radix-ui/react-dialog",
         "@radix-ui/react-dropdown-menu",
         "@radix-ui/react-tooltip",
+        // Each of these is ESM-first and turned its importers (AppShell,
+        // AppSidebar, RecipeSearchFlyout, ...) into async webpack modules,
+        // which lost RouterContext during static prerendering. All ship a CJS
+        // main and no "type": "module", so requiring them synchronously is safe.
+        // @phosphor-icons/react is deliberately excluded: it sets
+        // "type": "module" while its CJS entry is a .js file, so require() of it
+        // throws "exports is not defined in ES module scope".
+        "@radix-ui/react-select",
+        "@radix-ui/react-accordion",
+        "cmdk",
+        "embla-carousel-react",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/modifiers",
+        "next-auth/react",
       ];
+      const isForcedCommonJs = (request) => {
+        if (FORCE_COMMONJS.includes(request)) {
+          return true;
+        }
+        // The Lexical family is ESM-only and made the whole editor subtree async
+        // webpack modules on the server, which lost next/router's RouterContext
+        // during static prerendering. Every package ships a CJS entry.
+        // @lexical/code is excluded so the PrismJS-stripping alias below still
+        // applies -- externalizing it would pull PrismJS back into the build.
+        if (request === "@lexical/code" || request.startsWith("@lexical/code/")) {
+          return false;
+        }
+        return (
+          request === "lexical" ||
+          request.startsWith("@lexical/") ||
+          // package.json sets "type": "module", so webpack resolved Next's ESM
+          // build (next/dist/esm/**) for app code while the Pages Router
+          // renderer uses the CJS build. That duplicated
+          // router-context.shared-runtime, so every useRouter() call in the app
+          // tree read a different context instance than the renderer provided
+          // and threw "NextRouter was not mounted" during static prerendering.
+          /^next\/(router|document|link|head|image|script|dynamic)$/.test(
+            request,
+          )
+        );
+      };
+
       const existingExternals = Array.isArray(config.externals)
         ? config.externals
         : config.externals
@@ -109,7 +156,7 @@ const nextConfig = {
           : [];
       config.externals = [
         ({ request }, callback) => {
-          if (FORCE_COMMONJS.includes(request)) {
+          if (request && isForcedCommonJs(request)) {
             return callback(null, `commonjs ${request}`);
           }
           callback();

@@ -3,7 +3,7 @@ import { jest } from "@jest/globals";
 
 import { SearchBar } from "./SearchBar";
 
-import { render } from "../../../utils";
+import { render } from "../../../utils/testing";
 
 jest.mock("../../../context", () => ({
   useSearchBox: () => ({

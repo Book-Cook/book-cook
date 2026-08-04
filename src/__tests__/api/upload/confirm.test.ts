@@ -26,8 +26,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import { r2 } from "src/lib/r2";
+import handler from "src/pages/api/upload/confirm";
 import { getDb } from "src/utils/db";
-import handler from "../confirm";
 
 const mockGetServerSession = getServerSession as jest.Mock;
 const mockGetDb = getDb as jest.Mock;

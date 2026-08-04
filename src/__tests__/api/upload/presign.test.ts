@@ -23,8 +23,8 @@ jest.mock("@aws-sdk/s3-request-presigner", () => ({
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
+import handler from "src/pages/api/upload/presign";
 import { getDb } from "src/utils/db";
-import handler from "../presign";
 
 const mockGetServerSession = getServerSession as jest.Mock;
 const mockGetDb = getDb as jest.Mock;

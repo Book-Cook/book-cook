@@ -9,7 +9,7 @@ import { Spinner } from "../components/Spinner";
 const MealPlanCalendar = dynamic(
   () =>
     import("../components/MealPlan/MealPlanCalendar/MealPlanCalendar").then(
-      (mod) => mod.MealPlanCalendar,
+      (mod) => ({ default: mod.MealPlanCalendar }),
     ),
   {
     loading: () => <Spinner size="large" />,
