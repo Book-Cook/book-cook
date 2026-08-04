@@ -30,7 +30,6 @@ const RecipeSearchFlyout = dynamic(
   { ssr: false },
 );
 
-
 export type AppShellProps = {
   children: React.ReactNode;
 };
