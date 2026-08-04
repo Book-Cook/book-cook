@@ -55,7 +55,7 @@
 │   ├── server/             # Server-side utilities
 │   ├── clients/            # External API clients
 │   └── stories/            # Storybook stories
-├── tests/                  # Unit and integration tests
+├── tests/                  # Playwright end-to-end specs (ignored by Jest)
 ├── public/                 # Static assets
 │   ├── icons/
 │   └── image/
@@ -83,6 +83,17 @@
 - Each component and hook should include a short comment on usage
 - Document top-level files (like `pages/_app.tsx`) and configs
 - Keep `README.md` up to date with getting started, design tokens, and component usage notes
+
+## 🧪 Test placement
+
+- Jest specs live in `src/**/__tests__/` or beside their subject as `*.test.ts(x)`.
+- **Never put a test file under `src/pages/`.** Every file there becomes a route,
+  so `src/pages/api/upload/__tests__/presign.test.ts` shipped as a live
+  `/api/upload/__tests__/presign.test` endpoint. API-route specs belong in
+  `src/__tests__/api/**`; import the handler by root-absolute path
+  (e.g. `src/pages/api/upload/presign`).
+- `tests/` holds Playwright specs only — `jest.config.js` ignores it, so a Jest
+  file placed there runs silently never.
 
 ## 🔐 Security
 
