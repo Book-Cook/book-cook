@@ -12,12 +12,40 @@
 
 ## ⚙️ Dev Commands
 
-- **Dev server**: `yarn dev`
+- **Dev server**: `yarn dev` (pinned to port 3200)
 - **Build**: `yarn build`
 - **Start**: `yarn start`
 - **Lint**: `yarn lint`
 - **Test**: `yarn test`
 - **Coverage**: `yarn test:coverage`
+
+> Ports are pinned on purpose. Agent runtimes export `PORT=3100` for their own
+> API and `next dev` honours a shell-set `PORT`, so an unpinned dev server
+> hijacks that socket. Never assume 3100 is Book Cook.
+
+## 🌳 Parallel agents (git worktrees)
+
+Multiple agents share one checkout, so each non-primary agent works in its own
+git worktree instead of switching branches in place:
+
+```powershell
+cd C:\Code\book-cook
+git worktree add C:\Code\book-cook-worktrees\<slug> -b <branch> main
+cd C:\Code\book-cook-worktrees\<slug>
+# a new worktree has no dependencies; --ignore-engines is required because a
+# transitive dev dependency rejects Node 25, and --frozen-lockfile fails on the
+# lockfile currently committed to main
+yarn install --ignore-engines
+git checkout -- yarn.lock   # the install rewrites it; do not commit that
+```
+
+- Worktrees live in `C:\Code\book-cook-worktrees\`, a **sibling** of the repo,
+  never inside it — a nested worktree lands in the Jest, ESLint and Next globs.
+- Do **not** junction `node_modules` to the primary checkout. `next lint` and
+  `jest` pass that way, but `next dev` fails with "Next.js package not found":
+  Turbopack resolves real paths and will not follow a junction out of the tree.
+- Clean up after merging: `git worktree remove C:\Code\book-cook-worktrees\<slug>`.
+
 
 ## 📂 Project Structure
 

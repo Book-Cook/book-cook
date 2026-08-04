@@ -34,9 +34,15 @@ cd book-cook
 # Install dependencies
 yarn install
 
-# Start the development server
+# Start the development server (http://localhost:3200)
 yarn dev
 ```
+
+The dev and start scripts pin `-p 3200` deliberately. Next.js honours a
+shell-set `PORT`, and some tooling (including the Cairn Harness agent runtime)
+exports `PORT=3100` for its own API. Without the explicit flag, `yarn dev`
+silently binds 3100 and takes that API's socket. Storybook runs separately on
+6006 via `yarn storybook`.
 
 ## 📦 Bundle Analysis
 
