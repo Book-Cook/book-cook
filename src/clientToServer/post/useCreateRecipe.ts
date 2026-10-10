@@ -24,6 +24,7 @@ export function useCreateRecipe() {
         queryKey: ["recipes"],
         refetchType: "none",
       });
+      void queryClient.invalidateQueries({ queryKey: ["allTags"] });
     },
     onError: (error) => {
       if (error instanceof Error) {

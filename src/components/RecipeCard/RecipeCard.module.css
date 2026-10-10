@@ -27,7 +27,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .interactive:hover {
-    border-color: var(--ui-ControlBorderHover);
+    border-color: var(--brand-Primary);
     box-shadow:
       0 10px 24px -20px
         color-mix(in srgb, var(--ui-ControlBorderPressed) 70%, transparent),

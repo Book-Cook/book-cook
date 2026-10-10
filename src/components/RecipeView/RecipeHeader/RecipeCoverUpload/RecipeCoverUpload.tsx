@@ -99,7 +99,7 @@ export const RecipeCoverUpload = forwardRef<
                 <MenuItem
                   startIcon={<TrashIcon size={14} />}
                   onSelect={() => void handleRemoveCover()}
-                  style={{ color: "var(--danger-Primary)" }}
+                  destructive
                 >
                   Remove cover
                 </MenuItem>

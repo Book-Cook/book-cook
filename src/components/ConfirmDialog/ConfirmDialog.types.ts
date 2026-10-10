@@ -41,6 +41,14 @@ export interface ConfirmDialogProps {
    */
   cancelVariant?: ButtonVariant;
 
+  /**
+   * Which side of the footer the dismissing action sits on. Use "end" when
+   * the dismissing action is the one you want people to take, so it lands
+   * where the primary action usually is.
+   * @default "start"
+   */
+  cancelPlacement?: "start" | "end";
+
   /** Called when the user confirms. */
   onConfirm: () => void;
 

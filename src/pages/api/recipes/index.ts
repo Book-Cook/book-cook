@@ -112,9 +112,13 @@ const handleGetRequest = async (
     const projection = { data: 0 };
 
     if (search && typeof search === "string" && search.trim()) {
-      const searchRegex = { $regex: search.trim(), $options: "i" };
+      // Match the text literally; a stray "(" or "*" would otherwise be
+      // parsed as a pattern and make the query throw
+      const escaped = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const searchRegex = { $regex: escaped, $options: "i" };
       query = {
-        $and: [query, { $or: [{ title: searchRegex }, { tags: searchRegex }] }],
+        // Title only; tags are filtered separately through `tags`
+        $and: [query, { title: searchRegex }],
       };
     }
 
@@ -142,8 +146,10 @@ const handleGetRequest = async (
       .collection<RecipeDocument>("recipes")
       .countDocuments(query);
 
-    // Add caching headers for better performance
-    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+    // Per-user and changes on every create/edit/delete, so no cache may reuse
+    // it without revalidating: stale-while-revalidate made the gallery show a
+    // just-deleted recipe, and s-maxage let a CDN share one user's list.
+    res.setHeader("Cache-Control", "private, no-cache");
     res.status(200).json({
       recipes,
       totalCount,

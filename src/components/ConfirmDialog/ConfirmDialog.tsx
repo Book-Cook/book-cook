@@ -26,6 +26,7 @@ export const ConfirmDialog = ({
   cancelLabel = "Cancel",
   confirmVariant = "destructive",
   cancelVariant = "secondary",
+  cancelPlacement = "start",
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) => {
@@ -35,6 +36,16 @@ export const ConfirmDialog = ({
     }
     onOpenChange(nextOpen);
   };
+
+  const cancelButton = (
+    <Button
+      variant={cancelVariant}
+      size="sm"
+      onClick={() => handleOpenChange(false)}
+    >
+      {cancelLabel}
+    </Button>
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -48,13 +59,7 @@ export const ConfirmDialog = ({
           </DialogBody>
         )}
         <DialogFooter>
-          <Button
-            variant={cancelVariant}
-            size="sm"
-            onClick={() => handleOpenChange(false)}
-          >
-            {cancelLabel}
-          </Button>
+          {cancelPlacement === "start" && cancelButton}
           <Button
             variant={confirmVariant}
             size="sm"
@@ -65,6 +70,7 @@ export const ConfirmDialog = ({
           >
             {confirmLabel}
           </Button>
+          {cancelPlacement === "end" && cancelButton}
         </DialogFooter>
       </DialogContent>
     </Dialog>

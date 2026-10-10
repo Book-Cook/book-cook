@@ -7,7 +7,7 @@ exports[`renders correctly and matches snapshot 1`] = `
   >
     <input
       class="input"
-      placeholder="Search recipes or tags"
+      placeholder="Search recipes"
       type="search"
       value=""
     />

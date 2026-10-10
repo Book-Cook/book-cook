@@ -32,7 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const {
       as: Component = "button",
-      appearance = "secondary",
+      appearance,
       variant,
       size = "md",
       shape = "default",
@@ -60,8 +60,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         className={clsx(
           styles.button,
-          styles[appearance],
-          variant && variantStyles[variant],
+          // `appearance` is an alias for `variant`; applying both let the
+          // default "secondary" appearance override the variant's styles
+          variant
+            ? variantStyles[variant]
+            : styles[appearance ?? "secondary"],
           sizeStyles[size],
           shapeStyles[shape],
           fullWidth && styles.fullWidth,

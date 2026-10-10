@@ -43,6 +43,7 @@ export const RecipeTags = ({
         {tags.map((tag) => (
           <Tag
             key={tag}
+            className={styles.tag}
             onClick={onTagClick ? () => onTagClick(tag) : undefined}
           >
             {tag}

@@ -33,6 +33,7 @@ export const MenuItem = ({
   endIcon,
   shortcut,
   inset = false,
+  destructive = false,
   children,
   ...props
 }: MenuItemProps) => {
@@ -40,7 +41,12 @@ export const MenuItem = ({
 
   return (
     <DropdownMenu.Item
-      className={clsx(styles.item, inset && styles.inset, className)}
+      className={clsx(
+        styles.item,
+        inset && styles.inset,
+        destructive && styles.destructive,
+        className,
+      )}
       {...props}
     >
       {startIcon && <span className={styles.itemIcon}>{startIcon}</span>}

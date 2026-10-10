@@ -53,7 +53,7 @@ export const MealPlanSidebar: React.FC = () => {
       <div className={styles.header}>
         <SearchBox
           className={styles.searchBox}
-          placeholder="Search recipes..."
+          placeholder="Search recipes"
           value={searchQuery}
           onChange={(_, value) => setSearchQuery(value)}
         />

@@ -39,6 +39,22 @@
   margin-left: -10px; /* compensate for button's internal padding so text aligns with content */
 }
 
+/* Text-style action like the recipe save bar: no box at rest or on hover,
+   underline on hover instead. Doubled class outranks Button's
+   :hover:not(:disabled) rules. */
+.addCoverBtn.addCoverBtn,
+.addCoverBtn.addCoverBtn:hover:not(:disabled),
+.addCoverBtn.addCoverBtn:active:not(:disabled) {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ui-TextSecondary);
+}
+
+.addCoverBtn:hover:not(:disabled) > span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .title {
   margin: 12px 0 16px;
 }

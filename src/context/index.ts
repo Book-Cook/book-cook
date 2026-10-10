@@ -1,4 +1,5 @@
 export * from "./SearchBoxProvider";
+export * from "./RecipeSortProvider";
 export * from "./RecipeProvider/RecipeProvider";
 export type {
   EditableData,

@@ -96,4 +96,20 @@ describe("ConfirmDialog", () => {
     expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
+
+  it("places the dismissing action first by default", () => {
+    setup();
+
+    expect(
+      screen.getAllByRole("button").map((button) => button.textContent)
+    ).toEqual(["Keep editing", "Discard changes"]);
+  });
+
+  it("places the dismissing action last when cancelPlacement is end", () => {
+    setup({ cancelPlacement: "end" });
+
+    expect(
+      screen.getAllByRole("button").map((button) => button.textContent)
+    ).toEqual(["Discard changes", "Keep editing"]);
+  });
 });

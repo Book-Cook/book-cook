@@ -202,6 +202,34 @@ describe("/api/recipes", () => {
     expect(response.recipes).toEqual(recipeDocs);
   });
 
+  test("GET search matches titles only, not tags", async () => {
+    const req = makeGetReq({ search: "pasta (veg)" });
+    const res = mockRes();
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user1", email: "user1@test.com" },
+    });
+
+    const find = jest.fn().mockReturnValue(makeCursor([]));
+    const db = {
+      collection: jest.fn().mockImplementation((name: string) => {
+        if (name === "users") {
+          return { find: jest.fn().mockReturnValue(makeCursor([])) };
+        }
+        return { find, countDocuments: jest.fn().mockResolvedValue(0) };
+      }),
+    };
+    (getDb as jest.Mock).mockResolvedValue(db);
+
+    await handler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    const [query] = find.mock.calls[0];
+    expect(query.$and[1]).toEqual({
+      title: { $regex: "pasta \\(veg\\)", $options: "i" },
+    });
+    expect(JSON.stringify(query)).not.toContain('"tags"');
+  });
+
   test("GET invalid sort parameter returns 400", async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const req = { method: "GET", query: { sortProperty: "invalid" } } as any;

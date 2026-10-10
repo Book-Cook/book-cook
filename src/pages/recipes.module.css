@@ -10,24 +10,57 @@
 
 .header {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Full-width search directly under the title */
+.search {
+  margin: 8px 0 4px;
+}
+
+/* Recipe count on the left, Sort/Filter on the same line to the right */
+.toolbar {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
 }
 
-.titleSection {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .controls {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: stretch;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 320px;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Equal widths; the longest sort label truncates rather than widening both */
+.controls > * {
+  width: 200px;
+}
+
+/* Keep the sort label on one line, truncating rather than wrapping */
+.controls > button {
+  white-space: nowrap;
+}
+
+.controls > button > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+  /* Two equal columns that share the row instead of wrapping */
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .controls > * {
+    width: auto;
+    min-width: 0;
+  }
 }

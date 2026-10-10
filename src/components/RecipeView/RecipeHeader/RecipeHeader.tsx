@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   CalendarBlankIcon,
-  CameraIcon,
+  // CameraIcon,
   ChartBarIcon,
   TagIcon,
   UserIcon,
@@ -18,7 +18,6 @@ import { RecipeTags } from "./RecipeTags";
 import { useRecipeViewSaveState } from "../RecipeViewSaveStateContext";
 
 import { formatDate } from "../../../utils/formatDate";
-import { Button } from "../../Button";
 import { RecipeTitle } from "../../Typography";
 
 export const RecipeHeader = ({
@@ -27,6 +26,8 @@ export const RecipeHeader = ({
   onTagClick,
 }: RecipeHeaderProps) => {
   const isEditable = viewingMode === "editor";
+  // Covers upload against a saved recipe id, so an unsaved draft has none yet.
+  const canEditCover = isEditable && Boolean(recipe._id);
   const saveState = useRecipeViewSaveState();
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -72,7 +73,7 @@ export const RecipeHeader = ({
 
   return (
     <header className={styles.header}>
-      {isEditable ? (
+      {canEditCover ? (
         <RecipeCoverUpload
           ref={coverInputRef}
           recipeId={recipe._id}
@@ -93,7 +94,7 @@ export const RecipeHeader = ({
           recipe.imageURL && styles.mainHasCover,
         )}
       >
-        {isEditable && !recipe.imageURL && (
+        {/* {canEditCover && !recipe.imageURL && (
           <Button
             variant="ghost"
             size="sm"
@@ -103,7 +104,7 @@ export const RecipeHeader = ({
           >
             Add cover
           </Button>
-        )}
+        )} */}
         {!recipe.imageURL && (
           <RecipeEmoji
             emoji={localEmoji}

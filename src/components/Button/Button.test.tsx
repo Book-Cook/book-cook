@@ -26,6 +26,14 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveClass("secondary");
   });
 
+  it("uses only the variant's styles when a variant is given", () => {
+    render(<Button variant="primary">Save</Button>);
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("primary");
+    expect(button).not.toHaveClass("secondary");
+  });
+
   it("renders icon with text", () => {
     render(<Button icon={<span data-testid="icon">=</span>}>Search</Button>);
 

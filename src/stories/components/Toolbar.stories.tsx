@@ -45,7 +45,7 @@ const ToolbarPreviewLayout: React.FC<{ children: React.ReactNode }> = ({
         search, and account actions close at hand.
       </p>
       <p style={{ margin: 0 }}>
-        Resize the canvas to preview the mobile drawer, or click New Recipe to
+        Resize the canvas to preview the mobile drawer, or click New recipe to
         see how the dialog opens without leaving the current view.
       </p>
     </div>

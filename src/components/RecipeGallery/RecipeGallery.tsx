@@ -111,7 +111,7 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
             <Text
               size={200}
               weight="medium"
-              style={{ color: "var(--colorNeutralForeground2)" }}
+              className={styles.subtitle}
             >
               {totalCount} recipes{" "}
               {searchBoxValue
@@ -141,10 +141,10 @@ export const RecipeGallery: React.FC<RecipeGalleryProps> = ({
                     Sort by date (oldest)
                   </DropdownItem>
                   <DropdownItem value="ascTitle">
-                    Sort by title (asc)
+                    Sort by title (ascending)
                   </DropdownItem>
                   <DropdownItem value="descTitle">
-                    Sort by title (desc)
+                    Sort by title (descending)
                   </DropdownItem>
                 </DropdownContent>
               </Dropdown>

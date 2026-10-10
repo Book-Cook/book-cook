@@ -20,7 +20,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   return (
     <SearchBox
-      placeholder="Search recipes or tags"
+      placeholder="Search recipes"
       value={searchBoxValue}
       onChange={handleChange}
     />
