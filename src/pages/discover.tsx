@@ -61,7 +61,7 @@ export default function DiscoverPage() {
           <Text
             size={200}
             weight="medium"
-            style={{ color: "var(--colorNeutralForeground2)" }}
+            className={galleryStyles.subtitle}
           >
             {recipes.length > 0
               ? `${recipes.length} recipes found${recipesData?.hasMore ? " (showing first 20)" : ""}`

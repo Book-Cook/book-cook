@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { recipeGridStyle } from "./gridLayout";
 import styles from "./VirtualizedRecipeList.module.css";
 import { PaginationControls } from "../PaginationControls/PaginationControls";
 import { RecipeCard } from "../RecipeCard";
@@ -70,7 +71,7 @@ export const VirtualizedRecipeList: React.FC<VirtualizedRecipeListProps> = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.grid}>
+      <div className={styles.grid} style={recipeGridStyle}>
         {recipes.map((recipe, index) => (
           <div
             key={recipe._id}

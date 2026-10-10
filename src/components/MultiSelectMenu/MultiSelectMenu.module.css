@@ -7,16 +7,17 @@
   width: 100%;
 }
 
-/* Pill-box that holds selected Tag chips + the search input (single row) */
+/* Pill-box that holds selected Tag chips + the search input (single row).
+   Sized to match the md DropdownTrigger so it lines up with the Sort control. */
 .inputControl {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: 6px;
-  height: 48px;
-  padding: 0 16px;
+  height: 36px;
+  padding: 0 14px;
   border: 1px solid var(--ui-ControlBorder);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--ui-Canvas);
   color: var(--ui-TextPrimary);
   width: 100%;
@@ -56,27 +57,43 @@
   background: transparent;
   color: inherit;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
   min-width: 80px;
   height: 24px;
 }
 
+/* Primary rather than caption so it matches the Sort control's label. */
 .input::placeholder {
-  color: var(--ui-TextCaption);
+  color: var(--ui-TextPrimary);
+  opacity: 1;
+}
+
+/* Below 16px iOS Safari zooms the page when the input gains focus. */
+@media (max-width: 640px) {
+  .input {
+    font-size: 16px;
+  }
 }
 
 /* Dropdown */
 .dropdown {
   position: absolute;
   top: calc(100% + 6px);
+  /* Span exactly the input box above it */
   left: 0;
-  min-width: 180px;
+  right: 0;
   background: var(--ui-Canvas);
-  border: 1px solid var(--ui-ControlBorder);
   border-radius: 12px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   z-index: 50;
-  overflow: hidden;
+  /* A long tag list scrolls inside the menu instead of running off the page;
+     contain stops the wheel from scrolling the gallery behind it at the ends */
+  max-height: min(280px, 50vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ui-Divider) transparent;
   padding: 6px;
   display: grid;
   gap: 2px;

@@ -2,7 +2,7 @@
   min-height: 100vh;
   background-color: var(--app-bg);
   color: var(--app-fg);
-  font-family: var(--app-font);
+  font-family: var(--font-sans);
   transition:
     background-color 0.3s ease,
     color 0.3s ease;

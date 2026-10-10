@@ -32,3 +32,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Text-style menu actions: no fill or focus ring when highlighted, underline
+   the label instead. Doubled class outranks Menu's [data-highlighted] and
+   :focus-visible rules. The underline also marks the keyboard-highlighted
+   item, standing in for the ring. */
+.menuItem.menuItem[data-highlighted],
+.menuItem.menuItem:focus-visible {
+  background: transparent;
+  box-shadow: none;
+}
+
+.menuItem[data-highlighted] > span:last-child {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

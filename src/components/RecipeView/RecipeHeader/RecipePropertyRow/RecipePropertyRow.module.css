@@ -23,7 +23,16 @@
 .propertyValue {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
+  /* Same height as the tag editor so every row (Tags, Created, …) lines up */
+  min-height: 26px;
+  /* Match the MetaLabel beside it rather than BodyText's default size */
+  font-size: var(--type-size-sm);
+}
+
+:global([data-theme="dark"]) .propertyLabel {
+  color: var(--ui-TextPrimary);
 }
 
 @media (max-width: 720px) {

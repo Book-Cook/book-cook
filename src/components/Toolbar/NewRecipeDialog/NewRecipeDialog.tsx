@@ -95,7 +95,7 @@ export const NewRecipeDialog: React.FC<NewRecipeDialogProps> = ({
     >
       <DialogContent size="sm" withCloseButton>
         <DialogHeader>
-          <DialogTitle>New Recipe</DialogTitle>
+          <DialogTitle>New recipe</DialogTitle>
         </DialogHeader>
         <DialogBody className={styles.dialogBody}>
           <textarea

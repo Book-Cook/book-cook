@@ -28,6 +28,8 @@ export type MenuItemProps = DropdownMenuItemProps & {
   endIcon?: ReactNode;
   shortcut?: string;
   inset?: boolean;
+  /** Renders the item in the danger color, including while highlighted. */
+  destructive?: boolean;
 };
 
 export type MenuCheckboxItemProps = DropdownMenuCheckboxItemProps & {

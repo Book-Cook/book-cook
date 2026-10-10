@@ -21,7 +21,6 @@
     background-color var(--motion-default),
     border-color var(--motion-default),
     color var(--motion-default),
-    transform var(--motion-default),
     box-shadow var(--motion-default);
 }
 
@@ -43,11 +42,9 @@
 .primary:hover:not(:disabled) {
   background-color: var(--brand-Hover);
   border-color: var(--brand-Hover);
-  transform: translateY(-1px);
 }
 .primary:active:not(:disabled) {
   background-color: var(--brand-Pressed);
-  transform: translateY(1px);
 }
 
 .secondary {
@@ -55,9 +52,11 @@
   color: var(--ui-TextPrimary);
   border-color: var(--ui-ControlBorder);
 }
+/* Same hover fill as the other outlined and ghost controls (Dropdown trigger,
+   Settings buttons, ghost buttons) */
 .secondary:hover:not(:disabled) {
   border-color: var(--ui-ControlBorderHover);
-  background-color: transparent;
+  background-color: var(--ui-ControlHover);
   color: var(--ui-TextPrimary);
 }
 .secondary:active:not(:disabled) {
@@ -69,12 +68,13 @@
   color: var(--brand-Primary);
   border-color: var(--brand-Primary);
 }
+/* Same light gray fill as the secondary outline; the brand label and outline
+   hold steady */
 .outline:hover:not(:disabled) {
-  background-color: var(--brand-Primary);
-  color: #fff;
+  background-color: var(--ui-ControlHover);
 }
 .outline:active:not(:disabled) {
-  background-color: var(--brand-Pressed);
+  background-color: var(--ui-ControlPressed);
 }
 
 .subtle {
@@ -99,17 +99,19 @@
   color: var(--ui-TextPrimary);
 }
 
+/* Red outline, label and icon at rest. On hover the label and outline hold
+   steady and the fill matches the secondary and brand outlines (lighter in
+   dark mode, darker in light mode). */
 .variantDestructive {
   background-color: transparent;
-  border-color: transparent;
+  border-color: var(--danger-Primary);
   color: var(--danger-Primary);
 }
 .variantDestructive:hover:not(:disabled) {
-  background-color: var(--danger-BackgroundDisabled);
-  border-color: var(--danger-Disabled);
+  background-color: var(--ui-ControlHover);
 }
 .variantDestructive:active:not(:disabled) {
-  background-color: var(--danger-Disabled);
+  background-color: var(--ui-ControlPressed);
 }
 .variantDestructive:focus-visible {
   box-shadow:

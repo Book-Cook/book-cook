@@ -67,6 +67,19 @@
   border-radius: 6px;
 }
 
+.timeSlotGroup {
+  margin-bottom: 12px;
+}
+
+/* Scoped under .timeSlotGroup so it outranks Text's own size/weight classes */
+.timeSlotGroup .timeLabel {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ui-TextLabel);
+}
+
 .addMealSlot {
   min-height: 60px;
   background-color: var(--ui-Canvas);

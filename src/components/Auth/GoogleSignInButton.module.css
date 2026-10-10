@@ -1,11 +1,17 @@
-.button {
+/* The doubled class outranks Button's `.secondary` rules, which load after
+   this file and would otherwise reset the fill to transparent on every state. */
+.button.button {
   background-color: #ffffff;
   border: 1px solid #d0d7e2;
   color: #1f2937;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-.button:hover:not(:disabled) {
-  background-color: #f8fafc;
+.button.button:hover:not(:disabled) {
+  background-color: #f3f4f6;
   border-color: #c7d0df;
+}
+
+.button.button:active:not(:disabled) {
+  background-color: #e5e7eb;
 }

@@ -1,10 +1,7 @@
 import * as React from "react";
 import {
-  BookOpenIcon,
-  GridFourIcon,
-  CompassIcon,
+  CookingPotIcon,
   PlusIcon,
-  MagnifyingGlassIcon,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
@@ -13,7 +10,6 @@ import { SidebarItem } from "./SidebarItem";
 type SidebarContentProps = {
   currentPath: string;
   onNewRecipe: () => void;
-  onSearch: () => void;
 };
 
 type NavItem = {
@@ -24,25 +20,24 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/recipes", label: "Recipes", icon: <BookOpenIcon size={18} /> },
-  {
-    href: "/collections",
-    label: "Collections",
-    icon: <GridFourIcon size={18} />,
-    disabled: true,
-  },
-  {
-    href: "/explore",
-    label: "Explore",
-    icon: <CompassIcon size={18} />,
-    disabled: true,
-  },
+  { href: "/recipes", label: "Recipes", icon: <CookingPotIcon size={18} /> },
+  // {
+  //   href: "/collections",
+  //   label: "Collections",
+  //   icon: <GridFourIcon size={18} />,
+  //   disabled: true,
+  // },
+  // {
+  //   href: "/explore",
+  //   label: "Explore",
+  //   icon: <CompassIcon size={18} />,
+  //   disabled: true,
+  // },
 ];
 
 export const SidebarContent = ({
   currentPath,
   onNewRecipe,
-  onSearch,
 }: SidebarContentProps) => {
   const router = useRouter();
 
@@ -50,13 +45,8 @@ export const SidebarContent = ({
     <nav aria-label="Main navigation">
       <SidebarItem
         icon={<PlusIcon size={18} />}
-        label="New Recipe"
+        label="New recipe"
         onClick={onNewRecipe}
-      />
-      <SidebarItem
-        icon={<MagnifyingGlassIcon size={18} />}
-        label="Search recipes..."
-        onClick={onSearch}
       />
       {NAV_ITEMS.map((item) => (
         <SidebarItem

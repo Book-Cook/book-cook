@@ -3,7 +3,7 @@ import type { StoryContext } from "@storybook/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-import { SearchBoxProvider } from "../context";
+import { RecipeSortProvider, SearchBoxProvider } from "../context";
 
 const mockSession: Session = {
   user: {
@@ -26,9 +26,11 @@ const StoryWrapper: React.FC<{ Story: React.ComponentType; theme: string }> = ({
 
   return (
     <SearchBoxProvider>
-      <div style={{ padding: "12px 24px", boxSizing: "border-box" }}>
-        <Story />
-      </div>
+      <RecipeSortProvider>
+        <div style={{ padding: "12px 24px", boxSizing: "border-box" }}>
+          <Story />
+        </div>
+      </RecipeSortProvider>
     </SearchBoxProvider>
   );
 };

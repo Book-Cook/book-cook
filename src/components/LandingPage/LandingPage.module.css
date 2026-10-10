@@ -4,17 +4,13 @@
   place-items: center;
   padding: 24px;
   background: var(--ui-Canvas);
+  font-family: var(--font-sans);
+  color-scheme: light;
 }
 
 .card {
   width: min(480px, 100%);
-  padding: 28px;
-  border: 1px solid var(--ui-Divider);
-  border-radius: 16px;
-  background: var(--ui-PageBackground);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    0 12px 32px rgba(0, 0, 0, 0.06);
+  text-align: center;
 }
 
 .logo {

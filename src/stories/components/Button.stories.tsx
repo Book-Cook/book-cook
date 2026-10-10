@@ -33,8 +33,10 @@ export const AllVariants: Story = {
         >
           <Button appearance="primary">Primary</Button>
           <Button appearance="secondary">Secondary</Button>
+          <Button appearance="outline">Outline</Button>
           <Button appearance="subtle">Subtle</Button>
           <Button appearance="transparent">Transparent</Button>
+          <Button variant="destructive">Destructive</Button>
         </div>
       </div>
 
@@ -57,10 +59,10 @@ export const AllVariants: Story = {
           <Button appearance="secondary" icon={<PencilIcon />}>
             Edit
           </Button>
-          <Button appearance="subtle" icon={<TrashIcon />}>
+          <Button variant="destructive" icon={<TrashIcon />}>
             Delete
           </Button>
-          <Button appearance="transparent" icon={<PlusIcon />}>
+          <Button appearance="outline" icon={<PlusIcon />}>
             Create
           </Button>
         </div>
@@ -81,8 +83,8 @@ export const AllVariants: Story = {
         >
           <Button appearance="primary" icon={<PlusIcon />} />
           <Button appearance="secondary" icon={<PencilIcon />} />
-          <Button appearance="subtle" icon={<TrashIcon />} />
-          <Button appearance="transparent" icon={<PlusIcon />} />
+          <Button variant="destructive" icon={<TrashIcon />} />
+          <Button appearance="outline" icon={<PlusIcon />} />
         </div>
       </div>
 
@@ -105,11 +107,17 @@ export const AllVariants: Story = {
           <Button appearance="secondary" disabled>
             Secondary
           </Button>
+          <Button appearance="outline" disabled>
+            Outline
+          </Button>
           <Button appearance="subtle" disabled>
             Subtle
           </Button>
           <Button appearance="transparent" disabled>
             Transparent
+          </Button>
+          <Button variant="destructive" disabled>
+            Destructive
           </Button>
         </div>
       </div>
@@ -133,7 +141,12 @@ export const AllVariants: Story = {
           <Button appearance="secondary" icon={<PencilIcon />} disabled>
             Edit
           </Button>
-          <Button appearance="subtle" icon={<TrashIcon />} disabled />
+          <Button variant="destructive" icon={<TrashIcon />} disabled>
+            Delete
+          </Button>
+          <Button appearance="outline" icon={<PlusIcon />} disabled>
+            Create
+          </Button>
         </div>
       </div>
     </div>

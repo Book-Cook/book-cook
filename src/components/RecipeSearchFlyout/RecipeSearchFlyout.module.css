@@ -7,12 +7,15 @@
 }
 
 .panel {
+  /* Anchored to the top, not centred: a centred panel re-centres every time
+     the result list changes height, which on phones drops the search row
+     down behind the on-screen keyboard while typing. */
   position: fixed;
-  top: 50%;
+  top: 12vh;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: min(92vw, 560px);
-  max-height: min(520px, 82vh);
+  max-height: min(520px, 76dvh);
   background: var(--ui-Canvas);
   border: 1px solid var(--ui-Divider);
   border-radius: 16px;
@@ -181,11 +184,25 @@
 @keyframes panelIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.97);
+    transform: translateX(-50%) translateY(4px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    top: 12px;
+    /* svh tracks the smallest viewport, so the panel never extends under
+       the browser toolbars */
+    max-height: calc(60svh - 12px);
+  }
+
+  /* iOS zooms the page when a focused input is under 16px */
+  .searchInput {
+    font-size: 16px;
   }
 }
 

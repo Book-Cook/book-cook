@@ -20,6 +20,7 @@ out
 # dotenv environment variables file
 .env
 .env.build
+.env.development
 
 # Dependencies
 .yarn
@@ -102,4 +103,8 @@ package-manifest.json
 
 # Build artifacts
 webpack-stats.json
+test-results/
+
+# Local output
+debug-storybook.log
 test-results/

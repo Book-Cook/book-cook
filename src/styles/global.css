@@ -1,7 +1,6 @@
 :root {
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-serif: "Merriweather", "Georgia", serif;
 
   /* Type scale */
   --type-size-xs: 0.8125rem;
@@ -55,6 +54,14 @@
   box-sizing: border-box;
 }
 
+/* Form controls don't inherit font-family by default */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 html,
 body {
   height: 100%;
@@ -64,6 +71,7 @@ body {
 
 body {
   min-height: 100dvh;
+  font-family: var(--font-sans);
   background: var(--ui-PageBackground);
   color: var(--ui-TextPrimary);
 }
@@ -120,7 +128,7 @@ body {
   --danger-BackgroundDisabled: #2b1f1f;
 
   /* UI Colors */
-  --ui-Canvas: #0b0a0f;
+  --ui-Canvas: #18161f;
   --ui-ControlHover: #1f2937;
   --ui-ControlPressed: #374151;
   --ui-ControlBackgroundDisabled: #1f2937;
@@ -132,6 +140,6 @@ body {
   --ui-TextSecondary: #e2e0ee;
   --ui-TextLabel: #a7a2c4;
   --ui-TextCaption: #7e799b;
-  --ui-PageBackground: #0b0a0f;
+  --ui-PageBackground: #18161f;
   --ui-Divider: #1f2937;
 }

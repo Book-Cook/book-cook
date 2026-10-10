@@ -54,17 +54,9 @@ export const CondensedWeekView: React.FC<CondensedWeekViewProps> = ({
                 scheduledMeals.map((timeSlot, timeIndex) => (
                   <div
                     key={`${dateStr}-${timeSlot.time}-${timeIndex}`}
-                    style={{ marginBottom: "12px" }}
+                    className={styles.timeSlotGroup}
                   >
-                    <Text
-                      style={{
-                        fontSize: "10px",
-                        color: "var(--ui-TextLabel)",
-                        marginBottom: "4px",
-                        fontWeight: 600,
-                        display: "block",
-                      }}
-                    >
+                    <Text className={styles.timeLabel}>
                       {formatTimeForDisplay(timeSlot.time)}
                     </Text>
                     <TimeSlot

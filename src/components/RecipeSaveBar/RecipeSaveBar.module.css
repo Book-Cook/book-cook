@@ -1,6 +1,6 @@
 .bar {
   position: fixed;
-  bottom: 24px;
+  top: 16px;
   right: 24px;
   z-index: 50;
   display: flex;
@@ -16,4 +16,46 @@
 .error {
   font-size: 12px;
   color: var(--danger-Primary);
+}
+
+/* Text-style actions: no box at rest, underline on hover instead of a
+   filled or outlined box. Scoped under .bar to outrank Button's
+   :hover:not(:disabled) and .disabled rules. */
+.bar .action,
+.bar .action:hover:not(:disabled),
+.bar .action:active:not(:disabled),
+.bar .action:disabled {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.bar .action:hover:not(:disabled) > span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bar .delete:not(:disabled) {
+  color: var(--danger-Primary);
+}
+
+.bar .cancel:not(:disabled) {
+  color: var(--ui-TextSecondary);
+}
+
+.bar .save:not(:disabled) {
+  color: var(--brand-Primary);
+}
+
+/* Button hides its text while loading by making it transparent, and the
+   spinner inherits that colour; with no fill behind it, it would vanish. */
+.bar .action:disabled > [aria-hidden="true"] {
+  color: var(--ui-TextSecondary);
+}
+
+/* Clear the 52px mobile header from AppShell */
+@media (max-width: 640px) {
+  .bar {
+    top: 60px;
+    right: 12px;
+  }
 }

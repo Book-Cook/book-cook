@@ -6,13 +6,14 @@ import { useRouter } from "next/router";
 import { RecipePage } from "./RecipePage";
 import { useRecipeViewSaveState } from "../RecipeView/RecipeViewSaveStateContext";
 
-import { fetchRecipe } from "../../clientToServer";
+import { deleteRecipe, fetchRecipe } from "../../clientToServer";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
 jest.mock("../../clientToServer", () => ({
+  deleteRecipe: jest.fn(),
   fetchRecipe: jest.fn(),
 }));
 
@@ -41,6 +42,7 @@ const recipe = {
 const routeHandlers = new Set<(url: string) => void>();
 let popStateHandler: (state: { url: string }) => boolean = () => true;
 const push = jest.fn(() => Promise.resolve(true));
+const replace = jest.fn(() => Promise.resolve(true));
 
 const navigate = (url: string) => {
   let blocked = false;
@@ -58,11 +60,14 @@ beforeEach(() => {
   routeHandlers.clear();
   popStateHandler = () => true;
   push.mockClear();
+  replace.mockClear();
+  (deleteRecipe as jest.Mock).mockReset();
   (fetchRecipe as jest.Mock).mockResolvedValue(recipe);
   (useRouter as jest.Mock).mockReturnValue({
     asPath: "/recipes/abc",
     query: { recipes: "abc" },
     push,
+    replace,
     beforePopState: (handler: (state: { url: string }) => boolean) => {
       popStateHandler = handler;
     },
@@ -90,7 +95,7 @@ const renderPage = () => {
   return render(
     <QueryClientProvider client={queryClient}>
       <RecipePage />
-    </QueryClientProvider>
+    </QueryClientProvider>,
   );
 };
 
@@ -120,7 +125,7 @@ describe("RecipePage unsaved changes", () => {
     expect(blocked).toBe(true);
 
     expect(
-      await screen.findByText("Discard unsaved changes?")
+      await screen.findByText("Discard unsaved changes?"),
     ).toBeInTheDocument();
     expect(push).not.toHaveBeenCalled();
   });
@@ -137,7 +142,7 @@ describe("RecipePage unsaved changes", () => {
     expect(allowed).toBe(false);
 
     expect(
-      await screen.findByText("Discard unsaved changes?")
+      await screen.findByText("Discard unsaved changes?"),
     ).toBeInTheDocument();
   });
 
@@ -150,11 +155,11 @@ describe("RecipePage unsaved changes", () => {
     });
 
     await user.click(
-      await screen.findByRole("button", { name: "Keep editing" })
+      await screen.findByRole("button", { name: "Keep editing" }),
     );
 
     await waitFor(() =>
-      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument(),
     );
     expect(push).not.toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
@@ -169,7 +174,7 @@ describe("RecipePage unsaved changes", () => {
     });
 
     await user.click(
-      await screen.findByRole("button", { name: "Discard changes" })
+      await screen.findByRole("button", { name: "Discard changes" }),
     );
 
     await waitFor(() => expect(push).toHaveBeenCalledWith("/recipes/other"));
@@ -183,7 +188,7 @@ describe("RecipePage unsaved changes", () => {
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(
-      await screen.findByText("Discard unsaved changes?")
+      await screen.findByText("Discard unsaved changes?"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
@@ -195,13 +200,81 @@ describe("RecipePage unsaved changes", () => {
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     await user.click(
-      await screen.findByRole("button", { name: "Discard changes" })
+      await screen.findByRole("button", { name: "Discard changes" }),
     );
 
     await waitFor(() =>
       expect(
-        screen.queryByRole("button", { name: "Save" })
-      ).not.toBeInTheDocument()
+        screen.queryByRole("button", { name: "Save" }),
+      ).not.toBeInTheDocument(),
     );
+  });
+});
+
+describe("RecipePage delete", () => {
+  it("deletes only after confirming, then leaves even mid-edit", async () => {
+    (deleteRecipe as jest.Mock).mockResolvedValue({
+      message: "ok",
+      recipeId: "abc",
+    });
+    const user = userEvent.setup();
+    renderPage();
+    await makeDirty(user);
+
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    expect(await screen.findByText("Delete this recipe?")).toBeInTheDocument();
+    expect(deleteRecipe).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Delete recipe" }));
+
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/recipes"));
+    expect(deleteRecipe).toHaveBeenCalledWith("abc");
+    expect(
+      screen.queryByText("Discard unsaved changes?"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("stays on the recipe and reports a failed delete", async () => {
+    (deleteRecipe as jest.Mock).mockRejectedValue(new Error("nope"));
+    const user = userEvent.setup();
+    renderPage();
+    await screen.findByRole("button", { name: "Make an edit" });
+
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await user.click(
+      await screen.findByRole("button", { name: "Delete recipe" }),
+    );
+
+    expect(await screen.findByText("Delete failed")).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+});
+
+describe("RecipePage new recipe draft", () => {
+  beforeEach(() => {
+    (fetchRecipe as jest.Mock).mockClear();
+    const router = (useRouter as jest.Mock)();
+    (useRouter as jest.Mock).mockReturnValue({
+      ...router,
+      asPath: "/recipes/new",
+      query: { recipes: "new" },
+      replace,
+    });
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ message: "ok", recipeId: "created123" }),
+    });
+  });
+
+  it("creates nothing until the draft is saved", async () => {
+    renderPage();
+    await screen.findByRole("button", { name: "Make an edit" });
+
+    expect(fetchRecipe).not.toHaveBeenCalled();
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(navigate("/recipes")).toBe(false);
+    expect(
+      screen.queryByRole("button", { name: "Delete" }),
+    ).not.toBeInTheDocument();
   });
 });

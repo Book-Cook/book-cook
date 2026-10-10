@@ -200,7 +200,7 @@ test.describe("Home page (authenticated)", () => {
     await expect(heading).toBeVisible({ timeout: 8000 });
   });
 
-  test("Create New Recipe button opens dialog, not navigates", async ({
+  test("Create New recipe button opens dialog, not navigates", async ({
     page,
   }) => {
     await page.goto("/");
@@ -246,7 +246,7 @@ test.describe("Sidebar behavior", () => {
     await mockAuth(page);
   });
 
-  test("sidebar renders with New Recipe and Recipes nav items", async ({
+  test("sidebar renders with New recipe and Recipes nav items", async ({
     page,
   }) => {
     await page.goto("/recipes");
@@ -255,7 +255,7 @@ test.describe("Sidebar behavior", () => {
     });
     // New Recipe and Recipes buttons are always in the sidebar
     await expect(
-      page.getByRole("button", { name: "New Recipe" }),
+      page.getByRole("button", { name: "New recipe" }),
     ).toBeVisible();
     // Recipes button -- may have aria-label or label text
     const recipesItem = page
@@ -264,6 +264,12 @@ test.describe("Sidebar behavior", () => {
       .filter({ hasText: /^Recipes$/ })
       .or(page.locator('[data-sidebar="true"] button[aria-label="Recipes"]'));
     await expect(recipesItem.first()).toBeVisible();
+    // Search moved onto the recipes page, so the sidebar no longer offers it
+    await expect(
+      page
+        .locator('[data-sidebar="true"]')
+        .getByRole("button", { name: "Search recipes" }),
+    ).toHaveCount(0);
   });
 
   // Issue 2 fix: assert disabled attribute on Collections and Explore buttons specifically
@@ -489,7 +495,7 @@ test.describe("Recipes page (authenticated)", () => {
     const listbox = page.getByRole("listbox");
     await expect(listbox).toBeVisible({ timeout: 3000 });
     await page
-      .getByRole("option", { name: /sort by title \(asc\)/i })
+      .getByRole("option", { name: /sort by title \(ascending\)/i })
       .first()
       .click();
     // Count label should update -- it shows "N recipes in your collection"
@@ -566,6 +572,38 @@ test.describe("Recipes page (authenticated)", () => {
       { timeout: 8000 },
     );
     await expect(page.getByText("Error")).toBeVisible({ timeout: 8000 });
+  });
+
+  test("search box filters the gallery by the typed text", async ({ page }) => {
+    await page.goto("/recipes");
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
+    const searchBox = page.getByRole("searchbox", { name: "Search recipes" });
+    await expect(searchBox).toBeVisible();
+
+    const searchRequest = page.waitForRequest(
+      (request) =>
+        request.method() === "GET" &&
+        new URL(request.url()).searchParams.get("search") === "pasta",
+    );
+    await searchBox.fill("pasta");
+    await searchRequest;
+    await expect(page.getByText(/matching "pasta"/)).toBeVisible({
+      timeout: 5000,
+    });
+  });
+
+  test("at 375px mobile, header has no search button", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/recipes");
+    await expect(page.getByRole("heading", { name: "My Recipes" })).toBeVisible(
+      { timeout: 8000 },
+    );
+    await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Search recipes" }),
+    ).toHaveCount(0);
   });
 
   test("at 375px mobile, page renders without horizontal overflow", async ({

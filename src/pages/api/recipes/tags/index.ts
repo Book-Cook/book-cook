@@ -6,14 +6,18 @@ import { getDb } from "src/utils/db";
 
 import { authOptions } from "../../auth/[...nextauth]";
 
-type StringOrInQuery = string | { $in: string[] };
+type VisibilityCondition = { owner: string } | { owner: { $in: string[] } };
 
-type VisibilityCondition = { isPublic: boolean } | { owner: StringOrInQuery };
-
+/**
+ * GET /api/recipes/tags — every tag across the recipes the user can see on
+ * My Recipes (their own plus collections shared with them), sorted. Scoped
+ * the same way as GET /api/recipes so the tag filter never offers a tag that
+ * matches nothing.
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-) {
+): Promise<void> {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
     return res
@@ -22,7 +26,7 @@ export default async function handler(
   }
 
   const session: Session | null = await getServerSession(req, res, authOptions);
-  if (!session?.user?.email) {
+  if (!session?.user?.id || !session.user.email) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -30,18 +34,27 @@ export default async function handler(
     const db = await getDb();
 
     const visibilityConditions: VisibilityCondition[] = [
-      { isPublic: true }, // Public recipes are always visible
-      { owner: session.user.id as string }, // User's own recipes
+      { owner: session.user.id },
     ];
 
-    const sharedUsers = await db
-      .collection("users")
-      .find({ sharedWithUsers: session.user.email })
-      .map((user) => user.email)
-      .toArray();
+    try {
+      // Owners are stored by user id, so shared collections are matched by
+      // the sharing user's _id rather than their email
+      const sharedOwners = await db
+        .collection("users")
+        .find(
+          { sharedWithUsers: session.user.email },
+          { projection: { _id: 1 } },
+        )
+        .map((user) => user._id.toString())
+        .toArray();
 
-    if (sharedUsers.length > 0) {
-      visibilityConditions.push({ owner: { $in: sharedUsers } });
+      if (sharedOwners.length > 0) {
+        visibilityConditions.push({ owner: { $in: sharedOwners } });
+      }
+    } catch (dbError) {
+      console.error("Error fetching shared owners:", dbError);
+      // Own tags are still returned; shared ones are skipped on error.
     }
 
     const pipeline = [

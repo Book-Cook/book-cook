@@ -6,9 +6,13 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  padding: 0 8px;
+  /* Values come from gridLayout.ts so the page size can match the columns */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--recipe-card-min-width), 1fr)
+  );
+  gap: var(--recipe-grid-gap);
+  padding: 0 var(--recipe-grid-padding-inline);
 }
 
 .emptyState {

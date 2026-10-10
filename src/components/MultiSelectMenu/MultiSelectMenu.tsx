@@ -65,12 +65,17 @@ export const MultiSelectMenu = ({
             onValueChange={setSearch}
             onFocus={() => setOpen(true)}
             onBlur={() => setTimeout(() => setOpen(false), 150)}
-            placeholder={value.length === 0 ? "Filter tags" : ""}
+            placeholder={value.length === 0 ? "Filter by tags" : ""}
             aria-label={label}
           />
         </div>
         {open && (
-          <Command.List className={styles.dropdown}>
+          <Command.List
+            className={styles.dropdown}
+            // Keep focus in the input so dragging the list's scrollbar does
+            // not blur it and close the menu
+            onMouseDown={(e) => e.preventDefault()}
+          >
             {filtered.length === 0 ? (
               <Command.Empty className={styles.empty}>
                 {search ? "No matching tags" : emptyMessage}

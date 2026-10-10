@@ -22,7 +22,8 @@ const ConfirmDialogPreview: React.FC<{
   confirmLabel?: string;
   cancelLabel?: string;
   confirmVariant?: "primary" | "destructive";
-  cancelVariant?: "secondary" | "ghost";
+  cancelVariant?: "primary" | "secondary" | "ghost";
+  cancelPlacement?: "start" | "end";
   triggerLabel: string;
 }> = ({ triggerLabel, ...dialogProps }) => {
   const [open, setOpen] = React.useState(false);
@@ -50,9 +51,11 @@ export const DiscardUnsavedChanges: Story = {
     <ConfirmDialogPreview
       triggerLabel="Leave the recipe"
       title="Discard unsaved changes?"
-      description="Your edits to this recipe have not been saved yet. They will be lost if you continue."
+      description="Your edits have not been saved yet. They will be lost if you continue."
       confirmLabel="Discard changes"
       cancelLabel="Keep editing"
+      cancelVariant="primary"
+      cancelPlacement="end"
     />
   ),
 };

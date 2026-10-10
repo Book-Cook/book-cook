@@ -69,6 +69,11 @@
     flex-shrink: 0;
   }
 
+  .mobileHeaderSpacer {
+    width: 44px;
+    flex-shrink: 0;
+  }
+
   .mobileMenuBtn:hover {
     background: var(--ui-Canvas);
   }

@@ -19,6 +19,11 @@
   gap: 8px;
 }
 
+/* Scoped under .titleSection so it outranks Text's base color */
+.titleSection .subtitle {
+  color: var(--ui-TextLabel);
+}
+
 .controlsRow {
   display: flex;
   align-items: center;

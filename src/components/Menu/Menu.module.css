@@ -82,6 +82,11 @@
   pointer-events: none;
 }
 
+.item.destructive:not([data-disabled]),
+.item.destructive[data-highlighted] {
+  color: var(--danger-Primary);
+}
+
 .inset {
   padding-left: 32px;
 }
