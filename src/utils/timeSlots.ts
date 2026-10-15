@@ -66,35 +66,6 @@ export function parseTime(time: string): { hour: number; minute: number } {
 }
 
 /**
- * Check if a time falls within a given range
- */
-export function isTimeInRange(
-  time: string,
-  startTime: string,
-  endTime: string,
-): boolean {
-  const timeMinutes = parseTime(time).hour * 60 + parseTime(time).minute;
-  const startMinutes =
-    parseTime(startTime).hour * 60 + parseTime(startTime).minute;
-  const endMinutes = parseTime(endTime).hour * 60 + parseTime(endTime).minute;
-
-  return timeMinutes >= startMinutes && timeMinutes <= endMinutes;
-}
-
-/**
- * Add minutes to a time string
- */
-export function addMinutesToTime(time: string, minutes: number): string {
-  const { hour, minute } = parseTime(time);
-  const totalMinutes = hour * 60 + minute + minutes;
-
-  const newHour = Math.floor(totalMinutes / 60) % 24;
-  const newMinute = totalMinutes % 60;
-
-  return `${newHour.toString().padStart(2, "0")}:${newMinute.toString().padStart(2, "0")}`;
-}
-
-/**
  * Convert legacy meal type to suggested time
  */
 export function mealTypeToTime(mealType: string): string {
@@ -110,22 +81,4 @@ export function mealTypeToTime(mealType: string): string {
     default:
       return "12:00";
   }
-}
-
-/**
- * Get suggested meal type based on time (for backward compatibility)
- */
-export function timeToMealType(time: string): string {
-  const { hour } = parseTime(time);
-
-  if (hour >= 6 && hour < 11) {
-    return "breakfast";
-  }
-  if (hour >= 11 && hour < 15) {
-    return "lunch";
-  }
-  if (hour >= 17 && hour < 22) {
-    return "dinner";
-  }
-  return "snack";
 }

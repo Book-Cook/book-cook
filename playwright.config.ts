@@ -8,10 +8,10 @@ export default defineConfig({
   retries: 0,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3200",
     headless: true,
     viewport: { width: 1440, height: 900 },
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
   },
   projects: [
     {
@@ -20,8 +20,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "yarn next dev --port 3000",
-    url: "http://localhost:3000",
+    command: "yarn dev",
+    url: "http://localhost:3200",
     reuseExistingServer: true,
     timeout: 60000,
   },

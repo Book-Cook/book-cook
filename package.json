@@ -29,14 +29,6 @@
   "engines": {
     "node": ">=22.5.1"
   },
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
-  },
   "resolutions": {
     "string-width": "8.1.0",
     "wrap-ansi": "9.0.0"
