@@ -1,3 +1,4 @@
+import config from "../../playwright.config";
 import fs from "fs";
 import path from "path";
 
@@ -6,17 +7,16 @@ const readProjectFile = (name: string): string =>
 
 describe("local development setup", () => {
   it("uses the documented application port for browser tests", () => {
-    const config = readProjectFile("playwright.config.ts");
-
-    expect(config).toContain('baseURL: "http://localhost:3200"');
-    expect(config).toContain('command: "yarn dev"');
-    expect(config).toContain('url: "http://localhost:3200"');
+    expect(config.use?.baseURL).toBe("http://localhost:3200");
+    expect(config.webServer).toMatchObject({
+      command: "yarn dev",
+      url: "http://localhost:3200",
+    });
   });
 
   it("captures failures without depending on disabled retries", () => {
-    expect(readProjectFile("playwright.config.ts")).toContain(
-      'trace: "retain-on-failure"',
-    );
+    expect(config.retries).toBe(0);
+    expect(config.use?.trace).toBe("retain-on-failure");
   });
 
   it("keeps TypeScript configuration in tsconfig rather than package metadata", () => {
