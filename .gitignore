@@ -21,6 +21,8 @@ out
 .env
 .env.build
 .env.development
+.env.local
+.env.*.local
 
 # Dependencies
 .yarn
@@ -55,6 +57,7 @@ public/manifest.webmanifest.gz
 build*
 
 # Logs
+*.log
 npminstall-log.txt
 npm-debug.log*
 yarn-debug.log*
@@ -107,4 +110,3 @@ test-results/
 
 # Local output
 debug-storybook.log
-test-results/

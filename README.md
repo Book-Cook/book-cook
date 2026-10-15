@@ -19,8 +19,8 @@ Book Cook is an AI-powered recipe management application that empowers individua
 
 ### Prerequisites
 
-- Node.js (version 16 or higher)
-- npm or yarn
+- Node.js 22.5.1 or higher (`.nvmrc` pins 22.14.0; CI uses Node 24.11.1)
+- Yarn Classic (1.x)
 
 ### Installation
 
@@ -43,6 +43,11 @@ shell-set `PORT`, and some tooling (including the Cairn Harness agent runtime)
 exports `PORT=3100` for its own API. Without the explicit flag, `yarn dev`
 silently binds 3100 and takes that API's socket. Storybook runs separately on
 6006 via `yarn storybook`.
+
+Run `yarn test --runInBand` for unit tests, `yarn lint` for linting, and
+`yarn build` for a production build. Browser tests use `yarn test:e2e`, start
+the same development server on 3200 when needed, and retain traces on failure.
+Local environment files (`.env.local`, `.env.*.local`) and logs are ignored.
 
 ## 📦 Bundle Analysis
 
